@@ -1,0 +1,7 @@
+black==19.10b0
+coverage==5.0
+flake8==3.7.9
+mypy==0.761
+pylint==2.4.4
+yamllint==1.20.0
+pyinstaller==3.5
