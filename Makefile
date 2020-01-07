@@ -8,11 +8,12 @@ requirements.txt: $(REQUIREMENTS)
 	echo 'hbmqtt==0.9.5' > $@
 	cat $^ | grep -v '^rhasspy-' | sort | uniq >> $@
 
-venv: requirements.txt
+venv: requirements.txt snowboy-1.3.0.tar.gz
 	rm -rf .venv/
 	python3 -m venv .venv
 	.venv/bin/pip3 install wheel setuptools
 	.venv/bin/pip3 install -r requirements.txt
+	.venv/bin/pip3 install snowboy-1.3.0.tar.gz
 	.venv/bin/pip3 install -r requirements_dev.txt
 
 update-bin:
@@ -21,3 +22,6 @@ update-bin:
 
 install-kaldi: rhasspy-asr-kaldi/kaldiroot
 	cd rhasspy-asr-kaldi && ../.venv/bin/python3 kaldi_setup.py install
+
+snowboy-1.3.0.tar.gz:
+	curl -sSfL -o $@ 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'

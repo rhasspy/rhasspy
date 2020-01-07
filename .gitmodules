@@ -74,3 +74,6 @@
 	path = rhasspy-web-vue
 	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-web-vue.git
   branch = master
+[submodule "rhasspy-wake-snowboy-hermes"]
+	path = rhasspy-wake-snowboy-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-wake-snowboy-hermes.git

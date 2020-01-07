@@ -16,4 +16,5 @@ rhasspy-speakers-cli-hermes
 rhasspy-supervisor
 rhasspy-tts-cli-hermes
 rhasspy-wake-porcupine-hermes
+rhasspy-wake-snowboy-hermes
 rhasspy-web-vue

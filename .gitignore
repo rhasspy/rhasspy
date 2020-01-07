@@ -3,3 +3,4 @@ __pycache__/
 .mypy_cache/
 supervisord.log
 web/
+snowboy-1.3.0.tar.gz

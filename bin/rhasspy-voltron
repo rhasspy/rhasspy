@@ -63,7 +63,9 @@ echo "Generating ${conf_path}"
 
 # Run assistant
 log_path="${profile_dir}/supervisord.log"
+pid_path="${profile_dir}/supervisord.pid"
 "${this_dir}/voltron-run" \
     supervisord \
-    -c "${conf_path}" \
-    -l "${log_path}"
+    --configuration "${conf_path}" \
+    --logfile "${log_path}" \
+    --pidfile "${pid_path}"
