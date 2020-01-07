@@ -6,6 +6,7 @@ rhasspy-asr-pocketsphinx-hermes
 rhasspy-dialogue-hermes
 rhasspy-hermes
 rhasspy-microphone-cli-hermes
+rhasspy-microphone-pyaudio-hermes
 rhasspy-nlu
 rhasspy-nlu-hermes
 rhasspy-profile

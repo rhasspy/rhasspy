@@ -49,65 +49,21 @@ fi
 profile_dir="${user_profiles}/${profile_name}"
 
 # -----------------------------------------------------------------------------
-# Set up environment
-# -----------------------------------------------------------------------------
-
-venv="${src_dir}/.venv"
-
-if [[ ! -d "${venv}" ]]; then
-    echo "Missing virtual environment at ${venv}"
-    echo 'Did you run "make venv"?'
-    exit 1
-fi
-
-source "${venv}/bin/activate"
-
-# Add submodules to Python path
-RHASSPY_DIRS=(`cat "${src_dir}/RHASSPY_DIRS"`)
-for rhasspy_dir in "${RHASSPY_DIRS[@]}"; do
-    PYTHONPATH="${src_dir}/${rhasspy_dir}:${PYTHONPATH}"
-done
-
-export PYTHONPATH="${src_dir}:${PYTHONPATH}"
-export PATH="${this_dir}:${PATH}"
-
-# Kaldi
-kaldiroot="${src_dir}/rhasspy-asr-kaldi/kaldiroot"
-if [[ -s "${kaldiroot}" ]]; then
-    kaldi_dir="$(cat "${kaldiroot}" | envsubst)"
-    kaldi_dir="$(realpath "${kaldi_dir}")"
-
-    if [[ ! -d "${kaldi_dir}" ]]; then
-        echo "Expected Kaldi at ${kaldi_dir}"
-        exit 1
-    fi
-
-    echo "Found Kaldi at ${kaldi_dir}"
-    export kaldi_dir
-
-    # Required bin/lib directories
-    lib_dir="${kaldi_dir}/src/lib"
-    openfst_dir="${kaldi_dir}/tools/openfst"
-    utils_dir="${kaldi_dir}/egs/wsj/s5/utils"
-    steps_dir="${kaldi_dir}/egs/wsj/s5/steps"
-
-    # Set up paths for Kaldi programs
-    export PATH="${kaldi_dir}/src/featbin:${kaldi_dir}/src/latbin:${kaldi_dir}/src/gmmbin:${kaldi_dir}/src/online2bin:$PATH"
-    export LD_LIBRARY_PATH="${lib_dir}:${openfst_dir}/lib:${LD_LIBRARY_PATH}"
-fi
-
-# -----------------------------------------------------------------------------
 
 # Generate supervisord conf
 conf_path="${profile_dir}/supervisord.conf"
 echo "Generating ${conf_path}"
 
-python3 -m rhasspysupervisor \
-        --profile "${profile_name}" \
-        --system-profiles "${system_profiles}" \
-        --user-profiles "${user_profiles}" \
-        > "${conf_path}"
+"${this_dir}/voltron-run" \
+    python3 -m rhasspysupervisor \
+    --profile "${profile_name}" \
+    --system-profiles "${system_profiles}" \
+    --user-profiles "${user_profiles}" \
+    --debug
 
 # Run assistant
 log_path="${profile_dir}/supervisord.log"
-# supervisord -c "${conf_path}" -l "${log_path}"
+"${this_dir}/voltron-run" \
+    supervisord \
+    -c "${conf_path}" \
+    -l "${log_path}"

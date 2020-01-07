@@ -5,7 +5,8 @@ REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements
 .PHONY: venv update-bin install-kaldi
 
 requirements.txt: $(REQUIREMENTS)
-	cat $^ | grep -v '^rhasspy-' | sort | uniq > $@
+	echo 'hbmqtt==0.9.5' > $@
+	cat $^ | grep -v '^rhasspy-' | sort | uniq >> $@
 
 venv: requirements.txt
 	rm -rf .venv/
