@@ -1,0 +1,76 @@
+[submodule "rhasspy-asr"]
+	path = rhasspy-asr
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-asr.git
+  branch = master
+[submodule "rhasspy-asr-kaldi"]
+	path = rhasspy-asr-kaldi
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-asr-kaldi.git
+  branch = master
+[submodule "rhasspy-asr-kaldi-hermes"]
+	path = rhasspy-asr-kaldi-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-asr-kaldi-hermes.git
+  branch = master
+[submodule "rhasspy-asr-pocketsphinx"]
+	path = rhasspy-asr-pocketsphinx
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-asr-pocketsphinx.git
+  branch = master
+[submodule "rhasspy-asr-pocketsphinx-hermes"]
+	path = rhasspy-asr-pocketsphinx-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-asr-pocketsphinx-hermes.git
+  branch = master
+[submodule "rhasspy-dialogue-hermes"]
+	path = rhasspy-dialogue-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-dialogue-hermes.git
+  branch = master
+[submodule "rhasspy-hermes"]
+	path = rhasspy-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-hermes.git
+  branch = master
+[submodule "rhasspy-microphone-cli-hermes"]
+	path = rhasspy-microphone-cli-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-microphone-cli-hermes.git
+  branch = master
+[submodule "rhasspy-microphone-pyaudio-hermes"]
+	path = rhasspy-microphone-pyaudio-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-microphone-pyaudio-hermes.git
+  branch = master
+[submodule "rhasspy-nlu"]
+	path = rhasspy-nlu
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-nlu.git
+  branch = master
+[submodule "rhasspy-nlu-hermes"]
+	path = rhasspy-nlu-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-nlu-hermes.git
+  branch = master
+[submodule "rhasspy-profile"]
+	path = rhasspy-profile
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-profile.git
+  branch = master
+[submodule "rhasspy-server-hermes"]
+	path = rhasspy-server-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-server-hermes.git
+  branch = master
+[submodule "rhasspy-silence"]
+	path = rhasspy-silence
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-silence.git
+  branch = master
+[submodule "rhasspy-speakers-cli-hermes"]
+	path = rhasspy-speakers-cli-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-speakers-cli-hermes.git
+  branch = master
+[submodule "rhasspy-supervisor"]
+	path = rhasspy-supervisor
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-supervisor.git
+  branch = master
+[submodule "rhasspy-tts-cli-hermes"]
+	path = rhasspy-tts-cli-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-tts-cli-hermes.git
+  branch = master
+[submodule "rhasspy-wake-porcupine-hermes"]
+	path = rhasspy-wake-porcupine-hermes
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-wake-porcupine-hermes.git
+  branch = master
+[submodule "rhasspy-web-vue"]
+	path = rhasspy-web-vue
+	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-web-vue.git
+  branch = master
