@@ -77,3 +77,6 @@
 [submodule "rhasspy-wake-snowboy-hermes"]
 	path = rhasspy-wake-snowboy-hermes
 	url = ssh://git@cecep-prime:9022/cecep3/rhasspy-wake-snowboy-hermes.git
+[submodule "rhasspy-remote-http-hermes"]
+	path = rhasspy-remote-http-hermes
+	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-remote-http-hermes.git
