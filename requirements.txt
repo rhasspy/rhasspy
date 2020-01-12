@@ -2,10 +2,11 @@ attrs==19.3.0
 cython==0.29.14
 json5==0.7.0
 multidict==4.6.1
-networkx==2.3
+networkx==2.4
 numpy==1.18.0
 paho-mqtt==1.5.0
 pocketsphinx==0.1.15
+PyAudio==0.2.11
 pydash==4.7.6
 quart==0.6.15
 quart-cors==0.1.3

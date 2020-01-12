@@ -16,7 +16,7 @@ fi
 . "${src_dir}/etc/shflags"
 
 DEFINE_string 'profile' '' 'Path to profile' 'p'
-DEFINE_string 'system-profiles' "${src_dir}/profiles" 'Directory with base profile files'
+DEFINE_string 'system-profiles' "${src_dir}/rhasspy-server-hermes/profiles" 'Directory with base profile files'
 DEFINE_string 'user-profiles' "${config_home}/rhasspy/profiles" 'Directory with user profile files'
 
 FLAGS "$@" || exit $?
@@ -48,6 +48,9 @@ fi
 
 profile_dir="${user_profiles}/${profile_name}"
 
+mqtt_host='localhost'
+mqtt_port='1883'
+
 # -----------------------------------------------------------------------------
 
 # Generate supervisord conf
@@ -60,6 +63,24 @@ echo "Generating ${conf_path}"
     --system-profiles "${system_profiles}" \
     --user-profiles "${user_profiles}" \
     --debug
+
+# Run web server
+"${this_dir}/voltron-run" \
+    python3 -m rhasspyserver_hermes \
+    --profile "${profile_name}" \
+    --system-profiles "${system_profiles}" \
+    --user-profiles "${user_profiles}" \
+    --web-dir "${src_dir}/web" \
+    &
+
+# Kill the process above when this terminal exits
+web_pid=$!
+
+function finish {
+    kill "${web_pid}"
+}
+
+trap finish EXIT
 
 # Run assistant
 log_path="${profile_dir}/supervisord.log"
