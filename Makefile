@@ -2,7 +2,7 @@ SHELL := bash
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
 
-.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker
+.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker docker-pulseaudio
 
 version := $(shell cat VERSION)
 architecture := $(shell dpkg-architecture | grep DEB_BUILD_ARCH= | sed 's/[^=]\+=//')
@@ -58,3 +58,6 @@ debian: pyinstaller
 
 docker:
 	docker build . -t "rhasspy/rhasspy-voltron:$(version)"
+
+docker-pulseaudio:
+	docker build -f Dockerfile.pulseaudio . -t "rhasspy/rhasspy-voltron:$(version)-pulseaudio"

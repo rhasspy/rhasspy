@@ -31,11 +31,11 @@ Install runtime dependencies:
   * `supervisord` (process management)
   * `mosquitto` (MQTT broker)
   * `sox` (WAV conversion)
-  * `alsa-tools` (record/play audio)
+  * `alsa-utils` (record/play audio)
 
 ```bash
 sudo apt-get update
-sudo apt-get install supervisor mosquitto sox alsa-tools
+sudo apt-get install supervisor mosquitto sox alsa-utils
 ```
 
 ## Running

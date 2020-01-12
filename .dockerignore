@@ -6,11 +6,17 @@
 !RHASSPY_DIRS
 !requirements.txt
 !VERSION
+!docker/pulseaudio.client.conf
+
+!download/kaldi-2019.tar.gz
 
 !rhasspy-asr/rhasspyasr
 !rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx
 !rhasspy-asr-pocketsphinx-hermes/rhasspyasr_pocketsphinx_hermes
 !rhasspy-asr-kaldi/rhasspyasr_kaldi
+!rhasspy-asr-kaldi/kaldi_speech
+!rhasspy-asr-kaldi/kaldi_setup.py
+!rhasspy-asr-kaldi/VERSION
 !rhasspy-asr-kaldi-hermes/rhasspyasr_kaldi_hermes
 !rhasspy-dialogue-hermes/rhasspydialogue_hermes
 !rhasspy-hermes/rhasspyhermes

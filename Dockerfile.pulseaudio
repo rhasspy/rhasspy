@@ -7,9 +7,30 @@ RUN apt-get install --no-install-recommends --yes \
 
 RUN apt-get install --no-install-recommends --yes \
         build-essential swig libatlas-base-dev portaudio19-dev \
-        supervisor mosquitto sox alsa-utils
+        supervisor mosquitto sox pulseaudio 
 
-ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
+# Create new user
+ENV UNAME=rhasspy
+RUN export UNAME=$UNAME UID=1000 GID=1000 && \
+    mkdir -p "/home/${UNAME}" && \
+    echo "${UNAME}:x:${UID}:${GID}:${UNAME} User,,,:/home/${UNAME}:/bin/bash" >> /etc/passwd && \
+    echo "${UNAME}:x:${UID}:" >> /etc/group && \
+    mkdir -p /etc/sudoers.d && \
+    echo "${UNAME} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${UNAME} && \
+    chmod 0440 /etc/sudoers.d/${UNAME} && \
+    gpasswd -a ${UNAME} audio
+
+COPY docker/pulseaudio.client.conf /etc/pulse/client.conf
+
+# Create cookie dir
+RUN mkdir -p /home/${UNAME}/.config/pulse
+
+# Own everything
+RUN export UNAME=$UNAME UID=1000 GID=1000 && \
+    chown ${UID}:${GID} -R /home/${UNAME}
+
+# Copy Rhasspy
+ENV RHASSPY_DIR=/home/${UNAME}/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
 ENV RHASSPY_PIP=${RHASSPY_VENV}/bin/pip3
 
@@ -26,24 +47,10 @@ COPY web/ ${RHASSPY_DIR}/web/
 COPY RHASSPY_DIRS ${RHASSPY_DIR}/
 COPY VERSION ${RHASSPY_DIR}/
 
-# Install pre-built Kaldi
-RUN apt-get install --yes --no-install-recommends curl
-# RUN curl -sSfL -o - https://github.com/synesthesiam/docker-kaldi/releases/download/v2019.1/kaldi-2019.tar.gz | \
-    # tar -C / -xzvf -
-# RUN curl -sSfL -o - https://github.com/synesthesiam/docker-kaldi/releases/download/v2019.1/kaldi-2019-amd64.tar.gz | \
-#     tar -C / -xzvf -
-
-# COPY download/kaldi-2019.tar.gz /
-# RUN tar -C / -xzvf /kaldi-2019.tar.gz
-
-# COPY rhasspy-asr-kaldi/ ${RHASSPY_DIR}/rhasspy-asr-kaldi/
-# RUN echo /kaldi-master > ${RHASSPY_DIR}/rhasspy-asr-kaldi/kaldiroot
-# RUN cd ${RHASSPY_DIR}/rhasspy-asr-kaldi && ${RHASSPY_DIR}/.venv/bin/python3 kaldi_setup.py install
-
-# Copy Rhasspy
 COPY rhasspy-asr/ ${RHASSPY_DIR}/rhasspy-asr/
 COPY rhasspy-asr-pocketsphinx/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx/
 COPY rhasspy-asr-pocketsphinx-hermes/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx-hermes/
+COPY rhasspy-asr-kaldi/ ${RHASSPY_DIR}/rhasspy-asr-kaldi/
 COPY rhasspy-asr-kaldi-hermes/ ${RHASSPY_DIR}/rhasspy-asr-kaldi-hermes/
 COPY rhasspy-dialogue-hermes/ ${RHASSPY_DIR}/rhasspy-dialogue-hermes/
 COPY rhasspy-hermes/ ${RHASSPY_DIR}/rhasspy-hermes/
@@ -59,6 +66,11 @@ COPY rhasspy-supervisor/ ${RHASSPY_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${RHASSPY_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-wake-porcupine-hermes/ ${RHASSPY_DIR}/rhasspy-wake-porcupine-hermes/
 COPY rhasspy-wake-snowboy-hermes/ ${RHASSPY_DIR}/rhasspy-wake-snowboy-hermes/
+
+# Switch to new user
+USER $UNAME
+ENV HOME /home/${UNAME}
+
 
 WORKDIR ${RHASSPY_DIR}
 

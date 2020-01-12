@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+export LC_ALL=C.UTF-8
+export LANG=C.UTF-8
+
+# Directory of *this* script
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+
+if [[ -z "${XDG_CONFIG_HOME}" ]]; then
+    profile_dir="${HOME}/.config/rhasspy/profiles"
+else
+    profile_dir="${XDG_CONFIG_HOME}/rhasspy/profiles"
+fi
+
+version="$(cat VERSION)"
+
+docker run -it -p 12101:12101 \
+       -v "/run/user/$(id -u)/pulse:/run/user/1000/pulse" \
+       -v "${HOME}/.config/pulse/cookie:/home/rhasspy/.config/pulse/cookie" \
+       -v "${profile_dir}":"${profile_dir}" \
+       -v /etc/localtime:/etc/localtime \
+       "rhasspy/rhasspy-voltron:${version}-pulseaudio" \
+       --user-profiles "${profile_dir}" \
+       "$@"
