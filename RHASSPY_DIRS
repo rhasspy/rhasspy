@@ -5,6 +5,7 @@ rhasspy-asr-pocketsphinx
 rhasspy-asr-pocketsphinx-hermes
 rhasspy-dialogue-hermes
 rhasspy-hermes
+rhasspy-http-remote-hermes
 rhasspy-microphone-cli-hermes
 rhasspy-microphone-pyaudio-hermes
 rhasspy-nlu
