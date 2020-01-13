@@ -77,9 +77,12 @@
 [submodule "rhasspy-wake-snowboy-hermes"]
 	path = rhasspy-wake-snowboy-hermes
 	url = https://github.com/rhasspy/rhasspy-wake-snowboy-hermes.git
+  branch = master
 [submodule "rhasspy-wake-snowboy-hermes"]
 	path = rhasspy-http-remote-hermes
 	url = https://github.com/rhasspy/rhasspy-http-remote-hermes.git
+	branch = master
 [submodule "rhasspy-remote-http-hermes"]
 	path = rhasspy-remote-http-hermes
 	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-remote-http-hermes.git
+  branch = master
