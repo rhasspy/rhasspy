@@ -52,5 +52,8 @@ if [[ -s "${kaldiroot}" ]]; then
     export LD_LIBRARY_PATH="${lib_dir}:${openfst_dir}/lib:${LD_LIBRARY_PATH}"
 fi
 
+# Site packages (for PyInstaller scripts)
+export RHASSPY_SITE_PACKAGES="$(find "${venv}" -mindepth 3 -maxdepth 3 -type d -name site-packages)"
+
 # Run user command
 "$@"

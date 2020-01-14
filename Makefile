@@ -11,8 +11,7 @@ debian_package := rhasspy-voltron_$(version)_$(architecture)
 debian_dir := debian/$(debian_package)
 
 requirements.txt: $(REQUIREMENTS)
-	echo 'hbmqtt==0.9.5' > $@
-	cat $^ | grep -v '^rhasspy-' | sort | uniq >> $@
+	cat $^ | grep -v '^rhasspy-' | sort | uniq > $@
 
 venv: requirements.txt snowboy-1.3.0.tar.gz update-bin
 	rm -rf .venv/
