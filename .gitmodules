@@ -78,7 +78,7 @@
 	path = rhasspy-wake-snowboy-hermes
 	url = https://github.com/rhasspy/rhasspy-wake-snowboy-hermes.git
   branch = master
-[submodule "rhasspy-http-remote-hermes"]
-	path = rhasspy-http-remote-hermes
+[submodule "rhasspy-remote-http-hermes"]
+	path = rhasspy-remote-http-hermes
 	url = https://github.com/rhasspy/rhasspy-http-remote-hermes.git
 	branch = master
