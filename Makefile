@@ -2,7 +2,7 @@ SHELL := bash
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
 
-.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker docker-pulseaudio
+.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
 
 version := $(shell cat VERSION)
 architecture := $(shell dpkg-architecture | grep DEB_BUILD_ARCH= | sed 's/[^=]\+=//')
@@ -10,9 +10,16 @@ architecture := $(shell dpkg-architecture | grep DEB_BUILD_ARCH= | sed 's/[^=]\+
 debian_package := rhasspy-voltron_$(version)_$(architecture)
 debian_dir := debian/$(debian_package)
 
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+
+# Gather non-Rhasspy requirements from all submodules.
+# Rhasspy libraries will be used from the submodule source code.
 requirements.txt: $(REQUIREMENTS)
 	cat $^ | grep -v '^rhasspy-' | sort | uniq > $@
 
+# Create virtual environment and install all (non-Rhasspy) dependencies.
 venv: requirements.txt snowboy-1.3.0.tar.gz update-bin
 	rm -rf .venv/
 	python3 -m venv .venv
@@ -21,24 +28,46 @@ venv: requirements.txt snowboy-1.3.0.tar.gz update-bin
 	.venv/bin/pip3 install snowboy-1.3.0.tar.gz
 	.venv/bin/pip3 install -r requirements_dev.txt
 
+# Copy submodule scripts to shared bin directory.
 update-bin:
 	$(shell find . -mindepth 3 -maxdepth 3 -type f -name 'rhasspy-*' -path '*/bin/*' -exec cp '{}' bin/ \;)
 	chmod +x bin/*
 
+# Build and copy Vue web artifacts to web directory.
 update-web:
 	rm -rf web
 	cd rhasspy-web-vue && make && mv dist ../web
 
+# Build Python Kaldi nnet3 extension.
+# Requires you to put the path to your Kaldi installation in a file named
+# rhasspy-asr-kaldi/kaldiroot.
 install-kaldi: rhasspy-asr-kaldi/kaldiroot
 	cd rhasspy-asr-kaldi && ../.venv/bin/python3 kaldi_setup.py install
 
-snowboy-1.3.0.tar.gz:
-	curl -sSfL -o $@ 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'
-
+# Create source/binary/debian distribution files
 dist: sdist debian
 
+# Create source distribution
 sdist:
 	python3 setup.py sdist
+
+# -----------------------------------------------------------------------------
+# Docker
+# -----------------------------------------------------------------------------
+
+docker-downloads: snowboy-1.3.0.tar.gz kaldi-2019-$(architecture).tar.gz kaldi-2019.tar.gz mitlm-0.4.2-$(architecture).tar.gz phonetisaurus-2019-$(architecture).tar.gz pocketsphinx-python.tar.gz
+
+# Build ALSA Docker image.
+docker-alsa: docker-downloads
+	docker build . -f Dockerfile.source.alsa -t "rhasspy/rhasspy-voltron:$(version)"
+
+# Build PulseAudio Docker image.
+docker-pulseaudio: docker-downloads
+	docker build -f Dockerfile.source.pulseaudio . -t "rhasspy/rhasspy-voltron:$(version)-pulseaudio"
+
+# -----------------------------------------------------------------------------
+# Debian
+# -----------------------------------------------------------------------------
 
 pyinstaller:
 	mkdir -p dist
@@ -55,8 +84,31 @@ debian: pyinstaller
 	cd debian/ && fakeroot dpkg --build "$(debian_package)"
 	mv "debian/$(debian_package).deb" dist/
 
-docker:
-	docker build . -f Dockerfile.source.alsa -t "rhasspy/rhasspy-voltron:$(version)"
 
-docker-pulseaudio:
-	docker build -f Dockerfile.pulseaudio . -t "rhasspy/rhasspy-voltron:$(version)-pulseaudio"
+# -----------------------------------------------------------------------------
+# Downloads
+# -----------------------------------------------------------------------------
+
+# Download snowboy.
+snowboy-1.3.0.tar.gz:
+	curl -sSfL -o $@ 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'
+
+# Download pre-built Kaldi binaries.
+kaldi-2019-$(architecture).tar.gz:
+	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-kaldi/releases/download/v2019.1/kaldi-2019-$(architecture).tar.gz"
+
+# Download Kaldi source code.
+kaldi-2019.tar.gz:
+	curl -sSfL -o $@ 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2019.tar.gz'
+
+# Download pre-built MITLM binaries.
+mitlm-0.4.2-$(architecture).tar.gz:
+	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-mitlm/releases/download/v0.4.2/mitlm-0.4.2-$(architecture).tar.gz"
+
+# Download pre-built Phonetisaurus binaries.
+phonetisaurus-2019-$(architecture).tar.gz:
+	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(architecture).tar.gz"
+
+# Download Python Pocketsphinx library with no dependency on PulseAudio.
+pocketsphinx-python.tar.gz:
+	curl -sSfL -o $@ 'https://github.com/synesthesiam/pocketsphinx-python/releases/download/v1.0/pocketsphinx-python.tar.gz'

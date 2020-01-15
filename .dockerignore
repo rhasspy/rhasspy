@@ -3,6 +3,8 @@
 !etc/
 !web/
 
+!dist/
+
 !RHASSPY_DIRS
 !RHASSPY_SERVICES
 !requirements.txt
@@ -10,7 +12,10 @@
 !docker/pulseaudio.client.conf
 !docker/bin
 
-!download/kaldi-2019.tar.gz
+!snowboy-1.3.0.tar.gz
+!kaldi-2019*.tar.gz
+!mitlm-0.4.2-*.tar.gz
+!pocketsphinx-python.tar.gz
 
 # Source
 !rhasspy-asr/rhasspyasr
