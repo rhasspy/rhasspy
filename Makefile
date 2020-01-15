@@ -56,7 +56,7 @@ debian: pyinstaller
 	mv "debian/$(debian_package).deb" dist/
 
 docker:
-	docker build . -t "rhasspy/rhasspy-voltron:$(version)"
+	docker build . -f Dockerfile.source.alsa -t "rhasspy/rhasspy-voltron:$(version)"
 
 docker-pulseaudio:
 	docker build -f Dockerfile.pulseaudio . -t "rhasspy/rhasspy-voltron:$(version)-pulseaudio"
