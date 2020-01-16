@@ -55,7 +55,7 @@ sdist:
 # Docker
 # -----------------------------------------------------------------------------
 
-docker-downloads: snowboy-1.3.0.tar.gz kaldi-2019-$(architecture).tar.gz kaldi-2019.tar.gz mitlm-0.4.2-$(architecture).tar.gz phonetisaurus-2019-$(architecture).tar.gz pocketsphinx-python.tar.gz
+docker-downloads: snowboy-1.3.0.tar.gz kaldi-2019-$(architecture).tar.gz kaldi-2019.tar.gz mitlm-0.4.2-$(architecture).tar.gz phonetisaurus-2019-$(architecture).tar.gz pocketsphinx-python.tar.gz openfst-1.6.7.tar.gz
 
 # Build ALSA Docker image.
 docker-alsa: docker-downloads
@@ -100,6 +100,10 @@ kaldi-2019-$(architecture).tar.gz:
 # Download Kaldi source code.
 kaldi-2019.tar.gz:
 	curl -sSfL -o $@ 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2019.tar.gz'
+
+# Download OpenFST source code.
+openfst-1.6.7.tar.gz:
+	curl -sSfL -o $@ 'http://openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz'
 
 # Download pre-built MITLM binaries.
 mitlm-0.4.2-$(architecture).tar.gz:

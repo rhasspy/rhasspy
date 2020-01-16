@@ -14,6 +14,7 @@
 
 !snowboy-1.3.0.tar.gz
 !kaldi-2019*.tar.gz
+!openfst-*.tar.gz
 !mitlm-0.4.2-*.tar.gz
 !pocketsphinx-python.tar.gz
 
@@ -43,16 +44,16 @@
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes
 
 # Services
-!rhasspy-asr-kaldi-hermes/pyinstaller/dist
-!rhasspy-asr-pocketsphinx-hermes/pyinstaller/dist
-!rhasspy-dialogue-hermes/pyinstaller/dist
-!rhasspy-microphone-cli-hermes/pyinstaller/dist
-!rhasspy-microphone-pyaudio-hermes/pyinstaller/dist
-!rhasspy-nlu-hermes/pyinstaller/dist
-!rhasspy-remote-http-hermes/pyinstaller/dist
-!rhasspy-server-hermes/pyinstaller/dist
-!rhasspy-speakers-cli-hermes/pyinstaller/dist
-!rhasspy-supervisor/pyinstaller/dist
-!rhasspy-tts-cli-hermes/pyinstaller/dist
-!rhasspy-wake-porcupine-hermes/pyinstaller/dist
-!rhasspy-wake-snowboy-hermes/pyinstaller/dist
+#!rhasspy-asr-kaldi-hermes/pyinstaller/dist
+#!rhasspy-asr-pocketsphinx-hermes/pyinstaller/dist
+#!rhasspy-dialogue-hermes/pyinstaller/dist
+#!rhasspy-microphone-cli-hermes/pyinstaller/dist
+#!rhasspy-microphone-pyaudio-hermes/pyinstaller/dist
+#!rhasspy-nlu-hermes/pyinstaller/dist
+#!rhasspy-remote-http-hermes/pyinstaller/dist
+#!rhasspy-server-hermes/pyinstaller/dist
+#!rhasspy-speakers-cli-hermes/pyinstaller/dist
+#!rhasspy-supervisor/pyinstaller/dist
+#!rhasspy-tts-cli-hermes/pyinstaller/dist
+#!rhasspy-wake-porcupine-hermes/pyinstaller/dist
+#!rhasspy-wake-snowboy-hermes/pyinstaller/dist
