@@ -4,12 +4,15 @@
 !web/
 
 !RHASSPY_DIRS
+!RHASSPY_SERVICES
 !requirements.txt
 !VERSION
 !docker/pulseaudio.client.conf
+!docker/bin
 
 !download/kaldi-2019.tar.gz
 
+# Source
 !rhasspy-asr/rhasspyasr
 !rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx
 !rhasspy-asr-pocketsphinx-hermes/rhasspyasr_pocketsphinx_hermes
@@ -33,3 +36,18 @@
 !rhasspy-tts-cli-hermes/rhasspytts_cli_hermes
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes
+
+# Services
+!rhasspy-asr-kaldi-hermes/pyinstaller/dist
+!rhasspy-asr-pocketsphinx-hermes/pyinstaller/dist
+!rhasspy-dialogue-hermes/pyinstaller/dist
+!rhasspy-microphone-cli-hermes/pyinstaller/dist
+!rhasspy-microphone-pyaudio-hermes/pyinstaller/dist
+!rhasspy-nlu-hermes/pyinstaller/dist
+!rhasspy-remote-http-hermes/pyinstaller/dist
+!rhasspy-server-hermes/pyinstaller/dist
+!rhasspy-speakers-cli-hermes/pyinstaller/dist
+!rhasspy-supervisor/pyinstaller/dist
+!rhasspy-tts-cli-hermes/pyinstaller/dist
+!rhasspy-wake-porcupine-hermes/pyinstaller/dist
+!rhasspy-wake-snowboy-hermes/pyinstaller/dist
