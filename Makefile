@@ -1,13 +1,15 @@
 SHELL := bash
+PYTHON_NAME = "rhasspyvoltron"
+SERVICE_NAME = "rhasspy-voltron"
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
 
 .PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
 
 version := $(shell cat VERSION)
-architecture := $(shell dpkg-architecture | grep DEB_BUILD_ARCH= | sed 's/[^=]\+=//')
+architecture := $(shell bash architecture.sh)
 
-debian_package := rhasspy-voltron_$(version)_$(architecture)
+debian_package := $(SERVICE_NAME)_$(version)_$(architecture)
 debian_dir := debian/$(debian_package)
 
 # -----------------------------------------------------------------------------
@@ -59,11 +61,15 @@ docker-downloads: snowboy-1.3.0.tar.gz kaldi-2019-$(architecture).tar.gz kaldi-2
 
 # Build ALSA Docker image.
 docker-alsa: docker-downloads
-	docker build . -f Dockerfile.source.alsa -t "rhasspy/rhasspy-voltron:$(version)"
+	docker build . -f Dockerfile.source.alsa \
+    -t "rhasspy/$(SERVICE_NAME):$(version)" \
+    -t "rhasspy/$(SERVICE_NAME):latest"
 
 # Build PulseAudio Docker image.
 docker-pulseaudio: docker-downloads
-	docker build -f Dockerfile.source.pulseaudio . -t "rhasspy/rhasspy-voltron:$(version)-pulseaudio"
+	docker build . -f Dockerfile.source.pulseaudio \
+    -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
+    -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
 
 # -----------------------------------------------------------------------------
 # Debian
@@ -71,8 +77,8 @@ docker-pulseaudio: docker-downloads
 
 pyinstaller:
 	mkdir -p dist
-	pyinstaller -y --workpath pyinstaller/build --distpath pyinstaller/dist rhasspyvoltron.spec
-	tar -C pyinstaller/dist -czf dist/rhasspy-voltron_$(version)_$(architecture).tar.gz rhasspyvoltron/
+	pyinstaller -y --workpath pyinstaller/build --distpath pyinstaller/dist $(PYTHON_NAME).spec
+	tar -C pyinstaller/dist -czf dist/$(SERVICE_NAME)_$(version)_$(architecture).tar.gz rhasspyvoltron/
 
 debian: pyinstaller
 	mkdir -p dist
@@ -80,7 +86,7 @@ debian: pyinstaller
 	mkdir -p "$(debian_dir)/DEBIAN" "$(debian_dir)/usr/bin" "$(debian_dir)/usr/lib"
 	cat debian/DEBIAN/control | version=$(version) architecture=$(architecture) envsubst > "$(debian_dir)/DEBIAN/control"
 	cp debian/bin/* "$(debian_dir)/usr/bin/"
-	cp -R pyinstaller/dist/rhasspyvoltron "$(debian_dir)/usr/lib/"
+	cp -R pyinstaller/dist/$(PYTHON_NAME) "$(debian_dir)/usr/lib/"
 	cd debian/ && fakeroot dpkg --build "$(debian_package)"
 	mv "debian/$(debian_package).deb" dist/
 
