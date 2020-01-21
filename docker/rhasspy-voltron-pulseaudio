@@ -14,7 +14,7 @@ fi
 
 version="$(cat VERSION)"
 
-docker run -it -p 12101:12101 \
+podman run -it -p 12101:12101 \
        -v "/run/user/$(id -u)/pulse:/run/user/1000/pulse" \
        -v "${HOME}/.config/pulse/cookie:/home/rhasspy/.config/pulse/cookie" \
        -v "${profile_dir}":"${profile_dir}" \
