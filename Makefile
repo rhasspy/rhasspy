@@ -3,6 +3,7 @@ PYTHON_NAME = "rhasspyvoltron"
 SERVICE_NAME = "rhasspy-voltron"
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
+PYTHON_FILES = **/*.py
 
 .PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
 
@@ -15,6 +16,19 @@ debian_dir := debian/$(debian_package)
 # -----------------------------------------------------------------------------
 # Python
 # -----------------------------------------------------------------------------
+
+reformat:
+	black .
+	isort $(PYTHON_FILES)
+
+check:
+	flake8 $(PYTHON_FILES)
+	pylint $(PYTHON_FILES)
+	mypy $(PYTHON_FILES)
+	black --check .
+	isort --check-only $(PYTHON_FILES)
+	yamllint .
+	pip list --outdated
 
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
