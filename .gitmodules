@@ -82,3 +82,6 @@
 	path = rhasspy-remote-http-hermes
 	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-remote-http-hermes.git
 	branch = master
+[submodule "rhasspy-fuzzywuzzy-hermes"]
+	path = rhasspy-fuzzywuzzy-hermes
+	url = ./rhasspy-fuzzywuzzy-hermes/
