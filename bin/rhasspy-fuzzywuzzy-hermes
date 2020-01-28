@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -e
+
+# Directory of *this* script
+this_dir="$( cd "$( dirname "$0" )" && pwd )"
+src_dir="$(realpath "${this_dir}/..")"
+venv="${src_dir}/.venv"
+
+if [[ ! -d "${venv}" ]]; then
+    echo "Missing virtual environment at ${venv}"
+    echo 'Did you run "make venv"?'
+    exit 1
+fi
+
+source "${venv}/bin/activate"
+
+export PYTHONPATH="${src_dir}:${PYTHONPATH}"
+python3 -m rhasspyfuzzywuzzy_hermes "$@"

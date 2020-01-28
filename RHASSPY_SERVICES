@@ -7,5 +7,6 @@ rhasspy-server-hermes
 rhasspy-speakers-cli-hermes
 rhasspy-supervisor
 rhasspy-tts-cli-hermes
+rhasspy-wake-pocketsphinx-hermes
 rhasspy-wake-porcupine-hermes
 rhasspy-wake-snowboy-hermes

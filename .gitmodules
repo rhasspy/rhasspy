@@ -85,3 +85,9 @@
 [submodule "rhasspy-fuzzywuzzy-hermes"]
 	path = rhasspy-fuzzywuzzy-hermes
 	url = ./rhasspy-fuzzywuzzy-hermes/
+[submodule "rhasspy-fuzzywuzzy"]
+	path = rhasspy-fuzzywuzzy
+	url = ./rhasspy-fuzzywuzzy
+[submodule "rhasspy-wake-pocketsphinx-hermes"]
+	path = rhasspy-wake-pocketsphinx-hermes
+	url = ./rhasspy-wake-pocketsphinx-hermes

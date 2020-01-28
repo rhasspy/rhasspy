@@ -4,6 +4,8 @@ rhasspy-asr-kaldi-hermes
 rhasspy-asr-pocketsphinx
 rhasspy-asr-pocketsphinx-hermes
 rhasspy-dialogue-hermes
+rhasspy-fuzzywuzzy
+rhasspy-fuzzywuzzy-hermes
 rhasspy-hermes
 rhasspy-microphone-cli-hermes
 rhasspy-microphone-pyaudio-hermes
@@ -16,6 +18,7 @@ rhasspy-silence
 rhasspy-speakers-cli-hermes
 rhasspy-supervisor
 rhasspy-tts-cli-hermes
+rhasspy-wake-pocketsphinx-hermes
 rhasspy-wake-porcupine-hermes
 rhasspy-wake-snowboy-hermes
 rhasspy-web-vue
