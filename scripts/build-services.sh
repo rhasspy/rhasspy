@@ -18,7 +18,7 @@ dist_dir="${src_dir}/dist"
 mkdir -p "${dist_dir}"
 
 # Clear old Rhasspy libraries
-rm -f "${dist_dir}/"rhasspy-*
+rm -f "${dist_dir}/"rhasspy*
 
 # Make dependent libraries
 cat "${src_dir}/RHASSPY_LIBRARIES" | \

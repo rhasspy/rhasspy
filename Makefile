@@ -3,7 +3,9 @@ PYTHON_NAME = "rhasspyvoltron"
 SERVICE_NAME = "rhasspy-voltron"
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
+REQUIREMENTS_DEV = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements_dev.txt)
 PYTHON_FILES = **/*.py
+PIP_INSTALL ?= install
 
 .PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
 
@@ -33,16 +35,20 @@ check:
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
 requirements.txt: $(REQUIREMENTS)
-	cat $^ | grep -v '^rhasspy-' | sort | uniq > $@
+	cat $^ | grep -v '^rhasspy' | sort | uniq > $@
+
+# Gather development requirements from all submodules.
+requirements_dev.txt: $(REQUIREMENTS_DEV)
+	cat $^ | grep -v '^-e' | sort | uniq > $@
 
 # Create virtual environment and install all (non-Rhasspy) dependencies.
 venv: requirements.txt snowboy-1.3.0.tar.gz update-bin
 	rm -rf .venv/
 	python3 -m venv .venv
-	.venv/bin/pip3 install wheel setuptools
-	.venv/bin/pip3 install -r requirements.txt
-	.venv/bin/pip3 install snowboy-1.3.0.tar.gz
-	.venv/bin/pip3 install -r requirements_dev.txt
+	.venv/bin/pip3 $(PIP_INSTALL) wheel setuptools
+	.venv/bin/pip3 $(PIP_INSTALL) -r requirements.txt
+	.venv/bin/pip3 $(PIP_INSTALL) snowboy-1.3.0.tar.gz
+	.venv/bin/pip3 $(PIP_INSTALL) -r requirements_dev.txt
 
 # Copy submodule scripts to shared bin directory.
 update-bin:
