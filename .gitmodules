@@ -1,93 +1,93 @@
 [submodule "rhasspy-asr"]
 	path = rhasspy-asr
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-asr.git
+	url = https://github.com/rhasspy/rhasspy-asr.git
   branch = master
 [submodule "rhasspy-asr-kaldi"]
 	path = rhasspy-asr-kaldi
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-asr-kaldi.git
+	url = https://github.com/rhasspy/rhasspy-asr-kaldi.git
   branch = master
 [submodule "rhasspy-asr-kaldi-hermes"]
 	path = rhasspy-asr-kaldi-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-asr-kaldi-hermes.git
+	url = https://github.com/rhasspy/rhasspy-asr-kaldi-hermes.git
   branch = master
 [submodule "rhasspy-asr-pocketsphinx"]
 	path = rhasspy-asr-pocketsphinx
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-asr-pocketsphinx.git
+	url = https://github.com/rhasspy/rhasspy-asr-pocketsphinx.git
   branch = master
 [submodule "rhasspy-asr-pocketsphinx-hermes"]
 	path = rhasspy-asr-pocketsphinx-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-asr-pocketsphinx-hermes.git
+	url = https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes.git
   branch = master
 [submodule "rhasspy-dialogue-hermes"]
 	path = rhasspy-dialogue-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-dialogue-hermes.git
+	url = https://github.com/rhasspy/rhasspy-dialogue-hermes.git
   branch = master
 [submodule "rhasspy-hermes"]
 	path = rhasspy-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-hermes.git
+	url = https://github.com/rhasspy/rhasspy-hermes.git
   branch = master
 [submodule "rhasspy-microphone-cli-hermes"]
 	path = rhasspy-microphone-cli-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-microphone-cli-hermes.git
+	url = https://github.com/rhasspy/rhasspy-microphone-cli-hermes.git
   branch = master
 [submodule "rhasspy-microphone-pyaudio-hermes"]
 	path = rhasspy-microphone-pyaudio-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-microphone-pyaudio-hermes.git
+	url = https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes.git
   branch = master
 [submodule "rhasspy-nlu"]
 	path = rhasspy-nlu
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-nlu.git
+	url = https://github.com/rhasspy/rhasspy-nlu.git
   branch = master
 [submodule "rhasspy-nlu-hermes"]
 	path = rhasspy-nlu-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-nlu-hermes.git
+	url = https://github.com/rhasspy/rhasspy-nlu-hermes.git
   branch = master
 [submodule "rhasspy-profile"]
 	path = rhasspy-profile
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-profile.git
+	url = https://github.com/rhasspy/rhasspy-profile.git
   branch = master
 [submodule "rhasspy-server-hermes"]
 	path = rhasspy-server-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-server-hermes.git
+	url = https://github.com/rhasspy/rhasspy-server-hermes.git
   branch = master
 [submodule "rhasspy-silence"]
 	path = rhasspy-silence
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-silence.git
+	url = https://github.com/rhasspy/rhasspy-silence.git
   branch = master
 [submodule "rhasspy-speakers-cli-hermes"]
 	path = rhasspy-speakers-cli-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-speakers-cli-hermes.git
+	url = https://github.com/rhasspy/rhasspy-speakers-cli-hermes.git
   branch = master
 [submodule "rhasspy-supervisor"]
 	path = rhasspy-supervisor
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-supervisor.git
+	url = https://github.com/rhasspy/rhasspy-supervisor.git
   branch = master
 [submodule "rhasspy-tts-cli-hermes"]
 	path = rhasspy-tts-cli-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-tts-cli-hermes.git
+	url = https://github.com/rhasspy/rhasspy-tts-cli-hermes.git
   branch = master
 [submodule "rhasspy-wake-porcupine-hermes"]
 	path = rhasspy-wake-porcupine-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-wake-porcupine-hermes.git
+	url = https://github.com/rhasspy/rhasspy-wake-porcupine-hermes.git
   branch = master
 [submodule "rhasspy-web-vue"]
 	path = rhasspy-web-vue
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-web-vue.git
+	url = https://github.com/rhasspy/rhasspy-web-vue.git
   branch = master
 [submodule "rhasspy-wake-snowboy-hermes"]
 	path = rhasspy-wake-snowboy-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-wake-snowboy-hermes.git
+	url = https://github.com/rhasspy/rhasspy-wake-snowboy-hermes.git
   branch = master
 [submodule "rhasspy-remote-http-hermes"]
 	path = rhasspy-remote-http-hermes
-	url = ssh://git@cecep-prime:9022/michael.hansen.24/rhasspy-remote-http-hermes.git
+	url = https://github.com/rhasspy/rhasspy-remote-http-hermes.git
 	branch = master
 [submodule "rhasspy-fuzzywuzzy-hermes"]
 	path = rhasspy-fuzzywuzzy-hermes
-	url = ./rhasspy-fuzzywuzzy-hermes/
+	url = https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes/
 [submodule "rhasspy-fuzzywuzzy"]
 	path = rhasspy-fuzzywuzzy
-	url = ./rhasspy-fuzzywuzzy
+	url = https://github.com/rhasspy/rhasspy-fuzzywuzzy
 [submodule "rhasspy-wake-pocketsphinx-hermes"]
 	path = rhasspy-wake-pocketsphinx-hermes
-	url = ./rhasspy-wake-pocketsphinx-hermes
+	url = https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes
