@@ -6,6 +6,7 @@ REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements
 REQUIREMENTS_DEV = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements_dev.txt)
 PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
+DOWNLOAD_DIR = download
 
 .PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
 
@@ -47,7 +48,7 @@ venv: requirements.txt snowboy-1.3.0.tar.gz update-bin
 	python3 -m venv .venv
 	.venv/bin/pip3 $(PIP_INSTALL) wheel setuptools
 	.venv/bin/pip3 $(PIP_INSTALL) -r requirements.txt
-	.venv/bin/pip3 $(PIP_INSTALL) snowboy-1.3.0.tar.gz
+	.venv/bin/pip3 $(PIP_INSTALL) $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
 	.venv/bin/pip3 $(PIP_INSTALL) -r requirements_dev.txt
 
 # Copy submodule scripts to shared bin directory.
@@ -77,7 +78,7 @@ sdist:
 # Docker
 # -----------------------------------------------------------------------------
 
-docker-downloads: snowboy-1.3.0.tar.gz kaldi-2019-$(architecture).tar.gz kaldi-2019.tar.gz mitlm-0.4.2-$(architecture).tar.gz phonetisaurus-2019-$(architecture).tar.gz pocketsphinx-python.tar.gz openfst-1.6.7.tar.gz
+docker-downloads: $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz $(DOWNLOAD_DIR)/kaldi-2019-$(architecture).tar.gz $(DOWNLOAD_DIR)/kaldi-2019.tar.gz $(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz $(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz $(DOWNLOAD_DIR)/openfst-1.6.7.tar.gz
 
 # Build ALSA Docker image.
 docker-alsa: docker-downloads
@@ -116,29 +117,29 @@ debian: pyinstaller
 # -----------------------------------------------------------------------------
 
 # Download snowboy.
-snowboy-1.3.0.tar.gz:
+$(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz:
 	curl -sSfL -o $@ 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'
 
 # Download pre-built Kaldi binaries.
-kaldi-2019-$(architecture).tar.gz:
+$(DOWNLOAD_DIR)/kaldi-2019-$(architecture).tar.gz:
 	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-kaldi/releases/download/v2019.1/kaldi-2019-$(architecture).tar.gz"
 
 # Download Kaldi source code.
-kaldi-2019.tar.gz:
+$(DOWNLOAD_DIR)/kaldi-2019.tar.gz:
 	curl -sSfL -o $@ 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2019.tar.gz'
 
 # Download OpenFST source code.
-openfst-1.6.7.tar.gz:
+$(DOWNLOAD_DIR)/openfst-1.6.7.tar.gz:
 	curl -sSfL -o $@ 'http://openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz'
 
 # Download pre-built MITLM binaries.
-mitlm-0.4.2-$(architecture).tar.gz:
+$(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz:
 	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-mitlm/releases/download/v0.4.2/mitlm-0.4.2-$(architecture).tar.gz"
 
 # Download pre-built Phonetisaurus binaries.
-phonetisaurus-2019-$(architecture).tar.gz:
+$(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz:
 	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(architecture).tar.gz"
 
 # Download Python Pocketsphinx library with no dependency on PulseAudio.
-pocketsphinx-python.tar.gz:
+$(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz:
 	curl -sSfL -o $@ 'https://github.com/synesthesiam/pocketsphinx-python/releases/download/v1.0/pocketsphinx-python.tar.gz'
