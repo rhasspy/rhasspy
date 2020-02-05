@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+rhasspy-voltron asr-pocketsphinx-hermes "$@"

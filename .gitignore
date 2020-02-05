@@ -6,3 +6,4 @@ pyinstaller/
 supervisord.log
 web/
 download/
+debian/rhasspy-voltron*

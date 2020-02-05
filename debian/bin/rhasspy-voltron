@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+if [[ -z "${rhasspyvoltron_dir}" ]]; then
+    this_dir="$( cd "$( dirname "$0" )" && pwd )"
+    rhasspyvoltron_dir="${this_dir}/../lib/rhasspyvoltron"
+fi
+
+# Include mitlm and phonetisaurus
+export LD_LIBRARY_PATH="${rhasspyvoltron_dir}/mitlm/lib:${rhasspyvoltron_dir}/phonetisaurus/lib:${LD_LIBRARY_PATH}"
+export PATH="${rhasspyvoltron_dir}/mitlm/bin:${rhasspyvoltron_dir}/phonetisaurus/bin:${PATH}"
+
+# Run service
+"${rhasspyvoltron_dir}/rhasspyvoltron" "$@"

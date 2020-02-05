@@ -1,0 +1,10 @@
+site_name: Rhasspy
+theme: readthedocs
+nav:
+  - Home: index.md
+  - Install: install.md
+  - Services: services.md
+  - Tutorials: tutorials.md
+  - Reference: reference.md
+  - License: license.md
+  - About: about.md
