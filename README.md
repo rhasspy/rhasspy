@@ -64,10 +64,11 @@ Install runtime dependencies:
   * `mosquitto` (MQTT broker)
   * `sox` (WAV conversion)
   * `alsa-utils` (record/play audio)
+  * `libgfortran3` (training)
 
 ```bash
 sudo apt-get update
-sudo apt-get install supervisor mosquitto sox alsa-utils
+sudo apt-get install supervisor mosquitto sox alsa-utils libgfortran3
 ```
 
 ## Running

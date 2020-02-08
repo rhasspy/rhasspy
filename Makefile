@@ -21,17 +21,10 @@ debian_dir := debian/$(debian_package)
 # -----------------------------------------------------------------------------
 
 reformat:
-	black .
-	isort $(PYTHON_FILES)
+	scripts/format-code.sh $(PYTHON_FILES)
 
 check:
-	flake8 $(PYTHON_FILES)
-	pylint $(PYTHON_FILES)
-	mypy $(PYTHON_FILES)
-	black --check .
-	isort --check-only $(PYTHON_FILES)
-	yamllint .
-	pip list --outdated
+	scripts/check-code.sh $(PYTHON_FILES)
 
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
@@ -43,13 +36,8 @@ requirements_dev.txt: $(REQUIREMENTS_DEV)
 	cat $^ | grep -v '^-e' | sort | uniq > $@
 
 # Create virtual environment and install all (non-Rhasspy) dependencies.
-venv: requirements.txt snowboy-1.3.0.tar.gz update-bin
-	rm -rf .venv/
-	python3 -m venv .venv
-	.venv/bin/pip3 $(PIP_INSTALL) wheel setuptools
-	.venv/bin/pip3 $(PIP_INSTALL) -r requirements.txt
-	.venv/bin/pip3 $(PIP_INSTALL) $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
-	.venv/bin/pip3 $(PIP_INSTALL) -r requirements_dev.txt
+venv: requirements.txt requirements_dev.txt update-bin downloads
+	scripts/create-venv.sh
 
 # Copy submodule scripts to shared bin directory.
 update-bin:
@@ -60,12 +48,6 @@ update-bin:
 update-web:
 	rm -rf web
 	cd rhasspy-web-vue && make && mv dist ../web
-
-# Build Python Kaldi nnet3 extension.
-# Requires you to put the path to your Kaldi installation in a file named
-# rhasspy-asr-kaldi/kaldiroot.
-install-kaldi: rhasspy-asr-kaldi/kaldiroot
-	cd rhasspy-asr-kaldi && ../.venv/bin/python3 kaldi_setup.py install
 
 # Create source/binary/debian distribution files
 dist: sdist debian
@@ -78,16 +60,14 @@ sdist:
 # Docker
 # -----------------------------------------------------------------------------
 
-docker-downloads: $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz $(DOWNLOAD_DIR)/kaldi-2019-$(architecture).tar.gz $(DOWNLOAD_DIR)/kaldi-2019.tar.gz $(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz $(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz $(DOWNLOAD_DIR)/openfst-1.6.7.tar.gz
-
 # Build ALSA Docker image.
-docker-alsa: docker-downloads
+docker-alsa: downloads
 	docker build . -f Dockerfile.source.alsa \
     -t "rhasspy/$(SERVICE_NAME):$(version)" \
     -t "rhasspy/$(SERVICE_NAME):latest"
 
 # Build PulseAudio Docker image.
-docker-pulseaudio: docker-downloads
+docker-pulseaudio: downloads
 	docker build . -f Dockerfile.source.pulseaudio \
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
@@ -116,30 +96,14 @@ debian: pyinstaller
 # Downloads
 # -----------------------------------------------------------------------------
 
+downloads: $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz
+
 # Download snowboy.
 $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz:
+	mkdir -p "$(DOWNLOAD_DIR)"
 	curl -sSfL -o $@ 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'
-
-# Download pre-built Kaldi binaries.
-$(DOWNLOAD_DIR)/kaldi-2019-$(architecture).tar.gz:
-	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-kaldi/releases/download/v2019.1/kaldi-2019-$(architecture).tar.gz"
-
-# Download Kaldi source code.
-$(DOWNLOAD_DIR)/kaldi-2019.tar.gz:
-	curl -sSfL -o $@ 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2019.tar.gz'
-
-# Download OpenFST source code.
-$(DOWNLOAD_DIR)/openfst-1.6.7.tar.gz:
-	curl -sSfL -o $@ 'http://openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.7.tar.gz'
-
-# Download pre-built MITLM binaries.
-$(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz:
-	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-mitlm/releases/download/v0.4.2/mitlm-0.4.2-$(architecture).tar.gz"
-
-# Download pre-built Phonetisaurus binaries.
-$(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz:
-	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(architecture).tar.gz"
 
 # Download Python Pocketsphinx library with no dependency on PulseAudio.
 $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz:
+	mkdir -p "$(DOWNLOAD_DIR)"
 	curl -sSfL -o $@ 'https://github.com/synesthesiam/pocketsphinx-python/releases/download/v1.0/pocketsphinx-python.tar.gz'

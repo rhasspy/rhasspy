@@ -10,7 +10,7 @@
 if [[ ! -z "$1" ]]; then
     cpu_arch="$1"
 else
-    cpu_arch="$(uname --m)"
+    cpu_arch="$(uname -m)"
 fi
 
 # Try lookup table first
