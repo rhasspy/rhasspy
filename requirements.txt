@@ -1,12 +1,11 @@
 aiohttp==3.6.2
 attrs==19.3.0
-cython==0.29.14
 fuzzywuzzy[speedup]==0.17.0
 json5==0.7.0
+mkdocs >= 1.0.4
 multidict==4.6.1
 networkx==2.4
 num2words==0.5.10
-numpy==1.18.0
 paho-mqtt==1.5.0
 pocketsphinx==0.1.15
 PyAudio==0.2.11
