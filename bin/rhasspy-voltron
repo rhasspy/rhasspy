@@ -48,9 +48,6 @@ fi
 
 profile_dir="${user_profiles}/${profile_name}"
 
-mqtt_host='localhost'
-mqtt_port='1883'
-
 # -----------------------------------------------------------------------------
 
 # Generate supervisord conf
@@ -71,6 +68,7 @@ echo "Generating ${conf_path}"
     --system-profiles "${system_profiles}" \
     --user-profiles "${user_profiles}" \
     --web-dir "${src_dir}/web" \
+    "$@" \
     &
 
 # Kill the process above when this terminal exits

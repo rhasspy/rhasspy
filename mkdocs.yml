@@ -6,5 +6,7 @@ nav:
   - Services: services.md
   - Tutorials: tutorials.md
   - Reference: reference.md
+  - Audio Input: audio-input.md
+  - Text to Speech: text-to-speech.md
   - License: license.md
   - About: about.md
