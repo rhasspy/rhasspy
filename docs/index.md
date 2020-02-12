@@ -2,7 +2,7 @@
 
 ![Rhasspy logo](img/rhasspy.png)
 
-Rhasspy (pronounced RAH-SPEE) is an [open source](https://github.com/rhasspy), fully offline set of [voice assistant services](services.md) for [many human languages](#supported-languages) that works well with:
+Rhasspy (pronounced RAH-SPEE) is an [open source](https://github.com/rhasspy), fully offline set of [voice assistant services](#services) for [many human languages](#supported-languages) that works well with:
 
 * [Hermes protocol](https://docs.snips.ai/reference/hermes) compatible services ([Snips.AI](https://snips.ai/))
 * [Home Assistant](https://www.home-assistant.io/) and [Hass.io](https://www.home-assistant.io/hassio/)
@@ -77,12 +77,20 @@ Rhasspy supports the following languages:
 * Swedish (`sv`)
 * Catalan (`ca`)
 
+## Services
+
+As of version 2.5, Rhasspy is composed of [independent services](services.md) that coordinate over [MQTT](https://mqtt.org) using a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes).
+
+![Rhasspy services](img/services.png)
+
+You can easily extend or replace functionality in Rhasspy by using the [appropriate messages](reference.md#mqtt-api). Many of these messages can be also sent and received over the [HTTP API](reference.md#http-api) and the [Websocket API](reference.md#websocket-api).
+
 ## Intended Audience
 
-Rhasspy is intended for advanced users that want to have a voice interface to Home Assistant, but value **privacy** and **freedom** above all else. There are many other voice assistants, but none (to my knowledge) that:
+Rhasspy is intended for savvy amateurs or advanced users that want to have a **private** voice interface to their chosen home automation software. There are many other voice assistants, but none (to my knowledge) that:
 
 1. Can function **completely disconnected from the Internet**
-2. Are entirely free/open source
-3. Work well with open home automation software like Home Assistant, Hass.io, and Node-RED
+2. Are entirely free/open source with a permissive license
+3. Work well with freely available home automation software
 
-If you feel comfortable sending your voice commands through the Internet for someone else to process, or are not comfortable with rolling your own Home Assistant automations to handle intents, I recommend taking a look at [Mycroft](https://mycroft.ai).
+If you feel comfortable sending your voice commands through the Internet for someone else to process, or are not comfortable customizing software to handle intents, I recommend taking a look at [Mycroft](https://mycroft.ai).

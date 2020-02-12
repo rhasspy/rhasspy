@@ -18,7 +18,7 @@ dist_dir="${src_dir}/dist"
 mkdir -p "${dist_dir}"
 
 # Make dependent libraries
-bash "${this_dir}/build-sdists.sh"
+bash "${this_dir}/build-dists.sh"
 
 # -----------------------------------------------------------------------------
 
@@ -34,33 +34,8 @@ cat "${src_dir}/RHASSPY_SERVICES" | \
         service_dir="${src_dir}/${service_name}"
         cd "${service_dir}"
 
-        if [[ ! -d .venv ]]; then
-            # Create virtual environment
-            rm -rf .venv
-            python3 -m venv .venv
-            .venv/bin/pip3 install --upgrade wheel setuptools
-        fi
-
-        # Install dependencies
-        # req_pyinstaller="$(grep pyinstaller "${service_dir}/requirements_dev.txt")"
-        if [[ -z "${req_pyinstaller}" ]]; then
-            req_pyinstaller='pyinstaller==3.5'
-        fi
-
-        .venv/bin/pip3 install \
-                       --upgrade \
-                       -f "${dist_dir}" \
-                       -r requirements.txt \
-                       "${req_pyinstaller}"
-
-
-        # Run PyInstaller
-        cd "${service_dir}" && \
-            .venv/bin/pyinstaller \
-                -y \
-                --workpath pyinstaller/build \
-                --distpath pyinstaller/dist \
-                "${python_name}.spec"
+        make dist
+        cp "${service_dir}/dist"/*.deb "${dist_dir}/"
 
         echo ""
     done

@@ -19,9 +19,7 @@ cat "${src_dir}/RHASSPY_DIRS" | \
         service_dir="${src_dir}/${package_name}"
         cd "${service_dir}"
 
-        source .venv/bin/activate
         make check
-        deactivate
 
         echo ''
     done
