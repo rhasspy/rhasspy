@@ -2,7 +2,7 @@
 
 Rhasspy is composed of independent services that communicate over [MQTT](https://mqtt.org) using a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes).
 
-Message payloads are typically UTF-8 encoded [JSON](https://json.org), except for the following messages whose payloads are binary [WAV audio](https://en.wikipedia.org/wiki/WAV):
+Message payloads are typically [JSON objects](https://json.org), except for the following messages whose payloads are binary [WAV audio](https://en.wikipedia.org/wiki/WAV):
 
 * `hermes/audioServer/<siteId>/audioFrame`
 * `hermes/audioServer/<siteId>/playBytes/<requestId>`
@@ -18,7 +18,7 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 * [rhasspy-server-hermes](https://github.com/rhasspy/rhasspy-server-hermes)
     * [Vue.js](https://vuejs.org/) based web UI at `http://YOUR_SERVER:12101`
-    * Implements Rhasspy's [HTTP API](/reference/#http-api) and [websocket API](/reference/#websocket-api)
+    * Implements Rhasspy's [HTTP API](reference.md#http-api) and [websocket API](reference.md#websocket-api)
 
 ## Dialogue
 
@@ -54,10 +54,10 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 * [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
     * Calls an external program for audio input
-    * Implements [arecord](/audio-input/#alsa)
+    * Implements [arecord](audio-input.md#alsa)
 * [rhasspy-microphone-pyaudio-hermes](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes)
     * Records directly from a [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) device
-    * Implements [pyaudio](/audio-input/#pyaudio)
+    * Implements [pyaudio](audio-input.md#pyaudio)
 
 ### Input Messages
 
@@ -145,7 +145,16 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Available Services
 
-* TODO
+* [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
+
+### Input Messages
+
+* `hermes/nlu/intent/<intentName>` - intent successfully recognized
+    * `intentName: string` - name of recognized intent (part of topic)
+
+### Output Messages
+
+* `hermes/tts/say` - speak a sentence
 
 ### Input Messages
 
@@ -158,10 +167,10 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 * [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
     * Calls external program for text to speech
-    * Implements [espeak](/text-to-speech/#espeak), [flite](/text-to-speech/#flite), [picoTTS](/text-to-speech/#picotts), and [command](/text-to-speech/#command)
+    * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), and [command](text-to-speech.md#command)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to remote web server for text to speech
-    * Implements [remote](/text-to-speech/#remote) (`--tts-url`) and [command](/text-to-speech/#command) (`--tts-command`)
+    * Implements [remote](text-to-speech.md#remote) (`--tts-url`) and [command](text-to-speech.md#command) (`--tts-command`)
 
 ### Input Messages
 

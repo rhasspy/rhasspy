@@ -7,6 +7,7 @@ rhasspy-dialogue-hermes
 rhasspy-fuzzywuzzy
 rhasspy-fuzzywuzzy-hermes
 rhasspy-hermes
+rhasspy-homeassistant-hermes
 rhasspy-microphone-cli-hermes
 rhasspy-microphone-pyaudio-hermes
 rhasspy-nlu

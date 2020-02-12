@@ -4,6 +4,13 @@ Rhasspy can listen to audio input from a local microphone or a remote audio
 stream. Most of the local audio testing has been done with a USB [PlayStation
 Eye camera](https://en.wikipedia.org/wiki/PlayStation_Eye).
 
+
+## MQTT/Hermes
+
+Rhasspy receives audio over [MQTT](https://mqtt.org) using the [Hermes protocol](https://docs.snips.ai/reference/hermes): specifically, audio chunks in the [WAV format](https://en.wikipedia.org/wiki/WAV) on the topic `hermes/audioServer/<siteId>/audioFrame`
+
+To avoid unnecessary conversion overhead, the WAV audio should be 16-bit 16Khz mono.
+
 ## PyAudio
 
 Streams microphone data from a [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) device.
@@ -49,12 +56,6 @@ By default, calls `arecord -t raw -r 16000 -f S16_LE -c 1` and reads 30ms (960
 bytes) of audio data at a time.
 
 Implemented by [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
-
-## MQTT/Hermes
-
-Rhasspy receives audio over [MQTT](https://mqtt.org) using the [Hermes protocol](https://docs.snips.ai/reference/hermes): specifically, audio chunks in the [WAV format](https://en.wikipedia.org/wiki/WAV) on the topic `hermes/audioServer/<siteId>/audioFrame`
-
-To avoid unnecessary conversion overhead, the WAV audio should be 16-bit 16Khz mono.
 
 ## HTTP Stream
 
