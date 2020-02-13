@@ -5,7 +5,7 @@
 * [HTTP API](#http-api)
 * [Websocket API](#websocket-api)
 * [Profile Settings](#profile-settings)
-* [Command Line](#command-line)
+* [Command Line Tools](#command-line-tools)
 
 ## Supported Languages
 
@@ -588,7 +588,7 @@ All available profile sections and settings are listed below:
     * `remote` - configuration for remote HTTP intent handler
         * `url` - URL to POST intent JSON to and receive response JSON from
 * `mqtt` - configuration for MQTT
-    * `enabled` - true if external broker should be used (false uses internal broker)
+    * `enabled` - true if external broker should be used (false uses internal broker on port 12183)
     * `host` - external MQTT host
     * `port` - external MQTT port
     * `username` - external MQTT username (blank for anonymous)
