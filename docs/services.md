@@ -1,18 +1,31 @@
 # Services
 
-Rhasspy is composed of independent services that communicate over [MQTT](https://mqtt.org) using a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes).
+Rhasspy is composed of independent services that communicate over [MQTT](https://mqtt.org) using a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes) for these components:
+
+* [Web Server](#web-server)
+* [Dialogue Manager](#dialogue-manager)
+* [Audio Input](#audio-input)
+* [Wake Word Detection](#wake-word-detection)
+* [Speech to Text](#speech-to-text)
+* [Intent Recognition](#intent-recognition)
+* [Intent Handling](#intent-handling)
+* [Text to Speech](#text-to-speech)
+* [Audio Output](#audio-output)
 
 Message payloads are typically [JSON objects](https://json.org), except for the following messages whose payloads are binary [WAV audio](https://en.wikipedia.org/wiki/WAV):
 
 * [`hermes/audioServer/<siteId>/audioFrame`](reference.md#audioserver_audioframe)
-* [`hermes/audioServer/<siteId>/playBytes/<requestId>`](reference.md#audioserver_playbytes)
-* [`rhasspy/asr/<siteId>/<sessionId>/audioCaptured`](reference.md#asr_audiocaptured)
+    * WAV chunk from microphone
+* [`hermes/audioServer/<siteId>/playBytes/<requestId>`](reference.md#audioserver_playbytes) 
+    * WAV audio to play through speakers
+* [`rhasspy/asr/<siteId>/<sessionId>/audioCaptured`](reference.md#asr_audiocaptured) 
+    * WAV audio recorded from session
 
 Most messages contain a string `siteId` property, whose default value is "default". Each service takes one or more `--siteId <NAME>` arguments that determine which site IDs the service will listen for. If not specified, the service will listen for **all sites**.
 
 ## Web Server
 
-Provides a graphical web interface for managing Rhasspy, and handles downloading language-specific profile artifacts.
+Provides a [graphical web interface](usage.md#web-interface) for managing Rhasspy, and handles downloading language-specific profile artifacts.
 
 ### Available Services
 
@@ -20,7 +33,9 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
     * [Vue.js](https://vuejs.org/) based web UI at `http://YOUR_SERVER:12101`
     * Implements Rhasspy's [HTTP API](reference.md#http-api) and [websocket API](reference.md#websocket-api)
 
-## Dialogue
+## Dialogue Manager
+
+Manages sessions initiated by a wake word [`detection`](reference.md#hotword_detected) or a [`startSession`](reference.md#dialoguemanager_startsession).
 
 ![Hermes dialogue message flow](img/hermes-flow.png)
 
@@ -30,25 +45,27 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `hermes/dialogueManager/startSession`
-    * `siteId: string = "default"` - Hermes site ID
-* `hermes/dialogueManager/continueSession`
-    * `siteId: string = "default"` - Hermes site ID
-* `hermes/dialogueManager/endSession`
-    * `siteId: string = "default"` - Hermes site ID
+* [`hermes/dialogueManager/startSession`](reference.md#dialoguemanager_startsession) 
+    * Start a new session
+* [`hermes/dialogueManager/continueSession`](reference.md#dialoguemanager_continuesession)
+    * Continue an existing session
+* [`hermes/dialogueManager/endSession`](reference.md#dialoguemanager_endsession) 
+    * End an existing session
 
 ### Output Messages
 
-* `hermes/dialogueManager/sessionStarted`
-    * `siteId: string = "default"` - Hermes site ID
-* `hermes/dialogueManager/sessionQueued`
-    * `siteId: string = "default"` - Hermes site ID
-* `hermes/dialogueManager/sessionEnded`
-    * `siteId: string = "default"` - Hermes site ID
-* `hermes/dialogueManager/intentNotRecognized`
-    * `siteId: string = "default"` - Hermes site ID
+* [`hermes/dialogueManager/sessionStarted`](reference.md#dialoguemanager_sessionstarted)
+    * New session has started
+* [`hermes/dialogueManager/sessionQueued`](reference.md#dialoguemanager_sessionqueued)
+    * New session has be enqueued
+* [`hermes/dialogueManager/sessionEnded`](reference.md#dialoguemanager_sessionended)
+    * Existing session has terminated
+* [`hermes/dialogueManager/intentNotRecognized`](reference.md#dialoguemanager_intentnotrecognized)
+    * Voice command was not recognized in existing session
 
 ## Audio Input
+
+Records audio from a microphone and streams it as WAV chunks over MQTT. See [Audio Input](audio-input.md) for details.
 
 ### Available Services
 
@@ -61,16 +78,19 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `rhasspy/audioServer/getDevices` - requests available input devices
+* [`rhasspy/audioServer/getDevices`](reference.md#audioserver_getdevices)
+    * Requests available input devices
 
 ### Output Messages
 
-* `hermes/audioServer/<siteId>/audioFrame`
-    * `wav_bytes: bytes` - WAV data to play (message payload)
-    * `siteId: string` - Hermes site ID (part of topic)
-* `rhasspy/audioServer/devices` - response to `getDevices`
+* [`hermes/audioServer/<siteId>/audioFrame`](reference.md#audioserver_audioframe)
+    * WAV chunk from microphone
+* [`rhasspy/audioServer/devices`](reference.md#audioserver_devices)
+    * Description of available audio input devices
 
 ## Wake Word Detection
+
+Listens to WAV chunks and tries to detect a wake/hotword. See [Wake Word](wake-word.md) for details.
 
 ### Available Services
 
@@ -80,15 +100,19 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `hermes/hotword/toggleOn`
-* `hermes/hotword/toggleOff`
+* [`hermes/hotword/toggleOn`](reference.md#hotword_toggleon)
+    * Enables wake word detection
+* [`hermes/hotword/toggleOff`](reference.md#hotword_toggleoff)
+    * Disables wake word detection
 
 ### Output Messages
 
- * `hermes/wake/hotword/<wakewordId>/detected`
-    * `wakewordId: string` - ID of detected wake word (part of topic)
+ * [`hermes/wake/hotword/<wakewordId>/detected`](reference.md#hotword_detected)
+    * Wake word successfully detected
 
 ## Speech to Text
+
+Listens to WAV chunks and transcribes voice commands. See [Speech to Text](speech-to-text.md) for details.
 
 ### Available Services
 
@@ -97,28 +121,37 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `hermes/audioServer/<siteId>/audioFrame`
-    * `wav_bytes: bytes` - WAV data to play (message payload)
-    * `siteId: string` - Hermes site ID (part of topic)
-* `hermes/asr/toggleOn`
-* `hermes/asr/toggleOff`
-* `hermes/asr/startListening`
-* `hermes/asr/stopListening`
-* `rhasspy/asr/<siteId>/train`
-    * `siteId: string` - Hermes site ID (part of topic)
+* [`hermes/audioServer/<siteId>/audioFrame`](reference.md#audioserver_audioframe)
+    * WAV chunk from microphone
+* [`hermes/asr/toggleOn`](reference.md#asr_toggleon)
+    * Enable ASR system
+* [`hermes/asr/toggleOff`](reference.md#asr_toggleoff)
+    * Disable ASR system
+* [`hermes/asr/startListening`](reference.md#asr_startlistening)
+    * Start recording a voice command
+* [`hermes/asr/stopListening`](reference.md#asr_stoplistening)
+    * Stop recording a voice command
+* [`rhasspy/asr/<siteId>/train`](reference.md#asr_train)
+    * Re-train ASR system
+* [`rhasspy/g2p/pronounce`](reference.md#g2p_pronounce)
+    * Get phonetic pronunciations for words
 
 ### Output Messages
 
-* `hermes/asr/textCaptured` - successful transcription
-* `hermes/error/asr` - error during transcription/training
-* `rhasspy/asr/<siteId>/trainSuccess` - training succeeded
-    * `siteId: string` - Hermes site ID (part of topic)
-* `rhasspy/asr/<siteId>/<sessionId>/audioCaptured` - audio from voice command
-    * `wav_bytes: bytes` - WAV data to play (message payload)
-    * `siteId: string` - Hermes site ID (part of topic)
-    * `session: string` - current session ID (part of topic)
+* [`hermes/asr/textCaptured`](reference.md#asr_textcaptured)
+    * Successful voice command transcription
+* [`hermes/error/asr`](reference.md#error_asr)
+    * Error during transcription/training
+* [`rhasspy/asr/<siteId>/trainSuccess`](reference.md#asr_trainsuccess)
+    * ASR training succeeded
+* [`rhasspy/asr/<siteId>/<sessionId>/audioCaptured`](reference.md#asr_audiocaptured)
+    * Audio recorded from voice command
+* [`rhasspy/g2p/phonemes`](reference.md#g2p_phonemes)
+    * Phonetic pronunciations of words
 
 ## Intent Recognition
+
+Recognizes user intents from text input. See [Intent Recognition](intent-recognition.md) for details.
 
 ### Available Services
 
@@ -127,21 +160,25 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `hermes/nlu/query` - recognize intent from text
-    * `input: string` - input text
-* `rhasspy/nlu/<siteId>/train` - retrain NLU system
-    * `siteId: string` - Hermes site ID (part of topic)
+* [`hermes/nlu/query`](reference.md#nlu_query)
+    * Recognize intent from text
+* [`rhasspy/nlu/<siteId>/train`](reference.md#nlu_<siteid>/train)
+    * Retrain NLU system
 
 ### Output Messages
 
-* `hermes/nlu/intent/<intentName>` - intent successfully recognized
-    * `intentName: string` - name of recognized intent (part of topic)
-* `hermes/nlu/intentNotRecognized` - intent was not recognized
-* `hermes/error/nlu` - error during recognition/training
-* `rhasspy/nlu/<siteId>/trainSuccess` - training succeeded
-    * `siteId: string` - Hermes site ID (part of topic)
+* [`hermes/nlu/intent/<intentName>`](reference.md#nlu_intent)
+    * Intent successfully recognized
+* [`hermes/nlu/intentNotRecognized`](reference.md#nlu_intentnotrecognized)
+    * Intent was **not** recognized
+* [`hermes/error/nlu`](reference.md#error_nlu)
+    * Error during recognition/training
+* [`rhasspy/nlu/<siteId>/trainSuccess`](reference.md#nlu_trainsuccess)
+    * NLU training succeeded
 
 ## Intent Handling
+
+Dispatches recognized intents to home automation software. See [Intent Handling](intent-handling.md) for details.
 
 ### Available Services
 
@@ -149,19 +186,21 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `hermes/nlu/intent/<intentName>` - intent successfully recognized
-    * `intentName: string` - name of recognized intent (part of topic)
+* [`hermes/nlu/intent/<intentName>`](reference.md#nlu_intent)
+    * Intent successfully recognized
+* [`hermes/handle/toggleOn`](reference.md#handle_toggleon)
+    * Enable intent handling
+* [`hermes/handle/toggleOff`](reference.md#handle_toggleoff)
+    * Disable intent handling
 
 ### Output Messages
 
-* `hermes/tts/say` - speak a sentence
-
-### Input Messages
-
-* `hermes/nlu/intent/<intentName>`
-    * `intentName: string` - name of intent to handle (part of topic)
+* [`hermes/tts/say`](reference.md#tts_say)
+    * Speak a sentence
 
 ## Text to Speech
+
+Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) for details.
 
 ### Available Services
 
@@ -174,22 +213,17 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ### Input Messages
 
-* `hermes/tts/say` - speak a sentence
-    * `text: string` - sentence to speak (required)
-    * `lang: string = ""` - language for TTS system
-    * `id: string = ""` - unique ID for request (copied to `sayFinished`)
-    * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+* [`hermes/tts/say`](reference.md#tts_say)
+    * Speak a sentence
 
 ### Output Messages
 
-* `hermes/tts/sayFinished` - response to `say`
-    * `id: string = ""` - unique ID for request (copied from `say`)
-    * `sessionId: string = ""` - current session ID (copied from `say`)
+* [`hermes/tts/sayFinished`](reference.md#tts_sayfinished)
+    * Finished *generating* audio
 
 ## Audio Output
 
-Plays WAV audio through an audio output device (speakers).
+Plays WAV audio through an audio output device (speakers). See [Audio Output](audio-output.md) for details.
 
 ### Available Services
 
@@ -198,11 +232,13 @@ Plays WAV audio through an audio output device (speakers).
 ### Input Messages
 
 * [`hermes/audioServer/<siteId>/playBytes/<requestId>`](reference.md#audioserver_playbytes)
-* `rhasspy/audioServer/getDevices` - request output devices
-    * TODO
+    * WAV audio to play through speakers
+* [`rhasspy/audioServer/getDevices`](reference.md#audioserver_getdevices)
+    * Request audio output devices
 
 ### Output Messages
 
 * [`hermes/audioServer/<siteId>/playFinished`](reference.md#audioserver_playfinished)
-* `rhasspy/audioServer/devices` - response to `getDevices`
-    * TODO
+    * Audio has finished playing
+* [`rhasspy/audioServer/devices`](reference.md#audioserver_devices)
+    * Details of audio output devices

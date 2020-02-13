@@ -209,11 +209,9 @@ Each time a voice command is transcribed, Rhasspy emits a JSON event at `ws://YO
 
 The transcription is contained in the `text` property. `wakewordId` is the id of the wakeword that initiated the voice command (or `default`). The `siteId` comes from your `mqtt.siteId` profile setting.
 
-### Websocket MQTT message
+### Websocket MQTT Messages
 
-You can send and receive MQTT messages over a special websocket endpoint:
-
-* `/api/mqtt`
+You can send and receive MQTT messages over a special websocket endpoint at `ws://YOUR_SERVER:12101/api/mqtt` (`wss://` if using HTTPS).
 
 #### Subscribing to Topics
 
