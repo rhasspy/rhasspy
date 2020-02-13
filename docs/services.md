@@ -4,9 +4,9 @@ Rhasspy is composed of independent services that communicate over [MQTT](https:/
 
 Message payloads are typically [JSON objects](https://json.org), except for the following messages whose payloads are binary [WAV audio](https://en.wikipedia.org/wiki/WAV):
 
-* `hermes/audioServer/<siteId>/audioFrame`
-* `hermes/audioServer/<siteId>/playBytes/<requestId>`
-* `rhasspy/asr/<siteId>/<sessionId>/audioCaptured`
+* [`hermes/audioServer/<siteId>/audioFrame`](reference.md#audioserver_audioframe)
+* [`hermes/audioServer/<siteId>/playBytes/<requestId>`](reference.md#audioserver_playbytes)
+* [`rhasspy/asr/<siteId>/<sessionId>/audioCaptured`](reference.md#asr_audiocaptured)
 
 Most messages contain a string `siteId` property, whose default value is "default". Each service takes one or more `--siteId <NAME>` arguments that determine which site IDs the service will listen for. If not specified, the service will listen for **all sites**.
 
@@ -189,23 +189,20 @@ Provides a graphical web interface for managing Rhasspy, and handles downloading
 
 ## Audio Output
 
+Plays WAV audio through an audio output device (speakers).
+
 ### Available Services
 
 * [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
 
 ### Input Messages
 
-* `hermes/audioServer/<siteId>/playBytes/<requestId>` - play WAV data
-    * `wav_bytes: bytes` - WAV data to play (message payload)
-    * `requestId: string` - unique ID for request (part of topic)
-    * `siteId: string` - Hermes site ID (part of topic)
+* [`hermes/audioServer/<siteId>/playBytes/<requestId>`](reference.md#audioserver_playbytes)
 * `rhasspy/audioServer/getDevices` - request output devices
     * TODO
 
 ### Output Messages
 
-* `hermes/audioServer/<siteId>/playFinished` - response to `playBytes`
-    * `siteId: string` - Hermes site ID (part of topic)
-    * `id: string = ""` - `requestId` from `playBytes`
+* [`hermes/audioServer/<siteId>/playFinished`](reference.md#audioserver_playfinished)
 * `rhasspy/audioServer/devices` - response to `getDevices`
     * TODO

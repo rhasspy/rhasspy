@@ -34,6 +34,181 @@ The table below lists which components and compatible with Rhasspy's supported l
 
 ## MQTT API
 
+Rhasspy implements a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes) in [rhasspy-hermes](https://github.com/rhasspy/rhasspy-hermes) for the following components:
+
+* [Audio Server](#audio-server)
+* [Automated Speech Recognition](#automated-speech-recognition)
+* [Dialogue Manager](#dialogue-manager)
+* [Hotword Detection](#hotword-detection)
+* [Text to Speech](#text-to-speech)
+
+### Audio Server
+
+* <a id="audioserver_audioframe"><tt>hermes/audioServer/&lt;siteId&gt;/audioFrame</tt></a> (binary)
+    * Chunk of WAV audio data
+    * `wav_bytes: bytes` - WAV data to play (**message payload**)
+    * `siteId: string` - Hermes site ID (part of topic)
+* <a id="audioserver_playbytes"><tt>hermes/audioServer/&lt;siteId&gt;/playBytes/&lt;requestId&gt;</tt></a> (JSON)
+    * Play WAV data
+    * `wav_bytes: bytes` - WAV data to play (message payload)
+    * `requestId: string` - unique ID for request (part of topic)
+    * `siteId: string` - Hermes site ID (part of topic)
+    * Response(s)
+        * [`hermes/audioServer/<siteId>/playFinished`](#audioserver_playfinished) (JSON)
+* <a id="audioserver_playfinished"><tt>hermes/audioServer/&lt;siteId&gt;/playFinished</tt></a>
+    * Indicates that audio has finished playing
+    * Response to [`hermes/audioServer/<siteId>/playBytes/<requestId>`](#audioserver_playbytes)
+    * `siteId: string` - Hermes site ID (part of topic)
+    * `id: string = ""` - `requestId` from request message
+    
+### Automated Speech Recognition
+
+* <a id="asr_toggleon"><tt>hermes/asr/toggleOn</tt></a> (JSON)
+    * Enables ASR system
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="asr_toggleoff"><tt>hermes/asr/toggleOff</tt></a> (JSON)
+    * Disables ASR system
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="asr_startlistening"><tt>hermes/asr/startListening</tt></a> (JSON)
+    * Tell ASR system to start recording/transcribing
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+* <a id="asr_stoplistening"><tt>hermes/asr/stopListening</tt></a> (JSON)
+    * Tell ASR system to stop recording
+    * Emits [`textCaptured`](#asr_textcaptured) if silence has was not detected earlier
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+* <a id="asr_textcaptured"><tt>hermes/asr/textCaptured</tt></a> (JSON)
+    * Successful transcription, sent either when silence is detected or on [`stopListening`](#asr_stoplistening)
+    * `text: string` - transcription text
+    * `likelihood: float` - confidence from ASR system
+    * `seconds: float` - transcription time in seconds
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+* <a id="asr_error"><tt>hermes/error/asr</tt></a> (JSON)
+    * Sent when an error occurs in the ASR system
+    * `error: string` - description of the error
+    * `context: string` - system-defined context of the error
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+* <a id="asr_train"><tt>hermes/asr/&lt;siteId&gt;/train</tt></a> (JSON, Rhasspy only)
+    * Instructs the ASR system to re-train
+    * `id: string` - unique ID for request (copied to [`trainSuccess`](#asr_trainsuccess))
+    * `graph_dict: object` - intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a JSON object
+    * `siteId: string` - Hermes site ID (part of topic)
+    * Response(s)
+        * [`hermes/asr/<siteId>/trainSuccess`](#asr_trainsuccess)
+        * [`hermes/error/asr`](#asr_error)
+* <a id="asr_trainsuccess"><tt>hermes/asr/&lt;siteId&gt;/trainSuccess</tt></a> (JSON, Rhasspy only)
+    * Indicates that training was successful
+    * `id: string` - unique ID from request (copied from [`train`](#asr_train))
+    * `siteId: string` - Hermes site ID (part of topic)
+    * Response to [`hermes/asr/<siteId>/train`](#asr_train)
+* <a id="asr_audiocaptured"><tt>hermes/asr/&lt;siteId&gt;/&lt;sessionId&gt;/audioCaptured</tt></a> (binary, Rhasspy only)
+    * WAV audio data captured by ASR session
+    * `siteId: string` - Hermes site ID (part of topic)
+    * `sessionId: string` - current session ID (part of topic)
+    * Only sent if `sendAudioCaptured = true` in [`startListening`](#asr_startlistening)
+    
+### Dialogue Manager
+
+* <a id="dialoguemanager_startsession"><tt>hermes/dialogueManager/startSession</tt></a> (JSON)
+    * Starts a new dialogue session (done automatically on hotword [`detected`](#hotword_detected))
+    * `init: object` - JSON object with one of two forms:
+        * Action
+            * `type: string = "action"` - required
+            * `canBeEnqueued: bool` - true if session can be queued if there is already one (required)
+            * `text: string = ""` - sentence to speak using [text to speech](#text-to-speech)
+            * `intentFilter: [string] = null` - valid intent names (`null` means all) 
+            * `sendIntentNotRecognized: bool = false` - send [`hermes/dialogueManager/intentNotRecognized`](#dialoguemanager_intentnotrecognized) if [intent recognition](#intent-recognition) fails
+        * Notification
+            * `type: string = "notification"` - required
+            * `text: string` - sentence to speak using [text to speech](#text-to-speech) (required)
+    * `siteId: string = "default"` - Hermes site ID
+    * `customData: string = ""` - user-defined data passed to subsequent session messages
+    * Response(s)
+        * [`hermes/dialogueManager/sessionStarted`](#dialoguemanager_sessionstarted)
+        * [`hermes/dialogueManager/sessionQueued`](#dialoguemanager_sessionqueued)
+* <a id="dialoguemanager_sessionstarted"><tt>hermes/dialogueManager/sessionStarted</tt></a> (JSON)
+    * Indicates a session has started
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * Response to [`hermes/dialogueManager/startSession`]
+* <a id="dialoguemanager_sessionqueued"><tt>hermes/dialogueManager/sessionQueued</tt></a> (JSON)
+    * Indicates a session has been queued (only when `init.canBeEnqueued = true` in [`startSession`](#dialoguemanager_startsession))
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * Response to [`hermes/dialogueManager/startSession`]
+* <a id="dialoguemanager_continuesession"><tt>hermes/dialogueManager/continueSession</tt></a> (JSON)
+    * Requests that a session be continued after an [`intent`](#nlu_intent) has been recognized
+    * `sessionId: string` - current session ID (required)
+    * `customData: string = ""` - user-defined data (overrides session `customData` if not empty)
+    * `text: string = ""` - sentence to speak using [text to speech](#text-to-speech)
+    * `intentFilter: [string] = null` - valid intent names (`null` means all) 
+    * `sendIntentNotRecognized: bool = false` - send [`hermes/dialogueManager/intentNotRecognized`](#dialoguemanager_intentnotrecognized) if [intent recognition](#intent-recognition) fails
+* <a id="dialoguemanager_endsession"><tt>hermes/dialogueManager/endSession</tt></a> (JSON)
+    * Requests that a session be terminated nominally
+    * `sessionId: string` - current session ID (required)
+    * `customData: string = ""` - user-defined data (overrides session `customData` if not empty)
+* <a id="dialoguemanager_sessionended"><tt>hermes/dialogueManager/sessionEnded</tt></a> (JSON)
+    * Indicates a session has terminated
+    * `termination: string` reason for termination (required), one of:
+        * nominal
+        * abortedByUser
+        * intentNotRecognized
+        * timeout
+        * error
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * Response to [`hermes/dialogueManager/endSession`](#dialoguemanager_endsession) or other reasons for a session termination
+    
+### Hotword Detection
+
+* <a id="hotword_toggleon"><tt>hermes/hotword/toggleOn</tt></a> (JSON)
+    * Enables hotword detection
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="hotword_toggleoff"><tt>hermes/hotword/toggleOff</tt></a> (JSON)
+    * Disables hotword detection
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="hotword_detected"><tt>hermes/hotword/&lt;wakewordId&gt;/detected</tt></a> (JSON)
+    * Indicates a hotword was successfully detected
+    * `wakewordId: string` - wake word ID (part of topic)
+    * `modelId: string` - ID of wake word model used (service specific)
+    * `modelVersion: string = ""` - version of wake word model used (service specific)
+    * `modelType: string = "personal"` - type of wake word model used (service specific)
+    * `currentSensitivity: float = 1.0` - sensitivity of wake word detection (service specific)
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID (Rhasspy only)
+* <a id="hotword_error"><tt>hermes/error/hotword</tt></a> (JSON, Rhasspy only)
+    * Sent when an error occurs in the hotword system
+    * `error: string` - description of the error
+    * `context: string` - system-defined context of the error
+    * `siteId: string = "default"` - Hermes site ID
+
+### Text to Speech
+
+* <a id="tts_say"><tt>hermes/tts/say</tt></a> (JSON)
+    * Generate spoken audio for a sentence using the configured text to speech system
+    * Automatically sends [`playBytes`](#audioserver_playbytes)
+        * `playBytes.requestId = say.id`
+    * `text: string` - sentence to speak (required)
+    * `lang: string = ""` - language for TTS system
+    * `id: string = ""` - unique ID for request (copied to `sayFinished`)
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+    * Response(s)
+        * [`hermes/tts/sayFinished`](#tts_sayfinished) (JSON)
+* <a id="tts_sayfinished"><tt>hermes/tts/sayFinished</tt></a> (JSON)
+    * Indicates that the text to speech system has finished generating audio
+    * `id: string = ""` - unique ID for request (copied from `say`)
+    * `siteId: string = "default"` - Hermes site ID
+    * Response to [`hermes/tts/say`](#tts_say)
+    * Listen for [`playFinished`](#audioserver_playfinished) to determine when audio is finished playing
+        * `playFinished.id = sayFinished.id`
+
 ## HTTP API
 
 Rhasspy's HTTP endpoints are documented below. You can also visit `/api/` in your Rhasspy server (note the final slash) to try out each endpoint.
