@@ -6,6 +6,7 @@ nav:
   - Services: services.md
   - Tutorials: tutorials.md
   - Usage: usage.md
+  - Profiles: profiles.md
   - Training: training.md
   - Hardware: hardware.md
   - Audio Input: audio-input.md
@@ -17,5 +18,6 @@ nav:
   - Intent Handling: intent-handling.md
   - Text to Speech: text-to-speech.md
   - Reference: reference.md
+  - Development: development.md
   - License: license.md
   - About: about.md

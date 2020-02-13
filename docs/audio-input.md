@@ -57,29 +57,6 @@ bytes) of audio data at a time.
 
 Implemented by [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
 
-## HTTP Stream
-
-Accepts chunks of 16-bit 16 kHz mono audio via an HTTP POST stream (assumes [chunked transfer encoding](https://en.wikipedia.org/wiki/Chunked_transfer_encoding)).
-
-Add to your [profile](profiles.md):
-
-```json
-"microphone": {
-  "system": "http",
-  "http": {
-    "host": "127.0.0.1",
-    "port": 12333,
-    "stop_after": "never"
-  }
-}
-```
-
-Set `microphone.http.stop_after` to one of "never", "text", or "intent". When set to "never", you can continuously stream (chunked) audio into Rhasspy across multiple voice commands. When set to "text" or "intent", the stream will be closed when the first voice command has been transcribed ("text") or recognized ("intent"). Once closed, you can perform an HTTP GET request to the stream URL to retrieve the result (text for transcriptions or JSON for intent).
-
-Note that `microphone.http.port` must be different than Rhasspy's webserver port (usually 12101).
-
-TODO: Not Implemented
-
 ## GStreamer
 
 Receives audio chunks via stdout from a [GStreamer](https://gstreamer.freedesktop.org/) pipeline.
