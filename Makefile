@@ -41,7 +41,7 @@ venv: requirements.txt requirements_dev.txt update-bin downloads
 
 # Copy submodule scripts to shared bin directory.
 update-bin:
-	$(shell find . -mindepth 3 -maxdepth 3 -type f -name 'rhasspy-*' -path '*/bin/*' -exec cp '{}' bin/ \;)
+	$(shell find . -mindepth 3 -maxdepth 3 -type f -name 'rhasspy-*' -path './rhasspy*/bin/*' -exec cp '{}' bin/ \;)
 	chmod +x bin/*
 
 # Build and copy Vue web artifacts to web directory.

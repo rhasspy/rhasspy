@@ -12,11 +12,7 @@
 !docker/pulseaudio.client.conf
 !docker/bin
 
-!snowboy-1.3.0.tar.gz
-!kaldi-2019*.tar.gz
-!openfst-*.tar.gz
-!mitlm-0.4.2-*.tar.gz
-!pocketsphinx-python.tar.gz
+!download
 
 # Source
 !rhasspy-asr/rhasspyasr
@@ -28,18 +24,23 @@
 !rhasspy-asr-kaldi/VERSION
 !rhasspy-asr-kaldi-hermes/rhasspyasr_kaldi_hermes
 !rhasspy-dialogue-hermes/rhasspydialogue_hermes
+!rhasspy-fuzzywuzzy/rhasspyfuzzywuzzy
+!rhasspy-fuzzywuzzy-hermes/rhasspyfuzzywuzzy_hermes
 !rhasspy-hermes/rhasspyhermes
+!rhasspy-homeassistant-hermes/rhasspyhomeassistant_hermes
 !rhasspy-microphone-cli-hermes/rhasspymicrophone_cli_hermes
 !rhasspy-microphone-pyaudio-hermes/rhasspymicrophone_pyaudio_hermes
 !rhasspy-nlu/rhasspynlu
 !rhasspy-nlu-hermes/rhasspynlu_hermes
 !rhasspy-profile/rhasspyprofile
+!rhasspy-remote-http-hermes/rhasspyremote_http_hermes
 !rhasspy-server-hermes/rhasspyserver_hermes
 !rhasspy-server-hermes/profiles
 !rhasspy-silence/rhasspysilence
 !rhasspy-speakers-cli-hermes/rhasspyspeakers_cli_hermes
 !rhasspy-supervisor/rhasspysupervisor
 !rhasspy-tts-cli-hermes/rhasspytts_cli_hermes
+!rhasspy-wake-pocketsphinx-hermes/rhasspywake_pocketsphinx_hermes
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes
 
