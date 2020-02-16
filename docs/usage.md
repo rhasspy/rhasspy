@@ -22,8 +22,6 @@ The top bar of the web interface lets you perform some global actions on Rhasspy
 * Click the Rhasspy logo to reload the page
 * Click the version number to test the [HTTP API](#http-api)
 * The green `Train` button will re-train your profile
-    * Use the `Clear Cache` drop down to train from scratch
-* The yellow `Wake` button will wake Rhasspy up and start listening for a voice command
 * The red `Restart` button forces Rhasspy to restart
 
 ### Speech Tab
@@ -32,10 +30,10 @@ Test voice and text commands.
 
 ![Web interface speech tab](img/web-speech.png)
 
-* Record a voice command with `Hold to Record` or `Tap to Record`
+* Wake up Rhasspy and have it listen for a voice command
 * Upload a WAV file with a voice command
-* Enter a text command and either execute it (`Get Intent`) or `Speak` the sentence
-* Uncheck `Send to Home Assistant` if you **don't** want Rhasspy to send events to Home Assistant
+* Enter a text command and Rhasspy recognize the intent
+* Speak a sentence using the text to speech system
 
 ### Sentences Tab
 
@@ -44,18 +42,19 @@ Add new voice commands to Rhasspy using the [template syntax](training.md#senten
 ![Web interface sentences tab](img/web-sentences.png)
 
 * Edits `sentences.ini` by default
-* Use the `Add File` button to create additional sentence template files
+* Create additional template files
     * These should be prefixed by the `sentences_dir` in your [profile](profiles.md). For example, `intents/more-commands.ini`
 * The drop down can be used to switch editing between different template files
 
 ### Slots Tab
 
-Edit your [slots lists](training.md#slots-lists) as JSON (keys = slot names, values = lists of slot values).
+Edit your [slots lists](training.md#slots-lists).
 
 ![Web interface slots tab](img/web-slots.png)
 
-* New slot values will overwrite previous ones
-* Delete a slot by providing an empty list for its JSON key
+* Slot values will overwrite previous ones
+* Create new slots (files in your `slots` directory)
+* Delete a slot by deleting all values and saving
 
 ### Words Tab
 
@@ -65,14 +64,7 @@ Teach Rhasspy how to pronounce new words.
 
 * Look up pronunciation(s) for known words (in your profile's `base_dictionary.txt` file)
 * Have Rhasspy guess how to pronounce a new (unknown) word
-* Pronounce the current word or download a WAV file of it
 * Add new words to your `custom_words.txt` file
-* Shows words that Rhasspy doesn't know (when training fails)
-
-![Web interface words tab 2](img/web-words-2.png)
-
-Table of examples for each phoneme in your profile language.
-Use this when constructing pronunciations for custom words.
 
 ### Settings Tab
 
@@ -92,7 +84,7 @@ Direct interface for editing your [profile](profiles.md).
 
 Streams Rhasspy's log output over a websocket.
 
-![Web interface log tab](img/web-log.png)
+TODO
 
 ## Home Assistant
 
