@@ -67,7 +67,7 @@ echo "Generating ${conf_path}"
     --profile "${profile_name}" \
     --system-profiles "${system_profiles}" \
     --user-profiles "${user_profiles}" \
-    --web-dir "${src_dir}/web" \
+    --web-dir "${src_dir}/rhasspy-server-hermes/web" \
     "$@" \
     &
 
