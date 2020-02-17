@@ -434,7 +434,7 @@ All available profile sections and settings are listed below:
     * `pem_file` - Full path to your <a href="http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification">CA_BUNDLE file or a directory with certificates of trusted CAs</a>
     * `event_type_format` - Python format string used to create event type from intent type (`{0}`)
 * `speech_to_text` - transcribing [voice commands to text](speech-to-text.md)
-    * `system` - name of speech to text system (`pocketsphinx`, `kaldi`, `remote`, `command`, or `dummy`)
+    * `system` - name of speech to text system (`pocketsphinx`, `kaldi`, `remote`, `command`, `remote`, `hermes`, or `dummy`)
     * `pocketsphinx` - configuration for [Pocketsphinx](speech-to-text.md#pocketsphinx)
         * `compatible` - true if profile can use pocketsphinx for speech recognition
         * `acoustic_model` - directory with CMU 16 kHz acoustic model
@@ -447,6 +447,7 @@ All available profile sections and settings are listed below:
         * `base_language_model` - large general language model (read only)
         * `mllr_matrix` - MLLR matrix from [acoustic model tuning](https://cmusphinx.github.io/wiki/tutorialtuning/)
         * `mix_weight` - how much of the base language model to [mix in during training](training.md#language-model-mixing) (0-1)
+        * `phoneme_examples` - text file with examples for each acoustic model phoneme
     * `kaldi` - configuration for [Kaldi](speech-to-text.md#kaldi)
         * `compatible` - true if profile can use Kaldi for speech recognition
         * `kaldi_dir` - absolute path to Kaldi root directory
@@ -459,6 +460,7 @@ All available profile sections and settings are listed below:
         * `open_transcription` - true if general language model should be used (custom voices commands ignored)
         * `unknown_words` - small text file with guessed word pronunciations (from phonetisaurus)
         * `mix_weight` - how much of the base language model to [mix in during training](training.md#language-model-mixing) (0-1)
+        * `phoneme_examples` - text file with examples for each acoustic model phoneme
     * `remote` - configuration for [remote Rhasspy server](speech-to-text.md#remote-http-server)
         * `url` - URL to POST WAV data for transcription (e.g., `http://your-rhasspy-server:12101/api/speech-to-text`)
     * `command` - configuration for [external speech-to-text program](speech-to-text.md#command)
@@ -494,7 +496,7 @@ All available profile sections and settings are listed below:
         * `arguments` - list of arguments to pass to program
     * `replace_numbers` if true, automatically replace number ranges (`N..M`) or numbers (`N`) with words
 * `text_to_speech` - pronouncing words
-    * `system` - text to speech system (`espeak`, `flite`, `picotts`, `marytts`, `command`, or `dummy`)
+    * `system` - text to speech system (`espeak`, `flite`, `picotts`, `marytts`, `command`, `remote`, `hermes`, or `dummy`)
     * `espeak` - configuration for [eSpeak](http://espeak.sourceforge.net)
         * `phoneme_map` - text file mapping CMU phonemes to eSpeak phonemes
     * `flite` - configuration for [flite](http://www.festvox.org/flite)
@@ -514,7 +516,8 @@ All available profile sections and settings are listed below:
         * `url` - URL of WaveNet endpoint
         * `voice` - voice to use (e.g., `Wavenet-C`)
         * `fallback_tts` - text to speech system to use when offline or error occurs (e.g., `espeak`)
-    * `phoneme_examples` - text file with examples for each CMU phoneme
+    * `remote` - configuration for remote text to speech server
+        * `url` - URL to POST sentence to and get back WAV data
 * `training` - training speech/intent recognizers
     * `speech_to_text` - training for speech decoder
         * `system` - speech to text training system (`auto` or `dummy`)
@@ -531,7 +534,7 @@ All available profile sections and settings are listed below:
         * `remote` - configuration for external HTTP endpoint
             * `url` - URL of intent recognizer training endpoint
 * `wake` - waking Rhasspy up for speech input
-    * `system` - wake word recognition system (`pocketsphinx`, `snowboy`, `precise`, `porcupine`, `command`, or `dummy`)
+    * `system` - wake word recognition system (`pocketsphinx`, `snowboy`, `precise`, `porcupine`, `command`, `hermes`, or `dummy`)
     * `pocketsphinx` - configuration for Pocketsphinx wake word recognizer
         * `keyphrase` - phrase to wake up on (3-4 syllables recommended)
         * `threshold` - sensitivity of detection (recommended range 1e-50 to 1e-5)
@@ -571,8 +574,8 @@ All available profile sections and settings are listed below:
         * `chunk_size` - number of bytes to read at a time (default 960)
     * `gstreamer` - configuration for GStreamer audio recorder
         * `pipeline` - GStreamer pipeline (e.g., `FILTER ! FILTER ! ...`) without sink
-* `sounds` - configuration for feedback sounds from Rhasspy
-    * `system` - which sound output system to use (`aplay`, `command`, or `dummy`)
+* `sounds` - configuration for audio output from Rhasspy
+    * `system` - which sound output system to use (`aplay`, `command`, `remote`, `hermes`, or `dummy`)
     * `wake` - path to WAV file to play when Rhasspy wakes up
     * `recorded` - path to WAV file to play when a command finishes recording
     * `aplay` - configuration for ALSA speakers
@@ -580,6 +583,8 @@ All available profile sections and settings are listed below:
     * `command` - configuration for external audio output program
         * `program` - path to executable
         * `arguments` - list of arguments to pass to program
+    * `remote` - configuration for remote audio output server
+        * `url` - URL to POST WAV data to
 * `handle`
     * `system` - which intent handling system to use (`hass`, `command`, `remote`, or `dummy`)
     * `command` - configuration for external speech-to-text program
@@ -594,6 +599,8 @@ All available profile sections and settings are listed below:
     * `username` - external MQTT username (blank for anonymous)
     * `password` - external MQTT password
     * `site_id` - one or more Hermes site IDs (comma separated). First ID is used for new messages
+* `dialogue` - configuration for Hermes dialogue manager
+    * `system` - which dialogue manager to use (`rhasspy`, `hermes`, or `dummy`)
 * `download` - configuration for profile file downloading
     * `url_base` - base URL to download profile artifacts (defaults to Github)
     * `conditions` - profile settings that will trigger file downloads
