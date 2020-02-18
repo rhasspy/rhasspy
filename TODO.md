@@ -13,6 +13,8 @@
 
 * Support dynamic entity injection
 * Test intent filters
+* Replace fuzzywuzzy with equivalent thats using a MIT license
+* Add Snips NLU
 
 # Wake
 
