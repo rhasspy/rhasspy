@@ -93,4 +93,4 @@
 	url = https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes
 [submodule "rhasspy-homeassistant-hermes"]
 	path = rhasspy-homeassistant-hermes
-	url = ./rhasspy-homeassistant-hermes/
+	url = https://github.com/rhasspy/rhasspy-homeassistant-hermes
