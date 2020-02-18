@@ -48,7 +48,8 @@ cat "${src_dir}/RHASSPY_DIRS" | \
         .venv/bin/pip3 ${PIP_INSTALL} \
                        --upgrade \
                        -f "${dist_dir}" \
-                       -r requirements.txt
+                       -r requirements.txt \
+                       -r requirements_dev.txt \
 
         echo ''
     done

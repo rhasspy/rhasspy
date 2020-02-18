@@ -1,7 +1,8 @@
 # Web UI
 
-* Download profile artifacts
-* Report unknown words to user
+* Add arguments to all command systems
+* Add SSL
+* Change out templating for API calls
 
 # ASR
 
@@ -19,7 +20,22 @@
 # Wake
 
 * Support Mycroft Precise
+* Add webhook?
 
 # TTS
 
 * Support Google Wavenet
+* Support NanoTTS
+* Support SSML
+
+# Intent Handling
+
+* Test Home Assistant
+
+# Dialogue Management
+
+* Session timeouts
+
+# Documentation
+
+* Describe supervisord/Docker restart processes
