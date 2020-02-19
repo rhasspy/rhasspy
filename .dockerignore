@@ -1,7 +1,6 @@
 *
 !bin/
 !etc/
-!web/
 
 !dist/
 
@@ -35,7 +34,8 @@
 !rhasspy-profile/rhasspyprofile
 !rhasspy-remote-http-hermes/rhasspyremote_http_hermes
 !rhasspy-server-hermes/rhasspyserver_hermes
-!rhasspy-server-hermes/profiles
+!rhasspy-server-hermes/templates
+!rhasspy-server-hermes/web
 !rhasspy-silence/rhasspysilence
 !rhasspy-speakers-cli-hermes/rhasspyspeakers_cli_hermes
 !rhasspy-supervisor/rhasspysupervisor

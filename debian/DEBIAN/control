@@ -2,7 +2,7 @@ Package: rhasspy-voltron
 Version: ${version}
 Section: utils
 Priority: optional
-Depends: sox,libgfortran3
+Depends: alsa-utils,espeak,flite,sox,libstdc++6,libgfortran4
 Architecture: ${architecture}
 Maintainer: Michael Hansen
 Description: All in one Rhasspy server
