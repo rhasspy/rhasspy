@@ -2,7 +2,6 @@
 
 * Add arguments to all command systems
 * Add SSL
-* Change out templating for API calls
 
 # ASR
 
