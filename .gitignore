@@ -4,6 +4,7 @@ __pycache__/
 dist/
 pyinstaller/
 supervisord.log
+site/
 web/
 download/
 debian/rhasspy-voltron*

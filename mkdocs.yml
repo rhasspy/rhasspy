@@ -2,7 +2,7 @@ site_name: Rhasspy
 theme: readthedocs
 nav:
   - Home: index.md
-  - Install: install.md
+  - Installation: installation.md
   - Services: services.md
   - Tutorials: tutorials.md
   - Usage: usage.md

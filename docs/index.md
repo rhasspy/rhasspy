@@ -7,8 +7,8 @@ Rhasspy (pronounced RAH-SPEE) is an [open source](https://github.com/rhasspy), f
 * [Hermes protocol](https://docs.snips.ai/reference/hermes) compatible services ([Snips.AI](https://snips.ai/))
 * [Home Assistant](https://www.home-assistant.io/) and [Hass.io](https://www.home-assistant.io/hassio/)
 * [Node-RED](https://nodered.org)
-* Jeedom
-* OpenHAB
+* [Jeedom](https://www.jeedom.com)
+* [OpenHAB](https://www.openhab.org)
 
 You specify voice commands in a [template language](training.md):
 
