@@ -5,9 +5,13 @@
 
 # ASR
 
+* German TDN 250 model
+* French TDN 250 model
 * Support language model mixing during training
+* Italian nnet2 model
 * Add Julius ASR
 * Add DeepSpeech ASR
+* Add Google STT
 
 # NLU
 
