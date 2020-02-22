@@ -8,13 +8,21 @@ PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
 DOWNLOAD_DIR = download
 
-.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
+.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
 
 debian_package := $(SERVICE_NAME)_$(version)_$(architecture)
 debian_dir := debian/$(debian_package)
+
+ifneq (,$(findstring -dev,$(version)))
+	DOCKER_TAGS = -t "rhasspy/$(PACKAGE_NAME):$(version)"
+else
+	DOCKER_TAGS = -t "rhasspy/$(PACKAGE_NAME):$(version)" -t "rhasspy/$(PACKAGE_NAME):latest"
+endif
+
+DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
 
 # -----------------------------------------------------------------------------
 # Python
@@ -71,6 +79,10 @@ docker-pulseaudio: requirements.txt requirements_dev.txt update-bin downloads
 	docker build . -f Dockerfile.source.pulseaudio \
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
+
+docker-deploy:
+	docker login --username rhasspy --password "$$DOCKER_PASSWORD"
+	docker buildx build . -f Dockerfile.source.alsa --platform $(DOCKER_PLATFORMS) --push $(DOCKER_TAGS)
 
 # -----------------------------------------------------------------------------
 # Debian

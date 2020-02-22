@@ -38,7 +38,7 @@ ARG BUILD_ARCH=amd64
 RUN apt-get update
 RUN apt-get install --no-install-recommends --yes \
     libportaudio2 libatlas3-base python3 python3-dev \
-    libgfortran3 libgfortran4 \
+    libgfortran4 \
     curl supervisor mosquitto sox alsa-utils \
     espeak flite libttspico-utils
 
