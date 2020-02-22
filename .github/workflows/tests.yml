@@ -20,4 +20,4 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Create Docker image
-        run: make docker
+        run: make docker-alsa
