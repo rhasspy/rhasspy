@@ -16,15 +16,12 @@ COPY requirements.txt ${RHASSPY_DIR}/
 RUN python3 -m venv ${RHASSPY_VENV}
 RUN ${RHASSPY_PIP} install wheel setuptools
 
-# Temporary workaround
-COPY dist/ /dist/
-
 # Pocketsphinx without Pulseaudio dependency
 COPY download/pocketsphinx-python.tar.gz /
 RUN ${RHASSPY_PIP} install /pocketsphinx-python.tar.gz
 
 # Runtime Python dependencies
-RUN ${RHASSPY_PIP} install -f /dist/ --no-index -r ${RHASSPY_DIR}/requirements.txt
+RUN ${RHASSPY_PIP} install -r ${RHASSPY_DIR}/requirements.txt
 
 # Snowboy wake word library
 COPY download/snowboy-1.3.0.tar.gz /
@@ -43,7 +40,7 @@ RUN apt-get install --no-install-recommends --yes \
     libportaudio2 libatlas3-base python3 python3-dev \
     libgfortran3 libgfortran4 \
     curl supervisor mosquitto sox alsa-utils \
-    espeak flite
+    espeak flite libttspico-utils
 
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv

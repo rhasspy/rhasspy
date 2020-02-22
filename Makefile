@@ -61,13 +61,13 @@ sdist:
 # -----------------------------------------------------------------------------
 
 # Build ALSA Docker image.
-docker-alsa: downloads
+docker-alsa: requirements.txt requirements_dev.txt update-bin downloads
 	docker build . -f Dockerfile.source.alsa \
     -t "rhasspy/$(SERVICE_NAME):$(version)" \
     -t "rhasspy/$(SERVICE_NAME):latest"
 
 # Build PulseAudio Docker image.
-docker-pulseaudio: downloads
+docker-pulseaudio: requirements.txt requirements_dev.txt update-bin downloads
 	docker build . -f Dockerfile.source.pulseaudio \
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
