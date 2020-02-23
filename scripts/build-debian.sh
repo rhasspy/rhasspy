@@ -14,8 +14,8 @@ fi
 this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
-package_name="$(basename "${src_dir}")"
-python_name="$(basename "${src_dir}" | sed -e 's/-//' | sed -e 's/-/_/g')"
+package_name='rhasspy'
+python_name='rhasspy'
 
 venv="${src_dir}/.venv"
 if [[ -d "${venv}" ]]; then
@@ -29,11 +29,37 @@ dist="${src_dir}/dist"
 mkdir -p dist
 
 # Create PyInstaller artifacts
+dist_dir="${src_dir}/pyinstaller/dist"
 pyinstaller \
     -y \
     --workpath "${src_dir}/pyinstaller/build" \
-    --distpath "${src_dir}/pyinstaller/dist" \
+    --distpath "${dist_dir}" \
     "${python_name}.spec"
+
+download_dir="${src_dir}/download"
+
+# Copy required files
+mkdir -p "${dist_dir}/rhasspy/rhasspyprofile"
+cp -R "${src_dir}/rhasspy-profile/rhasspyprofile/profiles" \
+   "${dist_dir}/rhasspy/rhasspyprofile/"
+
+mkdir -p "${dist_dir}/rhasspy/rhasspyserver_hermes"
+cp -R "${src_dir}/rhasspy-server-hermes/web" \
+   "${src_dir}/rhasspy-server-hermes/templates" \
+   "${src_dir}/VERSION" \
+   "${dist_dir}/rhasspy/rhasspyserver_hermes"
+
+# Copy pre-built programs
+tar -C "${dist_dir}/rhasspy" \
+    -xvf "${download_dir}/mitlm-0.4.2-${architecture}.tar.gz"
+
+mkdir -p "${dist_dir}/rhasspy/phonetisaurus"
+tar -C "${dist_dir}/rhasspy/phonetisaurus" \
+    -xvf "${download_dir}/phonetisaurus-2019-${architecture}.tar.gz"
+
+mkdir -p "${dist_dir}/rhasspy/rhasspyasr_kaldi"
+tar -C "${dist_dir}/rhasspy/rhasspyasr_kaldi" \
+    -xvf "${download_dir}/kaldi-2020-${architecture}.tar.gz"
 
 # Tar up binary distribution
 tar -C "${src_dir}/pyinstaller/dist" \

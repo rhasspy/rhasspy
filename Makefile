@@ -1,6 +1,6 @@
 SHELL := bash
-PYTHON_NAME = "rhasspyvoltron"
-SERVICE_NAME = "rhasspy-voltron"
+PYTHON_NAME = "rhasspy"
+SERVICE_NAME = "rhasspy"
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
 REQUIREMENTS_DEV = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements_dev.txt)
@@ -8,13 +8,10 @@ PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
 DOWNLOAD_DIR = download
 
-.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads
+.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads docs
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
-
-debian_package := $(SERVICE_NAME)_$(version)_$(architecture)
-debian_dir := debian/$(debian_package)
 
 # -----------------------------------------------------------------------------
 # Python
@@ -34,6 +31,7 @@ requirements.txt: $(REQUIREMENTS)
 # Gather development requirements from all submodules.
 requirements_dev.txt: $(REQUIREMENTS_DEV)
 	cat $^ | grep -v '^-e' | sort | uniq > $@
+	echo 'mkdocs==1.0.4' >> $@
 
 # Create virtual environment and install all (non-Rhasspy) dependencies.
 venv: requirements.txt requirements_dev.txt update-bin downloads
@@ -44,11 +42,6 @@ update-bin:
 	$(shell find . -mindepth 3 -maxdepth 3 -type f -name 'rhasspy-*' -path './rhasspy*/bin/*' -exec cp '{}' bin/ \;)
 	chmod +x bin/*
 
-# Build and copy Vue web artifacts to web directory.
-update-web:
-	rm -rf web
-	cd rhasspy-web-vue && make && mv dist ../web
-
 # Create source/binary/debian distribution files
 dist: sdist debian
 
@@ -56,18 +49,21 @@ dist: sdist debian
 sdist:
 	python3 setup.py sdist
 
+docs:
+	scripts/build-docs.sh
+
 # -----------------------------------------------------------------------------
 # Docker
 # -----------------------------------------------------------------------------
 
 # Build ALSA Docker image.
-docker-alsa: downloads
+docker-alsa: downloads docs
 	docker build . -f Dockerfile.source.alsa \
     -t "rhasspy/$(SERVICE_NAME):$(version)" \
     -t "rhasspy/$(SERVICE_NAME):latest"
 
 # Build PulseAudio Docker image.
-docker-pulseaudio: downloads
+docker-pulseaudio: downloads docs
 	docker build . -f Dockerfile.source.pulseaudio \
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"

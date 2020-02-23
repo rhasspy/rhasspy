@@ -21,6 +21,7 @@ _COMMANDS = [
     "profile",
     "remote-http-hermes",
     "silence",
+    "server-hermes",
     "speakers-cli-hermes",
     "supervisor",
     "tts-cli-hermes",

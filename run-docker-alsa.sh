@@ -16,6 +16,6 @@ docker run -it -p 12101:12101 \
        --device /dev/snd:/dev/snd \
        -v "${profile_dir}:${profile_dir}" \
        -v /etc/localtime:/etc/localtime \
-       rhasspy/rhasspy-voltron:latest \
+       rhasspy/rhasspy:latest \
        --user-profiles "${profile_dir}" \
        "$@"

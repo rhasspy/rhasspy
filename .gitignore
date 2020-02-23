@@ -7,4 +7,5 @@ supervisord.log
 site/
 web/
 download/
-debian/rhasspy-voltron*
+debian/rhasspy*
+etc/qemu-*
