@@ -1,0 +1,21 @@
+---
+name: Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-18.04]
+        python-version: [3.7]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+      - name: Create Docker image
+        run: make docker-deploy
+        env:
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

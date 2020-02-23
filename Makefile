@@ -8,11 +8,29 @@ PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
 DOWNLOAD_DIR = download
 
+<<<<<<< HEAD
 .PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-downloads docs
+=======
+.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy
+>>>>>>> b0b84421260939c09f5dd9b9b2ff2d8c5ea1fd47
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
 
+<<<<<<< HEAD
+=======
+debian_package := $(SERVICE_NAME)_$(version)_$(architecture)
+debian_dir := debian/$(debian_package)
+
+ifneq (,$(findstring -dev,$(version)))
+	DOCKER_TAGS = -t "rhasspy/$(PACKAGE_NAME):$(version)"
+else
+	DOCKER_TAGS = -t "rhasspy/$(PACKAGE_NAME):$(version)" -t "rhasspy/$(PACKAGE_NAME):latest"
+endif
+
+DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+
+>>>>>>> b0b84421260939c09f5dd9b9b2ff2d8c5ea1fd47
 # -----------------------------------------------------------------------------
 # Python
 # -----------------------------------------------------------------------------
@@ -57,16 +75,28 @@ docs:
 # -----------------------------------------------------------------------------
 
 # Build ALSA Docker image.
+<<<<<<< HEAD
 docker-alsa: downloads docs
+=======
+docker-alsa: requirements.txt requirements_dev.txt update-bin downloads
+>>>>>>> b0b84421260939c09f5dd9b9b2ff2d8c5ea1fd47
 	docker build . -f Dockerfile.source.alsa \
     -t "rhasspy/$(SERVICE_NAME):$(version)" \
     -t "rhasspy/$(SERVICE_NAME):latest"
 
 # Build PulseAudio Docker image.
+<<<<<<< HEAD
 docker-pulseaudio: downloads docs
+=======
+docker-pulseaudio: requirements.txt requirements_dev.txt update-bin downloads
+>>>>>>> b0b84421260939c09f5dd9b9b2ff2d8c5ea1fd47
 	docker build . -f Dockerfile.source.pulseaudio \
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
+
+docker-deploy:
+	docker login --username rhasspy --password "$$DOCKER_PASSWORD"
+	docker buildx build . -f Dockerfile.source.alsa --platform $(DOCKER_PLATFORMS) --push $(DOCKER_TAGS)
 
 # -----------------------------------------------------------------------------
 # Debian
