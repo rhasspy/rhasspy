@@ -37,7 +37,7 @@ for docker_arch in "${docker_archs[@]}"; do
        exit 1
     fi
 
-    docker_tag="rhasspy/rhasspy-voltron:${version}-${friendly_arch}"
+    docker_tag="rhasspy/rhasspy:${version}-${friendly_arch}"
 
     docker build "${this_dir}" \
         --build-arg "BUILD_ARCH=${docker_arch}" \
