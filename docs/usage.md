@@ -15,76 +15,72 @@ A browser-based interface for Rhasspy is available on port 12101 by default ([ht
 
 ### Top Bar
 
-The top bar of the web interface lets you perform some global actions on Rhasspy, regardless of which tab you have selected.
+The top bar of the web interface lets you perform some global actions on Rhasspy, regardless of which page you have selected.
 
 ![Web interface top bar](img/web-top.png)
 
 * Click the Rhasspy logo to reload the page
 * Click the version number to test the [HTTP API](#http-api)
+* Use the dropdown menu to change pages or open the documentation
+* The gray `Log` button opens a dialog with log messages
 * The green `Train` button will re-train your profile
 * The red `Restart` button forces Rhasspy to restart
 
-### Speech Tab
+### Test Page
 
 Test voice and text commands.
 
-![Web interface speech tab](img/web-speech.png)
+![Web interface speech page](img/web-speech.png)
 
 * Wake up Rhasspy and have it listen for a voice command
 * Upload a WAV file with a voice command
 * Enter a text command and Rhasspy recognize the intent
 * Speak a sentence using the text to speech system
 
-### Sentences Tab
+### Sentences Page
 
 Add new voice commands to Rhasspy using the [template syntax](training.md#sentencesini).
 
-![Web interface sentences tab](img/web-sentences.png)
+![Web interface sentences page](img/web-sentences.png)
 
 * Edits `sentences.ini` by default
 * Create additional template files
     * These should be prefixed by the `sentences_dir` in your [profile](profiles.md). For example, `intents/more-commands.ini`
 * The drop down can be used to switch editing between different template files
 
-### Slots Tab
+### Slots Page
 
 Edit your [slots lists](training.md#slots-lists).
 
-![Web interface slots tab](img/web-slots.png)
+![Web interface slots page](img/web-slots.png)
 
 * Slot values will overwrite previous ones
 * Create new slots (files in your `slots` directory)
 * Delete a slot by deleting all values and saving
 
-### Words Tab
+### Words Page
 
 Teach Rhasspy how to pronounce new words.
 
-![Web interface words tab](img/web-words.png)
+![Web interface words page](img/web-words.png)
 
 * Look up pronunciation(s) for known words (in your profile's `base_dictionary.txt` file)
 * Have Rhasspy guess how to pronounce a new (unknown) word
 * Add new words to your `custom_words.txt` file
 
-### Settings Tab
+### Settings Page
 
 Simplified interface for editing your [profile](profiles.md).
-Make sure to restart Rhasspy after saving changes.
+Rhasspy will automatically restart after saving changes.
 
-![Web interface settings tab](img/web-settings.png)
+![Web interface settings page](img/web-settings.png)
 
-### Advanced Tab
+### Advanced Page
 
 Direct interface for editing your [profile](profiles.md).
 **Be careful!** Entering invalid settings here can cause Rhasspy to not start.
 
-![Web interface advanced tab](img/web-advanced.png)
-
-### Log Tab
-
-Streams Rhasspy's log output over a websocket.
-
-TODO
+![Web interface advanced page](img/web-advanced.png)
 
 ## Home Assistant
 

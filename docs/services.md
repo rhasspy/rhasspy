@@ -167,7 +167,7 @@ Recognizes user intents from text input. See [Intent Recognition](intent-recogni
 
 ### Output Messages
 
-* [`hermes/nlu/intent/<intentName>`](reference.md#nlu_intent)
+* [`hermes/intent/<intentName>`](reference.md#nlu_intent)
     * Intent successfully recognized
 * [`hermes/nlu/intentNotRecognized`](reference.md#nlu_intentnotrecognized)
     * Intent was **not** recognized

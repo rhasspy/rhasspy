@@ -36,6 +36,11 @@ pyinstaller \
     --distpath "${dist_dir}" \
     "${python_name}.spec"
 
+# Delete unnecessary directories
+rm -rf \
+   "${pyinstaller_dist}/${python_name}/share/" \
+   "${pyinstaller_dist}${python_name}/notebook/"
+
 download_dir="${src_dir}/download"
 
 # Copy required files
