@@ -25,7 +25,12 @@ for qemu_file in qemu-arm-static qemu-aarch64-static; do
 done
 
 # Do Docker builds
-docker_archs=('amd64' 'arm32v7' 'arm64v8')
+if [[ -z "$1" ]]; then
+    docker_archs=('amd64' 'arm32v7' 'arm64v8')
+else
+    docker_archs=("$@")
+fi
+
 declare -A friendly_archs
 friendly_archs=(['amd64']='amd64' ['arm32v7']='armhf' ['arm64v8']='aarch64')
 
@@ -42,5 +47,6 @@ for docker_arch in "${docker_archs[@]}"; do
     docker build "${this_dir}" \
         --build-arg "BUILD_ARCH=${docker_arch}" \
         --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
+        -f Dockerfile.source.alsa \
         -t "${docker_tag}"
 done
