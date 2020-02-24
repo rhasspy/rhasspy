@@ -1,0 +1,8 @@
+{
+  "speech_to_text": {
+    "system": "kaldi"
+  },
+  "intent": {
+    "system": "fsticuffs"
+  }
+}

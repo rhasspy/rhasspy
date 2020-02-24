@@ -15,7 +15,7 @@
    id="svg4287"
    version="1.1"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="raspi-training.svg"
+   sodipodi:docname="training.svg"
    inkscape:export-filename="./training.png"
    inkscape:export-xdpi="119.99"
    inkscape:export-ydpi="119.99">
@@ -250,6 +250,21 @@
          transform="scale(0.4)"
          inkscape:connector-curvature="0" />
     </marker>
+    <marker
+       inkscape:isstock="true"
+       style="overflow:visible"
+       id="marker4959-3"
+       refX="0"
+       refY="0"
+       orient="auto"
+       inkscape:stockid="TriangleOutM">
+      <path
+         inkscape:connector-curvature="0"
+         transform="scale(0.4)"
+         style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.00000003pt;stroke-opacity:1"
+         d="M 5.77,0 -2.88,5 V -5 Z"
+         id="path4957-6" />
+    </marker>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -259,8 +274,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.70710678"
-     inkscape:cx="803.48068"
-     inkscape:cy="609.41458"
+     inkscape:cx="1005.535"
+     inkscape:cy="635.44402"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -283,7 +298,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -319,17 +334,6 @@
            y="153.4352"
            id="tspan528">(n-gram)</tspan></text>
     </g>
-    <text
-       id="text526"
-       y="606.80939"
-       x="-536.1925"
-       style="font-style:normal;font-weight:normal;font-size:101.58544922px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.93749994"
-       xml:space="preserve"><tspan
-         style="font-weight:normal;stroke-width:0.93749994"
-         y="606.80939"
-         x="-536.1925"
-         id="tspan524"
-         sodipodi:role="line">=</tspan></text>
     <g
        transform="translate(-507.25286,434.94922)"
        id="g538"
@@ -474,14 +478,14 @@
       <text
          id="text464"
          y="246.33484"
-         x="306.34711"
+         x="290.12012"
          style="font-style:normal;font-weight:normal;font-size:18.0859108px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            y="246.33484"
-           x="306.34711"
+           x="290.12012"
            id="tspan462"
            sodipodi:role="line"
-           style="font-weight:normal;font-size:45.21477509px;line-height:1.25;stroke-width:1px">intent.fst</tspan></text>
+           style="font-weight:normal;font-size:45.21477509px;line-height:1.25;stroke-width:1px">intent.json</tspan></text>
       <g
          transform="translate(-299.40372,231.26476)"
          id="g4019">
@@ -502,7 +506,7 @@
              x="330.7641"
              sodipodi:role="line"
              id="tspan4015"
-             style="font-size:29.55814552px;line-height:1.25;text-align:center;text-anchor:middle">FST N</tspan></text>
+             style="font-size:29.55814552px;line-height:1.25;text-align:center;text-anchor:middle">Graph N</tspan></text>
       </g>
       <g
          id="g4027"
@@ -524,7 +528,7 @@
              id="tspan4023"
              sodipodi:role="line"
              x="330.7641"
-             y="108.10217">FST 2</tspan></text>
+             y="108.10217">Graph 2</tspan></text>
       </g>
       <g
          transform="translate(-299.40372,1.25456)"
@@ -546,7 +550,7 @@
              x="330.7641"
              sodipodi:role="line"
              id="tspan4031"
-             style="font-size:29.55814552px;line-height:1.25;text-align:center;text-anchor:middle">FST 1</tspan></text>
+             style="font-size:29.55814552px;line-height:1.25;text-align:center;text-anchor:middle">Graph 1</tspan></text>
       </g>
       <text
          xml:space="preserve"
@@ -562,14 +566,14 @@
       <text
          id="text4043"
          y="26.261547"
-         x="-23.37122"
+         x="-58.651119"
          style="font-style:normal;font-weight:normal;font-size:18.0859108px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            y="26.261547"
-           x="-23.37122"
+           x="-58.651119"
            id="tspan4041"
            sodipodi:role="line"
-           style="font-weight:bold;font-size:45.21477509px;line-height:1.25;stroke-width:1px">FSTs</tspan></text>
+           style="font-weight:bold;font-size:45.21477509px;line-height:1.25;stroke-width:1px">Graphs</tspan></text>
     </g>
     <g
        id="g5620">
@@ -724,14 +728,14 @@
       <text
          id="text430"
          y="261.10263"
-         x="-312.22379"
+         x="-334.72379"
          style="font-style:normal;font-weight:normal;font-size:12px;line-height:0%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
          xml:space="preserve"><tspan
            y="261.10263"
-           x="-312.22379"
+           x="-334.72379"
            id="tspan428"
            sodipodi:role="line"
-           style="font-style:italic;font-size:27.5px;line-height:1.25;stroke-width:1px">To FSTs</tspan></text>
+           style="font-style:italic;font-size:27.5px;line-height:1.25;stroke-width:1px">To Graphs</tspan></text>
       <path
          sodipodi:nodetypes="cc"
          inkscape:connector-curvature="0"
@@ -795,7 +799,7 @@
          x="360.35165"
          id="tspan428-2"
          sodipodi:role="line"
-         style="font-style:italic;font-size:27.5px;line-height:1.25;stroke-width:1px">opengrm</tspan></text>
+         style="font-style:italic;font-size:27.5px;line-height:1.25;stroke-width:1px">MITLM</tspan></text>
     <g
        id="g6733">
       <rect
@@ -828,5 +832,11 @@
          id="tspan428-7"
          sodipodi:role="line"
          style="font-style:italic;font-size:27.5px;line-height:1.25;stroke-width:1px">To JSGFs</tspan></text>
+    <path
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:6;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;marker-end:url(#marker4959-3)"
+       d="m -431.10991,580.82929 -103.5104,-10e-6"
+       id="path3977-7"
+       inkscape:connector-curvature="0"
+       sodipodi:nodetypes="cc" />
   </g>
 </svg>

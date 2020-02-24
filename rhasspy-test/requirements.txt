@@ -1,0 +1,3 @@
+paho-mqtt==1.5.0
+requests==2.22.0
+rhasspy-hermes==0.1.7
