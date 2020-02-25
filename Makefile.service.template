@@ -1,5 +1,5 @@
 SHELL := bash
-PACKAGE_NAME = $(shell basename "$PWD")
+PACKAGE_NAME = $(shell basename "$$PWD")
 PYTHON_NAME = $(shell echo "$(PACKAGE_NAME)" | sed -e 's/-//' | sed -e 's/-/_/g')
 SOURCE = $(PYTHON_NAME)
 PYTHON_FILES = $(SOURCE)/*.py *.py
