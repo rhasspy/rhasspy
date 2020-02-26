@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
-set -e
+skip_dists=''
+
+while [[ ! -z "$1" ]]; do
+    case "$1" in
+        '--skip-dists')
+            skip_dists='yes'
+            ;;
+    esac
+
+    shift
+done
 
 if [[ -z "${PIP_INSTALL}" ]]; then
     export PIP_INSTALL='install'
@@ -14,12 +24,13 @@ src_dir="$(realpath "${this_dir}/..")"
 dist_dir="${src_dir}/dist"
 mkdir -p "${dist_dir}"
 
-"${this_dir}/build-dists.sh"
+if [[ -z "${skip_dists}}" ]]; then
+    "${this_dir}/build-dists.sh"
+fi
 
 # -----------------------------------------------------------------------------
 
 # Create/update submodule virtual environments and build
-# TODO: Add kaldi
 cat "${src_dir}/RHASSPY_DIRS" | \
     while read -r package_name;
     do
