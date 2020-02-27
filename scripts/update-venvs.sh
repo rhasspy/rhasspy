@@ -24,11 +24,13 @@ src_dir="$(realpath "${this_dir}/..")"
 dist_dir="${src_dir}/dist"
 mkdir -p "${dist_dir}"
 
-if [[ -z "${skip_dists}}" ]]; then
+if [[ -z "${skip_dists}" ]]; then
     "${this_dir}/build-dists.sh"
 fi
 
 # -----------------------------------------------------------------------------
+
+set -e
 
 # Create/update submodule virtual environments and build
 cat "${src_dir}/RHASSPY_DIRS" | \

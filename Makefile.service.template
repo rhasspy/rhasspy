@@ -5,8 +5,9 @@ SOURCE = $(PYTHON_NAME)
 PYTHON_FILES = $(SOURCE)/*.py *.py
 SHELL_FILES = bin/* debian/bin/* *.sh
 PIP_INSTALL ?= install
+DOWNLOAD_DIR = download
 
-.PHONY: reformat check dist venv pyinstaller debian docker deploy docker-multiarch docker-multiarch-deploy docker-multiarch-manifest docker-multiarch-manifest-init
+.PHONY: reformat check dist venv pyinstaller debian docker deploy docker-multiarch docker-multiarch-deploy docker-multiarch-manifest docker-multiarch-manifest-init downloads
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
@@ -31,7 +32,7 @@ reformat:
 check:
 	scripts/check-code.sh $(PYTHON_FILES)
 
-venv:
+venv: downloads
 	scripts/create-venv.sh
 
 dist: sdist debian
@@ -95,3 +96,16 @@ pyinstaller:
 
 debian:
 	scripts/build-debian.sh "$(architecture)" "$(version)"
+
+# -----------------------------------------------------------------------------
+# Downloads
+# -----------------------------------------------------------------------------
+
+# Rhasspy development dependencies
+RHASSPY_DEPS := $(shell grep '^rhasspy-' requirements.txt | sort | comm -3 - rhasspy_wheels.txt | sed -e 's|^|$(DOWNLOAD_DIR)/|' -e 's/==/-/' -e 's/$$/.tar.gz/')
+
+$(DOWNLOAD_DIR)/%.tar.gz:
+	mkdir -p "$(DOWNLOAD_DIR)"
+	echo "$@" | sed -e 's|^[^/]\+/|https://github.com/rhasspy/|' -e 's|-[0-9].\+|/archive/master.tar.gz|' | xargs curl -sSfL -o "$@"
+
+downloads: $(RHASSPY_DEPS)

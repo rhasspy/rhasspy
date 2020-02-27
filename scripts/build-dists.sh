@@ -34,5 +34,9 @@ done
 # Copy to submodule download directories
 while read -r dir_name;
 do
-    cd "${src_dir}/${dir_name}" && mkdir -p download && cp -f "${dist_dir}"/rhasspy* download/
+    echo "${src_dir}/${dir_name}/download"
+    cd "${src_dir}/${dir_name}" && \
+        mkdir -p download && \
+        rm -f download/rhasspy* && \
+        cp -f "${dist_dir}"/rhasspy* download/
 done < "${src_dir}/RHASSPY_DIRS"
