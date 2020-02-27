@@ -43,3 +43,4 @@
 # Documentation
 
 * Describe supervisord/Docker restart processes
+* Document getHotwords, getVoices

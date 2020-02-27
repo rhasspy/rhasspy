@@ -46,7 +46,7 @@ Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-c
 
 ## Flite
 
-Uses FestVox's [flite](http://www.festvox.org/flite) for speech. Sounds better than `espeak` in most cases, but only supports English out of the box.
+Uses FestVox's [flite](http://www.festvox.org/flite) for speech. Sounds better than `espeak` in most cases, but supports fewer languages out of the box.
 
 Add to your [profile](profiles.md):
 
