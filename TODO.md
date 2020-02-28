@@ -1,6 +1,5 @@
 # Web UI
 
-* Show download progress for parts
 * Add arguments to all command systems
 * Add SSL
 

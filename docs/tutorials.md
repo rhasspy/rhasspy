@@ -4,7 +4,7 @@
 
 ## Getting Started Guide
 
-Welcome to Rhasspy! This guide will step you through setting up Rhasspy immediately after [installation](installation.md).
+Welcome to Rhasspy! This guide will step you through setting up Rhasspy immediately after [installation](installation.md). This guide was tested with the following hardware and software:
 
 * Raspberry Pi 3B+
 * 32 GB SD card
@@ -37,19 +37,35 @@ Clicking on an individual icon on the service bar will take you to its settings.
 
 In the [Settings Page](usage.md#settings-page), you can change which services Rhasspy will start and configure. Each section is initially red or disabled, indicating that no service will be started.
 
+To have Rhasspy start a specific service, select an option from the drop down list next to a red (or green) button. When selected, a service's settings will be displayed when you click the button.
+
 ![Settings page for wake word](img/getting-started/settings-service.png)
 
-* Plug in microphone and speakers
+**NOTE**: Some settings, like the available microphones and speakers, required you to click "Save Settings" first because the service must be started!
 
-Initially configure Rhasspy like this:
+To get started, enable the following services and click "Save Settings":
+
+* Audio Recording (PyAudio) 
+* Speech to Text (Pocketsphinx)
+* Intent Recognition (Fsticuffs)
+* Text to Speech (Espeak)
+* Audio Playing (aplay)
+* Dialogue Management (Rhasspy)
+
+Visually, your settings page should look like the following image:
 
 ![Initial settings](img/getting-started/service-config.png)
 
-* Click Save Settings and wait for restart
+(Make sure you click "Save Settings" and wait for Rhasspy to restart)
 
 ### Test Microphone
 
+Expand the "Audio Recording" section by clicking the green button. You should see a drop down list with available microphones. If you have trouble recording audio, try choosing a specific device instead of using the default (make sure to "Save Settings").
+
 ![Microphone test in settings](img/getting-started/test-microphones.png)
+
+
+Clicking the blue "Refresh" button will query PyAudio again for this list. The "Test" button next to "Refresh" will attempt to record audio from each device and guess if it's working or not. The text "working!" will show up next to working microphones in the list.
 
 ### Training
 

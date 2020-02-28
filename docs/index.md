@@ -43,7 +43,7 @@ Rhasspy is <strong>optimized for</strong>:
 
 ## Getting Started
 
-Ready to try Rhasspy? Follow the steps below and check out the [tutorials](tutorials.md).
+Ready to try Rhasspy? Follow the steps below or check out the [Getting Started Guide](tutorials.md#getting-started-guide).
 
 1. Make sure you have the [necessary hardware](hardware.md)
 2. Choose an [installation method](installation.md)
