@@ -109,6 +109,6 @@ RHASSPY_DEPS := $(shell grep '^rhasspy-' requirements.txt | sort | comm -3 - rha
 
 $(DOWNLOAD_DIR)/%.tar.gz:
 	mkdir -p "$(DOWNLOAD_DIR)"
-	echo "$@" | sed -e 's|^[^/]\+/|https://github.com/rhasspy/|' -e 's|-[0-9].\+|/archive/master.tar.gz|' | xargs curl -sSfL -o "$@"
+	echo "$@" | sed -e 's|^[^/]\+/|https://github.com/rhasspy/|' -e 's|-[0-9].\+|/archive/master.tar.gz|' | xargs -n1 curl --output "$@" -sSfL
 
 downloads: $(RHASSPY_DEPS)

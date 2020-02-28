@@ -1,6 +1,7 @@
 rhasspy-asr-kaldi-hermes
 rhasspy-asr-pocketsphinx-hermes
 rhasspy-dialogue-hermes
+rhasspy-fuzzywuzzy-hermes
 rhasspy-homeassistant-hermes
 rhasspy-microphone-cli-hermes
 rhasspy-microphone-pyaudio-hermes
