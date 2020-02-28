@@ -26,10 +26,13 @@ DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
 # -----------------------------------------------------------------------------
 
 reformat:
-	scripts/format-code.sh $(PYTHON_FILES)
+	scripts/format-code.sh
 
 check:
-	scripts/check-code.sh $(PYTHON_FILES)
+	scripts/check-code.sh
+
+test:
+	scripts/run-tests.sh
 
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
