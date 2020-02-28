@@ -35,7 +35,7 @@ check:
 venv: downloads
 	scripts/create-venv.sh
 
-dist: sdist debian
+dist: sdist
 
 sdist:
 	python3 setup.py sdist
@@ -109,6 +109,6 @@ RHASSPY_DEPS := $(shell grep '^rhasspy-' requirements.txt | sort | comm -3 - rha
 
 $(DOWNLOAD_DIR)/%.tar.gz:
 	mkdir -p "$(DOWNLOAD_DIR)"
-	echo "$@" | sed -e 's|^[^/]\+/|https://github.com/rhasspy/|' -e 's|-[0-9].\+|/archive/master.tar.gz|' | xargs -n1 curl --output "$@" -sSfL
+	scripts/download-dep.sh "$@"
 
 downloads: $(RHASSPY_DEPS)
