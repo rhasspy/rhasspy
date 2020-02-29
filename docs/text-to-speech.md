@@ -176,6 +176,8 @@ Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-c
 
 ## Google WaveNet
 
+**Not supported yet in 2.5!**
+
 Uses Google's [WaveNet](https://cloud.google.com/text-to-speech/docs/wavenet) text to speech system. This **requires a Google account and an internet connection to function**. Rhasspy will cache WAV files for previously spoken sentences, but you will be sending Google information for every new sentence that Rhasspy speaks.
 
 Add to your [profile](profiles.md):
@@ -204,9 +206,9 @@ If there are problems using the Google API (e.g., your internet connection fails
 
 Contributed by [Romkabouter](https://github.com/Romkabouter).
 
-TODO: Unimplemented
-
 ## Home Assistant TTS Platform
+
+**Not supported yet in 2.5!**
 
 Use a [TTS platform](https://www.home-assistant.io/integrations/tts) on your Home Assistant server.
 
@@ -222,8 +224,6 @@ Add to your [profile](profiles.md):
 ```
 
 The settings from your profile's `home_assistant` section are automatically used (URL, access token, etc.).
-
-TODO: Unimplemented
 
 ## Remote
 

@@ -136,8 +136,6 @@ If the returned JSON contains a "speech" key like this:
 
 then Rhasspy will forward `speech.text` to the configured [text to speech](text-to-speech.md) system using a `hermes/tts/say` message.
 
-TODO: Move to separate service
-
 ## Command
 
 Once an intent is successfully recognized, Rhasspy will send an event to Home Assistant with the details. You can call a custom program instead *or in addition* to this behavior.
@@ -178,8 +176,6 @@ If the returned JSON contains a "speech" key like this:
 ```
 
 then Rhasspy will forward `speech.text` to the configured [text to speech](text-to-speech.md) system using a `hermes/tts/say` message.
-
-TODO: Not implemented
 
 ## Dummy
 

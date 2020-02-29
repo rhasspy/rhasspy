@@ -341,7 +341,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * GET custom word dictionary as plain text, or POST to overwrite it
     * See `custom_words.txt` in your profile directory
 * `/api/download-profile`
-    * Force Rhasspy to re-download profile
+    * POST to have Rhasspy to download missing profile artifacts
 * <a id="api_listen_for_command"><tt>/api/listen-for-command</tt></a>
     * POST to wake Rhasspy up and start listening for a voice command
     * Returns intent JSON when command is finished
@@ -356,6 +356,9 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * `?n=<number>` - return at most `n` guessed pronunciations
 * <a id="/api/microphones"><tt>/api/microphones</tt></a>
     * GET list of available microphones
+* <a id="api_mqtt"><tt>/api/mqtt</tt></a>
+    * POST JSON payload to `/api/mqtt/your/full/topic`
+    * Payload will be published to `your/full/topic`
 * <a id="api_phonemes"><tt>/api/phonemes</tt></a>
     * GET example phonemes from speech recognizer for your profile
     * See `phoneme_examples.txt` in your profile directory
@@ -399,18 +402,18 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * `?nohass=true` - stop Rhasspy from handling the intent
 * <a id="api_text_to_speech"><tt>/api/text-to-speech</tt></a>
     * POST text and have Rhasspy speak it
-    * `?play=false` - get WAV data instead of having Rhasspy speak
     * `?voice=<voice>` - override default TTS voice
     * `?language=<language>` - override default TTS language or locale
     * `?repeat=true` - have Rhasspy repeat the last sentence it spoke
 * <a id="api_train"><tt>/api/train</tt></a>
     * POST to re-train your profile
+* <a id="api_tts_voices"><tt>/api/tts-voices</tt></a>
+    * GET JSON object with available text to speech voices
+* <a id="api_wake_words"><tt>/api/wake-words</tt></a>
+    * GET JSON object with available wake words
 * <a id="api_unknown_words"><tt>/api/unknown-words</tt></a>
     * GET words that Rhasspy doesn't know in your sentences
     * See `unknown_words.txt` in your profile directory
-* <a id="api_mqtt"><tt>/api/mqtt</tt></a>
-    * POST JSON payload to `/api/mqtt/your/full/topic`
-    * Payload will be published to `your/full/topic`
 
 ## Websocket API
 
@@ -448,6 +451,7 @@ All available profile sections and settings are listed below:
         * `mllr_matrix` - MLLR matrix from [acoustic model tuning](https://cmusphinx.github.io/wiki/tutorialtuning/)
         * `mix_weight` - how much of the base language model to [mix in during training](training.md#language-model-mixing) (0-1)
         * `phoneme_examples` - text file with examples for each acoustic model phoneme
+        * `phoneme_map` - text file mapping ASR phonemes to eSpeak phonemes
     * `kaldi` - configuration for [Kaldi](speech-to-text.md#kaldi)
         * `compatible` - true if profile can use Kaldi for speech recognition
         * `kaldi_dir` - absolute path to Kaldi root directory
@@ -461,6 +465,7 @@ All available profile sections and settings are listed below:
         * `unknown_words` - small text file with guessed word pronunciations (from phonetisaurus)
         * `mix_weight` - how much of the base language model to [mix in during training](training.md#language-model-mixing) (0-1)
         * `phoneme_examples` - text file with examples for each acoustic model phoneme
+        * `phoneme_map` - text file mapping ASR phonemes to eSpeak phonemes
     * `remote` - configuration for [remote Rhasspy server](speech-to-text.md#remote-http-server)
         * `url` - URL to POST WAV data for transcription (e.g., `http://your-rhasspy-server:12101/api/speech-to-text`)
     * `command` - configuration for [external speech-to-text program](speech-to-text.md#command)
@@ -498,7 +503,7 @@ All available profile sections and settings are listed below:
 * `text_to_speech` - pronouncing words
     * `system` - text to speech system (`espeak`, `flite`, `picotts`, `marytts`, `command`, `remote`, `hermes`, or `dummy`)
     * `espeak` - configuration for [eSpeak](http://espeak.sourceforge.net)
-        * `phoneme_map` - text file mapping CMU phonemes to eSpeak phonemes
+        * `voice` - name of voice to use (e.g., `en`, `fr`)
     * `flite` - configuration for [flite](http://www.festvox.org/flite)
         * `voice` - name of voice to use (e.g., `kal16`, `rms`, `awb`)
     * `picotts` - configuration for [PicoTTS](https://en.wikipedia.org/wiki/SVOX)
@@ -621,5 +626,8 @@ All available profile sections and settings are listed below:
 ## Command Line Tools
 
 * `rhasspy-nlu`
+    * Converts `sentences.ini` to intent graph
 * `rhasspy-hermes`
+    * Injects WAV files and other Hermes MQTT messages
 * `rhasspy-supervisor`
+    * Converts `profile.json` to `supervisord` config or `docker-compose.yml`

@@ -59,6 +59,8 @@ Implemented by [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhassp
 
 ## GStreamer
 
+**Not supported yet in 2.5!**
+
 Receives audio chunks via stdout from a [GStreamer](https://gstreamer.freedesktop.org/) pipeline.
 
 Add to your [profile](profiles.md):

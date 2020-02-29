@@ -28,7 +28,7 @@ Implemented by [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-
 
 ## Remote
 
-TODO: Not Implemented
+**Not supported yet in 2.5!**
 
 ## Command
 

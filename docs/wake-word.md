@@ -143,6 +143,8 @@ Implemented by [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rha
 
 ## Mycroft Precise
 
+**Not supported yet in 2.5!**
+
 Listens for a wake word with [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise). It requires training up front, but can be done completely offline!
 
 Add to your [profile](profiles.md):
@@ -164,8 +166,6 @@ Add to your [profile](profiles.md):
 ```
 
 Follow [the instructions from Mycroft AI](https://github.com/MycroftAI/mycroft-precise/wiki/Training-your-own-wake-word#how-to-train-your-own-wake-word) to train your own wake word model. When you're finished, place **both** the `.pb` and `.pb.params` files in your profile directory, and set `wake.precise.model` to the name of the `.pb` file.
-
-TODO: Not implemented
 
 ## Command
 

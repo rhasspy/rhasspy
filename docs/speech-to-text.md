@@ -118,6 +118,8 @@ Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-r
 
 ## Home Assistant STT Platform
 
+**Not supported yet in 2.5!**
+
 Use an [STT platform](https://www.home-assistant.io/integrations/stt) on your Home Assistant server.
 This is the same way [Ada](https://github.com/home-assistant/ada) sends speech to Home Assistant.
 
@@ -140,8 +142,6 @@ The settings from your profile's `home_assistant` section are automatically used
 
 Rhasspy will convert audio to the configured format before streaming it to Home Assistant.
 In the future, this will be auto-detected from the STT platform API.
-
-TODO: Not implemented
 
 ## Command
 

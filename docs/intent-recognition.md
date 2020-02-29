@@ -69,6 +69,8 @@ Implemented by [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fu
 
 ## Mycroft Adapt
 
+**Not supported yet in 2.5!**
+
 Recognizes intents using [Mycroft Adapt](https://github.com/MycroftAI/adapt). Works best when you have a medium number of sentences (hundreds to thousands) and need to be able to recognize sentences not seen during training (no new words, though).
 
 Add to your [profile](profiles.md):
@@ -84,9 +86,9 @@ Add to your [profile](profiles.md):
 
 The `intent.adapt.stop_words` text file contains words that should be ignored (i.e., cannot be "required" or "optional").
 
-TODO: Not implemented
-
 ## Flair
+
+**Not supported yet in 2.5!**
 
 Recognizes intents using the [flair NLP framework](https://github.com/zalandoresearch/flair). Works best when you have a large number of sentences (thousands to hundreds of thousands) and need to handle sentences *and* words not seen during training.
 
@@ -108,9 +110,9 @@ By default, the flair recognizer will generate 10,000 random sentences (`num_sam
 
 A flair `TextClassifier` will be trained to classify unseen sentences by intent, and a `SequenceTagger` will be trained for each intent that has at least one [tag](training.md#tags). During recognition, sentences are first classified by intent and then run through the appropriate `SequenceTagger` model to determine slots/entities.
 
-TODO: Not implemented
-
 ## RasaNLU
+
+**Not supported yet in 2.5!**
 
 Recognizes intents **remotely** using a [Rasa NLU](https://rasa.com/) server. You must [install a Rasa NLU server](https://rasa.com/docs/rasa/user-guide/installation/) somewhere that Rhasspy can access. Works well when you have a large number of sentences (thousands to hundreds of thousands) and need to handle sentences *and* words not seen during training. This needs Rasa 1.0 or higher.
 
@@ -126,8 +128,6 @@ Add to your [profile](profiles.md):
   }
 }
 ```
-
-TODO: Not implemented
 
 ## Remote HTTP Server
 
@@ -163,6 +163,8 @@ Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-r
 
 ## Home Assistant Conversation
 
+**Not supported yet in 2.5!**
+
 Sends transcriptions from [speech to text](speech-to-text.md) to [Home Assistant's conversation API](https://www.home-assistant.io/integrations/conversation/). If the response contains speech, Rhasspy can optionally speak it.
 
 Add to your [profile](profiles.md):
@@ -181,8 +183,6 @@ When `handle_speech` is `true`, Rhasspy will forward the returned speech to your
 The settings from your profile's `home_assistant` section are automatically used (URL, access token, etc.).
 
 Because Home Assistant will already handle your intent (probably using an [intent script](https://www.home-assistant.io/integrations/intent_script/)), Rhasspy will always generate an empty intent with this recognizer.
-
-TODO: Not implemented
 
 ## Command
 
