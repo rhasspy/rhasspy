@@ -1,6 +1,7 @@
 SHELL := bash
 PYTHON_NAME = "rhasspy"
 SERVICE_NAME = "rhasspy"
+PACKAGE_NAME = "rhasspy"
 RHASSPY_DIRS = $(shell cat RHASSPY_DIRS)
 REQUIREMENTS = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements.txt)
 REQUIREMENTS_DEV = $(shell find . -mindepth 2 -maxdepth 2 -type f -name requirements_dev.txt)
@@ -12,6 +13,8 @@ DOWNLOAD_DIR = download
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
+
+version_tag := "rhasspy/$(PACKAGE_NAME):$(version)"
 
 ifneq (,$(findstring -dev,$(version)))
 	DOCKER_TAGS = -t "rhasspy/$(PACKAGE_NAME):$(version)"
@@ -78,6 +81,38 @@ docker-pulseaudio: requirements.txt requirements_dev.txt update-bin downloads do
 	docker build . -f Dockerfile.source.pulseaudio \
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
+
+docker-multiarch:
+	scripts/build-with-docker.sh
+
+docker-multiarch-deploy:
+	docker push "$(version_tag)-amd64"
+	docker push "$(version_tag)-armhf"
+	docker push "$(version_tag)-aarch64"
+	docker push "$(version_tag)-arm32v6"
+
+docker-multiarch-manifest:
+	docker manifest push --purge "$(version_tag)"
+	docker manifest create --amend "$(version_tag)" \
+      "$(version_tag)-amd64" \
+      "$(version_tag)-armhf" \
+      "$(version_tag)-aarch64" \
+      "$(version_tag)-arm32v6"
+	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm
+	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64
+	docker manifest annotate "$(version_tag)" "$(version_tag)-arm32v6" --os linux --arch arm32v6
+	docker manifest push "$(version_tag)"
+
+docker-multiarch-manifest-init:
+	docker manifest create "$(version_tag)" \
+      "$(version_tag)-amd64" \
+      "$(version_tag)-armhf" \
+      "$(version_tag)-aarch64" \
+      "$(version_tag)-arm32v6"
+	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm
+	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64
+	docker manifest annotate "$(version_tag)" "$(version_tag)-arm32v6" --os linux --arch arm32v6
+	docker manifest push "$(version_tag)"
 
 docker-deploy:
 	docker login --username rhasspy --password "$$DOCKER_PASSWORD"
