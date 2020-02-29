@@ -14,13 +14,15 @@ and that your user is part of the `docker` group:
 
 Next, start the [Rhasspy Docker image](https://hub.docker.com/r/rhasspy/rhasspy) in the background:
 
-    docker run -d -p 12101:12101 \
-          --restart unless-stopped \
-          -v "$HOME/.config/rhasspy/profiles:/profiles" \
-          --device /dev/snd:/dev/snd \
-          rhasspy/rhasspy:2.5.0-pre \
-          --user-profiles /profiles \
-          --profile en
+```bash
+docker run -d -p 12101:12101 \
+    --restart unless-stopped \
+    -v "$HOME/.config/rhasspy/profiles:/profiles" \
+    --device /dev/snd:/dev/snd \
+    rhasspy/rhasspy:2.5.0-pre \
+    --user-profiles /profiles \
+    --profile en
+```
 
 This will start Rhasspy with the English profile (`en`) in the background (`-d`) on port 12101 (`-p`) and give Rhasspy access to your microphone (`--device`). Any changes you make to [your profile](profiles.md) will be saved to `/home/<YOUR_USER>/.config/rhasspy`.
 
@@ -28,16 +30,18 @@ Once it starts, Rhasspy's web interface should be accessible at [http://localhos
 
 If you're using [docker compose](https://docs.docker.com/compose/), add the following to your `docker-compose.yml` file:
 
-    rhasspy:
-        image: "rhasspy/rhasspy:2.5.0-pre"
-        restart: unless-stopped
-        volumes:
-            - "$HOME/.config/rhasspy/profiles:/profiles"
-        ports:
-            - "12101:12101"
-        devices:
-            - "/dev/snd:/dev/snd"
-        command: --user-profiles /profiles --profile en
+```yaml
+rhasspy:
+    image: "rhasspy/rhasspy:2.5.0-pre"
+    restart: unless-stopped
+    volumes:
+        - "$HOME/.config/rhasspy/profiles:/profiles"
+    ports:
+        - "12101:12101"
+    devices:
+        - "/dev/snd:/dev/snd"
+    command: --user-profiles /profiles --profile en
+```
 
 ## Debian
 
