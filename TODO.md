@@ -33,7 +33,7 @@
 
 # Intent Handling
 
-* Test Home Assistant
+* Home Assistant SSL
 
 # Dialogue Management
 
