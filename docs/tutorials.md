@@ -259,4 +259,18 @@ Try giving Rhasspy a voice command, either by saying the wake word or clicking t
 
 If you give a command that Rhasspy doesn't recognize, this skill will speak the words "Unrecognized command". Try modifying the code and restarting the skill. Check out the [MQTT API reference](reference.md#mqtt-api) for details on MQTT topics and messages.
 
-Happy Rhasspy-ing!
+Happy Rhasspy-ing! &#x263A;
+
+#### Blackbelt Bash Skill
+
+Using Rhasspy's generic [`/api/mqtt`](reference.md#api_mqtt) HTTP endpoint, you can approximate the Python skill above with a tiny Bash script:
+
+```bash
+while true; do \
+    curl -s 'localhost:12101/api/mqtt/hermes/intent/%23' | \
+      jq .payload.input | \
+      curl -s -X POST --data @- 'localhost:12101/api/text-to-speech'; \
+done
+```
+
+This script loops indefinitely and waits for an MQTT message on `hermes/intent/#` (the `#` is encoded as `%23` in the URL). When a message is received, the "input" field of the payload is extracted with [`jq`](https://stedolan.github.io/jq) and then passed to Rhasspy's [`/api/text-to-speech`](reference.md#api_text_to_speech) HTTP endpoint.

@@ -12,7 +12,9 @@ Rhasspy is composed of independent services that communicate over [MQTT](https:/
 * [Text to Speech](#text-to-speech)
 * [Audio Output](#audio-output)
 
-Message payloads are typically [JSON objects](https://json.org), except for the following messages whose payloads are binary [WAV audio](https://en.wikipedia.org/wiki/WAV):
+The [`rhasspy-supervisor`](#rhasspy-supervisor) tool converts your [profile](profiles.md) into a runnable configuration for either [supervisord](http://supervisord.org) or [docker-compose](https://docs.docker.com/compose/).
+
+Each service sends and receives a specific set of MQTT messages. Message payloads are typically [JSON objects](https://json.org), except for the following messages whose payloads are binary [WAV audio](https://en.wikipedia.org/wiki/WAV):
 
 * [`hermes/audioServer/<siteId>/audioFrame`](reference.md#audioserver_audioframe)
     * WAV chunk from microphone
@@ -22,6 +24,8 @@ Message payloads are typically [JSON objects](https://json.org), except for the 
     * WAV audio recorded from session
 
 Most messages contain a string `siteId` property, whose default value is "default". Each service takes one or more `--siteId <NAME>` arguments that determine which site IDs the service will listen for. If not specified, the service will listen for **all sites**.
+
+---
 
 ## Web Server
 
@@ -242,3 +246,26 @@ Plays WAV audio through an audio output device (speakers). See [Audio Output](au
     * Audio has finished playing
 * [`rhasspy/audioServer/devices`](reference.md#audioserver_devices)
     * Details of audio output devices
+
+## Rhasspy Supervisor
+
+The [`rhasspy-supervisor`](https://github.com/rhasspy/rhasspy-supervisor) tool transforms a Rhasspy [`profile.json`](profiles.md) file into:
+
+* A `supervisord.conf` file that can be run with [`supervisord`](http://supervisord.org)
+    * Runs services on the local machine
+    * Requires you to have service executables in your `PATH` (e.g., `rhasspy-server-hermes`)
+* A `docker-compose.yml` file that can be run with [`docker-compose`](https://docs.docker.com/compose/)
+    * Runs services inside a virtual Docker network
+    * Requires [Docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/) to be installed
+    
+When you start Rhasspy, it automatically runs `rhasspy-supervisor` to generate these files in your profile directory. From there, it depends on how you've [installed Rhasspy](installation.md).
+
+### Supervisord Restart
+
+When running Rhasspy using [`supervisord`](http://supervisord.org), the process ID (PID) of the `supervisord` process will be written to a file named `supervisord.pid` in your profile directory. If a restart is requested from the web interface, a `SIGHUP` is sent to this PID, causing `supervisord` to re-read its configuration file and stop/start all child processes.
+
+### Docker Compose Restart
+
+If you run Rhasspy using [`docker-compose`](https://docs.docker.com/compose/), the restart process is a bit more complicated than with `supervisord`. This is due to the need to re-write `docker-compose.yml` on a profile change and bring the entire Docker container stack down and back up again.
+
+A wrapper script like [`get-rhasspy.sh`](https://github.com/rhasspy/rhasspy-voltron/blob/master/get-rhasspy.sh) needs to monitor the profile directory for a file named `.restart_docker`. When a restart is requested via the web interface, this file is written and a timeout is set. The wrapper script should restart `docker-compose` (using `down` and then `up`), and then delete the `.restart_docker` file. Once its deleted, the web interface will reload the user's page.

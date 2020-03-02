@@ -5,7 +5,6 @@
 
 # ASR
 
-* Cache base dictionary
 * Support language model mixing during training
 * Italian nnet2 model
 * Add Julius ASR
@@ -40,5 +39,4 @@
 
 # Documentation
 
-* Describe supervisord/Docker restart processes
 * Document getHotwords, getVoices
