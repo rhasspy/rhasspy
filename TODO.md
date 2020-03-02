@@ -5,8 +5,7 @@
 
 # ASR
 
-* German TDN 250 model
-* French TDN 250 model
+* Cache base dictionary
 * Support language model mixing during training
 * Italian nnet2 model
 * Add Julius ASR
