@@ -132,12 +132,14 @@ More example flows are available [on Github](https://github.com/synesthesiam/rha
 
 Rhasspy supports multiple websocket event endpoints:
 
-* `/api/events/intent`
+* [`/api/events/intent`](reference.md#api_events_intent)
     * Intent recognized or not
-* `/api/events/wake`
+* [`/api/events/wake`](reference.md#api_events_wake)
     * Wake word detected
-* `/api/events/text`
+* [`/api/events/text`](reference.md#api_events_text)
     * Speech transcription
+* [`/api/mqtt`](reference.md#api_ws_mqtt)
+    * Send/receive raw MQTT messages
     
 #### WebSocket Intents
 
@@ -232,6 +234,19 @@ To send a message to all of Rhasspy's services, send a JSON message like:
 ```json
 {
   "type": "publish",
+  "topic": "/the/mqtt/topic",
+  "payload": ...
+}
+```
+
+#### Single Topic
+
+If you only need to receive messages from a single MQTT topic, you can connect to `ws://YOUR_SERVER:12101/api/mqtt/<TOPIC>` (`wss://` if using HTTPS).
+
+When a message is received on this topic, you will receive a JSON message like:
+
+```json
+{
   "topic": "/the/mqtt/topic",
   "payload": ...
 }

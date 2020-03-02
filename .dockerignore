@@ -15,9 +15,9 @@
 
 # Source
 !rhasspy-asr/rhasspyasr/*.py
-!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/*.py
+!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/
 !rhasspy-asr-pocketsphinx-hermes/rhasspyasr_pocketsphinx_hermes/*.py
-!rhasspy-asr-kaldi/rhasspyasr_kaldi/*.py
+!rhasspy-asr-kaldi/rhasspyasr_kaldi/
 !rhasspy-asr-kaldi/etc
 !rhasspy-asr-kaldi/scripts
 !rhasspy-asr-kaldi-hermes/rhasspyasr_kaldi_hermes/*.py
@@ -43,3 +43,4 @@
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/*.py
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/*.py
+!rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/models

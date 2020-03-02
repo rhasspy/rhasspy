@@ -356,9 +356,12 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * `?n=<number>` - return at most `n` guessed pronunciations
 * <a id="/api/microphones"><tt>/api/microphones</tt></a>
     * GET list of available microphones
-* <a id="api_mqtt"><tt>/api/mqtt</tt></a>
+* <a id="api_mqtt"><tt>/api/mqtt/&lt;TOPIC&gt;</tt></a>
     * POST JSON payload to `/api/mqtt/your/full/topic`
-    * Payload will be published to `your/full/topic`
+        * Payload will be published to `your/full/topic` on MQTT broker
+    * GET next MQTT message on `TOPIC` as JSON
+        * Subscribes to `your/full/topic` with request to `/api/mqtt/your/full/topic`
+        * Escape wildcard `#` as `%23` and `+` as `%2B`
 * <a id="api_phonemes"><tt>/api/phonemes</tt></a>
     * GET example phonemes from speech recognizer for your profile
     * See `phoneme_examples.txt` in your profile directory
@@ -423,8 +426,15 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * Emits [JSON-encoded transcriptions](usage.md#websocket-transcriptions) after each ASR [transcription](#asr_textcaptured)
 * <a id="api_events_wake"><tt>/api/events/wake</tt></a>
     * Emits [JSON-encoded detections](usage.md#websocket-wake) after each wake word [detection](#hotword_detected)
-* <a id="api_mqtt"><tt>/api/mqtt</tt></a>
+* <a id="api_ws_mqtt"><tt>/api/mqtt</tt></a>
     * Allows you to subscribe to, receive, and publish [JSON-encoded MQTT messages](usage.md#websocket-mqtt-messages)
+    * Send `{ "type": "subscribe", "topic": "your/full/topic" }` to subscribe
+    * Send `{ "type": "publish", "topic": "your/full/topic", "payload": { ... } }` to publish
+    * Listen for subscribed topics, receiving `{ "topic": "...", "payload": { ... } }` for each message
+* <a id="api_ws_mqtt_"><tt>/api/mqtt/&lt;TOPIC&gt;</tt></a>
+    * Subscribes to messages from `TOPIC`
+    * Receive `{ "topic": "...", "payload": { ... } }` for each message
+    * Escape wildcard `#` as `%23` and `+` as `%2B`
 
 ## Profile Settings
 
@@ -623,8 +633,134 @@ All available profile sections and settings are listed below:
                 * `fragment` - fragment appended to file URL
                 * `bytes_expected` - number of bytes for this part
 
+## Data Formats
+
+In addition to the message formats specificed in the [Hermes protocol](https://docs.snips.ai/reference/hermes), Rhasspy has its own formats for [transcriptions](#transcriptions) and [intents](#intents). A Rhasspy profile also contains artifacts in standard formats, such as [pronunciation dictionaries](#pronunciation-dictionaries), [language models](#language-models), and [grapheme to phoneme models](#grapheme-to-phoneme-models).
+
+### Transcriptions
+
+The [`/api/speech-to-text`](#api_speech_to_text) HTTP endpoint and [`/api/events/text`](#api_events_text) Websocket endpoint produce JSON in the following format:
+
+```json
+{
+    "text": "transcription text",
+    "transcribe_seconds": 0.123,
+    "likelihood": 0.321,
+    "wav_seconds": 1.456
+}
+```
+
+where
+
+* `text` is the most likely transcription of the audio data (string)
+* `transcribe_seconds` is the number of seconds it took to transcribe (number)
+* `likelihood` is a confidence value returned by the ASR system (number)
+* `wav_seconds` is the duration of the WAV audio in seconds (number)
+
+### Intents
+
+The [`/api/text-to-intent`](#api_text_to_intent), [`/api/speech-to-intent`](#api_speech_to_intent), [`/api/listen-for-command`](#api_listen_for_command), and [`/api/stop-recording`](#api_stop_recording) HTTP endpoints as well as the [`/api/events/intent`](#api_events_intent) Websocket endpoint produce JSON in the following format:
+
+```json
+{
+    "intent": {
+        "name": "NameOfIntent",
+        "confidence": 1.0
+    },
+    "entities": [
+        { "entity": "entity_1", "value": "value_1", "raw_value": "value_1",
+          "start": 0, "end": 1, "raw_start": 0, "raw_end": 1 },
+        { "entity": "entity_2", "value": "value_2", "raw_value": "value_2",
+          "start": 0, "end": 1, "raw_start": 0, "raw_end": 1 }
+    ],
+    "slots": {
+        "entity_1": "value_1",
+        "entity_2": "value_2"
+    },
+    "text": "transcription text with substitutions",
+    "raw_text": "transcription text without substitutions",
+    "tokens": ["transcription", "text", "with", "substitutions"],
+    "raw_tokens": ["transcription", "text", "without", "substitutions"],
+    "recognize_seconds": 0.001
+    
+}
+```
+
+where
+
+* `intent` describes the recognized intent (object)
+    * `name` is the name of the recognized intent (section headers in your [sentences.ini](training.md#sentencesini)) (string)
+    * `confidence` is a value between 0 and 1, with 1 being maximally confident (number)
+* `entities` is a list of recognized entities (list)
+    * `entity` is the name of the slot (string)
+    * `value` is the ([substitued](training.md#substitutions)) value (string)
+    * `raw_value` is the (**non**-substitued) value (string)
+    * `start` is the zero-based start index of the entity in `text` (number)
+    * `raw_start` is the zero-based start index of the entity in `raw_text` (number)
+    * `stop` is the zero-based stop index (exclusive) of the entity in `text` (number)
+    * `raw_stop` is the zero-based stop index (exclusive) of the entity in `raw_text` (number)
+* `slots` is a dictionary of entities/values (object)
+    * Assumes one value per entity. See `entities` for complete list.
+* `text` is the input text with [substitutions](training.md#substitutions) (string)
+* `raw_text` is the input text **without** substitutions
+* `tokens` is the list of words/tokens in `text`
+* `raw_tokens` is the list of words/tokens in `raw_text`
+* `recognize_seconds` is the number of seconds it took to recognize the intent and slots (number)
+
+### Pronunciation Dictionaries
+
+Dictionaries are expected in plaintext, with the following format:
+
+```
+word1 P1 P2 P3
+word2 P1 P4 P5
+...
+```
+
+Each line starts with a word and, after some whitespace, a list of phonemes are given (separated by whitespace). These phonemes must match what the acoustic model was trained to recognize.
+
+Multiple pronunciations for the same word are possible, and may optionally contain an index:
+
+```
+word P1 P2 P3
+word(1) P2 P2 P3
+word(2) P3 P2 P3
+```
+
+A `rhasspy` [profile](profiles.md) will typically contain 3 dictionaries:
+
+1. `base_dictionary.txt`
+    * A large, pre-built dictionary with most of the words in a given language
+2. `custom_words.txt`
+    * A small, user-defined dictionary with custom words or pronunciations
+3. `dictionary.txt`
+    * Contains exactly the vocabulary needed for a profile
+    * Automatically generated during [training](training.md)
+
+### Language Models
+
+Language models must be in plaintext [ARPA format](https://cmusphinx.github.io/wiki/arpaformat/).
+
+A `rhasspy` [profile](profiles.md) will typically contain 2 language models:
+
+1. `base_language_model.txt`
+    * A large, pre-built language model that summarizes a given language
+    * Used when the `open_transcription` setting is `true` for the ASR system (e.g., `speech_to_text.pocketsphinx.open_transcription`)
+    * Used during [language model mixing](training.md#language-model-mixing)
+2. `language_model.txt`
+    * Summarizes the valid voice commands for a profile
+    * Automatically generated during [training](training.md)
+    
+### Grapheme To Phoneme Models
+
+A grapheme-to-phoneme (g2p) model helps guess the pronunciations of words outside of [the dictionary](#pronunciation-dictionaries). These models are trained on each profile's `base_dictionary.txt` file using [phonetisaurus](https://github.com/AdolfVonKleist/Phonetisaurus) and saved in the [OpenFST](http://www.openfst.org) binary format.
+
+G2P prediction can also be done using [transformer models](https://github.com/cmusphinx/g2p-seq2seq).
+
 ## Command Line Tools
 
+* `rhasspy-client`
+    * Remote control Rhasspy server
 * `rhasspy-nlu`
     * Converts `sentences.ini` to intent graph
 * `rhasspy-hermes`
