@@ -41,4 +41,5 @@
 !rhasspy-tts-cli-hermes/rhasspytts_cli_hermes/*.py
 !rhasspy-wake-pocketsphinx-hermes/rhasspywake_pocketsphinx_hermes/*.py
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/*.py
+!rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/*.py
