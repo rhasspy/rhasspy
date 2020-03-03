@@ -1,6 +1,7 @@
 # Tutorials
 
 * [Getting Started Guide](#getting-started-guide)
+* [Server with Satellites](#server-with-satellites)
 
 ## Getting Started Guide
 
@@ -274,3 +275,26 @@ done
 ```
 
 This script loops indefinitely and waits for an MQTT message on `hermes/intent/#` (the `#` is encoded as `%23` in the URL). When a message is received, the "input" field of the payload is extracted with [`jq`](https://stedolan.github.io/jq) and then passed to Rhasspy's [`/api/text-to-speech`](reference.md#api_text_to_speech) HTTP endpoint.
+
+---
+
+## Server with Satellites
+
+A common usage scenario for Rhasspy is to have one or more low power satellites connect to a more powerful central server. These satellites are typically Raspberry Pi's, and are responsible for:
+
+* Wake word detection
+* Audio recording from a microphone
+* Audio playback to a speaker
+
+The backend server, typically a standard desktop or [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html), is responsible for:
+
+* Speech to text
+* Intent recognition
+* Text to speech
+* Intent handling
+
+In this tutorial, we will configure two instances of Rhasspy: one as a satellite and one as a backend "master" server. This can be done using either Rhasspy's [MQTT API](reference.md#mqtt-api) or [HTTP API](reference.md#http-api) depending on whether or not the satellite and master are connected to the same MQTT broker.
+
+### Shared MQTT Broker
+
+### Remote HTTP Server
