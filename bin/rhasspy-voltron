@@ -17,6 +17,11 @@ fi
 
 DEFINE_string 'profile' '' 'Path to profile' 'p'
 DEFINE_string 'user-profiles' "${config_home}/rhasspy/profiles" 'Directory with user profile files'
+DEFINE_string 'certfile' '' 'SSL certificate file'
+DEFINE_string 'keyfile' '' 'SSL private key file (optional)'
+DEFINE_string 'http-host' '' 'Change host for web server (default: localhost)'
+DEFINE_string 'http-port' '' 'Change port for web server (default: 12101)'
+DEFINE_string 'local-mqtt-port' '' 'Change internal MQTT port (default: 12183)'
 
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
@@ -41,6 +46,41 @@ fi
 
 profile_dir="${user_profiles}/${profile_name}"
 
+# Extra arguments to pass to web server
+extra_web_args=("$@")
+
+certfile="${FLAGS_certfile}"
+keyfile="${FLAGS_keyfile}"
+
+if [[ ! -z "${certfile}" ]]; then
+    extra_web_args+=('--certfile'  "${certfile}")
+
+    # Only check for keyfile if certfile has been given
+    if [[ ! -z "${keyfile}" ]]; then
+        extra_web_args+=('--keyfile'  "${keyfile}")
+    fi
+fi
+
+http_host="${FLAGS_http_host}"
+http_port="${FLAGS_http_port}"
+
+if [[ ! -z "${http_host}" ]]; then
+    extra_web_args+=('--host' "${http_host}")
+fi
+
+if [[ ! -z "${http_port}" ]]; then
+    extra_web_args+=('--port' "${http_port}")
+fi
+
+# Extra arguments to pass to rhasspy-supervisor
+extra_supervisor_args=()
+
+local_mqtt_port="${FLAGS_local_mqtt_port}"
+if [[ ! -z "${local_mqtt_port}" ]]; then
+    extra_web_args+=('--local-mqtt-port' "${local_mqtt_port}")
+    extra_supervisor_args+=('--local-mqtt-port' "${local_mqtt_port}")
+fi
+
 # -----------------------------------------------------------------------------
 
 # Generate supervisord conf
@@ -51,6 +91,7 @@ echo "Generating ${conf_path}"
     python3 -m rhasspysupervisor \
     --profile "${profile_name}" \
     --user-profiles "${user_profiles}" \
+    "${extra_supervisor_args[@]}" \
     --debug
 
 # Run web server
@@ -59,7 +100,7 @@ echo "Generating ${conf_path}"
     --profile "${profile_name}" \
     --user-profiles "${user_profiles}" \
     --web-dir "${src_dir}/rhasspy-server-hermes/web" \
-    "$@" \
+    "${extra_web_args[@]}" \
     &
 
 # Kill the process above when this terminal exits
