@@ -15,9 +15,15 @@
 
 # Source
 !rhasspy-asr/rhasspyasr/*.py
-!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/
+!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/*.py
+!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/*-ngram
+!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/lib*.so*
+!rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/phonetisaurus-*
 !rhasspy-asr-pocketsphinx-hermes/rhasspyasr_pocketsphinx_hermes/*.py
-!rhasspy-asr-kaldi/rhasspyasr_kaldi/
+!rhasspy-asr-kaldi/rhasspyasr_kaldi/*.py
+!rhasspy-asr-kaldi/rhasspyasr_kaldi/*-ngram
+!rhasspy-asr-kaldi/rhasspyasr_kaldi/lib*.so*
+!rhasspy-asr-kaldi/rhasspyasr_kaldi/phonetisaurus-*
 !rhasspy-asr-kaldi/etc
 !rhasspy-asr-kaldi/scripts
 !rhasspy-asr-kaldi-hermes/rhasspyasr_kaldi_hermes/*.py
