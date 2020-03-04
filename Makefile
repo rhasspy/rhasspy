@@ -89,18 +89,15 @@ docker-multiarch-deploy:
 	docker push "$(version_tag)-amd64"
 	docker push "$(version_tag)-armhf"
 	docker push "$(version_tag)-aarch64"
-	docker push "$(version_tag)-arm32v6"
 
 docker-multiarch-manifest:
 	docker manifest push --purge "$(version_tag)"
 	docker manifest create --amend "$(version_tag)" \
       "$(version_tag)-amd64" \
       "$(version_tag)-armhf" \
-      "$(version_tag)-aarch64" \
-      "$(version_tag)-arm32v6"
-	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm --variant armv7
-	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64 --variant armv8
-	docker manifest annotate "$(version_tag)" "$(version_tag)-arm32v6" --os linux --arch arm --variant armv6
+      "$(version_tag)-aarch64"
+	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm
+	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64
 	docker manifest push "$(version_tag)"
 
 docker-multiarch-manifest-init:
@@ -108,9 +105,8 @@ docker-multiarch-manifest-init:
       "$(version_tag)-amd64" \
       "$(version_tag)-armhf" \
       "$(version_tag)-aarch64"
-	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm --variant armv7
-	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64 --variant armv8
-	docker manifest annotate "$(version_tag)" "$(version_tag)-arm32v6" --os linux --arch arm --variant armv6
+	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm
+	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64
 	docker manifest push "$(version_tag)"
 
 docker-deploy:
