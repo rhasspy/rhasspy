@@ -89,6 +89,7 @@ docker-multiarch-deploy:
 	docker push "$(version_tag)-amd64"
 	docker push "$(version_tag)-armhf"
 	docker push "$(version_tag)-aarch64"
+	docker push "$(version_tag)-arm32v6"
 
 docker-multiarch-manifest:
 	docker manifest push --purge "$(version_tag)"

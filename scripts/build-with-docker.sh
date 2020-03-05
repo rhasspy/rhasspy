@@ -51,11 +51,11 @@ for docker_arch in "${docker_archs[@]}"; do
                -f Dockerfile.source.alsa \
                -t "${docker_tag}"
     else
-        # Alpine build (arm32b6 only)
+        # Raspbian build (arm32b6 only)
         docker build "${src_dir}" \
                --build-arg "BUILD_ARCH=${docker_arch}" \
                --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
-               -f Dockerfile.source.alsa.alpine \
+               -f Dockerfile.source.alsa.pizero \
                -t "${docker_tag}"
     fi
 done
