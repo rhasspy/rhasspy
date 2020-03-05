@@ -297,4 +297,30 @@ In this tutorial, we will configure two instances of Rhasspy: one as a satellite
 
 ### Shared MQTT Broker
 
+If your master server and satellite(s) are all connected to a single MQTT broker, they can easily share information. The challege, in fact, is making sure they don't share too much!
+
 ### Remote HTTP Server
+
+You can connect satellites to a master Rhasspy server without needing to worry about a shared MQTT broker or conflicting `siteId` values.
+
+#### Satellite Settings
+
+On your satellite, set the speech to text, intent recognition, and (optionally) the text to speech services to "Remote HTTP". Make sure to also set "Dialogue Management" to "Rhasspy", and enable audio recording, wake word, and audio playing.
+
+![Satellite settings for remote HTTP](img/master-satellite/satellite-http-settings.png)
+
+Next, expand each "Remote HTTP" service and set the URL to the host name and port of your master Rhasspy server. Make sure to leave the `/api/...` part of the URL intact. 
+
+![Satellite HTTP servers](img/master-satellite/satellite-remote-settings.png)
+
+#### Master Settings
+
+Your master server needs to have speech to text, intent recognition, and (optionally) text to speech services enabled. Make sure to update sentences and train your profile on your master server.
+
+![Master settings for remote HTTP](img/master-satellite/master-http-settings.png)
+
+#### Testing
+
+If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page.
+
+![Satellite test for remote HTTP](img/master-satellite/satellite-http-test.png)
