@@ -47,7 +47,7 @@ RUN apt-get update && \
     libportaudio2 libatlas3-base \
     libgfortran4 ca-certificates \
     perl curl supervisor mosquitto sox alsa-utils \
-    espeak flite
+    espeak flite libttspico-utils
 
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv

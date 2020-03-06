@@ -282,26 +282,65 @@ This script loops indefinitely and waits for an MQTT message on `hermes/intent/#
 
 A common usage scenario for Rhasspy is to have one or more low power satellites connect to a more powerful central server. These satellites are typically Raspberry Pi's, and are responsible for:
 
-* Wake word detection
-* Audio recording from a microphone
-* Audio playback to a speaker
+* [Wake word](wake-word.md) detection
+* [Audio recording](audio-input.md) from a microphone
+* [Audio playback](audio-output.md) to a speaker
 
 The backend server, typically a standard desktop or [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html), is responsible for:
 
-* Speech to text
-* Intent recognition
-* Text to speech
-* Intent handling
+* [Speech to text](speech-to-text.md)
+* [Intent recognition](intent-recognition.md)
+* [Text to speech](text-to-speech.md)
+* [Intent handling](intent-handling.md)
 
-In this tutorial, we will configure two instances of Rhasspy: one as a satellite and one as a backend "master" server. This can be done using either Rhasspy's [MQTT API](reference.md#mqtt-api) or [HTTP API](reference.md#http-api) depending on whether or not the satellite and master are connected to the same MQTT broker.
+In this tutorial, we will configure **two instances** of Rhasspy: one as a satellite and one as a backend "master" server. This can be done using either Rhasspy's [MQTT API](reference.md#mqtt-api) or [HTTP API](reference.md#http-api) depending on whether or not the satellite and master are connected to the same MQTT broker.
+
+* [Master/Satellite over MQTT](#shared-mqtt-broker)
+* [Master/Satellite over HTTP](#remote-http-server)
 
 ### Shared MQTT Broker
 
 If your master server and satellite(s) are all connected to a single MQTT broker, they can easily share information. The challege, in fact, is making sure they don't share too much!
 
+The first step is to ensure that the master and satellite(s) have **different siteIds**. In the "Settings" page of each Rhasspy instance, ensure that the "siteId" at the top is unique across all [Hermes-compatible](https://docs.snips.ai/reference/hermes) services connected to your MQTT broker.
+
+#### Satellite Settings
+
+On your satellite, set MQTT to "External" and configure the details of your broker. Set the speech to text, intent recognition, and (optionally) the text to speech services to "Hermes MQTT". Make sure to disable "Dialogue Management", and enable audio recording, wake word, and audio playing.
+
+![Satellite settings for Hermes MQTT](img/master-satellite/satellite-mqtt-settings.png)
+
+Setting a service to "Hermes MQTT" means that Rhasspy will expect *some* service connected to your broker to handle the appropriate [MQTT messages](reference.md#mqtt-api) for speech to text, etc.
+
+#### Master Settings
+
+For you master server, also set MQTT to "External" and configure the details of your broker. Additionally, add the `siteId`'s of each of your satellites to the "Satellite siteIds" text box (separated by commas). 
+
+Finally, set "Dialogue Management" to "Rhasspy" and enable the appropriate speech to text, intent recognition, and text to speech systems.
+
+![Master settings for Hermes MQTT](img/master-satellite/master-mqtt-settings.png)
+
+Adding one or more satellite `siteId`'s will cause the master server to listen and respond to requests for each satellite. The dialoge manager is crucial here, as it will catch hotword detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
+
+#### UDP Audio Streaming
+
+By default, your satellite will stream all recorded audio over MQTT. This will go to both the wake word service (satellite) and ASR service (master).
+
+If you wish to keep streaming audio contained on the satellite until the wake word is spoken, you need to configure a **UDP audio port** for both the audio recording and wake word services.
+
+![Satellite UDP ports for Hermes MQTT](img/master-satellite/satellite-mqtt-udp.png)
+
+With a UDP audio port set, the microphone audio will go directly to the wake word service (on `127.0.0.1`). When an [`asr/startListening`](reference.md#asr_startlistening) message arrives at the microphone service, it will begin streaming over MQTT. Once an [`asr/stopListening`](reference.md#asr_stoplistening) message is received, audio is streamed again over UDP only.
+
+#### Testing
+
+If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page.
+
+![Satellite test for Hermes MQTT](img/master-satellite/satellite-mqtt-test.png)
+
 ### Remote HTTP Server
 
-You can connect satellites to a master Rhasspy server without needing to worry about a shared MQTT broker or conflicting `siteId` values.
+You can also connect satellites to a master Rhasspy server *without* needing to worry about a shared MQTT broker or conflicting `siteId` values! Rhasspy's built-in [HTTP API](reference.md#http-api) allows for any external client, including a satellite, to do speech to text, intent recognition, etc.
 
 #### Satellite Settings
 

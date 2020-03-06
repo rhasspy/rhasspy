@@ -1,7 +1,6 @@
 # Web UI
 
 * Add arguments to all command systems
-* Add SSL
 
 # ASR
 
@@ -22,6 +21,7 @@
 
 * Support Mycroft Precise
 * Add webhook?
+* Training for pocketsphinx keyphrase
 
 # TTS
 
