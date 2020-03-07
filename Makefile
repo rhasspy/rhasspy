@@ -82,7 +82,7 @@ docker-pulseaudio: requirements.txt requirements_dev.txt update-bin downloads do
     -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
     -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
 
-docker-multiarch:
+docker-multiarch: docs
 	scripts/build-with-docker.sh
 
 docker-multiarch-deploy:
