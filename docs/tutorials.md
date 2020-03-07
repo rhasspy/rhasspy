@@ -19,7 +19,6 @@ When you first start Rhasspy and visit the [web interface](http://localhost:1210
 
 By default, Rhasspy does not start any services (highlighted in green on this bar). From left to right, these services are:
 
-
 |                                                         | Service             | Description                                                                      |
 | -----                                                   | -----               | -----                                                                            |
 | ![MQTT icon](img/getting-started/mqtt.png)              | MQTT                | Indicates if Rhasspy is connected to an internal or external MQTT broker (green) |
@@ -42,11 +41,11 @@ To have Rhasspy start a specific service, select an option from the drop down li
 
 ![Settings page for wake word](img/getting-started/settings-service.png)
 
-**NOTE**: Some settings, like the available microphones and speakers, required you to click "Save Settings" first because the service must be started!
+**NOTE**: Some settings, like the available microphones and speakers, require you to click "Save Settings" first because the service must be started!
 
 To get started, enable the following services and click "Save Settings":
 
-* Audio Recording (PyAudio) 
+* Audio Recording (PyAudio)
 * Speech to Text (Pocketsphinx)
 * Intent Recognition (Fsticuffs)
 * Text to Speech (Espeak)
@@ -64,7 +63,6 @@ Visually, your settings page should look like the following image:
 Expand the "Audio Recording" section by clicking the green button. You should see a drop down list with available microphones. If you have trouble recording audio, try choosing a specific device instead of using the default (make sure to "Save Settings").
 
 ![Microphone test in settings](img/getting-started/test-microphones.png)
-
 
 Clicking the blue "Refresh" button will query PyAudio again for this list. The "Test" button next to "Refresh" will attempt to record audio from each device and guess if it's working or not. The text "working!" will show up next to working microphones in the list.
 
@@ -300,7 +298,7 @@ In this tutorial, we will configure **two instances** of Rhasspy: one as a satel
 
 ### Shared MQTT Broker
 
-If your master server and satellite(s) are all connected to a single MQTT broker, they can easily share information. The challege, in fact, is making sure they don't share too much!
+If your master server and satellite(s) are all connected to a single MQTT broker, they can easily share information. The challenge, in fact, is making sure they don't share too much!
 
 The first step is to ensure that the master and satellite(s) have **different siteIds**. In the "Settings" page of each Rhasspy instance, ensure that the "siteId" at the top is unique across all [Hermes-compatible](https://docs.snips.ai/reference/hermes) services connected to your MQTT broker.
 
@@ -314,13 +312,13 @@ Setting a service to "Hermes MQTT" means that Rhasspy will expect *some* service
 
 #### Master Settings
 
-For you master server, also set MQTT to "External" and configure the details of your broker. Additionally, add the `siteId`'s of each of your satellites to the "Satellite siteIds" text box (separated by commas). 
+For you master server, also set MQTT to "External" and configure the details of your broker. Additionally, add the `siteId`'s of each of your satellites to the "Satellite siteIds" text box (separated by commas).
 
 Finally, set "Dialogue Management" to "Rhasspy" and enable the appropriate speech to text, intent recognition, and text to speech systems.
 
 ![Master settings for Hermes MQTT](img/master-satellite/master-mqtt-settings.png)
 
-Adding one or more satellite `siteId`'s will cause the master server to listen and respond to requests for each satellite. The dialoge manager is crucial here, as it will catch hotword detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
+Adding one or more satellite `siteId`'s will cause the master server to listen and respond to requests for each satellite. The dialogue manager is crucial here, as it will catch wake word detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
 
 #### UDP Audio Streaming
 
@@ -348,7 +346,7 @@ On your satellite, set the speech to text, intent recognition, and (optionally) 
 
 ![Satellite settings for remote HTTP](img/master-satellite/satellite-http-settings.png)
 
-Next, expand each "Remote HTTP" service and set the URL to the host name and port of your master Rhasspy server. Make sure to leave the `/api/...` part of the URL intact. 
+Next, expand each "Remote HTTP" service and set the URL to the host name and port of your master Rhasspy server. Make sure to leave the `/api/...` part of the URL intact.
 
 ![Satellite HTTP servers](img/master-satellite/satellite-remote-settings.png)
 
