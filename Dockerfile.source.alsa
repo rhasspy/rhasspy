@@ -2,6 +2,8 @@ ARG BUILD_ARCH=amd64
 FROM ${BUILD_ARCH}/ubuntu:bionic as build
 ARG BUILD_ARCH=amd64
 
+ENV LANG C.UTF-8
+
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
 
@@ -40,6 +42,8 @@ ARG BUILD_ARCH=amd64
 FROM ${BUILD_ARCH}/ubuntu:bionic
 ARG BUILD_ARCH=amd64
 ARG FRIENDLY_ARCH=amd64
+
+ENV LANG C.UTF-8
 
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
