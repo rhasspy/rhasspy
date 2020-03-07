@@ -1,5 +1,5 @@
 ARG BUILD_ARCH=amd64
-FROM ${BUILD_ARCH}/debian:buster-slim as build
+FROM ${BUILD_ARCH}/ubuntu:bionic as build
 ARG BUILD_ARCH=amd64
 
 COPY etc/qemu-arm-static /usr/bin/
