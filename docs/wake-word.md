@@ -50,6 +50,10 @@ There are a lot of [keyword files](https://github.com/Picovoice/Porcupine/tree/m
 
 If you want to create a custom wake word, you will need to use the [Picovoice Console](https://github.com/Picovoice/porcupine#picovoice-console). **NOTE**: the generated keyword file is only valid for 30 days, though you can always just re-run the optimizer.
 
+### UDP Audio Streaming
+
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.porcupine.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+
 Implemented by [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)
 
 ## Snowboy
@@ -112,6 +116,10 @@ For example, to use both the `snowboy.umdl` and `jarvis.umdl` models, add this t
 
 Make sure to include all models you want in the `model` setting (separated by commas). Each model may have different settings in `model_settings`. If a setting is not present, the default values under `snowboy` will be used.
 
+### UDP Audio Streaming
+
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.snowboy.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+
 Implemented by [rhasspy-wake-snowboy-hermes](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes)
 
 ## Pocketsphinx
@@ -138,6 +146,10 @@ Add to your [profile](profiles.md):
 Set `wake.pocketsphinx.keyphrase` to whatever you like, though 3-4 syllables is recommended. Make sure to [train](training.md) and restart Rhasspy whenever you change the keyphrase.
 
 The `wake.pocketsphinx.threshold` should be in the range 1e-50 to 1e-5. The smaller the number, the less like the keyphrase is to be observed. At least one person has written a script to [automatically tune the threshold](https://medium.com/@PankajB96/automatic-tuning-of-keyword-spotting-thresholds-a27256869d31).
+
+### UDP Audio Streaming
+
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.pocketsphinx.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
 
 Implemented by [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes)
 
