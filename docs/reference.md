@@ -340,7 +340,14 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
 * <a id="api_custom_words"><tt>/api/custom-words</tt></a>
     * GET custom word dictionary as plain text, or POST to overwrite it
     * See `custom_words.txt` in your profile directory
-* `/api/download-profile`
+* <a id="api_backup_profile"><tt>/api/backup-profile</tt></a>
+    * GET a zip file with relevant profile files (sentences, slots, etc.)
+* <a id="api_evaluate"><tt>/api/evaluate</tt></a>
+    * POST archive with WAV/JSON files for batch testing
+    * Returns JSON report
+    * Every file `foo.wav` should have a `foo.json` with a [recognized intent](#intents)
+    * Archive must be in a format supported by [`shutil.unpack_archive`](https://docs.python.org/3/library/shutil.html#shutil.unpack_archive)
+* <a id="api_download_profile"><tt>/api/download-profile</tt></a>
     * POST to have Rhasspy to download missing profile artifacts
 * <a id="api_listen_for_command"><tt>/api/listen-for-command</tt></a>
     * POST to wake Rhasspy up and start listening for a voice command
