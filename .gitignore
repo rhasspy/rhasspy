@@ -9,3 +9,4 @@ web/
 download/
 debian/rhasspy*
 etc/qemu-*
+rhasspy-test/
