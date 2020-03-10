@@ -1,6 +1,8 @@
 FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build
 ARG BUILD_ARCH=amd64
 
+ENV LANG C.UTF-8
+
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
 
@@ -39,6 +41,8 @@ FROM balenalib/raspberry-pi-debian-python:3.7-buster-run
 ARG BUILD_ARCH=amd64
 ARG FRIENDLY_ARCH=amd64
 
+ENV LANG C.UTF-8
+
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
 
@@ -47,7 +51,13 @@ RUN apt-get update && \
     libportaudio2 libatlas3-base \
     libgfortran4 ca-certificates \
     perl curl supervisor mosquitto sox alsa-utils \
-    espeak flite libttspico-utils
+    espeak flite wget
+
+# PicoTTS
+RUN cd / && \
+    wget http://archive.raspberrypi.org/debian/pool/main/s/svox/libttspico-utils_1.0+git20130326-3+rpi1_armhf.deb && \
+    wget http://archive.raspberrypi.org/debian/pool/main/s/svox/libttspico0_1.0+git20130326-3+rpi1_armhf.deb && \
+    apt-get install --yes --no-install-recommends -f ./libttspico0_1.0+git20130326-3+rpi1_armhf.deb ./libttspico-utils_1.0+git20130326-3+rpi1_armhf.deb
 
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
