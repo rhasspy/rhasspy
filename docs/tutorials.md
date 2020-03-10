@@ -225,18 +225,19 @@ def on_disconnect(client, userdata, flags, rc):
 
 def on_message(client, userdata, msg):
     """Called each time a message is received on a subscribed topic."""
+    nlu_payload = json.loads(msg.payload)
     if msg.topic == "hermes/nlu/intentNotRecognized":
         sentence = "Unrecognized command!"
         print("Recognition failure")
     else:
         # Intent
-        nlu_intent = json.loads(msg.payload)
-        print("Got intent:", nlu_intent["intent"]["intentName"])
+        print("Got intent:", nlu_payload["intent"]["intentName"])
 
         # Speak the text from the intent
-        sentence = nlu_intent["input"]
+        sentence = nlu_payload["input"]
 
-    client.publish("hermes/tts/say", json.dumps({"text": sentence}))
+    site_id = nlu_payload["siteId"]
+    client.publish("hermes/tts/say", json.dumps({"text": , "siteId": site_id}))
 
 
 # Create MQTT client and connect to broker
