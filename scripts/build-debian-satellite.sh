@@ -6,7 +6,7 @@ version="$2"
 
 if [[ -z "${version}" ]];
 then
-    echo "Usage: build-debian.sh architecture version"
+    echo "Usage: build-debian-satellite.sh architecture version"
     exit 1
 fi
 
@@ -14,8 +14,8 @@ fi
 this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
-package_name='rhasspy'
-python_name='rhasspy'
+package_name='rhasspysatellite'
+python_name='rhasspysatellite'
 
 venv="${src_dir}/.venv"
 if [[ -d "${venv}" ]]; then
@@ -54,18 +54,6 @@ cp -R "${src_dir}/rhasspy-server-hermes/web" \
    "${src_dir}/VERSION" \
    "${dist_dir}/${python_name}/rhasspyserver_hermes"
 
-# Copy pre-built programs
-tar -C "${dist_dir}/rhasspy" \
-    -xvf "${download_dir}/mitlm-0.4.2-${architecture}.tar.gz"
-
-mkdir -p "${dist_dir}/rhasspy/phonetisaurus"
-tar -C "${dist_dir}/rhasspy/phonetisaurus" \
-    -xvf "${download_dir}/phonetisaurus-2019-${architecture}.tar.gz"
-
-mkdir -p "${dist_dir}/rhasspy/rhasspyasr_kaldi"
-tar -C "${dist_dir}/rhasspy/rhasspyasr_kaldi" \
-    -xvf "${download_dir}/kaldi-2020-${architecture}.tar.gz"
-
 # Tar up binary distribution
 tar -C "${src_dir}/pyinstaller/dist" \
     -czf \
@@ -81,7 +69,7 @@ rm -rf "${debian_dir}"
 mkdir -p "${debian_dir}/DEBIAN" "${debian_dir}/usr/bin" "${debian_dir}/usr/lib"
 
 # Generate control file
-cat "${debian}/DEBIAN/control" | \
+cat "${debian}/DEBIAN_satellite/control" | \
     version="${version}" architecture="${architecture}" envsubst \
                          > "${debian_dir}/DEBIAN/control"
 

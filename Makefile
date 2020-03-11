@@ -124,6 +124,9 @@ pyinstaller:
 debian:
 	scripts/build-debian.sh "${architecture}" "${version}"
 
+debian-satellite:
+	scripts/build-debian-satellite.sh "${architecture}" "${version}"
+
 # -----------------------------------------------------------------------------
 # Downloads
 # -----------------------------------------------------------------------------
