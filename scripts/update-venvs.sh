@@ -54,6 +54,7 @@ cat "${src_dir}/RHASSPY_DIRS" | \
             # Create virtual environment
             rm -rf .venv
             python3 -m venv .venv
+            .venv/bin/pip3 ${PIP_INSTALL} --upgrade pip
             .venv/bin/pip3 ${PIP_INSTALL} --upgrade wheel setuptools
         fi
 
