@@ -313,13 +313,15 @@ Setting a service to "Hermes MQTT" means that Rhasspy will expect *some* service
 
 #### Master Settings
 
-For you master server, also set MQTT to "External" and configure the details of your broker. Additionally, add the `siteId`'s of each of your satellites to the "Satellite siteIds" text box (separated by commas).
-
-Finally, set "Dialogue Management" to "Rhasspy" and enable the appropriate speech to text, intent recognition, and text to speech systems.
+For you master server, also set MQTT to "External" and configure the details of your broker. First, set Dialogue Management to "Rhasspy" and select your preferred Speech to Text, Intent Recognition, and Text to Speech services.
 
 ![Master settings for Hermes MQTT](img/master-satellite/master-mqtt-settings.png)
 
-Adding one or more satellite `siteId`'s will cause the master server to listen and respond to requests for each satellite. The dialogue manager is crucial here, as it will catch wake word detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
+ Under **each service** (including Dialogue Management), add the `siteId`'s of each of your satellites to the "Satellite siteIds" text box (separated by commas).
+
+![Master satellite ids for Hermes MQTT](img/master-satellite/master-mqtt-satellite-ids.png)
+
+Adding one or more satellite `siteId`'s to a service will cause it to listen and respond to requests for each satellite. The dialogue manager is crucial here, as it will catch wake word detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
 
 #### UDP Audio Streaming
 
