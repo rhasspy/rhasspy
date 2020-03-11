@@ -20,7 +20,6 @@
 # Wake
 
 * Support Mycroft Precise
-* Add webhook?
 * Training for pocketsphinx keyphrase
 
 # TTS
@@ -30,8 +29,6 @@
 * Support SSML
 
 # Intent Handling
-
-* Home Assistant SSL
 
 # Dialogue Management
 
