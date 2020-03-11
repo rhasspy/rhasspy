@@ -85,12 +85,13 @@ fi
 
 # Generate supervisord conf
 conf_path="${profile_dir}/supervisord.conf"
-echo "Generating ${conf_path}"
+echo 'Starting up...'
 
 "${this_dir}/voltron-run" \
     python3 -m rhasspysupervisor \
     --profile "${profile_name}" \
     --user-profiles "${user_profiles}" \
+    --docker-compose '' \
     "${extra_supervisor_args[@]}" \
     --debug
 
@@ -115,6 +116,8 @@ trap finish EXIT
 # Run assistant
 log_path="${profile_dir}/supervisord.log"
 pid_path="${profile_dir}/supervisord.pid"
+
+echo 'Starting services...'
 "${this_dir}/voltron-run" \
     supervisord \
     --configuration "${conf_path}" \
