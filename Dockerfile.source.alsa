@@ -53,7 +53,8 @@ RUN apt-get update && \
     libportaudio2 libatlas3-base python3 python3-dev \
     libgfortran4 ca-certificates \
     perl curl supervisor mosquitto sox alsa-utils \
-    espeak flite libttspico-utils
+    espeak flite libttspico-utils \
+    gstreamer1.0-tools gstreamer1.0-plugins-good
 
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
