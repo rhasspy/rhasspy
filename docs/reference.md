@@ -639,6 +639,8 @@ All available profile sections and settings are listed below:
             * `parts` - list of objects representing parts of a file that should be combined with `cat`
                 * `fragment` - fragment appended to file URL
                 * `bytes_expected` - number of bytes for this part
+* `logging` - settings for service loggers
+    * `format` - Python logger [format string](https://docs.python.org/3/library/logging.html#logrecord-attributes)
 
 ## Data Formats
 
