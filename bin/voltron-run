@@ -27,6 +27,14 @@ done
 export PYTHONPATH="${src_dir}:${PYTHONPATH}"
 export PATH="${this_dir}:${PATH}"
 
+if [[ -d "${venv}/tools" ]]; then
+    export PATH="${venv}/tools:${PATH}"
+
+    if [[ -d "${venv}/tools/kaldi" ]]; then
+        export KALDI_DIR="${venv}/tools/kaldi"
+    fi
+fi
+
 # Site packages (for PyInstaller scripts)
 export RHASSPY_SITE_PACKAGES="$(find "${venv}" -mindepth 3 -maxdepth 3 -type d -name site-packages)"
 
