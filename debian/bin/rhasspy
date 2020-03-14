@@ -66,6 +66,7 @@ echo "Generating ${conf_path}"
 rhasspy-supervisor \
     --profile "${profile_name}" \
     --user-profiles "${user_profiles}" \
+    --docker-compose '' \
     --debug
 
 # Run web server

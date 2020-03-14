@@ -8,5 +8,9 @@ fi
 export LD_LIBRARY_PATH="${rhasspy_dir}/mitlm/lib:${rhasspy_dir}/phonetisaurus/lib:${LD_LIBRARY_PATH}"
 export PATH="${rhasspy_dir}/mitlm/bin:${rhasspy_dir}/phonetisaurus/bin:${PATH}"
 
+if [[ -d "${rhasspy_dir}/kaldi" ]]; then
+    export KALDI_DIR="${rhasspy_dir}/kaldi"
+fi
+
 # Run service
 "${rhasspy_dir}/rhasspy" "$@"

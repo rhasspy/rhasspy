@@ -7,6 +7,8 @@ from PyInstaller.utils.hooks import copy_metadata
 
 block_cipher = None
 
+binary_tuples = []
+
 # Need to specially handle these snowflakes
 webrtcvad_path = None
 
@@ -20,11 +22,21 @@ if rhasspy_site_packages:
 # Add virtual environment site packages
 venv_path = os.environ.get("VIRTUAL_ENV")
 if venv_path:
-    venv_lib = Path(venv_path) / "lib"
+    venv_path = Path(venv_path)
+    venv_lib = venv_path / "lib"
     for venv_python_dir in venv_lib.glob("python*"):
         venv_site_dir = venv_python_dir / "site-packages"
         if venv_site_dir.is_dir():
             site_dirs.append(venv_site_dir)
+
+    kaldi_dir = venv_path / "tools" / "kaldi"
+    if kaldi_dir.is_dir():
+        tools_dir = venv_path / "tools"
+        for kaldi_file in kaldi_dir.rglob("*"):
+            if kaldi_file.is_file():
+                binary_tuples.append(
+                    (kaldi_file, str(kaldi_file.parent.relative_to(tools_dir)))
+                )
 
 # Look for compiled artifacts
 for site_dir in site_dirs:
@@ -35,6 +47,7 @@ for site_dir in site_dirs:
         break
 
 assert webrtcvad_path, "Missing webrtcvad"
+binary_tuples.append((webrtcvad_path, "."))
 
 a = Analysis(
     [Path.cwd() / "__main__.py"],
@@ -65,7 +78,7 @@ a = Analysis(
         "rhasspy-wake-porcupine-hermes",
         "rhasspy-wake-snowboy-hermes",
     ],
-    binaries=[(webrtcvad_path, ".")],
+    binaries=binary_tuples,
     datas=copy_metadata("webrtcvad"),
     hiddenimports=[
         "pkg_resources.py2_warn",
