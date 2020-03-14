@@ -27,26 +27,19 @@ Runs Rhasspy services using [supervisord](http://supervisord.org/). Service conf
     * [rhasspy-dialogue-hermes](https://github.com/rhasspy/rhasspy-dialogue-hermes)
 * Remote/Command
     * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
+    * [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
 
 ## Interface
 
 * [rhasspy-server-hermes](https://github.com/rhasspy/rhasspy-server-hermes)
-    * Built on [rhasspy-web-vue](https://github.com/rhasspy/rhasspy-web-vue)
 
 
 ## Getting Started
 
-Clone the repo and submodules:
+Before building Rhasspy, you will need some support packages:
 
-```bash
-git clone https://github.com/rhasspy/rhasspy-voltron
-cd rhasspy-voltron/
-git submodule update --init --recursive
-```
-
-Create a virtual environment and install Python dependencies.
-You will need some support packages:
-
+* `python3*` (Python)
+* `git` (clone repo)
 * `build-essential` (compiler)
 * `libatlas-base-dev` (snowboy)
 * `swig` (snowboy/pocketsphinx)
@@ -54,33 +47,43 @@ You will need some support packages:
 
 ```bash
 sudo apt-get update
-sudo apt-get install build-essential libatlas-base-dev swig portaudio19-dev
+sudo apt-get install \
+     python3 python3-dev python3-setuptools python3-pip python3-venv \
+     git build-essential libatlas-base-dev swig portaudio19-dev
 make venv
 ```
 
 Install runtime dependencies:
 
-  * `supervisord` (process management)
-  * `mosquitto` (MQTT broker)
-  * `sox` (WAV conversion)
-  * `alsa-utils` (record/play audio)
-  * `libgfortran3` (training)
+* `supervisord` (process management)
+* `mosquitto` (MQTT broker)
+* `sox` (WAV conversion)
+* `alsa-utils` (record/play audio)
+* `libgfortran4` (Kaldi)
+* Text to speech
+    * `espeak`
+    * `flite`
+    * `libttspico-utils`
+* Miscellaneous
+    * `perl`
+    * `curl`
+    * `patchelf`
+    * `ca-certificates`
 
 ```bash
 sudo apt-get update
-sudo apt-get install supervisor mosquitto sox alsa-utils libgfortran3
+sudo apt-get install \
+     supervisor mosquitto sox alsa-utils libgfortran4 \
+     espeak flite libttspico-utils \
+     perl curl patchelf ca-certificates
 ```
 
-If you plan to use [Pocketsphinx](https://github.com/cmusphinx/pocketsphinx) for speech recognition (the default), do:
+Clone the repo and build:
 
 ```bash
-cd rhasspy-asr-pocketsphinx && make venv
-```
-
-To use [Kaldi](https://kaldi-asr.org) instead for speech recognition (the default), do:
-
-```bash
-cd rhasspy-asr-kaldi && make venv
+git clone --recursive https://github.com/rhasspy/rhasspy-voltron
+cd rhasspy-voltron/
+make
 ```
 
 ## Running

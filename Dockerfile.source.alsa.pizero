@@ -41,11 +41,10 @@ FROM balenalib/raspberry-pi-debian-python:3.7-buster-run
 ARG BUILD_ARCH=amd64
 ARG FRIENDLY_ARCH=amd64
 
-ENV LANG C.UTF-8
-
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
 
+ENV LANG C.UTF-8
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
 

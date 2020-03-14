@@ -44,6 +44,8 @@ ARG BUILD_ARCH=amd64
 ARG FRIENDLY_ARCH=amd64
 
 ENV LANG C.UTF-8
+ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
+ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
 
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
@@ -70,9 +72,6 @@ RUN apt-get update && \
     perl curl supervisor mosquitto sox alsa-utils \
     espeak flite libttspico-utils \
     gstreamer1.0-tools gstreamer1.0-plugins-good
-
-ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
-ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
 
 COPY bin/ ${RHASSPY_DIR}/bin/
 COPY etc/ ${RHASSPY_DIR}/etc/

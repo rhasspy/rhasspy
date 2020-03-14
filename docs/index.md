@@ -40,6 +40,12 @@ Rhasspy is <strong>optimized for</strong>:
     * You can also do [open-ended speech recognition](speech-to-text.md#open-transcription)
 * Voice commands with [uncommon words or pronunciations](usage.md#words-tab)
     * New words are added phonetically with [automated assistance](https://github.com/AdolfVonKleist/Phonetisaurus)
+    
+## Web Interface
+
+Rhasspy comes with a [snazzy web interface](usage.md#web-interface) that lets you configure, program, and test your voice assistant remotely from your web browser. All of the web UI's functionality is exposed in a comprehensive [HTTP API](reference.md#http-api).
+
+![Test page in web interface](img/web-speech.png)
 
 ## Getting Started
 
