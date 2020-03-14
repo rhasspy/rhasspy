@@ -1,6 +1,6 @@
 # Web UI
 
-* Add arguments to all command systems
+* Multi-select in wakewords
 
 # ASR
 

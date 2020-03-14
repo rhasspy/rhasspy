@@ -2,7 +2,7 @@
 set -e
 
 if [[ -z "${PIP_INSTALL}" ]]; then
-    PIP_INSTALL='install'
+    PIP_INSTALL='install --upgrade'
 fi
 
 # Directory of *this* script
@@ -23,21 +23,63 @@ download="${src_dir}/download"
 
 # -----------------------------------------------------------------------------
 
-# Create virtual environment
-echo "Creating virtual environment at ${venv}"
-rm -rf "${venv}"
-python3 -m venv "${venv}"
+if [[ ! -d "${venv}" ]]; then
+    # Create virtual environment
+    echo "Creating virtual environment at ${venv}"
+    python3 -m venv "${venv}"
+fi
+
 source "${venv}/bin/activate"
 
-# Install Python dependencies
-echo "Installing Python dependencies"
-pip3 ${PIP_INSTALL} --upgrade pip
-pip3 ${PIP_INSTALL} wheel setuptools
-pip3 ${PIP_INSTALL} "${download}/snowboy-1.3.0.tar.gz"
+# Directory where pre-compiled binaries will be installed
+mkdir -p "${venv}/tools"
 
+# Install Python dependencies
+echo 'Installing Python dependencies'
+pip3 ${PIP_INSTALL} pip
+pip3 ${PIP_INSTALL} wheel setuptools
+
+# Snowboy
+if [[ -s "${download}/snowboy-1.3.0.tar.gz" ]]; then
+    # Only install if not already present in venv
+    if [[ -z "$(pip3 freeze | grep '^snowboy==1.2.0b1$')" ]]; then
+        echo 'Installing snowboy'
+        pip3 ${PIP_INSTALL} "${download}/snowboy-1.3.0.tar.gz"
+    fi
+fi
+
+# Pocketsphinx
+if [[ -s "${download}/pocketsphinx-python.tar.gz" ]]; then
+    echo 'Installing pocketsphinx'
+    # Only install if not already present in venv
+    if [[ -z "$(pip3 freeze | grep '^pocketsphinx==0.1.15$')" ]]; then
+        pip3 ${PIP_INSTALL} "${download}/pocketsphinx-python.tar.gz"
+    fi
+fi
+
+# MITLM
+if [[ -s "${download}/mitlm-0.4.2-${architecture}.tar.gz" ]]; then
+    echo 'Installing MITLM'
+    "${src_dir}/scripts/install-mitlm.sh" "${download}/mitlm-0.4.2-${architecture}.tar.gz" "${venv}/tools"
+fi
+
+# Phonetisaurus
+if [[ -s "${download}/phonetisaurus-2019-${architecture}.tar.gz" ]]; then
+    echo 'Installing Phonetisaurus'
+    "${src_dir}/scripts/install-phonetisaurus.sh" "${download}/phonetisaurus-2019-${architecture}.tar.gz" "${venv}/tools"
+fi
+
+# Phonetisaurus
+if [[ -s "${download}/kaldi-2020-${architecture}.tar.gz" ]]; then
+    echo 'Installing Kaldi'
+    "${src_dir}/scripts/install-kaldi.sh" "${download}/kaldi-2020-${architecture}.tar.gz" "${venv}/tools"
+fi
+
+echo 'Installing requirements'
 pip3 ${PIP_INSTALL} -r requirements.txt
 
 # Optional development requirements
+echo 'Installing development requirements'
 pip3 ${PIP_INSTALL} -r requirements_dev.txt || \
     echo "Failed to install development requirements"
 

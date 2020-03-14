@@ -9,7 +9,7 @@ PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
 DOWNLOAD_DIR = download
 
-.PHONY: venv update-bin install-kaldi dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy docs
+.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy docs clean
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
@@ -25,17 +25,8 @@ endif
 DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
 
 # -----------------------------------------------------------------------------
-# Python
-# -----------------------------------------------------------------------------
 
-reformat:
-	scripts/format-code.sh
-
-check:
-	scripts/check-code.sh
-
-test:
-	scripts/run-tests.sh
+all: venv docs
 
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
@@ -56,15 +47,35 @@ update-bin:
 	$(shell find . -mindepth 3 -maxdepth 3 -type f -name 'rhasspy-*' -path './rhasspy*/bin/*' -exec cp '{}' bin/ \;)
 	chmod +x bin/*
 
+docs:
+	scripts/build-docs.sh
+
+clean:
+	rm -rf .venv/
+
+# -----------------------------------------------------------------------------
+# Testing
+# -----------------------------------------------------------------------------
+
+reformat:
+	scripts/format-code.sh
+
+check:
+	scripts/check-code.sh
+
+test:
+	scripts/run-tests.sh
+
+# -----------------------------------------------------------------------------
+# Distribution
+# -----------------------------------------------------------------------------
+
 # Create source/binary/debian distribution files
 dist: sdist debian
 
 # Create source distribution
 sdist:
 	python3 setup.py sdist
-
-docs:
-	scripts/build-docs.sh
 
 # -----------------------------------------------------------------------------
 # Docker
@@ -131,7 +142,7 @@ debian-satellite:
 # Downloads
 # -----------------------------------------------------------------------------
 
-downloads: $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz
+downloads: $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz $(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz $(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz
 
 # Download snowboy.
 $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz:
@@ -142,3 +153,13 @@ $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz:
 $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz:
 	mkdir -p "$(DOWNLOAD_DIR)"
 	curl -sSfL -o $@ 'https://github.com/synesthesiam/pocketsphinx-python/releases/download/v1.0/pocketsphinx-python.tar.gz'
+
+# Download pre-built MITLM binaries.
+$(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz:
+	mkdir -p "$(DOWNLOAD_DIR)"
+	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-mitlm/releases/download/v0.4.2/mitlm-0.4.2-$(architecture).tar.gz"
+
+# Download pre-built Phonetisaurus binaries.
+$(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz:
+	mkdir -p "$(DOWNLOAD_DIR)"
+	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(architecture).tar.gz"

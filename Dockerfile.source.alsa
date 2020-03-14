@@ -48,16 +48,6 @@ ENV LANG C.UTF-8
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
 
-RUN apt-get update && \
-    apt-get install --no-install-recommends --yes \
-    libportaudio2 libatlas3-base python3 python3-dev \
-    libgfortran4 ca-certificates \
-    perl curl supervisor mosquitto sox alsa-utils \
-    espeak flite libttspico-utils
-
-ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
-ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
-
 # Copy Rhasspy virtual environment
 COPY --from=build ${RHASSPY_VENV} ${RHASSPY_VENV}
 
@@ -71,6 +61,18 @@ RUN cd /phonetisaurus && mv bin/* /usr/bin/ && mv lib/* /usr/lib/
 
 # Kaldi
 ADD download/kaldi-2020-${FRIENDLY_ARCH}.tar.gz ${RHASSPY_DIR}/rhasspy-asr-kaldi/rhasspyasr_kaldi/
+
+# Install Debian dependencies
+RUN apt-get update && \
+    apt-get install --no-install-recommends --yes \
+    libportaudio2 libatlas3-base python3 python3-dev \
+    libgfortran4 ca-certificates \
+    perl curl supervisor mosquitto sox alsa-utils \
+    espeak flite libttspico-utils \
+    gstreamer1.0-tools gstreamer1.0-plugins-good
+
+ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
+ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
 
 COPY bin/ ${RHASSPY_DIR}/bin/
 COPY etc/ ${RHASSPY_DIR}/etc/

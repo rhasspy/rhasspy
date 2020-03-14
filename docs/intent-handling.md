@@ -121,6 +121,8 @@ Add to your [profile](profiles.md):
 
 When an intent is recognized, Rhasspy will POST to `handle.remote.url` with the intent JSON. Your server should **return JSON** back, optionally with additional information (see below).
 
+Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
+
 ### Speech
 
 If the returned JSON contains a "speech" key like this:
@@ -138,7 +140,7 @@ then Rhasspy will forward `speech.text` to the configured [text to speech](text-
 
 ## Command
 
-Once an intent is successfully recognized, Rhasspy will send an event to Home Assistant with the details. You can call a custom program instead *or in addition* to this behavior.
+Once an intent is successfully recognized, can call a custom program to handle it.
 
 Add to your [profile](profiles.md):
 
@@ -152,7 +154,7 @@ Add to your [profile](profiles.md):
 }
 ```
 
-When an intent is recognized, Rhasspy will call your custom program with the intent JSON printed to standard in. You should return JSON to standard out, optionally with additional information (see below).
+When an intent arrives, Rhasspy will call your custom program with the intent JSON printed to standard in. You should return JSON to standard out, optionally with additional information (see below).
 
 The following environment variables are available to your program:
 
@@ -176,6 +178,8 @@ If the returned JSON contains a "speech" key like this:
 ```
 
 then Rhasspy will forward `speech.text` to the configured [text to speech](text-to-speech.md) system using a `hermes/tts/say` message.
+
+Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 
 ## Dummy
 

@@ -62,30 +62,61 @@ By default, audio will streamed over MQTT in WAV chunks. When using Rhasspy in a
 
 Implemented by [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
 
-## GStreamer
+## Command
 
-**Not supported yet in 2.5!**
-
-Receives audio chunks via stdout from a [GStreamer](https://gstreamer.freedesktop.org/) pipeline.
+Calls an external program to record audio. RAW audio data is expected from the program's standard out.
 
 Add to your [profile](profiles.md):
 
 ```json
 "microphone": {
-  "system": "gstreamer",
-  "gstreamer": {
-    "pipeline": "...",
+  "system": "command",
+  "command": {
+    "record_program": "/path/to/record/program",
+    "record_arguments": [],
+    "sample_rate": 16000,
+    "sample_width": 2,
+    "channels": 1,
+    
+    "list_program": "/path/to/list/program",
+    "list_arguments": [],
+    
+    "test_program": "/path/to/test/program",
+    "test_arguments": []
   }
 }
 ```
 
-Set `microphone.gstreamer.pipeline` to your GStreamer pipeline **without a sink** (this will be added by Rhasspy). By default, the pipeline is:
+The `microphone.command.record_program` is executed when Rhasspy starts. It should output raw PCM audio data on its standard out. The `sample_rate` (Hertz), `sample_width` (bytes), and `channels` parameters tell Rhasspy the format of the raw audio data.
 
-```
-udpsrc port=12333 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample
+If provided, the `microphone.command.list_program` will be executed when a `rhasspy/audioServer/getDevices` message is received and the `test` field is `false`. The program should return a listing of available audio output devices in the same format as `arecord -L`.
+
+If provided, the `microphone.command.test_program` will be executed when a `rhasspy/audioServer/getDevices` message is received and the `test` field is `true`. This program is called for each device returned by `list_command`. The `test_program` and its arguments are send to Python's `str.format` with the device name as the only argument, so `{}` in `test_program` or `test_arguments` will be replaced with it.
+
+Implemented by [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
+
+## GStreamer
+
+As of Rhasspy 2.5, you can use `gstreamer` through the [command microphone system](#command).
+
+Add to your [profile](profiles.md):
+
+```json
+"microphone": {
+  "system": "command",
+  "command": {
+    "record_program": "gstreamer",
+    "record_arguments": "udpsrc port=12333 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample ! filesink location=/dev/stdout",
+    "sample_rate": 16000,
+    "sample_width": 2,
+    "channels": 1
+  }
+}
 ```
 
-which "simply" receives raw 16-bit 16 kHz audio chunks via UDP port 12333. You could stream microphone audio to Rhasspy from another machine by running the following terminal command:
+This command receives raw 16-bit 16 kHz audio chunks via UDP port 12333. If you're using Docker, make sure to add `-p 12333:12333/udp` to your `docker run` command. 
+
+You can then stream microphone audio *to* Rhasspy from another computer by running the following terminal command:
 
 ```bash
 gst-launch-1.0 \
@@ -96,11 +127,9 @@ gst-launch-1.0 \
     udpsink host=RHASSPY_SERVER port=12333
 ```
 
-where `RHASSPY_SERVER` is the hostname of your Rhasspy server (e.g., `localhost`).
+where `RHASSPY_SERVER` is the hostname of your Rhasspy server (e.g., `localhost`). You man need to install the `gstreamer1.0-tools` and `gstreamer1.0-plugins-good` packages first.
 
-The Rhasspy Docker images contains the ["good" plugin](https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good-plugins/html/) set for GStreamer, which includes a wide variety of ways to stream/transform audio.
-
-TODO: Not Implemented
+The official Rhasspy Docker image contains the ["good" plugin set](https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good-plugins/html/) for GStreamer, which includes a wide variety of ways to stream/transform audio.
 
 ## Dummy
 

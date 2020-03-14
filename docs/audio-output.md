@@ -28,7 +28,22 @@ Implemented by [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-
 
 ## Remote
 
-**Not supported yet in 2.5!**
+Rhasspy can POST audio data (as WAV) to a remote HTTP endpoint (like [`/api/play-wav`](reference.md#api_play_wav)).
+
+Add to your [profile](profiles.md):
+
+```json
+"sounds": {
+  "system": "remote",
+  "remote": {
+      "url": "http://<address>:<port>/path/to/endpoint"
+  }
+}
+```
+
+The `Content-Type` header will be set to `audio/wav`
+
+Implemented by [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
 
 ## Command
 

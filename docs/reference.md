@@ -374,6 +374,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * See `phoneme_examples.txt` in your profile directory
 * <a id="api_play_wav"><tt>/api/play-wav</tt></a>
     * POST to play WAV data
+    * Make sure to set `Content-Type` to `audio/wav`
 * <a id="api_profile"><tt>/api/profile</tt></a>
     * GET the JSON for your profile, or POST to overwrite it
     * `?layers=profile` to only see settings different from `defaults.json`
