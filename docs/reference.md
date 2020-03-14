@@ -50,9 +50,14 @@ Rhasspy implements a superset of the [Hermes protocol](https://docs.snips.ai/ref
 Messages for [audio input](audio-input.md) and [audio output](audio-output.md).
 
 * <a id="audioserver_audioframe"><tt>hermes/audioServer/&lt;siteId&gt;/audioFrame</tt></a> (binary)
-    * Chunk of WAV audio data
+    * Chunk of WAV audio data for site
     * `wav_bytes: bytes` - WAV data to play (**message payload**)
     * `siteId: string` - Hermes site ID (part of topic)
+* <a id="audioserver_audiosessionframe"><tt>hermes/audioServer/&lt;siteId&gt;/&lt;sessionId&gt;/audioSessionFrame</tt></a> (binary)
+    * Chunk of WAV audio data for session
+    * `wav_bytes: bytes` - WAV data to play (**message payload**)
+    * `siteId: string` - Hermes site ID (part of topic)
+    * `sessionId: string` - session ID (part of topic)
 * <a id="audioserver_playbytes"><tt>hermes/audioServer/&lt;siteId&gt;/playBytes/&lt;requestId&gt;</tt></a> (JSON)
     * Play WAV data
     * `wav_bytes: bytes` - WAV data to play (message payload)
@@ -80,6 +85,9 @@ Messages for [speech to text](speech-to-text.md).
     * Tell ASR system to start recording/transcribing
     * `siteId: string = "default"` - Hermes site ID
     * `sessionId: string = ""` - current session ID
+    * `stopOnSilence: bool = true` - detect silence and automatically end voice command (Rhasspy only)
+    * `sendAudioCaptured: bool = false` - send [`audioCaptured`](#asr_audioCaptured) after stop listening (Rhasspy only)
+    * `wakewordId: string = ""` - id of wake word that triggered session (Rhasspy only)
 * <a id="asr_stoplistening"><tt>hermes/asr/stopListening</tt></a> (JSON)
     * Tell ASR system to stop recording
     * Emits [`textCaptured`](#asr_textcaptured) if silence has was not detected earlier
@@ -349,6 +357,8 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * Archive must be in a format supported by [`shutil.unpack_archive`](https://docs.python.org/3/library/shutil.html#shutil.unpack_archive)
 * <a id="api_download_profile"><tt>/api/download-profile</tt></a>
     * POST to have Rhasspy to download missing profile artifacts
+* <a id="api_handle_intent"><tt>/api/handle-intent</tt></a>
+    * POST Hermes intent as JSON to handle
 * <a id="api_listen_for_command"><tt>/api/listen-for-command</tt></a>
     * POST to wake Rhasspy up and start listening for a voice command
     * Returns intent JSON when command is finished

@@ -34,7 +34,7 @@ Provides a [graphical web interface](usage.md#web-interface) for managing Rhassp
 ### Available Services
 
 * [rhasspy-server-hermes](https://github.com/rhasspy/rhasspy-server-hermes)
-    * [Vue.js](https://vuejs.org/) based web UI at `http://YOUR_SERVER:12101`
+    * [alpine.js](https://github.com/alpinejs/alpine/) based web UI at `http://YOUR_SERVER:12101`
     * Implements Rhasspy's [HTTP API](reference.md#http-api) and [websocket API](reference.md#websocket-api)
 
 ## Dialogue Manager
@@ -75,7 +75,7 @@ Records audio from a microphone and streams it as WAV chunks over MQTT. See [Aud
 
 * [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
     * Calls an external program for audio input
-    * Implements [arecord](audio-input.md#alsa)
+    * Implements [arecord](audio-input.md#alsa) and [command](audio-input.md#command)
 * [rhasspy-microphone-pyaudio-hermes](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes)
     * Records directly from a [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) device
     * Implements [pyaudio](audio-input.md#pyaudio)
@@ -122,11 +122,16 @@ Listens to WAV chunks and transcribes voice commands. See [Speech to Text](speec
 
 * [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
 * [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes)
+* [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
+    * POSTs to [remote web server](reference.md#api_speech_to_text) for speech recognition
+    * Implements [remote](speech-to-text.md#remote-http-server) (`--asr-url`) and [command](speech-to-text.md#command) (`--asr-command`)
 
 ### Input Messages
 
 * [`hermes/audioServer/<siteId>/audioFrame`](reference.md#audioserver_audioframe)
-    * WAV chunk from microphone
+    * WAV chunk from microphone for a site
+* [`hermes/audioServer/<siteId>/<sessionId>/audioSessionFrame`](reference.md#audioserver_audiosessionframe)
+    * WAV chunk from microphone for a session
 * [`hermes/asr/toggleOn`](reference.md#asr_toggleon)
     * Enable ASR system
 * [`hermes/asr/toggleOff`](reference.md#asr_toggleoff)
@@ -150,6 +155,7 @@ Listens to WAV chunks and transcribes voice commands. See [Speech to Text](speec
     * ASR training succeeded
 * [`rhasspy/asr/<siteId>/<sessionId>/audioCaptured`](reference.md#asr_audiocaptured)
     * Audio recorded from voice command
+    * Sent when `sendAudioCaptured = true` in [`startListening`](reference.md#asr_audiocaptured)
 * [`rhasspy/g2p/phonemes`](reference.md#g2p_phonemes)
     * Phonetic pronunciations of words
 
@@ -161,6 +167,9 @@ Recognizes user intents from text input. See [Intent Recognition](intent-recogni
 
 * [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes)
 * [rhasspy-nlu-hermes](https://github.com/rhasspy/rhasspy-nlu-hermes)
+* [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
+    * POSTs to [remote web server](reference.md#api_text_to_intent) for intent recognition
+    * Implements [remote](intent-recognition.md#remote-http-server) (`--intent-url`) and [command](intent-recognition.md#command) (`--nlu-command`)
 
 ### Input Messages
 
@@ -187,6 +196,9 @@ Dispatches recognized intents to home automation software. See [Intent Handling]
 ### Available Services
 
 * [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
+* [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
+    * POSTs to [remote web server](reference.md#api_handle_intent) for intent handling
+    * Implements [remote](intent-handling.md#remote-server) (`--handle-url`) and [command](intent-handling.md#command) (`--handle-command`)
 
 ### Input Messages
 
@@ -212,7 +224,7 @@ Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) f
     * Calls external program for text to speech
     * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), and [command](text-to-speech.md#command)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
-    * POSTs to remote web server for text to speech
+    * POSTs to [remote web server](reference.md#api_text_to_speech) for text to speech
     * Implements [remote](text-to-speech.md#remote) (`--tts-url`) and [command](text-to-speech.md#command) (`--tts-command`)
 
 ### Input Messages
@@ -232,6 +244,9 @@ Plays WAV audio through an audio output device (speakers). See [Audio Output](au
 ### Available Services
 
 * [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
+    * Implements [remote](audio-output.md#remote) and [command](audio-output.md#command)
+    * POSTs to [remote web server](reference.md#api_play_wav) for audio output
+* [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 
 ### Input Messages
 
