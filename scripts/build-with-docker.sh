@@ -37,7 +37,8 @@ cpu_archs=(['amd64']='x86_64' ['arm32v7']='armv7l' ['arm64v8']='aarch64' ['arm32
 
 for docker_arch in "${docker_archs[@]}"; do
     friendly_arch="${friendly_archs[${docker_arch}]}"
-    echo "${docker_arch} ${friendly_arch}"
+    cpu_arch="${cpu_archs[${docker_arch}]}"
+    echo "${docker_arch} ${friendly_arch} ${cpu_arch}"
 
     if [[ -z "${friendly_arch}" ]]; then
        exit 1
