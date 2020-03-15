@@ -11,4 +11,7 @@ ac2378d011d08cd17799ffaddcf2830b  phonetisaurus-2019-arm32v6-alpine.tar.gz
 2ca56d1995ce7c8a211b8a5f4f9b5dd0  phonetisaurus-2019-arm32v6.tar.gz
 6202a9ec02d642c57f6cab3d7cf16296  phonetisaurus-2019-armhf.tar.gz
 51f21c20aa879cb5704413c61e655acb  pocketsphinx-python.tar.gz
+7cf02d3875f28cec7a81a443311aca37  precise-engine_0.3.0_aarch64.tar.gz
+2721d1b4c7950bc5554e484a26dbf8d1  precise-engine_0.3.0_armv7l.tar.gz
+90434d9898516d6e30d43ebb27bd56ef  precise-engine_0.3.0_x86_64.tar.gz
 e16e117914f76f4a35facb16b0fcd61b  snowboy-1.3.0.tar.gz
