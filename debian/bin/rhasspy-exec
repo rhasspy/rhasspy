@@ -12,5 +12,9 @@ if [[ -d "${rhasspy_dir}/kaldi" ]]; then
     export KALDI_DIR="${rhasspy_dir}/kaldi"
 fi
 
+if [[ -d "${rhasspy_dir}/precise-engine" ]]; then
+    export PRECISE_ENGINE_DIR="${rhasspy_dir}/precise-engine"
+fi
+
 # Run service
 "${rhasspy_dir}/rhasspy" "$@"

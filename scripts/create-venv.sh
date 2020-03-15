@@ -10,6 +10,7 @@ this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
 python_name="$(basename "${src_dir}" | sed -e 's/-//' | sed -e 's/-/_/g')"
+cpu_arch="$(uname -m)"
 
 # -----------------------------------------------------------------------------
 
@@ -69,10 +70,16 @@ if [[ -s "${download}/phonetisaurus-2019-${architecture}.tar.gz" ]]; then
     "${src_dir}/scripts/install-phonetisaurus.sh" "${download}/phonetisaurus-2019-${architecture}.tar.gz" "${venv}/tools"
 fi
 
-# Phonetisaurus
+# Kaldi
 if [[ -s "${download}/kaldi-2020-${architecture}.tar.gz" ]]; then
     echo 'Installing Kaldi'
     "${src_dir}/scripts/install-kaldi.sh" "${download}/kaldi-2020-${architecture}.tar.gz" "${venv}/tools"
+fi
+
+# Mycroft Precise
+if [[ -s "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" ]]; then
+    echo 'Installing Mycroft Precise'
+    "${src_dir}/scripts/install-precise.sh" "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" "${venv}/tools"
 fi
 
 echo 'Installing requirements'

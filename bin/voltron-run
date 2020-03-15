@@ -29,9 +29,14 @@ export PATH="${this_dir}:${PATH}"
 
 if [[ -d "${venv}/tools" ]]; then
     export PATH="${venv}/tools:${PATH}"
+    export LD_LIBRARY_PATH="${venv}/tools:${LD_LIBRARY_PATH}"
 
     if [[ -d "${venv}/tools/kaldi" ]]; then
         export KALDI_DIR="${venv}/tools/kaldi"
+    fi
+
+    if [[ -d "${venv}/tools/precise-engine" ]]; then
+        export PRECISE_ENGINE_DIR="${venv}/tools/precise-engine"
     fi
 fi
 

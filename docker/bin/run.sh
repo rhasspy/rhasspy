@@ -80,6 +80,7 @@ rhasspysupervisor \
     --profile "${profile_name}" \
     --system-profiles "${system_profiles}" \
     --user-profiles "${user_profiles}" \
+    --docker-compose '' \
     --debug
 
 # Run web server

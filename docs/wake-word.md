@@ -6,6 +6,7 @@ Available wake word systems are:
 
 * [Porcupine](wake-word.md#porcupine)
 * [Snowboy](wake-word.md#snowboy)
+* [Mycroft Precise](wake-word.md#precise)
 * [Pocketsphinx](wake-word.md#pocketsphinx)
 * [External Command](wake-word.md#command)
 
@@ -17,8 +18,8 @@ The following table summarizes the key characteristics of each wake word system:
 | ------                                    | ----------- | -----------------     | ----------------------- |
 | [porcupine](wake-word.md#porcupine)       | excellent   | yes, offline          | no                      |
 | [snowboy](wake-word.md#snowboy)           | good        | yes, online           | yes                     |
-| [pocketsphinx](wake-word.md#pocketsphinx) | poor        | no                    | no                      |
 | [precise](wake-word.md#mycroft-precise)   | moderate    | yes, offline          | no                      |
+| [pocketsphinx](wake-word.md#pocketsphinx) | poor        | no                    | no                      |
 
 ## MQTT/Hermes
 
@@ -155,8 +156,6 @@ Implemented by [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rha
 
 ## Mycroft Precise
 
-**Not supported yet in 2.5!**
-
 Listens for a wake word with [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise). It requires training up front, but can be done completely offline!
 
 Add to your [profile](profiles.md):
@@ -165,7 +164,7 @@ Add to your [profile](profiles.md):
 "wake": {
   "system": "precise",
   "precise": {
-    "model": "model-name-in-profile.pb",
+    "model": "model-name.pb",
     "sensitivity": 0.5,
     "trigger_level": 3,
     "chunk_size": 2048
@@ -177,7 +176,13 @@ Add to your [profile](profiles.md):
 }
 ```
 
-Follow [the instructions from Mycroft AI](https://github.com/MycroftAI/mycroft-precise/wiki/Training-your-own-wake-word#how-to-train-your-own-wake-word) to train your own wake word model. When you're finished, place **both** the `.pb` and `.pb.params` files in your profile directory, and set `wake.precise.model` to the name of the `.pb` file.
+Follow [the instructions from Mycroft AI](https://github.com/MycroftAI/mycroft-precise/wiki/Training-your-own-wake-word#how-to-train-your-own-wake-word) to train your own wake word model. When you're finished, place **both** the `.pb` and `.pb.params` files in the `precise` directory of your profile. Then set `wake.precise.model` to the name of the `.pb` file (e.g., `my-wake-word.pb`).
+
+### UDP Audio Streaming
+
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.precise.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+
+Implemented by [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes)
 
 ## Command
 

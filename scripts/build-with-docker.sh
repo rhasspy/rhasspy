@@ -33,6 +33,7 @@ fi
 
 declare -A friendly_archs
 friendly_archs=(['amd64']='amd64' ['arm32v7']='armhf' ['arm64v8']='aarch64' ['arm32v6']='arm32v6')
+cpu_archs=(['amd64']='x86_64' ['arm32v7']='armv7l' ['arm64v8']='aarch64' ['arm32v6']='armv6l')
 
 for docker_arch in "${docker_archs[@]}"; do
     friendly_arch="${friendly_archs[${docker_arch}]}"
@@ -48,6 +49,7 @@ for docker_arch in "${docker_archs[@]}"; do
         docker build "${src_dir}" \
                --build-arg "BUILD_ARCH=${docker_arch}" \
                --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
+               --build-arg "CPU_ARCH=${cpu_arch}" \
                -f Dockerfile.source.alsa \
                -t "${docker_tag}"
     else
@@ -55,6 +57,7 @@ for docker_arch in "${docker_archs[@]}"; do
         docker build "${src_dir}" \
                --build-arg "BUILD_ARCH=${docker_arch}" \
                --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
+               --build-arg "CPU_ARCH=${cpu_arch}" \
                -f Dockerfile.source.alsa.pizero \
                -t "${docker_tag}"
     fi

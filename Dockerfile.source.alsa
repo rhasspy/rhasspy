@@ -1,6 +1,7 @@
 ARG BUILD_ARCH=amd64
 FROM ${BUILD_ARCH}/ubuntu:bionic as build
 ARG BUILD_ARCH=amd64
+ARG CPU_ARCH=x86_64
 
 ENV LANG C.UTF-8
 
@@ -34,6 +35,20 @@ COPY download/snowboy-1.3.0.tar.gz /
 # Exclude snowboy from arm64
 RUN if [ "$BUILD_ARCH" != "arm64v8" ]; then ${RHASSPY_PIP} install /snowboy-1.3.0.tar.gz; fi
 
+# MITLM
+ADD download/mitlm-0.4.2-${FRIENDLY_ARCH}.tar.gz /
+RUN cd /mitlm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
+
+# Phonetisuarus
+ADD download/phonetisaurus-2019-${FRIENDLY_ARCH}.tar.gz /phonetisaurus/
+RUN cd /phonetisaurus && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
+
+# Kaldi
+ADD download/kaldi-2020-${FRIENDLY_ARCH}.tar.gz ${RHASSPY_VENV}/tools/
+
+# Mycroft Precise Engine
+ADD download/precise-engine_0.3.0_${CPU_ARCH}.tar.gz ${RHASSPY_VENV}/tools/
+
 # -----------------------------------------------------------------------------
 # Runtime Image
 # -----------------------------------------------------------------------------
@@ -42,6 +57,7 @@ ARG BUILD_ARCH=amd64
 FROM ${BUILD_ARCH}/ubuntu:bionic
 ARG BUILD_ARCH=amd64
 ARG FRIENDLY_ARCH=amd64
+ARG CPU_ARCH=x86_64
 
 ENV LANG C.UTF-8
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
@@ -52,17 +68,6 @@ COPY etc/qemu-aarch64-static /usr/bin/
 
 # Copy Rhasspy virtual environment
 COPY --from=build ${RHASSPY_VENV} ${RHASSPY_VENV}
-
-# MITLM
-ADD download/mitlm-0.4.2-${FRIENDLY_ARCH}.tar.gz /
-RUN cd /mitlm && mv bin/* /usr/bin/ && mv lib/* /usr/lib/
-
-# Phonetisuarus
-ADD download/phonetisaurus-2019-${FRIENDLY_ARCH}.tar.gz /phonetisaurus/
-RUN cd /phonetisaurus && mv bin/* /usr/bin/ && mv lib/* /usr/lib/
-
-# Kaldi
-ADD download/kaldi-2020-${FRIENDLY_ARCH}.tar.gz ${RHASSPY_DIR}/rhasspy-asr-kaldi/rhasspyasr_kaldi/
 
 # Install Debian dependencies
 RUN apt-get update && \
@@ -102,6 +107,7 @@ COPY rhasspy-supervisor/ ${RHASSPY_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${RHASSPY_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${RHASSPY_DIR}/rhasspy-wake-pocketsphinx-hermes/
 COPY rhasspy-wake-porcupine-hermes/ ${RHASSPY_DIR}/rhasspy-wake-porcupine-hermes/
+COPY rhasspy-wake-precise-hermes/ ${RHASSPY_DIR}/rhasspy-wake-precise-hermes/
 COPY rhasspy-wake-snowboy-hermes/ ${RHASSPY_DIR}/rhasspy-wake-snowboy-hermes/
 
 # Web artifacts

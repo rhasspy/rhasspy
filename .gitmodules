@@ -94,3 +94,6 @@
 [submodule "rhasspy-homeassistant-hermes"]
 	path = rhasspy-homeassistant-hermes
 	url = https://github.com/rhasspy/rhasspy-homeassistant-hermes
+[submodule "rhasspy-wake-precise-hermes"]
+	path = rhasspy-wake-precise-hermes
+	url = ./rhasspy-wake-precise-hermes/
