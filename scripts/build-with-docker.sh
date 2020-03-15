@@ -33,6 +33,7 @@ fi
 
 declare -A friendly_archs
 friendly_archs=(['amd64']='amd64' ['arm32v7']='armhf' ['arm64v8']='aarch64' ['arm32v6']='arm32v6')
+declare -A cpu_archs
 cpu_archs=(['amd64']='x86_64' ['arm32v7']='armv7l' ['arm64v8']='aarch64' ['arm32v6']='armv6l')
 
 for docker_arch in "${docker_archs[@]}"; do
