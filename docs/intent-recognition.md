@@ -67,6 +67,44 @@ Add to your [profile](profiles.md):
 
 Implemented by [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes)
 
+## RasaNLU
+
+Recognizes intents **remotely** using a [Rasa NLU](https://rasa.com/) server. You must [install a Rasa NLU server](https://rasa.com/docs/rasa/user-guide/installation/) somewhere that Rhasspy can access. Works well when you have a large number of sentences (thousands to hundreds of thousands) and need to handle sentences *and* words not seen during training. This needs Rasa 1.0 or higher.
+
+Add to your [profile](profiles.md):
+
+```json
+"intent": {
+  "system": "rasa",
+  "rasa": {
+    "examples_markdown": "intent_examples.md",
+    "project_name": "rhasspy",
+    "url": "http://localhost:5005/"
+  }
+}
+```
+
+Set `intent.rasa.config_yaml` to the name of a file in your profile directory if you want to use a custom configuration during training. If unset, the default configuration is:
+
+```yaml
+language: "en"
+pipeline: "pretrained_embeddings_spacy"
+```
+
+where "en" is replaced with your profile's language or the value of `intent.rasa.language`.
+
+### Installing Rasa NLU
+
+If you have Docker, Rasa NLU can be run with:
+
+```bash
+docker run -it -v "$(pwd):/app" -p 5005:5005 rasa/rasa:latest-spacy-en run --enable-api
+```
+
+Your Rasa NLU server should now be accessible at [http://localhost:5005](http://localhost:5005). Models will be saved in the `models` directory (relative to your current directory).
+
+Implemented by [rhasspy-rasa-nlu-hermes](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes)
+
 ## Mycroft Adapt
 
 **Not supported yet in 2.5!**
@@ -109,25 +147,6 @@ Add to your [profile](profiles.md):
 By default, the flair recognizer will generate 10,000 random sentences (`num_samples`) from each intent in your [sentences.ini](training.md#sentencesini) file. If you set `do_sampling` to `false`, Rhasspy will generate **all** possible sentences and use them as training data. This will produce the most accurate models, but may take a *long* time depending on the complexity of your grammars.
 
 A flair `TextClassifier` will be trained to classify unseen sentences by intent, and a `SequenceTagger` will be trained for each intent that has at least one [tag](training.md#tags). During recognition, sentences are first classified by intent and then run through the appropriate `SequenceTagger` model to determine slots/entities.
-
-## RasaNLU
-
-**Not supported yet in 2.5!**
-
-Recognizes intents **remotely** using a [Rasa NLU](https://rasa.com/) server. You must [install a Rasa NLU server](https://rasa.com/docs/rasa/user-guide/installation/) somewhere that Rhasspy can access. Works well when you have a large number of sentences (thousands to hundreds of thousands) and need to handle sentences *and* words not seen during training. This needs Rasa 1.0 or higher.
-
-Add to your [profile](profiles.md):
-
-```json
-"intent": {
-  "system": "rasa",
-  "rasa": {
-    "examples_markdown": "intent_examples.md",
-    "project_name": "rhasspy",
-    "url": "http://localhost:5005/"
-  }
-}
-```
 
 ## Remote HTTP Server
 

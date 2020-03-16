@@ -31,6 +31,7 @@
 !rhasspy-nlu/rhasspynlu/*.py
 !rhasspy-nlu-hermes/rhasspynlu_hermes/*.py
 !rhasspy-profile/rhasspyprofile
+!rhasspy-rasa-nlu-hermes/rhasspyrasa_nlu_hermes/*.py
 !rhasspy-remote-http-hermes/rhasspyremote_http_hermes/*.py
 !rhasspy-server-hermes/rhasspyserver_hermes/*.py
 !rhasspy-server-hermes/templates

@@ -98,9 +98,14 @@ Listens to WAV chunks and tries to detect a wake/hotword. See [Wake Word](wake-w
 
 ### Available Services
 
-* [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)
 * [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes)
+    * Implements [pocketsphinx](wake-word.md#pocketsphinx)
+* [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)
+    * Implements [porcupine](wake-word.md#porcupine)
+* [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes)
+    * Implements [precise](wake-word.md#mycroft-precise)
 * [rhasspy-wake-snowboy-hermes](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes)
+    * Implements [snowboy](wake-word.md#snowboy)
 
 ### Input Messages
 
@@ -121,7 +126,9 @@ Listens to WAV chunks and transcribes voice commands. See [Speech to Text](speec
 ### Available Services
 
 * [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
+    * Implements [kaldi](speech-to-text.md#kaldi)
 * [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes)
+    * Implements [pocketsphinx](speech-to-text.md#pocketsphinx)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_speech_to_text) for speech recognition
     * Implements [remote](speech-to-text.md#remote-http-server) (`--asr-url`) and [command](speech-to-text.md#command) (`--asr-command`)
@@ -166,7 +173,11 @@ Recognizes user intents from text input. See [Intent Recognition](intent-recogni
 ### Available Services
 
 * [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes)
+    * Implements [fuzzywuzzy](intent-recognition.md#fuzzywuzzy)
 * [rhasspy-nlu-hermes](https://github.com/rhasspy/rhasspy-nlu-hermes)
+    * Implements [fsticuffs](intent-recognition.md#fsticuffs)
+* [rhasspy-rasa-nlu-hermes](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes)
+    * Implements [rasa](intent-recognition.md#rasanlu)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_text_to_intent) for intent recognition
     * Implements [remote](intent-recognition.md#remote-http-server) (`--intent-url`) and [command](intent-recognition.md#command) (`--nlu-command`)
@@ -196,6 +207,7 @@ Dispatches recognized intents to home automation software. See [Intent Handling]
 ### Available Services
 
 * [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
+    * Implements [homeassistant](intent-handling.md#home-assistant)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_handle_intent) for intent handling
     * Implements [remote](intent-handling.md#remote-server) (`--handle-url`) and [command](intent-handling.md#command) (`--handle-command`)
@@ -222,7 +234,7 @@ Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) f
 
 * [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
     * Calls external program for text to speech
-    * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), and [command](text-to-speech.md#command)
+    * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), [marytts](text-to-speech.md#marytts), and [command](text-to-speech.md#command)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_text_to_speech) for text to speech
     * Implements [remote](text-to-speech.md#remote) (`--tts-url`) and [command](text-to-speech.md#command) (`--tts-command`)
@@ -235,7 +247,7 @@ Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) f
 ### Output Messages
 
 * [`hermes/tts/sayFinished`](reference.md#tts_sayfinished)
-    * Finished *generating* audio
+    * Finished *generating* audio (actually spoken with [`playBytes`](reference.md#audioserver_playbytes))
 
 ## Audio Output
 
@@ -246,7 +258,6 @@ Plays WAV audio through an audio output device (speakers). See [Audio Output](au
 * [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
     * Implements [remote](audio-output.md#remote) and [command](audio-output.md#command)
     * POSTs to [remote web server](reference.md#api_play_wav) for audio output
-* [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 
 ### Input Messages
 
