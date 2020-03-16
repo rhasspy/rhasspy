@@ -6,6 +6,7 @@ rhasspy-homeassistant-hermes
 rhasspy-microphone-cli-hermes
 rhasspy-microphone-pyaudio-hermes
 rhasspy-nlu-hermes
+rhasspy-rasa-nlu-hermes
 rhasspy-remote-http-hermes
 rhasspy-server-hermes
 rhasspy-speakers-cli-hermes

@@ -13,6 +13,7 @@ rhasspy-microphone-pyaudio-hermes
 rhasspy-nlu
 rhasspy-nlu-hermes
 rhasspy-profile
+rhasspy-rasa-nlu-hermes
 rhasspy-remote-http-hermes
 rhasspy-server-hermes
 rhasspy-silence
