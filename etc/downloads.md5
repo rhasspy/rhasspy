@@ -1,10 +1,10 @@
 aa4b3a243f763ae3d2bfcf83f668585d  kaldi-2020-aarch64.tar.gz
 8e9fd50bd0c27210de651a430299879a  kaldi-2020-amd64.tar.gz
 e23f749078c4deb530edb9dace165abe  kaldi-2020-armhf.tar.gz
-3f7681df4361b9641fee3c5cbe1e5f7c  mitlm-0.4.2-aarch64.tar.gz
-112983515e7f9850c2d5bd1ca6ed5864  mitlm-0.4.2-amd64.tar.gz
-c82e794783cef1116e0bed4433895d71  mitlm-0.4.2-arm32v6.tar.gz
-61da4dc9870453fd69ed4f3b7282f363  mitlm-0.4.2-armhf.tar.gz
+cb40adca089b0906c67ab1a39b1de0cc  ngramcount
+f3c963683a57fad93fff68609eb1b9df  opengrm-1.3.4-aarch64.tar.gz
+6f83a01865d1525f10c238408bafff6d  opengrm-1.3.4-amd64.tar.gz
+5996bd0d9fafa0edfb92460c87c50dc7  opengrm-1.3.4-armhf.tar.gz
 486058f468acdb16d0383e6722b871a8  phonetisaurus-2019-aarch64.tar.gz
 5e2fb42df5c2f92baa60489a9c59e862  phonetisaurus-2019-amd64.tar.gz
 2ca56d1995ce7c8a211b8a5f4f9b5dd0  phonetisaurus-2019-arm32v6.tar.gz

@@ -54,16 +54,27 @@ cat "${src_dir}/RHASSPY_DIRS" | \
             # Create virtual environment
             rm -rf .venv
             python3 -m venv .venv
-            .venv/bin/pip3 ${PIP_INSTALL} --upgrade pip
-            .venv/bin/pip3 ${PIP_INSTALL} --upgrade wheel setuptools
+            source .venv/bin/activate
+            pip3 ${PIP_INSTALL} --upgrade pip
+            pip3 ${PIP_INSTALL} --upgrade wheel setuptools
+        else
+            source .venv/bin/activate
         fi
 
-        # Update dependencies
-        .venv/bin/pip3 ${PIP_INSTALL} \
-                       --upgrade \
-                       -f "${dist_dir}" \
-                       -r requirements.txt \
-                       -r requirements_dev.txt \
+        # Force reinstall of Rhasspy dependencies
+        pip3 ${PIP_INSTALL} \
+             --force-reinstall \
+             --no-cache \
+             -f "${dist_dir}" \
+             -r <(grep '^rhasspy-' requirements.txt)
 
+        # Update dependencies
+        pip3 ${PIP_INSTALL} \
+             --upgrade \
+             -f "${dist_dir}" \
+             -r requirements.txt \
+             -r requirements_dev.txt
+
+        deactivate
         echo ''
     done

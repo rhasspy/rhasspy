@@ -55,9 +55,6 @@ cp -R "${src_dir}/rhasspy-server-hermes/web" \
    "${dist_dir}/${python_name}/rhasspyserver_hermes"
 
 # Copy pre-built programs
-tar -C "${dist_dir}/rhasspy" \
-    -xvf "${download_dir}/mitlm-0.4.2-${architecture}.tar.gz"
-
 mkdir -p "${dist_dir}/rhasspy/phonetisaurus"
 tar -C "${dist_dir}/rhasspy/phonetisaurus" \
     -xvf "${download_dir}/phonetisaurus-2019-${architecture}.tar.gz"

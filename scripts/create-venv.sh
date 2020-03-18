@@ -58,10 +58,10 @@ if [[ -s "${download}/pocketsphinx-python.tar.gz" ]]; then
     fi
 fi
 
-# MITLM
-if [[ -s "${download}/mitlm-0.4.2-${architecture}.tar.gz" ]]; then
-    echo 'Installing MITLM'
-    "${src_dir}/scripts/install-mitlm.sh" "${download}/mitlm-0.4.2-${architecture}.tar.gz" "${venv}/tools"
+# Check for opengrm
+if [[ -n "$(command -v ngramcount)" ]]; then
+    echo 'Missing libngram-tools'
+    echo 'Run: apt-get install libngram-tools'
 fi
 
 # Phonetisaurus
