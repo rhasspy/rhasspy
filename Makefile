@@ -158,3 +158,8 @@ $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz:
 $(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz:
 	mkdir -p "$(DOWNLOAD_DIR)"
 	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(architecture).tar.gz"
+
+# Download pre-built MITLM binaries.
+$(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz:
+	mkdir -p "$(DOWNLOAD_DIR)"
+	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-mitlm/releases/download/v0.4.2/mitlm-0.4.2-$(architecture).tar.gz"
