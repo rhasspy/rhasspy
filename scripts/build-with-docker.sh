@@ -26,7 +26,8 @@ for qemu_file in qemu-arm-static qemu-aarch64-static; do
 done
 
 # Do Docker builds
-docker_archs=('amd64' 'arm32v7' 'arm64v8' 'arm32v6')
+# docker_archs=('amd64' 'arm32v7' 'arm64v8' 'arm32v6')
+docker_archs=('amd64' 'arm32v7' 'arm64v8')
 if [[ ! -z "$1" ]]; then
     docker_archs=("$@")
 fi
@@ -46,21 +47,34 @@ for docker_arch in "${docker_archs[@]}"; do
     fi
 
     docker_tag="rhasspy/rhasspy:${version}-${friendly_arch}"
-    if [[ "${friendly_arch}" != 'arm32v6' ]]; then
-        # Debian build (skip arm32v6)
-        docker build "${src_dir}" \
-               --build-arg "BUILD_ARCH=${docker_arch}" \
-               --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
-               --build-arg "CPU_ARCH=${cpu_arch}" \
-               -f Dockerfile.source.alsa \
-               -t "${docker_tag}"
-    else
-        # Raspbian build (arm32b6 only)
-        docker build "${src_dir}" \
-               --build-arg "BUILD_ARCH=${docker_arch}" \
-               --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
-               --build-arg "CPU_ARCH=${cpu_arch}" \
-               -f Dockerfile.source.alsa.pizero \
-               -t "${docker_tag}"
-    fi
+    case "${friendly_arch}" in
+        'arm32v6')
+            # Raspbian build
+            docker build "${src_dir}" \
+                   --build-arg "BUILD_ARCH=${docker_arch}" \
+                   --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
+                   --build-arg "CPU_ARCH=${cpu_arch}" \
+                   -f Dockerfile.source.alsa.pizero \
+                   -t "${docker_tag}"
+        ;;
+
+        'aarch64')
+            # Custom arm64 build
+            docker build "${src_dir}" \
+                   --build-arg "BUILD_ARCH=${docker_arch}" \
+                   --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
+                   --build-arg "CPU_ARCH=${cpu_arch}" \
+                   -f Dockerfile.source.alsa.aarch64 \
+                   -t "${docker_tag}"
+        ;;
+
+        *)
+            # Default Debian build
+            docker build "${src_dir}" \
+                   --build-arg "BUILD_ARCH=${docker_arch}" \
+                   --build-arg "FRIENDLY_ARCH=${friendly_arch}" \
+                   --build-arg "CPU_ARCH=${cpu_arch}" \
+                   -f Dockerfile.source.alsa \
+                   -t "${docker_tag}"
+    esac
 done
