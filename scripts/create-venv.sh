@@ -73,19 +73,25 @@ fi
 # Phonetisaurus
 if [[ -s "${download}/phonetisaurus-2019-${architecture}.tar.gz" ]]; then
     echo 'Installing Phonetisaurus'
-    "${src_dir}/scripts/install-phonetisaurus.sh" "${download}/phonetisaurus-2019-${architecture}.tar.gz" "${venv}/tools"
+    "${src_dir}/scripts/install-phonetisaurus.sh" \
+        "${download}/phonetisaurus-2019-${architecture}.tar.gz" \
+        "${venv}/tools"
 fi
 
 # Kaldi
 if [[ -s "${download}/kaldi-2020-${architecture}.tar.gz" ]]; then
     echo 'Installing Kaldi'
-    "${src_dir}/scripts/install-kaldi.sh" "${download}/kaldi-2020-${architecture}.tar.gz" "${venv}/tools"
+    "${src_dir}/scripts/install-kaldi.sh" \
+        "${download}/kaldi-2020-${architecture}.tar.gz" \
+        "${venv}/tools"
 fi
 
 # Mycroft Precise
 if [[ -s "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" ]]; then
     echo 'Installing Mycroft Precise'
-    "${src_dir}/scripts/install-precise.sh" "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" "${venv}/tools"
+    "${src_dir}/scripts/install-precise.sh" \
+        "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" \
+        "${venv}/tools"
 fi
 
 echo 'Installing requirements'
