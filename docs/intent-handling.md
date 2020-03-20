@@ -32,8 +32,6 @@ Add to your [profile](profiles.md):
 
 If you're running Rhasspy as an add-on inside [Hass.io](https://www.home-assistant.io/hassio/), the access token is [automatically provided](https://developers.home-assistant.io/docs/en/hassio_addon_communication.html#hassio-api). Otherwise, you'll need to create a [long-lived access token](https://www.home-assistant.io/docs/authentication/) and set `home_assistant.access_token` manually.
 
-Implemented by [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
-
 ### Events
 
 Rhasspy will send Home Assistant an event every time an intent is recognized through its [REST API](https://developers.home-assistant.io/docs/en/external_api_rest.html#post-api-events-lt-event-type). The type of the event is determined by the name of the intent, and the event data comes from the tagged words in your [sentences](training.md#sentencesini).
@@ -54,6 +52,12 @@ and you say something like *"set the bedroom light to blue"*, Rhasspy will POST 
 }
 ```
 
+Rhasspy also provides a few extra fields besides the intent's slots:
+
+* `_text` - string with [substituted intent text](training.md#substitutions)
+* `_raw_text` - string with original intent text
+* `_intent` - object with recognized [Hermes intent](https://docs.snips.ai/reference/dialogue#intent)
+
 In order to do something with the `rhasspy_ChangeLightColor` event, create an automation with an [event trigger](https://www.home-assistant.io/docs/automation/trigger/#event-trigger). For example, add the following to your `automation.yaml` file:
 
 ```yaml
@@ -69,6 +73,9 @@ In order to do something with the `rhasspy_ChangeLightColor` event, create an au
 ```
 
 See the documentation on [actions](https://www.home-assistant.io/docs/automation/action/) for the different things you can do with Home Assistant.
+
+Implemented by [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
+
 
 ### MQTT
 
