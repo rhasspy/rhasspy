@@ -123,6 +123,36 @@ By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When u
 
 Implemented by [rhasspy-wake-snowboy-hermes](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes)
 
+## Mycroft Precise
+
+Listens for a wake word with [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise). It requires training up front, but can be done completely offline!
+
+Add to your [profile](profiles.md):
+
+```json
+"wake": {
+  "system": "precise",
+  "precise": {
+    "model": "model-name.pb",
+    "sensitivity": 0.5,
+    "trigger_level": 3,
+    "chunk_size": 2048
+  }
+},
+
+"rhasspy": {
+  "listen_on_start": true
+}
+```
+
+Follow [the instructions from Mycroft AI](https://github.com/MycroftAI/mycroft-precise/wiki/Training-your-own-wake-word#how-to-train-your-own-wake-word) to train your own wake word model. When you're finished, place **both** the `.pb` and `.pb.params` files in the `precise` directory of your profile. Then set `wake.precise.model` to the name of the `.pb` file (e.g., `my-wake-word.pb`).
+
+### UDP Audio Streaming
+
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.precise.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+
+Implemented by [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes)
+
 ## Pocketsphinx
 
 Listens for a [keyphrase](https://cmusphinx.github.io/wiki/tutoriallm/#using-keyword-lists-with-pocketsphinx) using [pocketsphinx](https://github.com/cmusphinx/pocketsphinx). This is the most flexible wake system, but has the worst performance in terms of false positives/negatives.
@@ -153,36 +183,6 @@ The `wake.pocketsphinx.threshold` should be in the range 1e-50 to 1e-5. The smal
 By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.pocketsphinx.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
 
 Implemented by [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes)
-
-## Mycroft Precise
-
-Listens for a wake word with [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise). It requires training up front, but can be done completely offline!
-
-Add to your [profile](profiles.md):
-
-```json
-"wake": {
-  "system": "precise",
-  "precise": {
-    "model": "model-name.pb",
-    "sensitivity": 0.5,
-    "trigger_level": 3,
-    "chunk_size": 2048
-  }
-},
-
-"rhasspy": {
-  "listen_on_start": true
-}
-```
-
-Follow [the instructions from Mycroft AI](https://github.com/MycroftAI/mycroft-precise/wiki/Training-your-own-wake-word#how-to-train-your-own-wake-word) to train your own wake word model. When you're finished, place **both** the `.pb` and `.pb.params` files in the `precise` directory of your profile. Then set `wake.precise.model` to the name of the `.pb` file (e.g., `my-wake-word.pb`).
-
-### UDP Audio Streaming
-
-By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio_port` and `wake.precise.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
-
-Implemented by [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes)
 
 ## Command
 

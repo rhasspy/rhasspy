@@ -109,7 +109,8 @@ Messages for [speech to text](speech-to-text.md).
 * <a id="asr_train"><tt>rhasspy/asr/&lt;siteId&gt;/train</tt></a> (JSON, Rhasspy only)
     * Instructs the ASR system to re-train
     * `id: string` - unique ID for request (copied to [`trainSuccess`](#asr_trainsuccess))
-    * `graph_dict: object` - intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a JSON object
+    * `graph_path: str` - path to intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a [pickle](https://networkx.github.io/documentation/stable/reference/readwrite/gpickle.html) and [gzipped](https://docs.python.org/3/library/gzip.html)
+    * `graph_format: string` - format of the graph (only `pickle-gzip` for now)
     * `siteId: string` - Hermes site ID (part of topic)
     * Response(s)
         * [`rhasspy/asr/<siteId>/trainSuccess`](#asr_trainsuccess)
@@ -305,7 +306,8 @@ Messages for [intent handling](intent-handling.md).
 * <a id="nlu_train"><tt>rhasspy/nlu/&lt;siteId&gt;/train</tt></a> (JSON, Rhasspy only)
     * Instructs the NLU system to re-train
     * `id: string` - unique ID for request (copied to [`trainSuccess`](#nlu_trainsuccess))
-    * `graph_dict: object` - intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a JSON object
+    * `graph_path: str` - path to intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a [pickle](https://networkx.github.io/documentation/stable/reference/readwrite/gpickle.html) and [gzipped](https://docs.python.org/3/library/gzip.html)
+    * `graph_format: string` - format of the graph (only `pickle-gzip` for now)
     * `siteId: string` - Hermes site ID (part of topic)
     * Response(s)
         * [`rhasspy/nlu/<siteId>/trainSuccess`](#nlu_trainsuccess)
@@ -779,11 +781,11 @@ G2P prediction can also be done using [transformer models](https://github.com/cm
 
 ## Command Line Tools
 
-* `rhasspy-client`
+* [`rhasspy-client`](https://github.com/rhasspy/rhasspy-client)
     * Remote control Rhasspy server
-* `rhasspy-nlu`
+* [`rhasspy-nlu`](https://github.com/rhasspy/rhasspy-nlu)
     * Converts `sentences.ini` to intent graph
-* `rhasspy-hermes`
+* [`rhasspy-hermes`](https://github.com/rhasspy/rhasspy-hermes)
     * Injects WAV files and other Hermes MQTT messages
-* `rhasspy-supervisor`
+* [`rhasspy-supervisor`](https://github.com/rhasspy/rhasspy-supervisor)
     * Converts `profile.json` to `supervisord` config or `docker-compose.yml`

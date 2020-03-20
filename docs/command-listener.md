@@ -8,36 +8,11 @@ Rhasspy listens for messages according to the [Hermes protocol](https://docs.sni
 
 ## WebRTCVAD
 
-The [rhasspy-silence](https://github.com/rhasspy/rhasspy-silence) library used by Rhasspy's [pocketsphinx](speech-to-text.md#pocketsphinx) and [kaldi](speech-to-text.md#kaldi) uses [webrtcvad](https://github.com/wiseman/py-webrtcvad) to detect speech and silence.
-
-TODO: Silence detection parameters
-
-Add to your [profile](profiles.md):
-
-```json
-"command": {
-  "system": "webrtcvad",
-  "webrtcvad": {
-    "chunk_size": 960,
-    "min_sec": 2,
-    "sample_rate": 16000,
-    "silence_sec": 0.5,
-    "speech_buffers": 5,
-    "throwaway_buffers": 10,
-    "timeout_sec": 30,
-    "vad_mode": 0
-  }
-}
-```
-
-This system listens for up to `timeout_sec` for a voice command. The first few frames of audio data are discarded (`throwaway_buffers`) to avoid clicks from the microphone being engaged. When speech is detected for some number of successive frames (`speech_buffers`), the voice command is considered to have *started*. After `min_sec`, Rhasspy will start listening for silence. If at least `silence_sec` goes by without any speech detected, the command is considered *finished*, and the recorded WAV data is sent to the [speech recognition system](speech-to-text.md).
-
-You may want to adjust `min_sec`, `silence_sec`, and `vad_mode` for your environment.
-These control how short a voice command can be (`min_sec`), how much silence is required before Rhasspy stops listening (`silence_sec`), and how aggressive the voice activity filter `vad_mode` is: this is an integer between 0 and 3. 0 is the least aggressive about filtering out non-speech, 3 is the most aggressive.
+The [rhasspy-silence](https://github.com/rhasspy/rhasspy-silence) library used by Rhasspy's [pocketsphinx](speech-to-text.md#pocketsphinx) and [kaldi](speech-to-text.md#kaldi) use [webrtcvad](https://github.com/wiseman/py-webrtcvad) to detect speech and silence.
 
 ## OneShot
 
-Deprecated as of Rhasspy 2.5. 
+**Deprecated as of Rhasspy 2.5** 
 
 This system previously listened for a single WAV audio chunk and processed it as a complete voice command.
 You can acheive the same thing now with the following steps:
@@ -50,12 +25,12 @@ With `stopOnSilence` set in `startListening`, the configured [speech to text](sp
 
 ## Command
 
-Deprecated as of Rhasspy 2.5.
+**Deprecated as of Rhasspy 2.5** 
 
 This system previously allowed for an external program to determine voice command boundaries.
 
 ## Dummy
 
-Deprecated as of Rhasspy 2.5.
+**Deprecated as of Rhasspy 2.5** 
 
 This system previously disabled voice command recording.

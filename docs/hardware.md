@@ -23,7 +23,7 @@ The table below summarizes architecture compatibility with Rhasspy's components:
 |                        | [rasaNLU](intent-recognition.md#rasanlu)       | &#x2713; | &#x2713; | &#x2713; |
 | **Text to Speech**     | [espeak](text-to-speech.md#espeak)             | &#x2713; | &#x2713; | &#x2713; |
 |                        | [flite](text-to-speech.md#flite)               | &#x2713; | &#x2713; | &#x2713; |
-|                        | [picotts](text-to-speech.md#picotts)           | &#x2713; | &#x2713; | &#x2713; |
+|                        | [picotts](text-to-speech.md#picotts)           | &#x2713; | &#x2713; |          |
 |                        | [marytts](text-to-speech.md#marytts)           | &#x2713; | &#x2713; | &#x2713; |
 |                        | [wavenet](text-to-speech.md#google-wavenet)    | &#x2713; | &#x2713; | &#x2713; |
 
@@ -35,6 +35,7 @@ Some components of Rhasspy will not work on the Raspberry Pi 3 B+ model with a 6
 
 * [snowboy](wake-word.md#snowboy) (wake word)
 * [Mycroft Precise](wake-word.md#mycroft-precise) (wake word)
+* [picoTTS](text-to-speech.md#picotts) (text to speech)
 
 ## Microphone
 

@@ -4,6 +4,16 @@ Rhasspy was created and is currently maintained by [Michael Hansen](https://syne
 
 <img src="../img/mike-head.png" style="max-height: 100px;" title="Mike head">
 
+Special thanks to:
+
+* [maxbachmann](https://github.com/maxbachmann)
+* [koenvervloesem](https://github.com/koenvervloesem)
+* [fastjack](https://community.rhasspy.org/u/fastjack)
+* [KiboOst](https://github.com/KiboOst)
+* [Romkabouter](https://github.com/Romkabouter)
+* [FunkyBoT](https://community.home-assistant.io/u/FunkyBoT)
+* [S_n_Nguy_n](https://community.home-assistant.io/u/S_n_Nguy_n)
+
 ## Supporting Tools
 
 The following tools/libraries help to support Rhasspy:

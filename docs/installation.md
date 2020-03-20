@@ -1,5 +1,7 @@
 # Install
 
+Rhasspy can be installed in several different ways. The easiest way is [with Docker](#docker), which will pull a 1.5-2GB image with all of the [officially supported services](https://github.com/rhasspy/rhasspy-voltron).
+
 ## Docker
 
 The easiest way to try Rhasspy is with Docker. To get started, make sure you have [Docker installed](https://docs.docker.com/install/):
@@ -43,8 +45,32 @@ rhasspy:
     command: --user-profiles /profiles --profile en
 ```
 
+Rhasspy runs an MQTT broker inside the Docker image on port `12183` by default. Connecting to this broker will let you interact with Rhasspy over its [MQTT API](reference.md#mqtt-api).
+
 ## Debian
+
+**Coming soon**
+
+Rhasspy will be packaged as a `.deb` file for easy non-Docker installation on Debian, Ubuntu, and Raspbian.
 
 ## Virtual Environment
 
-## From Source
+See the [Github documentation](https://github.com/rhasspy/rhasspy-voltron). On a Debian system, you should only need to install the necessary dependencies:
+
+```bash
+sudo apt-get update
+sudo apt-get install \
+     python3 python3-dev python3-setuptools python3-pip python3-venv \
+     git build-essential libatlas-base-dev swig portaudio19-dev
+     supervisor mosquitto sox alsa-utils libgfortran4 \
+     espeak flite libttspico-utils \
+     perl curl patchelf ca-certificates
+```
+
+and then clone/build:
+
+```bash
+git clone --recursive https://github.com/rhasspy/rhasspy-voltron
+cd rhasspy-voltron/
+make
+```

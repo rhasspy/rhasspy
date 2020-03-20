@@ -18,33 +18,35 @@ Rhasspy looks for profile-related files in two directories:
 Files in the user profile directory override system files, and Rhasspy will *only* ever write to the user profile directory.
 The default location for each of these directories is:
 
-TODO: Update
-
 * Virtual Environment
-    * System profile location is `$PWD/profiles` where `$PWD` is Rhasspy's root directory (where `run-venv.sh` is located)
+    * System profile location is `rhasspy-profile/rhasspyprofile/profiles` relative to Rhasspy's root directory
     * User profile location is `$HOME/.config/rhasspy/profiles`
 * Docker
-    * System profile location is either `/usr/share/rhasspy/profiles` (ALSA) or `/home/rhasspy/profiles` (PulseAudio)
+    * System profile location is `/usr/lib/rhasspy-voltron/rhasspy-profile/rhasspyprofile/profiles`
     * User profile location **must** be explicitly set and mapped to a volume:
-        * `docker run ... -v /path/to/profiles:/profiles synesthesiam/rhasspy-server --user-profiles /profiles`
+        * `docker run ... -v /path/to/profiles:/profiles <IMAGE_NAME> --user-profiles /profiles`
 
 ### Example
-
-TODO: Rewrite
 
 Assume you are running Rhasspy in a virtual environment, and you add some new sentences to the `en` (English) profile in the web interface. When saving the `sentences.ini` file, Rhasspy will create `$HOME/.config/rhasspy/profiles/en` (if it doesn't exist), and write `sentences.ini` in that directory. If you adjust and save your settings, you will find them in `$HOME/.config/rhasspy/profiles/en/profile.json`.
 
 ## Downloading Profiles
 
-The first time Rhasspy loads a profile, it needs to download the required binary artifacts (acoustic model, base dictionary, etc.) from [the internet](https://github.com/synesthesiam/rhasspy-profiles/releases). After the initial download, Rhasspy can function completely offline.
+The first time Rhasspy loads a profile, it needs to download the required binary artifacts (acoustic model, base dictionary, etc.) from [the internet](https://github.com/synesthesiam). After the initial download, Rhasspy can function completely offline.
 
-If you need to install Rhasspy onto a machine that is not connected to the internet, you can simply download the artifacts yourself and place them in a `download` directory *inside* the appropriate profile directory. For example, the `fr` (French) profile has [three artifacts](https://github.com/synesthesiam/rhasspy-profiles/releases/tag/v1.0-fr):
+See the [supported languages list](index.md#supported-languages) for links to each language's profile artifacts. The [`rhasspy-profile`](https://github.com/rhasspy/rhasspy-profile) is responsible for downloading and unpacking these artifacts according to the `download` section in `profile.json` for [each language](https://github.com/rhasspy/rhasspy-profile/tree/master/rhasspyprofile/profiles).
 
-1. `cmusphinx-fr-5.2.tar.gz`
-2. `fr-g2p.tar.gz`
-3. `fr-small.lm.gz`
+Some files are gzipped, and should be unzipped before use (`unzip = true`). Other files are split into multiple parts so that they can be uploaded to GitHub. This is done with the `split` command:
 
-If your user profile directory is `$HOME/.config/rhasspy/profiles`, then you should download/copy all three artifacts to `$HOME/.config/rhasspy/profiles/fr/download` on the offline machine. Now, when Rhasspy loads the `fr` profile and you click "Download", it will extract the files in the `download` directory without going out to the internet.
+```bash
+split -d -b 25M FILE FILE.part-
+```
+
+They can be recombined simply with:
+
+```bash
+cat FILE.part-* > FILE
+```
 
 ## Available Settings
 

@@ -345,9 +345,11 @@ Rhasspy looks for words you've defined outside of your profile's base dictionary
     hello H EH L OW
     world W ER L D
 
-You can use the [Words tab](usage.md#words-tab) in Rhasspy's web interface to generate this dictionary. During training, Rhasspy will merge `custom_words.txt` into your `dictionary.txt` file so the [speech to text](speech-to-text.md) system knows the words in your voice commands are pronounced.
+You can use the [Words tab](usage.md#words-tab) in Rhasspy's web interface to generate this dictionary. During training, Rhasspy will merge `custom_words.txt` into your `dictionary.txt` file so the [speech to text](speech-to-text.md** system knows the words in your voice commands are pronounced.
 
 ## Language Model Mixing
+
+**Not supported yet in 2.5!**
 
 Rhasspy is designed to only respond to the voice commands you specify in [sentences.ini](training.md#sentencesini), but both the Pocketsphinx and Kaldi speech to text systems are capable of transcribing open ended speech. While this will never be as good as a cloud-based system, Rhasspy [offers it as an option](speech-to-text.md#open-transcription).
 
@@ -489,4 +491,4 @@ $ echo 'would you please turn on the living room light' | \
 
 This works well for our toy example, but will not scale well when there are thousands of voice commands represented in `sentences.ini` or if the words used are significantly different than in the training set ("light" and "lamp" are close enough for `fuzzywuzzy`).
 
-A machine learning-based intent recognizer, like [flair](intent-recognition.md#flair) or [Rasa](intent-recognition.md#rasanlu), would be a better choice for open ended speech.
+A machine learning-based intent recognizer, like [Rasa](intent-recognition.md#rasanlu), would be a better choice for open ended speech.
