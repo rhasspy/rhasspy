@@ -58,6 +58,18 @@ Visually, your settings page should look like the following image:
 
 (Make sure you click "Save Settings" and wait for Rhasspy to restart)
 
+### Download Profile
+
+Once Rhasspy restarts, you will see a notification at top that tells you Rhasspy needs to download some files before continuing.
+
+![Rhasspy download notification](img/getting-started/download-profile.png)
+
+Click the "Download" button to begin downloading the necessary speech models, etc. from Github. You will see a dialogue box will the download progress of each file.
+
+![Rhasspy download progress](img/getting-started/download-dialogue.png)
+
+Once all files have finished downloading, Rhasspy will automatically restart.
+
 ### Test Microphone
 
 Expand the "Audio Recording" section by clicking the green button. You should see a drop down list with available microphones. If you have trouble recording audio, try choosing a specific device instead of using the default (make sure to "Save Settings").
