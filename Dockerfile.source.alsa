@@ -80,11 +80,17 @@ RUN apt-get update && \
     gstreamer1.0-tools gstreamer1.0-plugins-good
 
 COPY bin/ ${RHASSPY_DIR}/bin/
-COPY etc/ ${RHASSPY_DIR}/etc/
+COPY etc/shflags ${RHASSPY_DIR}/etc/
+COPY etc/wav/ ${RHASSPY_DIR}/etc/wav/
 COPY RHASSPY_DIRS ${RHASSPY_DIR}/
 COPY VERSION ${RHASSPY_DIR}/rhasspy-server-hermes/
 
 # Copy Rhasspy source
+COPY rhasspy-server-hermes/ ${RHASSPY_DIR}/rhasspy-server-hermes/
+COPY rhasspy-wake-snowboy-hermes/ ${RHASSPY_DIR}/rhasspy-wake-snowboy-hermes/
+COPY rhasspy-wake-porcupine-hermes/ ${RHASSPY_DIR}/rhasspy-wake-porcupine-hermes/
+COPY rhasspy-wake-precise-hermes/ ${RHASSPY_DIR}/rhasspy-wake-precise-hermes/
+COPY rhasspy-profile/ ${RHASSPY_DIR}/rhasspy-profile/
 COPY rhasspy-asr/ ${RHASSPY_DIR}/rhasspy-asr/
 COPY rhasspy-asr-pocketsphinx/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx/
 COPY rhasspy-asr-pocketsphinx-hermes/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx-hermes/
@@ -99,22 +105,13 @@ COPY rhasspy-microphone-cli-hermes/ ${RHASSPY_DIR}/rhasspy-microphone-cli-hermes
 COPY rhasspy-microphone-pyaudio-hermes/ ${RHASSPY_DIR}/rhasspy-microphone-pyaudio-hermes/
 COPY rhasspy-nlu/ ${RHASSPY_DIR}/rhasspy-nlu/
 COPY rhasspy-nlu-hermes/ ${RHASSPY_DIR}/rhasspy-nlu-hermes/
-COPY rhasspy-profile/ ${RHASSPY_DIR}/rhasspy-profile/
 COPY rhasspy-rasa-nlu-hermes/ ${RHASSPY_DIR}/rhasspy-rasa-nlu-hermes/
 COPY rhasspy-remote-http-hermes/ ${RHASSPY_DIR}/rhasspy-remote-http-hermes/
-COPY rhasspy-server-hermes/ ${RHASSPY_DIR}/rhasspy-server-hermes/
 COPY rhasspy-silence/ ${RHASSPY_DIR}/rhasspy-silence/
 COPY rhasspy-speakers-cli-hermes/ ${RHASSPY_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/ ${RHASSPY_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${RHASSPY_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${RHASSPY_DIR}/rhasspy-wake-pocketsphinx-hermes/
-COPY rhasspy-wake-porcupine-hermes/ ${RHASSPY_DIR}/rhasspy-wake-porcupine-hermes/
-COPY rhasspy-wake-precise-hermes/ ${RHASSPY_DIR}/rhasspy-wake-precise-hermes/
-COPY rhasspy-wake-snowboy-hermes/ ${RHASSPY_DIR}/rhasspy-wake-snowboy-hermes/
-
-# Web artifacts
-COPY rhasspy-server-hermes/templates/ ${RHASSPY_DIR}/rhasspy-server-hermes/templates/
-COPY rhasspy-server-hermes/web/ ${RHASSPY_DIR}/rhasspy-server-hermes/web/
 
 WORKDIR ${RHASSPY_DIR}
 
