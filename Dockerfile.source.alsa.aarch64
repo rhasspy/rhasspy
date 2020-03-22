@@ -38,17 +38,14 @@ RUN if [ "$BUILD_ARCH" != "arm64v8" ]; then ${RHASSPY_PIP} install /snowboy-1.3.
 # Create directory for pre-built binaries
 RUN mkdir -p ${RHASSPY_VENV}/tools
 
-# MITLM
-ADD download/mitlm-0.4.2-${FRIENDLY_ARCH}.tar.gz /
-RUN cd /mitlm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
-
 # Phonetisuarus
 ADD download/phonetisaurus-2019-${FRIENDLY_ARCH}.tar.gz /phonetisaurus/
 RUN cd /phonetisaurus && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
 
 # Opengrm
 ADD download/opengrm-1.3.4-${FRIENDLY_ARCH}.tar.gz /opengrm/
-RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
+RUN ls /opengrm
+RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/*.so* ${RHASSPY_VENV}/tools/
 
 # -----------------------------------------------------------------------------
 # Runtime Image
@@ -75,7 +72,7 @@ RUN apt-get update && \
     libportaudio2 libatlas3-base python3 python3-dev \
     libgfortran4 ca-certificates \
     perl curl supervisor mosquitto sox alsa-utils \
-    espeak flite libttspico-utils \
+    espeak flite \
     gstreamer1.0-tools gstreamer1.0-plugins-good
 
 COPY bin/ ${RHASSPY_DIR}/bin/
