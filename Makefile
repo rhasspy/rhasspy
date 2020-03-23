@@ -9,7 +9,7 @@ PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
 DOWNLOAD_DIR = download
 
-.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy docs clean
+.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy docs clean check-dirs
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
@@ -28,6 +28,9 @@ DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
 
 all: venv docs
 
+check-dirs:
+	scripts/ensure-checkout.sh
+
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
 requirements.txt: $(REQUIREMENTS)
@@ -38,8 +41,8 @@ requirements_dev.txt: $(REQUIREMENTS_DEV)
 	cat $^ | grep -v '^-e' | sort | uniq > $@
 	echo 'mkdocs==1.0.4' >> $@
 
-# Create virtual environment and install all (non-Rhasspy) dependencies.
-venv: requirements.txt requirements_dev.txt update-bin downloads
+# Create virtual environment and install all dependencies.
+venv: check-dirs requirements.txt requirements_dev.txt update-bin downloads
 	scripts/create-venv.sh
 
 # Copy submodule scripts to shared bin directory.
