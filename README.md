@@ -50,7 +50,6 @@ sudo apt-get update
 sudo apt-get install \
      python3 python3-dev python3-setuptools python3-pip python3-venv \
      git build-essential libatlas-base-dev swig portaudio19-dev
-make venv
 ```
 
 Install runtime dependencies:
