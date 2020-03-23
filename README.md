@@ -77,10 +77,13 @@ sudo apt-get install \
      perl curl patchelf ca-certificates
 ```
 
+If you can an error regarding `libttspico-utils`, you can skip installing it.
+The necessary `.deb` files can be manually downloaded and installed from [http://archive.raspberrypi.org/debian/pool/main/s/svox/](http://archive.raspberrypi.org/debian/pool/main/s/svox/). You will need `libttspico-utils` and `libttspico0` packages with matching versions.
+
 Clone the repo and build:
 
 ```bash
-git clone --recursive https://github.com/rhasspy/rhasspy-voltron
+git clone --recurse-submodules https://github.com/rhasspy/rhasspy-voltron
 cd rhasspy-voltron/
 make
 ```
