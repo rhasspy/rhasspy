@@ -73,6 +73,7 @@ Install runtime dependencies:
 sudo apt-get update
 sudo apt-get install \
      supervisor mosquitto sox alsa-utils libgfortran4 \
+     libfst-tools libngram-tools \
      espeak flite libttspico-utils \
      perl curl patchelf ca-certificates
 ```
