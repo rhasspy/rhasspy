@@ -13,7 +13,7 @@ cat "${src_dir}/RHASSPY_DIRS" | \
         fi
 
         cd "${src_dir}/${dir_name}"
-        if [[ -z "$(ls)" ]]; then
+        if [[ ! -f README.md ]]; then
             git checkout master
         fi
 
