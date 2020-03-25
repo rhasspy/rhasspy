@@ -111,7 +111,7 @@ function finish {
     kill "${web_pid}"
 }
 
-trap finish EXIT
+# trap finish EXIT
 
 # Run assistant
 log_path="${profile_dir}/supervisord.log"
