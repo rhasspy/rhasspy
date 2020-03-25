@@ -1,5 +1,5 @@
 ARG BUILD_ARCH=amd64
-FROM ${BUILD_ARCH}/ubuntu:bionic as build
+FROM ${BUILD_ARCH}/ubuntu:eoan as build
 ARG FRIENDLY_ARCH=amd64
 ARG BUILD_ARCH=amd64
 ARG CPU_ARCH=x86_64
@@ -54,7 +54,7 @@ ADD download/precise-engine_0.3.0_${CPU_ARCH}.tar.gz ${RHASSPY_VENV}/tools/
 # -----------------------------------------------------------------------------
 
 ARG BUILD_ARCH=amd64
-FROM ${BUILD_ARCH}/ubuntu:bionic
+FROM ${BUILD_ARCH}/ubuntu:eoan
 ARG BUILD_ARCH=amd64
 ARG FRIENDLY_ARCH=amd64
 ARG CPU_ARCH=x86_64

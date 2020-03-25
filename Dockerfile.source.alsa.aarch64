@@ -1,7 +1,8 @@
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build
-ARG BUILD_ARCH=amd64
-ARG FRIENDLY_ARCH=amd64
-ARG CPU_ARCH=x86_64
+ARG BUILD_ARCH=arm64v8
+FROM ${BUILD_ARCH}/ubuntu:eoan as build
+ARG BUILD_ARCH=arm64v8
+ARG FRIENDLY_ARCH=arm64v8
+ARG CPU_ARCH=aarch64
 
 ENV LANG C.UTF-8
 
@@ -51,10 +52,11 @@ RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/*.so* ${RHASSPY_VEN
 # Runtime Image
 # -----------------------------------------------------------------------------
 
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-run
-ARG BUILD_ARCH=amd64
-ARG FRIENDLY_ARCH=amd64
-ARG CPU_ARCH=x86_64
+ARG BUILD_ARCH=arm64v8
+FROM ${BUILD_ARCH}/ubuntu:eoan as build
+ARG BUILD_ARCH=arm64v8
+ARG FRIENDLY_ARCH=arm64v8
+ARG CPU_ARCH=aarch64
 
 COPY etc/qemu-arm-static /usr/bin/
 COPY etc/qemu-aarch64-static /usr/bin/
