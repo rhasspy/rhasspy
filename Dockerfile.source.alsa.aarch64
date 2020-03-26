@@ -54,7 +54,7 @@ RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/*.so* ${RHASSPY_VEN
 # -----------------------------------------------------------------------------
 
 ARG BUILD_ARCH=arm64v8
-FROM ${BUILD_ARCH}/ubuntu:eoan as build
+FROM ${BUILD_ARCH}/ubuntu:eoan
 ARG BUILD_ARCH=arm64v8
 ARG FRIENDLY_ARCH=arm64v8
 ARG CPU_ARCH=aarch64

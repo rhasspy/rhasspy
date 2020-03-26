@@ -74,6 +74,25 @@ In order to do something with the `rhasspy_ChangeLightColor` event, create an au
 
 See the documentation on [actions](https://www.home-assistant.io/docs/automation/action/) for the different things you can do with Home Assistant.
 
+### Intents
+
+More recent versions of Home Assistant can accept intents directly. Add the following to your `configuration.yaml` file:
+
+```yaml
+intent:
+```
+
+This will enable intents over the HTTP API. Next, write [intent scripts](https://www.home-assistant.io/integrations/intent_script) to handle each Rhasspy intent:
+
+```yaml
+intent_script:
+  ChangeLightColor:
+    action:
+      ...
+```
+
+The possible [actions](https://www.home-assistant.io/docs/automation/action/) are the same as in automations.
+
 Implemented by [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
 
 
