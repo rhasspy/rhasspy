@@ -70,6 +70,12 @@ Messages for [audio input](audio-input.md) and [audio output](audio-output.md).
     * Response to [`hermes/audioServer/<siteId>/playBytes/<requestId>`](#audioserver_playbytes)
     * `siteId: string` - Hermes site ID (part of topic)
     * `id: string = ""` - `requestId` from request message
+* <a id="audioserver_toggleoff"><tt>hermes/audioServer/toggleOff</tt></a> (JSON)
+    * Disable audio output
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="audioserver_toggleon"><tt>hermes/audioServer/toggleOn</tt></a> (JSON)
+    * Enable audio output
+    * `siteId: string = "default"` - Hermes site ID
     
 ### Automated Speech Recognition
 

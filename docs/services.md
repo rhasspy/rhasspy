@@ -263,6 +263,10 @@ Plays WAV audio through an audio output device (speakers). See [Audio Output](au
 
 * [`hermes/audioServer/<siteId>/playBytes/<requestId>`](reference.md#audioserver_playbytes)
     * WAV audio to play through speakers
+* [`hermes/audioServer/toggleOff`](reference.md#audioserver_toggleoff)
+    * Disable audio output
+* [`hermes/audioServer/toggleOn`](reference.md#audioserver_toggleon)
+    * Enable audio output
 * [`rhasspy/audioServer/getDevices`](reference.md#audioserver_getdevices)
     * Request audio output devices
 
