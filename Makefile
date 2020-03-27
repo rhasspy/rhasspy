@@ -9,7 +9,7 @@ PYTHON_FILES = **/*.py
 PIP_INSTALL ?= install
 DOWNLOAD_DIR = download
 
-.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-pulseaudio docker-deploy docs clean check-dirs
+.PHONY: venv update-bin dist sdist debian pyinstaller docker-alsa docker-deploy docs clean check-dirs
 
 version := $(shell cat VERSION)
 architecture := $(shell bash architecture.sh)
@@ -22,7 +22,7 @@ else
 	DOCKER_TAGS = -t "rhasspy/$(PACKAGE_NAME):$(version)" -t "rhasspy/$(PACKAGE_NAME):latest"
 endif
 
-DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6
+DOCKER_PLATFORMS = linux/amd64,linux/arm64,linux/arm/v7
 
 # -----------------------------------------------------------------------------
 
@@ -84,49 +84,13 @@ sdist:
 # Docker
 # -----------------------------------------------------------------------------
 
-# Build ALSA Docker image.
-docker-alsa: requirements.txt requirements_dev.txt update-bin downloads docs
-	docker build . -f Dockerfile.source.alsa \
-    -t "rhasspy/$(SERVICE_NAME):$(version)" \
-    -t "rhasspy/$(SERVICE_NAME):latest"
-
-# Build PulseAudio Docker image.
-docker-pulseaudio: requirements.txt requirements_dev.txt update-bin downloads docs
-	docker build . -f Dockerfile.source.pulseaudio \
-    -t "rhasspy/$(SERVICE_NAME):$(version)-pulseaudio" \
-    -t "rhasspy/$(SERVICE_NAME):latest-pulseaudio"
-
-docker-multiarch: docs
-	scripts/build-with-docker.sh
-
-docker-multiarch-deploy:
-	docker push "$(version_tag)-amd64"
-	docker push "$(version_tag)-armhf"
-	docker push "$(version_tag)-aarch64"
-	docker push "$(version_tag)-arm32v6"
-
-docker-multiarch-manifest:
-	docker manifest push --purge "$(version_tag)"
-	docker manifest create --amend "$(version_tag)" \
-      "$(version_tag)-amd64" \
-      "$(version_tag)-armhf" \
-      "$(version_tag)-aarch64"
-	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm
-	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64
-	docker manifest push "$(version_tag)"
-
-docker-multiarch-manifest-init:
-	docker manifest create "$(version_tag)" \
-      "$(version_tag)-amd64" \
-      "$(version_tag)-armhf" \
-      "$(version_tag)-aarch64"
-	docker manifest annotate "$(version_tag)" "$(version_tag)-armhf" --os linux --arch arm
-	docker manifest annotate "$(version_tag)" "$(version_tag)-aarch64" --os linux --arch arm64
-	docker manifest push "$(version_tag)"
-
-docker-deploy:
+deploy: downloads
 	docker login --username rhasspy --password "$$DOCKER_PASSWORD"
 	docker buildx build . -f Dockerfile.source.alsa --platform $(DOCKER_PLATFORMS) --push $(DOCKER_TAGS)
+
+deploy-satellite: downloads
+	# docker login --username rhasspy --password "$$DOCKER_PASSWORD"
+	docker buildx build . -f Dockerfile.source.alsa.pizero --platform linux/arm/v6 #--push "rhasspy/rhasspy:$(version)-arm32v6"
 
 # -----------------------------------------------------------------------------
 # Debian
@@ -138,31 +102,9 @@ pyinstaller:
 debian:
 	scripts/build-debian.sh "${architecture}" "${version}"
 
-debian-satellite:
-	scripts/build-debian-satellite.sh "${architecture}" "${version}"
-
 # -----------------------------------------------------------------------------
 # Downloads
 # -----------------------------------------------------------------------------
 
-downloads: $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz $(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz
-
-# Download snowboy.
-$(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz:
-	mkdir -p "$(DOWNLOAD_DIR)"
-	curl -sSfL -o $@ 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'
-
-# Download Python Pocketsphinx library with no dependency on PulseAudio.
-$(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz:
-	mkdir -p "$(DOWNLOAD_DIR)"
-	curl -sSfL -o $@ 'https://github.com/synesthesiam/pocketsphinx-python/releases/download/v1.0/pocketsphinx-python.tar.gz'
-
-# Download pre-built Phonetisaurus binaries.
-$(DOWNLOAD_DIR)/phonetisaurus-2019-$(architecture).tar.gz:
-	mkdir -p "$(DOWNLOAD_DIR)"
-	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(architecture).tar.gz"
-
-# Download pre-built MITLM binaries.
-$(DOWNLOAD_DIR)/mitlm-0.4.2-$(architecture).tar.gz:
-	mkdir -p "$(DOWNLOAD_DIR)"
-	curl -sSfL -o $@ "https://github.com/synesthesiam/docker-mitlm/releases/download/v0.4.2/mitlm-0.4.2-$(architecture).tar.gz"
+downloads:
+	scripts/download-deps.sh
