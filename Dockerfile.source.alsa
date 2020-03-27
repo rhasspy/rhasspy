@@ -1,13 +1,9 @@
-ARG BUILD_ARCH=amd64
-FROM ${BUILD_ARCH}/ubuntu:eoan as build
-ARG FRIENDLY_ARCH=amd64
-ARG BUILD_ARCH=amd64
-ARG CPU_ARCH=x86_64
+FROM ubuntu:eoan as build
+ARG TARGETPLATFORM
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
-
-COPY etc/qemu-arm-static /usr/bin/
-COPY etc/qemu-aarch64-static /usr/bin/
 
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
@@ -34,37 +30,33 @@ RUN ${RHASSPY_PIP} install -r ${RHASSPY_DIR}/requirements.txt
 COPY download/snowboy-1.3.0.tar.gz /
 
 # Exclude snowboy from arm64
-RUN if [ "$BUILD_ARCH" != "arm64v8" ]; then ${RHASSPY_PIP} install /snowboy-1.3.0.tar.gz; fi
+RUN if [ "$TARGETARCH" != "arm64" ]; then ${RHASSPY_PIP} install /snowboy-1.3.0.tar.gz; fi
 
 # Create directory for pre-built binaries
 RUN mkdir -p ${RHASSPY_VENV}/tools
 
 # Phonetisuarus
-ADD download/phonetisaurus-2019-${FRIENDLY_ARCH}.tar.gz /phonetisaurus/
+ADD download/phonetisaurus-2019-${TARGETARCH}${TARGETVARIANT}.tar.gz /phonetisaurus/
 RUN cd /phonetisaurus && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
 
 # Kaldi
-ADD download/kaldi-2020-${FRIENDLY_ARCH}.tar.gz ${RHASSPY_VENV}/tools/
+ADD download/kaldi-2020-${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
 
 # Mycroft Precise Engine
-ADD download/precise-engine_0.3.0_${CPU_ARCH}.tar.gz ${RHASSPY_VENV}/tools/
+ADD download/precise-engine_0.3.0_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
 
 # -----------------------------------------------------------------------------
 # Runtime Image
 # -----------------------------------------------------------------------------
 
-ARG BUILD_ARCH=amd64
-FROM ${BUILD_ARCH}/ubuntu:eoan
-ARG BUILD_ARCH=amd64
-ARG FRIENDLY_ARCH=amd64
-ARG CPU_ARCH=x86_64
+FROM ubuntu:eoan
+ARG TARGETPLATFORM
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
-
-COPY etc/qemu-arm-static /usr/bin/
-COPY etc/qemu-aarch64-static /usr/bin/
 
 # Copy Rhasspy virtual environment
 COPY --from=build ${RHASSPY_VENV} ${RHASSPY_VENV}

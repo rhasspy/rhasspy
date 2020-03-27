@@ -9,13 +9,13 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-18.04]
+        os: [ubuntu-19.04]
         python-version: [3.7]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
       - name: Create Docker image
-        run: make docker-deploy
+        run: make deploy
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}

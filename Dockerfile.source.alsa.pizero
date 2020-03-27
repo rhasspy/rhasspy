@@ -1,12 +1,8 @@
 FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build
-ARG BUILD_ARCH=arm32v6
-ARG FRIENDLY_ARCH=arm32v6
-ARG CPU_ARCH=armv6l
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
-
-COPY etc/qemu-arm-static /usr/bin/
-COPY etc/qemu-aarch64-static /usr/bin/
 
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
@@ -32,15 +28,18 @@ RUN ${RHASSPY_PIP} install -r ${RHASSPY_DIR}/requirements.txt
 # Snowboy wake word library
 COPY download/snowboy-1.3.0.tar.gz /
 
+# Exclude snowboy from arm64
+RUN ${RHASSPY_PIP} install /snowboy-1.3.0.tar.gz
+
 # Create directory for pre-built binaries
 RUN mkdir -p ${RHASSPY_VENV}/tools
 
 # Phonetisuarus
-ADD download/phonetisaurus-2019-${FRIENDLY_ARCH}.tar.gz /phonetisaurus/
+ADD download/phonetisaurus-2019-${TARGETARCH}${TARGETVARIANT}.tar.gz /phonetisaurus/
 RUN cd /phonetisaurus && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
 
 # Opengrm
-ADD download/opengrm-1.3.4-${FRIENDLY_ARCH}.tar.gz /
+ADD download/opengrm-1.3.4-${TARGETARCH}${TARGETVARIANT}.tar.gz /opengrm/
 RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
 
 # -----------------------------------------------------------------------------
@@ -48,12 +47,8 @@ RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/t
 # -----------------------------------------------------------------------------
 
 FROM balenalib/raspberry-pi-debian-python:3.7-buster-run
-ARG BUILD_ARCH=arm32v6
-ARG FRIENDLY_ARCH=arm32v6
-ARG CPU_ARCH=armv6l
-
-COPY etc/qemu-arm-static /usr/bin/
-COPY etc/qemu-aarch64-static /usr/bin/
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
