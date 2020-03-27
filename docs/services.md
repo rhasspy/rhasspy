@@ -113,11 +113,17 @@ Listens to WAV chunks and tries to detect a wake/hotword. See [Wake Word](wake-w
     * Enables wake word detection
 * [`hermes/hotword/toggleOff`](reference.md#hotword_toggleoff)
     * Disables wake word detection
+* [`rhasspy/hotword/getHotwords`](reference.md#hotword_gethotwords)
+    * Request available hotwords
 
 ### Output Messages
 
  * [`hermes/wake/hotword/<wakewordId>/detected`](reference.md#hotword_detected)
     * Wake word successfully detected
+* [`rhasspy/hotword/hotwords`](reference.md#hotword_hotwords)
+    * Description of available hotwords
+ * [`hermes/error/hotword`](reference.md#hotword_error)
+    * Wake word system error
 
 ## Speech to Text
 
@@ -243,11 +249,15 @@ Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) f
 
 * [`hermes/tts/say`](reference.md#tts_say)
     * Speak a sentence
+* [`rhasspy/tts/getVoices`](reference.md#tts_getvoices)
+    * Request available voices
 
 ### Output Messages
 
 * [`hermes/tts/sayFinished`](reference.md#tts_sayfinished)
     * Finished *generating* audio (actually spoken with [`playBytes`](reference.md#audioserver_playbytes))
+* [`rhasspy/tts/voices`](reference.md#tts_voices)
+    * Description of available voices
 
 ## Audio Output
 

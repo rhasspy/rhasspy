@@ -76,6 +76,22 @@ Messages for [audio input](audio-input.md) and [audio output](audio-output.md).
 * <a id="audioserver_toggleon"><tt>hermes/audioServer/toggleOn</tt></a> (JSON)
     * Enable audio output
     * `siteId: string = "default"` - Hermes site ID
+* <a id="audioserver_getdevices"><tt>rhasspy/audioServer/getDevices</tt></a> (JSON, Rhasspy only)
+    * Request available input or output audio devices
+    * `modes: [string]` - list of modes ("input" or "output")
+    * `id: string` - unique ID returned in response
+    * `siteId: string = "default"` - Hermes site ID
+    * `test: bool = false` - if true, test input devices
+* <a id="audioserver_devices"><tt>rhasspy/audioServer/devices</tt></a> (JSON, Rhasspy only)
+    * Response to [`rhasspy/audioServer/getDevices`](#audioserver_getdevices)
+    * `id: string` - unique ID from request
+    * `siteId: string = "default"` - Hermes site ID
+    * `devices: [object]` - list of available devices
+        * `mode: string` - "input" or "output"
+        * `id: string` - unique device ID
+        * `name: string` - human readable name for device
+        * `description: string` - detailed description of device
+        * `working: boolean? = null` - true/false if test succeeded or not, null if not tested
     
 ### Automated Speech Recognition
 
@@ -250,6 +266,19 @@ Messages for [wake word detection](wake-word.md). See also the [`/api/listen-for
     * `error: string` - description of the error
     * `context: string` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
+* <a id="hotword_gethotwords"><tt>rhasspy/hotword/getHotwords</tt></a> (JSON, Rhasspy only)
+    * Request available hotwords
+    * `id: string` - unique ID for response
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="hotword_hotwords"><tt>rhasspy/hotword/hotwords</tt></a> (JSON, Rhasspy only)
+    * Response to [`rhasspy/hotword/hotwords`](#hotword_hotwords)
+    * `models: [object]` - list of available hotwords
+        * `modelId: string` - unique ID of hotword model
+        * `modelWords: string` - words used to activate hotword
+        * `modelVersion: string = ""` - version of hotword model
+        * `modelType: string = "personal"` - "universal" or "personal"
+    * `id: string` - unique ID from request
+    * `siteId: string = "default"` - Hermes site ID
 
 ### Intent Handling
 
@@ -344,6 +373,17 @@ Messages for [intent handling](intent-handling.md).
     * Response to [`hermes/tts/say`](#tts_say)
     * Listen for [`playFinished`](#audioserver_playfinished) to determine when audio is finished playing
         * `playFinished.id = sayFinished.id`
+* <a id="tts_getvoices"><tt>rhasspy/tts/getVoices</tt></a> (JSON, Rhasspy only)
+    * Request available text to speech voices
+    * `id: string = ""` - unique ID provided in response
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="tts_voices"><tt>rhasspy/tts/voices</tt></a> (JSON, Rhasspy only)
+    * Response to [`rhasspy/tts/getVoices`](#tts_getvoices)
+    * `voices: list[object]` - available voices
+        * `voiceId: string` - unique ID for voice
+        * `description: string` - human readable description of voice
+    * `id: string = ""` - unique ID from request
+    * `siteId: string = "default"` - Hermes site ID
 
 ## HTTP API
 
