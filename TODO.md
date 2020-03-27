@@ -1,6 +1,7 @@
 # Web UI
 
 * Multi-select in wakewords
+* Allow hotword upload
 
 # ASR
 
@@ -13,17 +14,15 @@
 # NLU
 
 * Support dynamic entity injection
-* Test intent filters
-* Replace fuzzywuzzy with equivalent thats using a MIT license
 * Add Snips NLU
 
 # Wake
 
-* Support Mycroft Precise
 * Training for pocketsphinx keyphrase
 
 # TTS
 
+* Add MaryTTS effects
 * Support Google Wavenet
 * Support NanoTTS
 * Support SSML
@@ -32,8 +31,4 @@
 
 # Dialogue Management
 
-* Session timeouts
-
 # Documentation
-
-* Document getHotwords, getVoices

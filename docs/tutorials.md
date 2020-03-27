@@ -315,6 +315,34 @@ If your master server and satellite(s) are all connected to a single MQTT broker
 
 The first step is to ensure that the master and satellite(s) have **different siteIds**. In the "Settings" page of each Rhasspy instance, ensure that the "siteId" at the top is unique across all [Hermes-compatible](https://docs.snips.ai/reference/hermes) services connected to your MQTT broker.
 
+Example master command:
+
+```bash
+docker run -it \
+    -v "$HOME/.config/rhasspy/master:/profiles" \
+    --network host \
+    rhasspy/rhasspy:2.5.0-pre \
+    --profile en \
+    --user-profiles /profiles
+```
+
+Master web UI will be accessible at [http://localhost:12101](http://localhost:12101)
+
+Example satellite command:
+
+```bash
+docker run -it -v "$HOME/.config/rhasspy/satellite:/profiles" \
+    --network host \
+    --device /dev/snd \
+    rhasspy/rhasspy:2.5.0-pre \
+    --profile en \
+    --user-profiles /profiles \
+    --http-port 13202 \
+    --local-mqtt-port 13183
+```
+
+Satellite web UI will be accessible at [http://localhost:13202](http://localhost:13202)
+
 #### Satellite Settings
 
 On your satellite, set MQTT to "External" and configure the details of your broker. Set the speech to text, intent recognition, and (optionally) the text to speech services to "Hermes MQTT". Make sure to disable "Dialogue Management", and enable audio recording, wake word, and audio playing.
@@ -347,13 +375,41 @@ With a UDP audio port set, the microphone audio will go directly to the wake wor
 
 #### Testing
 
-If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page.
+If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page. Something like "porcupine (pause) turn on the living room lamp".
 
 ![Satellite test for Hermes MQTT](img/master-satellite/satellite-mqtt-test.png)
 
 ### Remote HTTP Server
 
 You can also connect satellites to a master Rhasspy server *without* needing to worry about a shared MQTT broker or conflicting `siteId` values! Rhasspy's built-in [HTTP API](reference.md#http-api) allows for any external client, including a satellite, to do speech to text, intent recognition, etc.
+
+Example master command:
+
+```bash
+docker run -it \
+    -v "$HOME/.config/rhasspy/master:/profiles" \
+    --network host \
+    rhasspy/rhasspy:2.5.0-pre \
+    --profile en \
+    --user-profiles /profiles
+```
+
+Master web UI will be accessible at [http://localhost:12101](http://localhost:12101)
+
+Example satellite command:
+
+```bash
+docker run -it -v "$HOME/.config/rhasspy/satellite:/profiles" \
+    --network host \
+    --device /dev/snd \
+    rhasspy/rhasspy:2.5.0-pre \
+    --profile en \
+    --user-profiles /profiles \
+    --http-port 13202 \
+    --local-mqtt-port 13183
+```
+
+Satellite web UI will be accessible at [http://localhost:13202](http://localhost:13202)
 
 #### Satellite Settings
 
@@ -367,12 +423,12 @@ Next, expand each "Remote HTTP" service and set the URL to the host name and por
 
 #### Master Settings
 
-Your master server needs to have speech to text, intent recognition, and (optionally) text to speech services enabled. Make sure to update sentences and train your profile on your master server.
+Your master server needs to have speech to text, intent recognition, and (optionally) text to speech services enabled. Make sure to download profile artifacts, update sentences, and train the profile on your master server.
 
 ![Master settings for remote HTTP](img/master-satellite/master-http-settings.png)
 
 #### Testing
 
-If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page.
+If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page. Something like "porcupine (pause) turn on the living room lamp".
 
 ![Satellite test for remote HTTP](img/master-satellite/satellite-http-test.png)
