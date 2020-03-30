@@ -55,6 +55,11 @@ fi
 
 profile_dir="${user_profiles}/${profile_name}"
 
+# Set environment variables
+export RHASSPY_BASE_DIR="${rhasspy_dir}"
+export RHASSPY_PROFILE="${profile_name}"
+export RHASSPY_PROFILE_DIR="${profile_dir}"
+
 # -----------------------------------------------------------------------------
 
 set -e
