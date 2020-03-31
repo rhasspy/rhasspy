@@ -59,6 +59,31 @@ When Rhasspy starts, it creates a pocketsphinx decoder with the following attrib
 
 If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.pocketsphinx.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified. For English, German, and Dutch, you may want to use [Kaldi](#kaldi) instead for better results.
 
+### Silence Detection
+
+You can adjust how Rhasspy detects the start and stop of voice commands. Add to your [profile](profiles.md):
+
+```json
+  "command": {
+    "webrtcvad": {
+      "min_sec": 1,
+      "speech_sec": 0.3,
+      "silence_sec": 0.5,
+      "before_sec": 0.5,
+      "vad_mode": 3
+    }
+  }
+}
+```
+
+where:
+
+* `min_sec` is the minimum number of seconds a voice command should last
+* `speech_sec` is the seconds of speech before a command starts
+* `silence_sec` is the seconds a silence after a command before ending
+* `before_sec` is how many seconds of audio before a command starts are kept
+* `vad_mode` is the sensitivity of speech detection (3 is the <strong>least</strong> sensitive)
+
 Implemented by [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes)
 
 ## Kaldi
@@ -92,6 +117,31 @@ This requires Kaldi to be installed, which is...challenging. The [Docker image o
 ### Open Transcription
 
 If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.kaldi.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified.
+
+### Silence Detection
+
+You can adjust how Rhasspy detects the start and stop of voice commands. Add to your [profile](profiles.md):
+
+```json
+  "command": {
+    "webrtcvad": {
+      "min_sec": 1,
+      "speech_sec": 0.3,
+      "silence_sec": 0.5,
+      "before_sec": 0.5,
+      "vad_mode": 3
+    }
+  }
+}
+```
+
+where:
+
+* `min_sec` is the minimum number of seconds a voice command should last
+* `speech_sec` is the seconds of speech before a command starts
+* `silence_sec` is the seconds a silence after a command before ending
+* `before_sec` is how many seconds of audio before a command starts are kept
+* `vad_mode` is the sensitivity of speech detection (3 is the <strong>least</strong> sensitive)
 
 Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
 
