@@ -89,8 +89,8 @@ deploy: downloads
 	docker buildx build . -f Dockerfile.source.alsa --platform $(DOCKER_PLATFORMS) --push $(DOCKER_TAGS)
 
 deploy-satellite: downloads
-	# docker login --username rhasspy --password "$$DOCKER_PASSWORD"
-	docker buildx build . -f Dockerfile.source.alsa.pizero --platform linux/arm/v6 #--push "rhasspy/rhasspy:$(version)-arm32v6"
+	docker login --username rhasspy --password "$$DOCKER_PASSWORD"
+	docker buildx build . -f Dockerfile.source.alsa.pizero --platform linux/arm/v6 --push "rhasspy/rhasspy:$(version)-arm32v6"
 
 # -----------------------------------------------------------------------------
 # Debian
