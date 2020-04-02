@@ -12,6 +12,8 @@ The following table summarizes language support for the various text to speech s
 | [marytts](text-to-speech.md#marytts)        | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |          |          |          |          |          |
 | [wavenet](text-to-speech.md#google-wavenet) | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |
 
+---
+
 ## eSpeak
 
 Uses [eSpeak](http://espeak.sourceforge.net) to speak sentences. This is the default text to speech system and, while it sounds robotic, has the widest support for different languages.
@@ -140,9 +142,11 @@ docker run -it -p 59125:59125 -v "$(pwd)/marytts-5.2/lib/voice-${voice}-hsmm-5.2
 
 Change the first line to select the voice you'd like to add. It's not recommended to link in all of the voices at once, since MaryTTS seems to load them all into memory and overwhelm the RAM of a Raspberry Pi.
 
-See `rhasspy.tts.MaryTTSSentenceSpeaker` for details.
+See `rhasspy.tts.MaryTTSSentenceSpeaker** for details.
 
 ### Audio Effects
+
+**Not supported yet in 2.5!**
 
 MaryTTS is capable of applying several audio effects when producing speech.  See the web interface at [http://localhost:59125](http://localhost:59125)
 to experiment with this.
@@ -227,7 +231,7 @@ The settings from your profile's `home_assistant` section are automatically used
 
 ## Remote
 
-Simply POSTs the sentence to be spoken to an HTTP endpoint.
+Simply POSTs the sentence to be spoken to an HTTP endpoint. Expects [WAV audio](https://en.wikipedia.org/wiki/WAV) back with a `Content-Type: audio/wav` header.
 
 Add to your [profile](profiles.md):
 
@@ -239,6 +243,8 @@ Add to your [profile](profiles.md):
   }
 }
 ```
+
+The the `lang` property of [`hermes/tts/say`](reference.md#tts_say) is not empty, a query parameter `language` is added to the URL (e.g., `http://tts-server/endpoint?language=<lang>`).
 
 Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 
@@ -252,13 +258,20 @@ Add to your [profile](profiles.md):
 "text_to_speech": {
   "system": "command",
   "command": {
-      "program": "/path/to/program",
-      "arguments": []
+      "say_program": "/path/to/say/program",
+      "say_arguments": [],
+      "voices_program": "/path/to/voices/program",
+      "voices_arguments": [],
+      "language": ""
   }
 }
 ```
 
-Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes) and [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
+The `text_to_speech.command.say_program` is executed each time a text to speech request is made with arguments from `text_to_speech.command.say_arguments`. The command is run through Python's `str.format` function with a `lang` keyword argument set to `text_to_speech.command.language` (so `{lang}` is replaced). Rhasspy passes the sentence as the first command-line argument to the program and expects [WAV audio](https://en.wikipedia.org/wiki/WAV) back on standard out.
+
+If provided, the `text_to_speech.command.voices_program` will be executed when a [`rhasspy/tts/getVoices`](reference.md#tts_getvoices) message is received. The program should return a listing of available voices, one per line with the first whitespace-separated column being a unique voice ID.
+
+Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
 
 ## Dummy
 

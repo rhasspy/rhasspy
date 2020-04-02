@@ -122,11 +122,12 @@ Add to your [profile](profiles.md):
 ```json
 "home_assistant": {
   ...
-  "pem_file": "/path/to/certfile"
+  "pem_file": "/path/to/certfile",
+  "key_file": "/path/to/keyfile"
 }
 ```
 
-Set `home_assistant.pem_file` to the full path to your <a href="http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification">CA_BUNDLE file or a directory with certificates of trusted CAs</a>.
+Set `home_assistant.pem_file` to the full path to your <a href="https://docs.python.org/3/library/ssl.html#ssl-certificates">PEM certificate file</a>. If your key is separate, set `home_assistant.key_file` as well.
 
 Use the environment variable `RHASSPY_PROFILE_DIR` to reference your current profile's directory. For example, `$RHASSPY_PROFILE_DIR/my.pem` will tell Rhasspy to use a file named `my.pem` in your profile directory when verifying your self-signed certificate.
 

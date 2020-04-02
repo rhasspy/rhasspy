@@ -66,7 +66,7 @@ Add to your [profile](profiles.md):
 
 The `sounds.command.play_program` is executed each time a sound is played with arguments from `sounds.command.play_arguments`. Rhasspy passes [WAV audio](https://en.wikipedia.org/wiki/WAV) to the program's standard input.
 
-If provided, the `sounds.command.list_program` will be executed when a `rhasspy/audioServer/getDevices` message is received. The program should return a listing of available audio output devices in the same format as `aplay -L`.
+If provided, the `sounds.command.list_program` will be executed when a [`rhasspy/audioServer/getDevices`](reference.md#audioserver_getdevices) message is received. The program should return a listing of available audio output devices in the same format as `aplay -L`.
 
 Implemented by [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
 

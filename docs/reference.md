@@ -32,6 +32,8 @@ The table below lists which components and compatible with Rhasspy's supported l
 
 &bull; - yes, but requires training/customization
 
+---
+
 ## MQTT API
 
 Rhasspy implements a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes) in [rhasspy-hermes](https://github.com/rhasspy/rhasspy-hermes) for the following components:
@@ -76,6 +78,18 @@ Messages for [audio input](audio-input.md) and [audio output](audio-output.md).
 * <a id="audioserver_toggleon"><tt>hermes/audioServer/toggleOn</tt></a> (JSON)
     * Enable audio output
     * `siteId: string = "default"` - Hermes site ID
+* <a id="audioserver_error_play"><tt>hermes/error/audioServer/play</tt></a> (JSON, Rhasspy only)
+    * Sent when an error occurs in the audio output system
+    * `error: string` - description of the error
+    * `context: string` - system-defined context of the error
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
+* <a id="audioserver_error_record"><tt>hermes/error/audioServer/record</tt></a> (JSON, Rhasspy only)
+    * Sent when an error occurs in the audio input system
+    * `error: string` - description of the error
+    * `context: string` - system-defined context of the error
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
 * <a id="audioserver_getdevices"><tt>rhasspy/audioServer/getDevices</tt></a> (JSON, Rhasspy only)
     * Request available input or output audio devices
     * `modes: [string]` - list of modes ("input" or "output")
@@ -373,6 +387,12 @@ Messages for [intent handling](intent-handling.md).
     * Response to [`hermes/tts/say`](#tts_say)
     * Listen for [`playFinished`](#audioserver_playfinished) to determine when audio is finished playing
         * `playFinished.id = sayFinished.id`
+* <a id="tts_error"><tt>hermes/error/tts</tt></a> (JSON, Rhasspy only)
+    * Sent when an error occurs in the text to speech system
+    * `error: string` - description of the error
+    * `context: string` - system-defined context of the error
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
 * <a id="tts_getvoices"><tt>rhasspy/tts/getVoices</tt></a> (JSON, Rhasspy only)
     * Request available text to speech voices
     * `id: string = ""` - unique ID provided in response
@@ -510,7 +530,8 @@ All available profile sections and settings are listed below:
     * `url` - Base URL of Home Assistant server (no `/api`)
     * `access_token` -  long-lived access token for Home Assistant (Hass.io token is used automatically)
     * `api_password` - Password, if you have that enabled (deprecated)
-    * `pem_file` - Full path to your <a href="http://docs.python-requests.org/en/latest/user/advanced/#ssl-cert-verification">CA_BUNDLE file or a directory with certificates of trusted CAs</a>
+    * `pem_file` - Full path to your <a href="https://docs.python.org/3/library/ssl.html#ssl-certificates">PEM certificate file</a>
+    * `key_file` - Full path to your key file (if separate, optional)
     * `event_type_format` - Python format string used to create event type from intent type (`{0}`)
 * `speech_to_text` - transcribing [voice commands to text](speech-to-text.md)
     * `system` - name of speech to text system (`pocketsphinx`, `kaldi`, `remote`, `command`, `remote`, `hermes`, or `dummy`)
@@ -577,7 +598,7 @@ All available profile sections and settings are listed below:
         * `arguments` - list of arguments to pass to program
     * `replace_numbers` if true, automatically replace number ranges (`N..M`) or numbers (`N`) with words
 * `text_to_speech` - pronouncing words
-    * `system` - text to speech system (`espeak`, `flite`, `picotts`, `marytts`, `command`, `remote`, `hermes`, or `dummy`)
+    * `system` - text to speech system (`espeak`, `flite`, `picotts`, `marytts`, `command`, `remote`, `command`, `hermes`, or `dummy`)
     * `espeak` - configuration for [eSpeak](http://espeak.sourceforge.net)
         * `voice` - name of voice to use (e.g., `en`, `fr`)
     * `flite` - configuration for [flite](http://www.festvox.org/flite)
@@ -599,6 +620,11 @@ All available profile sections and settings are listed below:
         * `fallback_tts` - text to speech system to use when offline or error occurs (e.g., `espeak`)
     * `remote` - configuration for remote text to speech server
         * `url` - URL to POST sentence to and get back WAV data
+    * `command` - configuration for external text-to-speech program
+        * `say_program` - path to executable for text to WAV
+        * `say_arguments` - list of arguments to pass to say program
+        * `voices_program` - path to executable for listing available voices
+        * `voices_arguments` - list of arguments to pass to voices program
 * `training` - training speech/intent recognizers
     * `speech_to_text` - training for speech decoder
         * `system` - speech to text training system (`auto` or `dummy`)
@@ -653,8 +679,13 @@ All available profile sections and settings are listed below:
     * `arecord` - configuration for ALSA microphone
         * `device` - name of ALSA device (see `arecord -L`) to use or empty for default device
         * `chunk_size` - number of bytes to read at a time (default 960)
-    * `gstreamer` - configuration for GStreamer audio recorder
-        * `pipeline` - GStreamer pipeline (e.g., `FILTER ! FILTER ! ...`) without sink
+    * `command` - configuration for external audio input program
+        * `record_program` - path to executable for audio input
+        * `record_arguments` - list of arguments to pass to record program
+        * `list_program` - path to executable for listing available output devices
+        * `list_arguments` - list of arguments to pass to list program
+        * `test_program` - path to executable for testing available output devices
+        * `test_arguments` - list of arguments to pass to test program
 * `sounds` - configuration for audio output from Rhasspy
     * `system` - which sound output system to use (`aplay`, `command`, `remote`, `hermes`, or `dummy`)
     * `wake` - path to WAV file to play when Rhasspy wakes up
@@ -662,17 +693,19 @@ All available profile sections and settings are listed below:
     * `aplay` - configuration for ALSA speakers
         * `device` - name of ALSA device (see `aplay -L`) to use or empty for default device
     * `command` - configuration for external audio output program
-        * `program` - path to executable
-        * `arguments` - list of arguments to pass to program
+        * `play_program` - path to executable for audio output
+        * `play_arguments` - list of arguments to pass to play program
+        * `list_program` - path to executable for listing available output devices
+        * `list_arguments` - list of arguments to pass to list program
     * `remote` - configuration for remote audio output server
         * `url` - URL to POST WAV data to
 * `handle`
-    * `system` - which intent handling system to use (`hass`, `command`, `remote`, or `dummy`)
+    * `system` - which intent handling system to use (`hass`, `command`, `remote`, `command`, or `dummy`)
+    * `remote` - configuration for remote HTTP intent handler
+        * `url` - URL to POST intent JSON to and receive response JSON from
     * `command` - configuration for external speech-to-text program
         * `program` - path to executable
         * `arguments` - list of arguments to pass to program
-    * `remote` - configuration for remote HTTP intent handler
-        * `url` - URL to POST intent JSON to and receive response JSON from
 * `mqtt` - configuration for MQTT
     * `enabled` - true if external broker should be used (false uses internal broker on port 12183)
     * `host` - external MQTT host
