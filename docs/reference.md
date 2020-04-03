@@ -205,6 +205,7 @@ Messages for managing dialogue sessions. These can be initiated by a hotword [`d
 * <a id="dialoguemanager_endsession"><tt>hermes/dialogueManager/endSession</tt></a> (JSON)
     * Requests that a session be terminated nominally
     * `sessionId: string` - current session ID (required)
+    * `text: string = ""` - sentence to speak using [text to speech](#text-to-speech)
     * `customData: string = ""` - user-defined data (overrides session `customData` if not empty)
 * <a id="dialoguemanager_sessionended"><tt>hermes/dialogueManager/sessionEnded</tt></a> (JSON)
     * Indicates a session has terminated
@@ -224,6 +225,12 @@ Messages for managing dialogue sessions. These can be initiated by a hotword [`d
     * `siteId: string = "default"` - Hermes site ID
     * `sessionId: string = ""` - current session ID
     * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+* <a id="dialoguemanager_error"><tt>hermes/error/dialogueManager</tt></a> (JSON, Rhasspy only)
+    * Sent when an error occurs in the dialogue manager system
+    * `error: string` - description of the error
+    * `context: string` - system-defined context of the error
+    * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string = ""` - current session ID
 
 ### Grapheme to Phoneme
 
@@ -473,6 +480,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * POST a WAV file and have Rhasspy process it as a voice command
     * Returns intent JSON when command is finished
     * `?nohass=true` - stop Rhasspy from handling the intent
+    * `?entity=<entity>&value=<value>` - set custom entity/value in recognized intent
 * <a id="api_speech_to_text"><tt>/api/speech-to-text</tt></a>
     * POST a WAV file and have Rhasspy return the text transcription
     * Set `Accept: application/json` to receive JSON with more details
@@ -483,12 +491,14 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * POST to have Rhasspy stop recording and process recorded data as a voice command
     * Returns intent JSON when command has been processed
     * `?nohass=true` - stop Rhasspy from handling the intent
+    * `?entity=<entity>&value=<value>` - set custom entity/value in recognized intent
 * <a id="api_test_microphones"><tt>/api/test-microphones</tt></a>
     * GET list of available microphones and if they're working
 * <a id="api_text_to_intent"><tt>/api/text-to-intent</tt></a>
     * POST text and have Rhasspy process it as command
     * Returns intent JSON when command has been processed
     * `?nohass=true` - stop Rhasspy from handling the intent
+    * `?entity=<entity>&value=<value>` - set custom entity/value in recognized intent
 * <a id="api_text_to_speech"><tt>/api/text-to-speech</tt></a>
     * POST text and have Rhasspy speak it
     * `?voice=<voice>` - override default TTS voice
