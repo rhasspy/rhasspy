@@ -9,14 +9,11 @@ fi
 this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
-python_name="$(basename "${src_dir}" | sed -e 's/-//' | sed -e 's/-/_/g')"
-cpu_arch="$(uname -m)"
-
 # -----------------------------------------------------------------------------
 
-architecture="$1"
-if [[ -z "${architecture}" ]]; then
-    architecture="$(bash "${src_dir}/architecture.sh")"
+target_arch="$1"
+if [[ -z "${target_arch}" ]]; then
+    target_arch="$(bash "${src_dir}/architecture.sh")"
 fi
 
 venv="${src_dir}/.venv"
@@ -58,10 +55,13 @@ if [[ -s "${download}/pocketsphinx-python.tar.gz" ]]; then
     fi
 fi
 
-# Check for opengrm
+# Opengrm
+opengrm_file="${download}/opengrm-1.3.4-${target_arch}.tar.gz"
 if [[ -n "$(command -v ngramcount)" ]]; then
-    echo 'Missing libngram-tools'
-    echo 'Run: apt-get install libngram-tools'
+    echo 'Installing Opengrm'
+    "${src_dir}/scripts/install-opengrm.sh" \
+        "${opengrm_file}" \
+        "${venv}/tools"
 fi
 
 # MITLM
@@ -71,26 +71,29 @@ fi
 # fi
 
 # Phonetisaurus
-if [[ -s "${download}/phonetisaurus-2019-${architecture}.tar.gz" ]]; then
+phonetisaurus_file="${download}/phonetisaurus-2019-${target_arch}.tar.gz"
+if [[ -n "$(command -v phonetisaurus-apply)" ]]; then
     echo 'Installing Phonetisaurus'
     "${src_dir}/scripts/install-phonetisaurus.sh" \
-        "${download}/phonetisaurus-2019-${architecture}.tar.gz" \
+        "${phonetisaurus_file}" \
         "${venv}/tools"
 fi
 
 # Kaldi
-if [[ -s "${download}/kaldi-2020-${architecture}.tar.gz" ]]; then
+kaldi_file="${download}/kaldi-2020-${target_arch}.tar.gz"
+if [[ -s "${kaldi_file}" ]]; then
     echo 'Installing Kaldi'
     "${src_dir}/scripts/install-kaldi.sh" \
-        "${download}/kaldi-2020-${architecture}.tar.gz" \
+        "${kaldi_file}" \
         "${venv}/tools"
 fi
 
 # Mycroft Precise
-if [[ -s "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" ]]; then
+precise_file="${download}/precise-engine_0.3.0_${target_arch}.tar.gz"
+if [[ -s "${precise_file}" ]]; then
     echo 'Installing Mycroft Precise'
     "${src_dir}/scripts/install-precise.sh" \
-        "${download}/precise-engine_0.3.0_${cpu_arch}.tar.gz" \
+        "${precise_file}" \
         "${venv}/tools"
 fi
 

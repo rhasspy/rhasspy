@@ -66,6 +66,7 @@ You can adjust how Rhasspy detects the start and stop of voice commands. Add to 
 ```json
   "command": {
     "webrtcvad": {
+      "skip_sec": 0,
       "min_sec": 1,
       "speech_sec": 0.3,
       "silence_sec": 0.5,
@@ -78,6 +79,7 @@ You can adjust how Rhasspy detects the start and stop of voice commands. Add to 
 
 where:
 
+* `skip_sec` is how many seconds of audio should be ignored before recording
 * `min_sec` is the minimum number of seconds a voice command should last
 * `speech_sec` is the seconds of speech before a command starts
 * `silence_sec` is the seconds a silence after a command before ending
@@ -120,28 +122,7 @@ If you just want to use Rhasspy for general speech to text, you can set `speech_
 
 ### Silence Detection
 
-You can adjust how Rhasspy detects the start and stop of voice commands. Add to your [profile](profiles.md):
-
-```json
-  "command": {
-    "webrtcvad": {
-      "min_sec": 1,
-      "speech_sec": 0.3,
-      "silence_sec": 0.5,
-      "before_sec": 0.5,
-      "vad_mode": 3
-    }
-  }
-}
-```
-
-where:
-
-* `min_sec` is the minimum number of seconds a voice command should last
-* `speech_sec` is the seconds of speech before a command starts
-* `silence_sec` is the seconds a silence after a command before ending
-* `before_sec` is how many seconds of audio before a command starts are kept
-* `vad_mode` is the sensitivity of speech detection (3 is the <strong>least</strong> sensitive)
+See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
 
 Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
 
@@ -163,6 +144,10 @@ Add to your [profile](profiles.md):
 ```
 
 During speech recognition, 16-bit 16 kHz mono WAV data will be POST-ed to the endpoint with the `Content-Type` set to `audio/wav`. A `text/plain` response with the transcription is expected back.
+
+### Silence Detection
+
+See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
 
 Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 
