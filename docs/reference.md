@@ -81,31 +81,31 @@ Messages for [audio input](audio-input.md) and [audio output](audio-output.md).
 * <a id="audioserver_error_play"><tt>hermes/error/audioServer/play</tt></a> (JSON, Rhasspy only)
     * Sent when an error occurs in the audio output system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
 * <a id="audioserver_error_record"><tt>hermes/error/audioServer/record</tt></a> (JSON, Rhasspy only)
     * Sent when an error occurs in the audio input system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
 * <a id="audioserver_getdevices"><tt>rhasspy/audioServer/getDevices</tt></a> (JSON, Rhasspy only)
     * Request available input or output audio devices
     * `modes: [string]` - list of modes ("input" or "output")
-    * `id: string` - unique ID returned in response
+    * `id: string? = null` - unique ID returned in response
     * `siteId: string = "default"` - Hermes site ID
     * `test: bool = false` - if true, test input devices
 * <a id="audioserver_devices"><tt>rhasspy/audioServer/devices</tt></a> (JSON, Rhasspy only)
     * Response to [`rhasspy/audioServer/getDevices`](#audioserver_getdevices)
-    * `id: string` - unique ID from request
-    * `siteId: string = "default"` - Hermes site ID
     * `devices: [object]` - list of available devices
         * `mode: string` - "input" or "output"
         * `id: string` - unique device ID
-        * `name: string` - human readable name for device
-        * `description: string` - detailed description of device
+        * `name: string? = null` - human readable name for device
+        * `description: string? = null` - detailed description of device
         * `working: boolean? = null` - true/false if test succeeded or not, null if not tested
+    * `id: string? = null` - unique ID from request
+    * `siteId: string = "default"` - Hermes site ID
     
 ### Automated Speech Recognition
 
@@ -114,16 +114,18 @@ Messages for [speech to text](speech-to-text.md).
 * <a id="asr_toggleon"><tt>hermes/asr/toggleOn</tt></a> (JSON)
     * Enables ASR system
     * `siteId: string = "default"` - Hermes site ID
+    * `reason: string = ""` - Reason for toggle on
 * <a id="asr_toggleoff"><tt>hermes/asr/toggleOff</tt></a> (JSON)
     * Disables ASR system
     * `siteId: string = "default"` - Hermes site ID
+    * `reason: string = ""` - Reason for toggle off
 * <a id="asr_startlistening"><tt>hermes/asr/startListening</tt></a> (JSON)
     * Tell ASR system to start recording/transcribing
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     * `stopOnSilence: bool = true` - detect silence and automatically end voice command (Rhasspy only)
     * `sendAudioCaptured: bool = false` - send [`audioCaptured`](#asr_audioCaptured) after stop listening (Rhasspy only)
-    * `wakewordId: string = ""` - id of wake word that triggered session (Rhasspy only)
+    * `wakewordId: string? = null` - id of wake word that triggered session (Rhasspy only)
 * <a id="asr_stoplistening"><tt>hermes/asr/stopListening</tt></a> (JSON)
     * Tell ASR system to stop recording
     * Emits [`textCaptured`](#asr_textcaptured) if silence has was not detected earlier
@@ -135,25 +137,26 @@ Messages for [speech to text](speech-to-text.md).
     * `likelihood: float` - confidence from ASR system
     * `seconds: float` - transcription time in seconds
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
+    * `wakewordId: string? = null` - id of wake word that triggered session (Rhasspy only)
 * <a id="asr_error"><tt>hermes/error/asr</tt></a> (JSON)
     * Sent when an error occurs in the ASR system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
 * <a id="asr_train"><tt>rhasspy/asr/&lt;siteId&gt;/train</tt></a> (JSON, Rhasspy only)
     * Instructs the ASR system to re-train
-    * `id: string` - unique ID for request (copied to [`trainSuccess`](#asr_trainsuccess))
     * `graph_path: str` - path to intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a [pickle](https://networkx.github.io/documentation/stable/reference/readwrite/gpickle.html) and [gzipped](https://docs.python.org/3/library/gzip.html)
-    * `graph_format: string` - format of the graph (only `pickle-gzip` for now)
+    * `id: string? = null` - unique ID for request (copied to [`trainSuccess`](#asr_trainsuccess))
+    * `graph_format: string? = null` - format of the graph (not used)
     * `siteId: string` - Hermes site ID (part of topic)
     * Response(s)
         * [`rhasspy/asr/<siteId>/trainSuccess`](#asr_trainsuccess)
         * [`hermes/error/asr`](#asr_error)
 * <a id="asr_trainsuccess"><tt>rhasspy/asr/&lt;siteId&gt;/trainSuccess</tt></a> (JSON, Rhasspy only)
     * Indicates that training was successful
-    * `id: string` - unique ID from request (copied from [`train`](#asr_train))
+    * `id: string? = null` - unique ID from request (copied from [`train`](#asr_train))
     * `siteId: string` - Hermes site ID (part of topic)
     * Response to [`rhasspy/asr/<siteId>/train`](#asr_train)
 * <a id="asr_audiocaptured"><tt>rhasspy/asr/&lt;siteId&gt;/&lt;sessionId&gt;/audioCaptured</tt></a> (binary, Rhasspy only)
@@ -172,41 +175,41 @@ Messages for managing dialogue sessions. These can be initiated by a hotword [`d
         * Action
             * `type: string = "action"` - required
             * `canBeEnqueued: bool` - true if session can be queued if there is already one (required)
-            * `text: string = ""` - sentence to speak using [text to speech](#text-to-speech)
-            * `intentFilter: [string] = null` - valid intent names (`null` means all) 
+            * `text: string? = null` - sentence to speak using [text to speech](#text-to-speech)
+            * `intentFilter: [string]? = null` - valid intent names (`null` means all) 
             * `sendIntentNotRecognized: bool = false` - send [`hermes/dialogueManager/intentNotRecognized`](#dialoguemanager_intentnotrecognized) if [intent recognition](intent-recognition.md) fails
         * Notification
             * `type: string = "notification"` - required
             * `text: string` - sentence to speak using [text to speech](#text-to-speech) (required)
     * `siteId: string = "default"` - Hermes site ID
-    * `customData: string = ""` - user-defined data passed to subsequent session messages
+    * `customData: string? = null` - user-defined data passed to subsequent session messages
     * Response(s)
         * [`hermes/dialogueManager/sessionStarted`](#dialoguemanager_sessionstarted)
         * [`hermes/dialogueManager/sessionQueued`](#dialoguemanager_sessionqueued)
 * <a id="dialoguemanager_sessionstarted"><tt>hermes/dialogueManager/sessionStarted</tt></a> (JSON)
     * Indicates a session has started
+    * `sessionId: string` - current session ID
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
-    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * `customData: string? = null` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
     * Response to [`hermes/dialogueManager/startSession`]
 * <a id="dialoguemanager_sessionqueued"><tt>hermes/dialogueManager/sessionQueued</tt></a> (JSON)
     * Indicates a session has been queued (only when `init.canBeEnqueued = true` in [`startSession`](#dialoguemanager_startsession))
+    * `sessionId: string` - current session ID
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
-    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * `customData: string? = null` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
     * Response to [`hermes/dialogueManager/startSession`]
 * <a id="dialoguemanager_continuesession"><tt>hermes/dialogueManager/continueSession</tt></a> (JSON)
     * Requests that a session be continued after an [`intent`](#nlu_intent) has been recognized
     * `sessionId: string` - current session ID (required)
-    * `customData: string = ""` - user-defined data (overrides session `customData` if not empty)
-    * `text: string = ""` - sentence to speak using [text to speech](#text-to-speech)
-    * `intentFilter: [string] = null` - valid intent names (`null` means all) 
+    * `customData: string? = null` - user-defined data (overrides session `customData` if not null)
+    * `text: string? = null` - sentence to speak using [text to speech](#text-to-speech)
+    * `intentFilter: [string]? = null` - valid intent names (`null` means all) 
     * `sendIntentNotRecognized: bool = false` - send [`hermes/dialogueManager/intentNotRecognized`](#dialoguemanager_intentnotrecognized) if [intent recognition](intent-recognition.md) fails
 * <a id="dialoguemanager_endsession"><tt>hermes/dialogueManager/endSession</tt></a> (JSON)
     * Requests that a session be terminated nominally
     * `sessionId: string` - current session ID (required)
-    * `text: string = ""` - sentence to speak using [text to speech](#text-to-speech)
-    * `customData: string = ""` - user-defined data (overrides session `customData` if not empty)
+    * `text: string? = null` - sentence to speak using [text to speech](#text-to-speech)
+    * `customData: string? = null` - user-defined data (overrides session `customData` if not null)
 * <a id="dialoguemanager_sessionended"><tt>hermes/dialogueManager/sessionEnded</tt></a> (JSON)
     * Indicates a session has terminated
     * `termination: string` reason for termination (required), one of:
@@ -215,22 +218,28 @@ Messages for managing dialogue sessions. These can be initiated by a hotword [`d
         * intentNotRecognized
         * timeout
         * error
+    * `sessionId: string` - current session ID
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
-    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * `customData: string? = null` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
     * Response to [`hermes/dialogueManager/endSession`](#dialoguemanager_endsession) or other reasons for a session termination
 * <a id="dialoguemanager_intentnotrecognized"><tt>hermes/dialogueManager/intentNotRecognized</tt></a> (JSON)
     * Sent when [intent recognition](intent-recognition.md) fails during a session (only when `init.sendIntentNotRecognized = true` in [`startSession`](#dialoguemanager_startsession))
-    * `input: string` input to NLU system (required)
+    * `sessionId: string` - current session ID
+    * `input: string? = null` input to NLU system
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
-    * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+    * `customData: string? = null` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
+* <a id="dialoguemanager_configure"><tt>hermes/dialogueManager/configure</tt></a> (JSON)
+    * Sets the default intent filter for all subsequent dialogue sessions
+    * `intents: [object]` - Intents to enable/disable (empty for all intents)
+        * `intentId: string` - Name of intent
+        * `enable: bool` - true if intent should be eligible for recognition
+    * `siteId: string = "default"` - Hermes site ID
 * <a id="dialoguemanager_error"><tt>hermes/error/dialogueManager</tt></a> (JSON, Rhasspy only)
     * Sent when an error occurs in the dialogue manager system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
 
 ### Grapheme to Phoneme
 
@@ -240,28 +249,28 @@ Words are usually looked up from a [phonetic dictionary](https://cmusphinx.githu
 
 * <a id="g2p_pronounce"><tt>rhasspy/g2p/pronounce</tt></a> (JSON, Rhasspy only)
     * Requests phonetic pronunciations of words
-    * `id: string = ""` - unique ID for request (copied to [`phonemes`](#g2p_phonemes))
     * `words: [string]` - words to pronounce (required)
+    * `id: string? = null` - unique ID for request (copied to [`phonemes`](#g2p_phonemes))
     * `numGuesses: int = 5` - number of guesses if not in dictionary
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     * Response(s)
         * [`rhasspy/g2p/phonemes`](#g2p_phonemes)
 * <a id="g2p_phonemes"><tt>rhasspy/g2p/phonemes</tt></a> (JSON, Rhasspy only)
     * Phonetic pronunciations of words, either from a dictionary or grapheme-to-phoneme model
     * `wordPhonemes: [object]` - phonetic pronunciations (required), keyed by word, values are:
         * `phonemes: [string]` - phonemes for word (key)
-        * `guessed: bool` - true if pronunciation came from a grapheme-to-phoneme model
-    * `id: string = ""` - unique ID for request (copied from [`pronounce`](#g2p_pronounce))
+        * `guessed: bool? = null` - true if pronunciation came from a grapheme-to-phoneme model, false if guessed with g2p model
+    * `id: string? = null` - unique ID for request (copied from [`pronounce`](#g2p_pronounce))
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     * Response to [`rhasspy/g2p/pronounce`](#g2p_pronounce)
 * <a id="g2p_error"><tt>rhasspy/error/g2p</tt></a> (JSON, Rhasspy only)
     * Sent when an error occurs in the G2P system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     
 ### Hotword Detection
 
@@ -270,9 +279,11 @@ Messages for [wake word detection](wake-word.md). See also the [`/api/listen-for
 * <a id="hotword_toggleon"><tt>hermes/hotword/toggleOn</tt></a> (JSON)
     * Enables hotword detection
     * `siteId: string = "default"` - Hermes site ID
+    * `reason: string = ""` - Reason for toggle on
 * <a id="hotword_toggleoff"><tt>hermes/hotword/toggleOff</tt></a> (JSON)
     * Disables hotword detection
     * `siteId: string = "default"` - Hermes site ID
+    * `reason: string = ""` - Reason for toggle off
 * <a id="hotword_detected"><tt>hermes/hotword/&lt;wakewordId&gt;/detected</tt></a> (JSON)
     * Indicates a hotword was successfully detected
     * `wakewordId: string` - wake word ID (part of topic)
@@ -281,15 +292,17 @@ Messages for [wake word detection](wake-word.md). See also the [`/api/listen-for
     * `modelType: string = "personal"` - type of wake word model used (service specific)
     * `currentSensitivity: float = 1.0` - sensitivity of wake word detection (service specific)
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID (Rhasspy only)
+    * `sessionId: string? = null` - current session ID (Rhasspy only)
+    * `sendAudioCaptured: bool? = null` - if not null, copied to [`asr/startListening`](#asr_startlistening) message in dialogue manager
 * <a id="hotword_error"><tt>hermes/error/hotword</tt></a> (JSON, Rhasspy only)
     * Sent when an error occurs in the hotword system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
+    * `sessionId: string? = null` - current session ID
 * <a id="hotword_gethotwords"><tt>rhasspy/hotword/getHotwords</tt></a> (JSON, Rhasspy only)
     * Request available hotwords
-    * `id: string` - unique ID for response
+    * `id: string? = null` - unique ID for response
     * `siteId: string = "default"` - Hermes site ID
 * <a id="hotword_hotwords"><tt>rhasspy/hotword/hotwords</tt></a> (JSON, Rhasspy only)
     * Response to [`rhasspy/hotword/hotwords`](#hotword_hotwords)
@@ -298,7 +311,7 @@ Messages for [wake word detection](wake-word.md). See also the [`/api/listen-for
         * `modelWords: string` - words used to activate hotword
         * `modelVersion: string = ""` - version of hotword model
         * `modelType: string = "personal"` - "universal" or "personal"
-    * `id: string` - unique ID from request
+    * `id: string? = null` - unique ID from request
     * `siteId: string = "default"` - Hermes site ID
 
 ### Intent Handling
@@ -317,10 +330,10 @@ Messages for [intent handling](intent-handling.md).
 * <a id="nlu_query"><tt>hermes/nlu/query</tt></a> (JSON)
     * Request an intent to be recognized from text
     * `input: string` - text to recognize intent from (required)
-    * `intentFilter: [string] = null` - valid intent names (`null` means all) 
-    * `id: string = ""` - unique id for request (copied to response messages)
+    * `intentFilter: [string]? = null` - valid intent names (`null` means all) 
+    * `id: string? = null` - unique id for request (copied to response messages)
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     * Response(s)
         * [`hermes/nlu/intent/<intentName>`](#nlu_intent)
         * [`hermes/nlu/intentNotRecognized`](#nlu_intentnotrecognized)
@@ -334,8 +347,9 @@ Messages for [intent handling](intent-handling.md).
         * `entity: string` - name of entity (required)
         * `slotName: string` - name of slot (required)
         * `confidence: float` - confidence from NLU system for this slot (required)
-        * `raw_value: string` - entity value **without** [substitutons](training.md#substitutions) (required)
-        * `value: string` - entity value with [substitutons](training.md#substitutions) (required)
+        * `rawValue: string` - entity value **without** [substitutons](training.md#substitutions) (required)
+        * `value: object` - entity value with [substitutons](training.md#substitutions) (required)
+            * `value: any` - entity value
         * `range: object = null` - indexes of entity value in text
             * `start: int` - start index
             * `end: int` - end index (exclusive)
@@ -343,35 +357,39 @@ Messages for [intent handling](intent-handling.md).
     * `siteId: string = "default"` - Hermes site ID
     * `sessionId: string = ""` - current session ID
     * `customData: string = ""` - user-defined data (copied from [`startSession`](#dialoguemanager_startsession))
-    * `asrTokens: [string] = []` - tokens from [transcription](#asr_textcaptured)
-    * `asrConfidence: float = 1.0` - confidence from ASR system for input text
+    * `asrTokens: [[object]]? = null` - tokens from [transcription](#asr_textcaptured)
+        * `value: string` - token value
+        * `confidence: float` - confidence in token
+        * `range_start: int` - start of token in input
+        * `range_end: int` - end of token in input (exclusive)
+    * `asrConfidence: float? = null` - confidence from ASR system for input text
     * Response to [`hermes/nlu/query`](#nlu_query)
 * <a id="nlu_intentnotrecognized"><tt>hermes/nlu/intentNotRecognized</tt></a> (JSON)
     * Sent when [intent recognition](intent-recognition.md) fails
     * `input: string` - text from query (required)
-    * `id: string = ""` - unique id for request (copied from [`query`](#nlu_query))
+    * `id: string? = null` - unique id for request (copied from [`query`](#nlu_query))
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     * Response to [`hermes/nlu/query`](#nlu_query)
 * <a id="nlu_error"><tt>hermes/error/nlu</tt></a> (JSON)
     * Sent when an error occurs in the NLU system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
 * <a id="nlu_train"><tt>rhasspy/nlu/&lt;siteId&gt;/train</tt></a> (JSON, Rhasspy only)
     * Instructs the NLU system to re-train
-    * `id: string` - unique ID for request (copied to [`trainSuccess`](#nlu_trainsuccess))
     * `graph_path: str` - path to intent graph from [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) encoded as a [pickle](https://networkx.github.io/documentation/stable/reference/readwrite/gpickle.html) and [gzipped](https://docs.python.org/3/library/gzip.html)
-    * `graph_format: string` - format of the graph (only `pickle-gzip` for now)
+    * `id: string? = null` - unique ID for request (copied to [`trainSuccess`](#nlu_trainsuccess))
+    * `graph_format: string? = null` - format of the graph (unused)
     * `siteId: string` - Hermes site ID (part of topic)
     * Response(s)
         * [`rhasspy/nlu/<siteId>/trainSuccess`](#nlu_trainsuccess)
         * [`hermes/error/nlu`](#nlu_error)
 * <a id="nlu_trainsuccess"><tt>rhasspy/nlu/&lt;siteId&gt;/trainSuccess</tt></a> (JSON, Rhasspy only)
     * Indicates that training was successful
-    * `id: string` - unique ID from request (copied from [`train`](#nlu_train))
     * `siteId: string` - Hermes site ID (part of topic)
+    * `id: string? = null` - unique ID from request (copied from [`train`](#nlu_train))
     * Response to [`rhasspy/nlu/<siteId>/train`](#nlu_train)
     
 ### Text to Speech
@@ -381,35 +399,33 @@ Messages for [intent handling](intent-handling.md).
     * Automatically sends [`playBytes`](#audioserver_playbytes)
         * `playBytes.requestId = say.id`
     * `text: string` - sentence to speak (required)
-    * `lang: string = ""` - language for TTS system
-    * `id: string = ""` - unique ID for request (copied to `sayFinished`)
+    * `lang: string? = null` - override language for TTS system
+    * `id: string? = null` - unique ID for request (copied to `sayFinished`)
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
     * Response(s)
         * [`hermes/tts/sayFinished`](#tts_sayfinished) (JSON)
 * <a id="tts_sayfinished"><tt>hermes/tts/sayFinished</tt></a> (JSON)
-    * Indicates that the text to speech system has finished generating audio
-    * `id: string = ""` - unique ID for request (copied from `say`)
+    * Indicates that the text to speech system has finished speaking
+    * `id: string? = null` - unique ID for request (copied from `say`)
     * `siteId: string = "default"` - Hermes site ID
     * Response to [`hermes/tts/say`](#tts_say)
-    * Listen for [`playFinished`](#audioserver_playfinished) to determine when audio is finished playing
-        * `playFinished.id = sayFinished.id`
 * <a id="tts_error"><tt>hermes/error/tts</tt></a> (JSON, Rhasspy only)
     * Sent when an error occurs in the text to speech system
     * `error: string` - description of the error
-    * `context: string` - system-defined context of the error
+    * `context: string? = null` - system-defined context of the error
     * `siteId: string = "default"` - Hermes site ID
-    * `sessionId: string = ""` - current session ID
+    * `sessionId: string? = null` - current session ID
 * <a id="tts_getvoices"><tt>rhasspy/tts/getVoices</tt></a> (JSON, Rhasspy only)
     * Request available text to speech voices
-    * `id: string = ""` - unique ID provided in response
+    * `id: string? = null` - unique ID provided in response
     * `siteId: string = "default"` - Hermes site ID
 * <a id="tts_voices"><tt>rhasspy/tts/voices</tt></a> (JSON, Rhasspy only)
     * Response to [`rhasspy/tts/getVoices`](#tts_getvoices)
     * `voices: list[object]` - available voices
         * `voiceId: string` - unique ID for voice
-        * `description: string` - human readable description of voice
-    * `id: string = ""` - unique ID from request
+        * `description: string? = null` - human readable description of voice
+    * `id: string? = null` - unique ID from request
     * `siteId: string = "default"` - Hermes site ID
 
 ## HTTP API
