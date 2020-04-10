@@ -100,3 +100,6 @@
 [submodule "rhasspy-rasa-nlu-hermes"]
 	path = rhasspy-rasa-nlu-hermes
 	url = https://github.com/rhasspy/rhasspy-rasa-nlu-hermes
+[submodule "rhasspy-asr-deepspeech-hermes"]
+	path = rhasspy-asr-deepspeech-hermes
+	url = https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes
