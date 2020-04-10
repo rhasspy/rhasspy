@@ -19,6 +19,7 @@
 # Wake
 
 * Training for pocketsphinx keyphrase
+* Snips Wake?
 
 # TTS
 
@@ -29,6 +30,12 @@
 
 # Intent Handling
 
+* Multiple intent handling systems?
+
 # Dialogue Management
+
+# MQTT
+
+* TLS support
 
 # Documentation
