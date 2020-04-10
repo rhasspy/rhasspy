@@ -34,7 +34,7 @@ check-dirs:
 # Gather non-Rhasspy requirements from all submodules.
 # Rhasspy libraries will be used from the submodule source code.
 requirements.txt: $(REQUIREMENTS)
-	cat $^ | grep -v '^rhasspy' | sort | uniq > $@
+	cat $^ | grep -v '^rhasspy' | grep -v '^deepspeech' | sort | uniq > $@
 
 # Gather development requirements from all submodules.
 requirements_dev.txt: $(REQUIREMENTS_DEV)
