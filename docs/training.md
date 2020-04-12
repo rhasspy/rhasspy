@@ -117,7 +117,7 @@ turn (on){action:activate} the living room lamp
 
 See [tag synonyms](#tag-synonyms) for more details on tag substitution.
 
-You can leave the left-hand or right-hand side (or both!) of the `:` empty:
+Lastly, you can leave the left-hand or right-hand side (or both!) of the `:` empty:
 
 ```
 these: words: will: be: dropped:
@@ -125,6 +125,19 @@ these: words: will: be: dropped:
 ```
 
 When the right-hand side is empty (`dropped:`), the spoken word will not appear in the intent. An empty left-hand side (`:added`) means the word is *not* spoken, but will appear in the intent.
+
+The right-hand side of a substitution can also be a group:
+
+```
+(words to speak):(other words to emit)
+```
+
+which is equivalent to:
+
+```
+(words to speak):other :words :to :emit
+```
+
 
 Leaving **both** sides empty does nothing unless you attach a [tag](#tags) it. This allows you to embed a named entity in a voice command without matching specific words:
 
