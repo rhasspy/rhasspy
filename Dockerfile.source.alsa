@@ -46,7 +46,10 @@ ADD download/kaldi-2020-${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/too
 ADD download/precise-engine_0.3.0_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
 
 # Mozilla DeepSpeech
-ADD download/native_client.${TARGETARCH}${TARGETVARIANT}.cpu.linux.0.6.1.tar.xz ${RHASSPY_VENV}/tools/
+COPY download/native_client.${TARGETARCH}${TARGETVARIANT}.cpu.linux.0.6.1.tar.xz /native_client.tar.xz
+RUN tar -C ${RHASSPY_VENV}/tools -xf /native_client.tar.gz
+
+# KenLM
 ADD download/kenlm-20200308_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
 
 # -----------------------------------------------------------------------------
@@ -62,9 +65,6 @@ ENV LANG C.UTF-8
 ENV RHASSPY_DIR=/usr/lib/rhasspy-voltron
 ENV RHASSPY_VENV=${RHASSPY_DIR}/.venv
 
-# Copy Rhasspy virtual environment
-COPY --from=build ${RHASSPY_VENV} ${RHASSPY_VENV}
-
 # Install Debian dependencies
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
@@ -74,6 +74,9 @@ RUN apt-get update && \
     perl curl supervisor mosquitto sox alsa-utils \
     espeak flite libttspico-utils \
     gstreamer1.0-tools gstreamer1.0-plugins-good
+
+# Copy Rhasspy virtual environment
+COPY --from=build ${RHASSPY_VENV} ${RHASSPY_VENV}
 
 COPY bin/ ${RHASSPY_DIR}/bin/
 COPY etc/shflags ${RHASSPY_DIR}/etc/
