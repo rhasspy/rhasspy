@@ -64,7 +64,7 @@ Once Rhasspy restarts, you will see a notification at top that tells you Rhasspy
 
 ![Rhasspy download notification](img/getting-started/download-profile.png)
 
-Click the "Download" button to begin downloading the necessary speech models, etc. from Github. You will see a dialogue box will the download progress of each file.
+Click the "Download" button to begin downloading the necessary speech models, etc. from GitHub. You will see a dialogue box will the download progress of each file.
 
 ![Rhasspy download progress](img/getting-started/download-dialogue.png)
 
@@ -102,7 +102,7 @@ Speak a voice command, like "turn on the living room lamp" and wait for a moment
 
 ![Recognized intent with slots](img/getting-started/recognized-intent.png)
 
-You can click the gray "Show JSON" button underneath to view the intent JSON you would receive if this voice command was recognized through the [`/api/speech-to-intent` HTTP endpint](reference.md#api_speech_to_intent).
+You can click the gray "Show JSON" button underneath to view the intent JSON you would receive if this voice command was recognized through the [`/api/speech-to-intent` HTTP endpoint](reference.md#api_speech_to_intent).
 
 ### Websocket
 
@@ -197,7 +197,7 @@ If you don't have an existing MQTT broker (Home Assistant as [one built in](http
 
 Once you have `mosquitto` running, go to the "Settings" page in the Rhasspy web interface and change the MQTT setting to "External". You may need to expand the MQTT section and modify the host/port if your broker is running on a different machine.
 
-Once you click "Save Settings", Rhasspy will restart and try to connect to your MQTT broker. **This will fail** if you are running Rhasspy inside Docker and trying to connect to `locahost`! In this case, you **must** stop Rhasspy (with `docker stop`) and modify your `docker run` command like this:
+Once you click "Save Settings", Rhasspy will restart and try to connect to your MQTT broker. **This will fail** if you are running Rhasspy inside Docker and trying to connect to `localhost`! In this case, you **must** stop Rhasspy (with `docker stop`) and modify your `docker run` command like this:
 
 ```bash
 docker run -d -p 12101:12101 \

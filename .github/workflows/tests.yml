@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-19.04]
+        os: [ubuntu-18.04]
         python-version: [3.7]
 
     steps:
