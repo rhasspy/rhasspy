@@ -88,6 +88,7 @@ COPY rhasspy-wake-porcupine-hermes/ ${RHASSPY_DIR}/rhasspy-wake-porcupine-hermes
 COPY rhasspy-wake-precise-hermes/ ${RHASSPY_DIR}/rhasspy-wake-precise-hermes/
 COPY rhasspy-profile/ ${RHASSPY_DIR}/rhasspy-profile/
 COPY rhasspy-asr/ ${RHASSPY_DIR}/rhasspy-asr/
+COPY rhasspy-asr-deepspeech-hermes/ ${RHASSPY_DIR}/rhasspy-asr-deepspeech-hermes/
 COPY rhasspy-asr-pocketsphinx/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx/
 COPY rhasspy-asr-pocketsphinx-hermes/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx-hermes/
 COPY rhasspy-asr-kaldi/ ${RHASSPY_DIR}/rhasspy-asr-kaldi/
