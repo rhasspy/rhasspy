@@ -47,7 +47,7 @@ ADD download/precise-engine_0.3.0_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY
 
 # Mozilla DeepSpeech
 COPY download/native_client.${TARGETARCH}${TARGETVARIANT}.cpu.linux.0.6.1.tar.xz /native_client.tar.xz
-RUN tar -C ${RHASSPY_VENV}/tools -xf /native_client.tar.gz
+RUN tar -C ${RHASSPY_VENV}/tools -xf /native_client.tar.xz
 
 # KenLM
 ADD download/kenlm-20200308_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/

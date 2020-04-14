@@ -16,6 +16,7 @@
 # Source
 !rhasspy-asr/rhasspyasr/*.py
 !rhasspy-asr-deepspeech-hermes/rhasspyasr_deepspeech_hermes/*.py
+!rhasspy-asr-deepspeech-hermes/rhasspyasr_deepspeech_hermes/alphabet.txt
 !rhasspy-asr-pocketsphinx/rhasspyasr_pocketsphinx/*.py
 !rhasspy-asr-pocketsphinx-hermes/rhasspyasr_pocketsphinx_hermes/*.py
 !rhasspy-asr-kaldi/rhasspyasr_kaldi/*.py
