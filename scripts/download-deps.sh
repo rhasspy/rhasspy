@@ -71,6 +71,30 @@ if [ ! -z "${precise_arch}" ] && [ ! -s "${precise_file}" ]; then
     curl -sSfL -o "${precise_file}" "https://github.com/MycroftAI/mycroft-precise/releases/download/v0.3.0/precise-engine_0.3.0_${precise_arch}.tar.gz"
 fi
 
+# Mozilla DeepSpeech Native Client
+declare -A deepspeech_archs
+deepspeech_archs=(['x86_64']='amd64' ['armv7l']='rpi3' ['aarch64']='rpi3')
+
+deepspeech_arch="${deepspeech_archs[${cpu_arch}]}"
+
+# TODO: Support other platforms besides Linux
+deepspeech_file="${download}/native_client.${target_arch}.cpu.linux.0.6.1.tar.xz"
+if [ ! -z "${deepspeech_arch}" ] && [ ! -s "${deepspeech_file}" ]; then
+    echo "Downloading DeepSpeech native client (${deepspeech_file})"
+    curl -sSfL -o "${deepspeech_file}" "https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/native_client.${deepspeech_arch}.cpu.linux.tar.xz"
+fi
+
+# KenLM
+declare -A kenlm_archs
+kenlm_archs=(['x86_64']='amd64' ['armv7l']='armv7' ['aarch64']='arm64')
+
+kenlm_arch="${kenlm_archs[${cpu_arch}]}"
+kenlm_file="${download}/kenlm-20200308_${target_arch}.tar.gz"
+if [ ! -z "${kenlm_arch}" ] && [ ! -s "${kenlm_file}" ]; then
+    echo "Downloading KenLM (${kenlm_file})"
+    curl -sSfL -o "${kenlm_file}" "https://github.com/synesthesiam/docker-kenlm/releases/download/v2020.03.28/kenlm-20200308_${kenlm_arch}.tar.gz"
+fi
+
 # -----------------------------------------------------------------------------
 
 echo "OK"

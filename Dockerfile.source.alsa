@@ -45,6 +45,10 @@ ADD download/kaldi-2020-${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/too
 # Mycroft Precise Engine
 ADD download/precise-engine_0.3.0_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
 
+# Mozilla DeepSpeech
+ADD download/native_client.${TARGETARCH}${TARGETVARIANT}.cpu.linux.0.6.1.tar.xz ${RHASSPY_VENV}/tools/
+ADD download/kenlm-20200308_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
+
 # -----------------------------------------------------------------------------
 # Runtime Image
 # -----------------------------------------------------------------------------

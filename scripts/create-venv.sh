@@ -97,6 +97,24 @@ if [[ -s "${precise_file}" ]]; then
         "${venv}/tools"
 fi
 
+# Mozilla DeepSpeech
+deepspeech_file="${download}/native_client.${target_arch}.cpu.linux.0.6.1.tar.xz"
+if [[ -s "${deepspeech_file}" ]]; then
+    echo 'Installing DeepSpeech Native Client'
+    "${src_dir}/scripts/install-deepspeech.sh" \
+        "${deepspeech_file}" \
+        "${venv}/tools"
+fi
+
+# KenLM
+kenlm_file="${download}/kenlm-20200308_${target_arch}.tar.gz"
+if [[ -s "${kenlm_file}" ]]; then
+    echo 'Installing Kenlm'
+    "${src_dir}/scripts/install-kenlm.sh" \
+        "${kenlm_file}" \
+        "${venv}/tools"
+fi
+
 echo 'Installing requirements'
 pip3 ${PIP_INSTALL} -r requirements.txt
 

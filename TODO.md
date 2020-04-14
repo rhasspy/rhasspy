@@ -10,6 +10,7 @@
 * Add Julius ASR
 * Add DeepSpeech ASR
 * Add Google STT
+* Use secondary ASR for wildcard transcriptions
 
 # NLU
 
@@ -18,6 +19,7 @@
 
 # Wake
 
+* Audio stream/detector per site id
 * Training for pocketsphinx keyphrase
 * Snips Wake?
 
