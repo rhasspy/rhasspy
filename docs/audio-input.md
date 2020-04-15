@@ -32,7 +32,7 @@ Streams 2048 byte chunks of 16-bit, 16 kHz mono audio by default.
 
 ### UDP Audio Streaming
 
-By default, audio will streamed over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.pyaudio.udp_audio_port` and `wake.<WAKE_SYSTEM>.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+By default, audio will streamed over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.pyaudio.udp_audio` and `wake.<WAKE_SYSTEM>.udp_audio` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
 
 Implemented by [rhasspy-microphone-pyaudio-hermes](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes)
 
@@ -58,7 +58,7 @@ By default, calls `arecord -t raw -r 16000 -f S16_LE -c 1` and reads 2048 byte c
 
 ### UDP Audio Streaming
 
-By default, audio will streamed over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.arecord.udp_audio_port` and `wake.<WAKE_SYSTEM>.udp_audio_port` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+By default, audio will streamed over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite as woken up. For this case, set **both** `microphone.arecord.udp_audio` and `wake.<WAKE_SYSTEM>.udp_audio` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
 
 Implemented by [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
 
@@ -127,7 +127,7 @@ gst-launch-1.0 \
     udpsink host=RHASSPY_SERVER port=12333
 ```
 
-where `RHASSPY_SERVER` is the hostname of your Rhasspy server (e.g., `localhost`). You man need to install the `gstreamer1.0-tools` and `gstreamer1.0-plugins-good` packages first.
+where `RHASSPY_SERVER` is the hostname of your Rhasspy server (e.g., `localhost`). You may need to install the `gstreamer1.0-tools` and `gstreamer1.0-plugins-good` packages first.
 
 The official Rhasspy Docker image contains the ["good" plugin set](https://gstreamer.freedesktop.org/data/doc/gstreamer/head/gst-plugins-good-plugins/html/) for GStreamer, which includes a wide variety of ways to stream/transform audio.
 

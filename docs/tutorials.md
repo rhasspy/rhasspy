@@ -64,7 +64,7 @@ Once Rhasspy restarts, you will see a notification at top that tells you Rhasspy
 
 ![Rhasspy download notification](img/getting-started/download-profile.png)
 
-Click the "Download" button to begin downloading the necessary speech models, etc. from GitHub. You will see a dialogue box will the download progress of each file.
+Click the "Download" button to begin downloading the necessary speech models, etc. from GitHub. You will see a dialogue box with the download progress of each file.
 
 ![Rhasspy download progress](img/getting-started/download-dialogue.png)
 
@@ -262,7 +262,7 @@ client.connect("localhost", 1883)
 client.loop_forever()
 ```
 
-You will need to the [paho-mqtt Python library](https://pypi.org/project/paho-mqtt/) installed by running `pip install paho-mqtt` (it's highly recommended you do this in a [virtual environment](https://docs.python.org/3/tutorial/venv.html)).
+You will need the [paho-mqtt Python library](https://pypi.org/project/paho-mqtt/), which is installed by running `pip install paho-mqtt` (it's highly recommended you do this in a [virtual environment](https://docs.python.org/3/tutorial/venv.html)).
 
 Now, you can run the skill in a separate terminal using `python3 simple-skill.py`
 You should see "Connected. Waiting for intents." printed to the terminal.

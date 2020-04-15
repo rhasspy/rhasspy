@@ -29,7 +29,7 @@ Rhasspy receives intent recognition requests on the `hermes/nlu/query` topic. Su
 
 ## Fsticuffs
 
-Uses the [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) library to recognize **only** those sentences that were Rhasspy was [trained on](training.md#sentencesini). While less flexible than the other intent recognizers, `fsticuffs` can be trained and perform recognition over *millions* of sentences in milliseconds. If you only plan to recognize voice commands from your training set (and not unseen ones via text chat), `fsticuffs` is the best choice.
+Uses the [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) library to recognize **only** those sentences that Rhasspy was [trained on](training.md#sentencesini). While less flexible than the other intent recognizers, `fsticuffs` can be trained and perform recognition over *millions* of sentences in milliseconds. If you only plan to recognize voice commands from your training set (and not unseen ones via text chat), `fsticuffs` is the best choice.
 
 Add to your [profile](profiles.md):
 
@@ -52,7 +52,7 @@ Implemented by [rhasspy-nlu-hermes](https://github.com/rhasspy/rhasspy-nlu-herme
 
 ## Fuzzywuzzy
 
-Finds the closest matching intent by using the [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) between the text and the all of the [training sentences](training.md#sentencesini) you provided. Works best when you have a small number of sentences (dozens to hundreds) and need some resiliency to spelling errors (i.e., from text chat).
+Finds the closest matching intent by using the [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) between the text and all of the [training sentences](training.md#sentencesini) you provided. Works best when you have a small number of sentences (dozens to hundreds) and need some resiliency to spelling errors (i.e., from text chat).
 
 Add to your [profile](profiles.md):
 

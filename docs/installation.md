@@ -47,6 +47,14 @@ rhasspy:
 
 Rhasspy runs an MQTT broker inside the Docker image on port `12183` by default. Connecting to this broker will let you interact with Rhasspy over its [MQTT API](reference.md#mqtt-api).
 
+### Updating
+
+To update your Rhasspy Docker image, simply run:
+
+```bash
+docker pull rhasspy/rhasspy:2.5.0-pre
+```
+
 ## Debian
 
 **Coming soon**
@@ -72,5 +80,15 @@ and then clone/build:
 ```bash
 git clone --recursive https://github.com/rhasspy/rhasspy-voltron
 cd rhasspy-voltron/
+make
+```
+
+### Updating
+
+To update your Rhasspy virtual environment, you must update your code and any dependencies:
+
+```bash
+git submodule foreach git pull origin master
+git pull origin master
 make
 ```

@@ -86,7 +86,7 @@ Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-c
 
 ## MaryTTS
 
-Uses a remote [MaryTTS](http://mary.dfki.de/) web server. Supported languages include German, British and American English, French, Italian, Luxembourgish, Russian, Swedish, Telugu, and Turkish. An [MaryTTS Docker image](https://hub.docker.com/r/synesthesiam/marytts) is available, though only the default voice is included.
+Uses a remote [MaryTTS](http://mary.dfki.de/) web server. Supported languages include German, British and American English, French, Italian, Luxembourgish, Russian, Swedish, Telugu, and Turkish. A [MaryTTS Docker image](https://hub.docker.com/r/synesthesiam/marytts) is available, though only the default voice is included.
 
 Add to your [profile](profiles.md):
 
@@ -244,7 +244,7 @@ Add to your [profile](profiles.md):
 }
 ```
 
-The the `lang` property of [`hermes/tts/say`](reference.md#tts_say) is not empty, a query parameter `language` is added to the URL (e.g., `http://tts-server/endpoint?language=<lang>`).
+The `lang` property of [`hermes/tts/say`](reference.md#tts_say) is not empty, a query parameter `language` is added to the URL (e.g., `http://tts-server/endpoint?language=<lang>`).
 
 Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 

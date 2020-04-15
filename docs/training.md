@@ -256,7 +256,7 @@ slot_programs="${HOME}/.config/rhasspy/profiles/en/slot_programs"
 mkdir -p "${slot_programs}"
 ```
 
-Add a file in `slot_programs` with the name of your slot, e.g. `colors`. Write a program in this file, such as a bash script. Make sure to include the [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) and mark the file as executable:
+Add a file in the `slot_programs` directory with the name of your slot, e.g. `colors`. Write a program in this file, such as a bash script. Make sure to include the [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)) and mark the file as executable:
 
 ```bash
 cat <<EOF > "${slot_programs}/colors"

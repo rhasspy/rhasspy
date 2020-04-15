@@ -6,6 +6,7 @@ Available speech to text systems are:
 
 * [Pocketsphinx](speech-to-text.md#pocketsphinx)
 * [Kaldi](speech-to-text.md#kaldi)
+* [DeepSpeech](speech-to-text.md#deepspeech)
 * [Remote HTTP Server](speech-to-text.md#remote-http-server)
 * [External Command](speech-to-text.md#command)
 
@@ -15,6 +16,7 @@ The following table summarizes language support for the various speech to text s
 | ------                                         | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  |
 | [pocketsphinx](speech-to-text.md#pocketsphinx) | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |
 | [kaldi](speech-to-text.md#kaldi)               | &#x2713; | &#x2713; |          | &#x2713; |          | &#x2713; |          |          |          |          | &#x2713; |          |          |
+| [deepspeech](speech-to-text.md#deepspeech)     | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |          |          |          |
 
 ## MQTT/Hermes
 
@@ -125,6 +127,41 @@ If you just want to use Rhasspy for general speech to text, you can set `speech_
 See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
 
 Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
+
+## DeepSpeech
+
+Does speech recognition with [Mozilla's DeepSpeech](https://github.com/mozilla/DeepSpeech) version 0.6.
+This is done completely offline, on your device. If you experience performance problems (usually on a Raspberry Pi), consider running on a home server as well and have your client Rhasspy use a [remote HTTP connection](speech-to-text.md#remote-http-server).
+
+```json
+{
+  "speech_to_text": {
+    "system": "deepspeech",
+    "kaldi": {
+      "alphabet": "deepspeech/model/0.6.1/alphabet.txt",
+      "acoustic_model": "deepspeech/model/0.6.1/output_graph.pbmm",
+      "base_language_model": "deepspeech/model/0.6.1/base_lm.binary",
+      "base_trie": "deepspeech/model/0.6.1/base_trie",
+      "compatible": true,
+      "language_model": "deepspeech/lm.binary",
+      "trie": "deepspeech/trie",
+      "open_transcription": false
+    }
+  }
+}
+```
+
+Uses the official [deepspeech library](https://pypi.org/project/deepspeech/), an appropriate native client, and [KenLM](https://kheafield.com/code/kenlm/) for building language models. For English, Rhasspy automatically uses Mozilla's TFLite graph on the Raspberry Pi (`armv7l`).
+
+### Open Transcription
+
+If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.deepspeech.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified. Beware that the required downloads are quite large (at least 1 GB extra).
+
+### Silence Detection
+
+See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
+
+Implemented by [rhasspy-asr-deepspeech-hermes](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes)
 
 ## Remote HTTP Server
 
