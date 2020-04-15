@@ -23,6 +23,9 @@ RUN ${RHASSPY_PIP} install wheel setuptools
 COPY download/pocketsphinx-python.tar.gz /
 RUN ${RHASSPY_PIP} install /pocketsphinx-python.tar.gz
 
+# Exclude DeepSpeech from arm64
+RUN if [ "$TARGETARCH" = "arm64" ]; then sed -i '/^deepspeech/d' ${RHASSPY_DIR}/requirements.txt; fi
+
 # Runtime Python dependencies
 RUN ${RHASSPY_PIP} install -r ${RHASSPY_DIR}/requirements.txt
 
@@ -45,12 +48,13 @@ ADD download/kaldi-2020-${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/too
 # Mycroft Precise Engine
 ADD download/precise-engine_0.3.0_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
 
-# Mozilla DeepSpeech
+# Mozilla DeepSpeech (excludes arm64)
 COPY download/native_client.${TARGETARCH}${TARGETVARIANT}.cpu.linux.0.6.1.tar.xz /native_client.tar.xz
-RUN tar -C ${RHASSPY_VENV}/tools -xf /native_client.tar.xz
+RUN if [ "$TARGETARCH" != "arm64" ]; then tar -C ${RHASSPY_VENV}/tools -xf /native_client.tar.xz; fi
 
-# KenLM
-ADD download/kenlm-20200308_${TARGETARCH}${TARGETVARIANT}.tar.gz ${RHASSPY_VENV}/tools/
+# KenLM (excludes arm64)
+COPY download/kenlm-20200308_${TARGETARCH}${TARGETVARIANT}.tar.gz /kenlm.tar.gz
+RUN if [ "$TARGETARCH" != "arm64" ]; then tar -C ${RHASSPY_VENV}/tools -xf /kenlm.tar.gz; fi
 
 # -----------------------------------------------------------------------------
 # Runtime Image
