@@ -96,6 +96,7 @@ COPY rhasspy-microphone-pyaudio-hermes/ ${RHASSPY_DIR}/rhasspy-microphone-pyaudi
 COPY rhasspy-nlu/ ${RHASSPY_DIR}/rhasspy-nlu/
 COPY rhasspy-nlu-hermes/ ${RHASSPY_DIR}/rhasspy-nlu-hermes/
 COPY rhasspy-rasa-nlu-hermes/ ${RHASSPY_DIR}/rhasspy-rasa-nlu-hermes/
+COPY rhasspy-snips-nlu-hermes/ ${RHASSPY_DIR}/rhasspy-snips-nlu-hermes/
 COPY rhasspy-remote-http-hermes/ ${RHASSPY_DIR}/rhasspy-remote-http-hermes/
 COPY rhasspy-silence/ ${RHASSPY_DIR}/rhasspy-silence/
 COPY rhasspy-speakers-cli-hermes/ ${RHASSPY_DIR}/rhasspy-speakers-cli-hermes/

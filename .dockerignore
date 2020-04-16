@@ -33,6 +33,8 @@
 !rhasspy-nlu-hermes/rhasspynlu_hermes/*.py
 !rhasspy-profile/rhasspyprofile
 !rhasspy-rasa-nlu-hermes/rhasspyrasa_nlu_hermes/*.py
+!rhasspy-snips-nlu-hermes/rhasspysnips_nlu_hermes/*.py
+!rhasspy-snips-nlu-hermes/etc/languages/*.tar.gz
 !rhasspy-remote-http-hermes/rhasspyremote_http_hermes/*.py
 !rhasspy-server-hermes/rhasspyserver_hermes/*.py
 !rhasspy-server-hermes/templates

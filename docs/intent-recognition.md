@@ -7,21 +7,23 @@ Available intent recognition systems are:
 
 * [Fsticuffs](intent-recognition.md#fsticuffs)
 * [Fuzzywuzzy](intent-recognition.md#fuzzywuzzy)
-* [Mycroft Adapt](intent-recognition.md#mycroft-adapt)
+* [Snips NLU](intent-recognition.md#snips-nlu)
 * [RasaNLU](intent-recognition.md#rasanlu)
+* [Mycroft Adapt](intent-recognition.md#mycroft-adapt)
 * [Flair](intent-recognition.md#flair)
 * [Remote HTTP Server](intent-recognition.md#remote-http-server)
 * [External Command](intent-recognition.md#command)
 
 The following table summarizes the trade-offs of using each intent recognizer:
 
-| System                                         | Ideal Sentence count | Training Speed | Recognition Speed | Flexibility           |
-| --------                                       | ----                 | --------       | -----             | -------------         |
-| [fsticuffs](intent-recognition.md#fsticuffs)   | 1M+                  | very fast      | very fast         | ignores unknown words |
-| [fuzzywuzzy](intent-recognition.md#fuzzywuzzy) | 12-100               | fast           | fast              | fuzzy string matching |
-| [adapt](intent-recognition.md#mycroft-adapt)   | 100-1K               | moderate       | fast              | ignores unknown words |
-| [rasaNLU](intent-recognition.md#rasanlu)       | 1K-100K              | very slow      | moderate          | handles unseen words  |
-| [flair](intent-recognition.md#flair)           | 1K-100K              | very slow      | moderate          | handles unseen words  |
+| System                                               | Ideal Sentence count | Training Speed | Recognition Speed | Flexibility                   |
+| --------                                             | ----                 | --------       | -----             | -------------                 |
+| [Fsticuffs](intent-recognition.md#fsticuffs)         | 1M+                  | very fast      | very fast         | ignores unknown words         |
+| [Fuzzywuzzy](intent-recognition.md#fuzzywuzzy)       | 100-1K               | fast           | very fast         | fuzzy string matching         |
+| [Snips NLU](intent-recognition.md#snips-nlu)         | 1K-100K              | moderate       | very fast         | handles unseen words/entities |
+| [RasaNLU](intent-recognition.md#rasanlu)             | 1K-100K              | very slow      | moderate          | handles unseen words          |
+| [Mycroft Adapt](intent-recognition.md#mycroft-adapt) | 100-1K               | moderate       | fast              | ignores unknown words         |
+| [Flair](intent-recognition.md#flair)                 | 1K-100K              | very slow      | moderate          | handles unseen words          |
 
 ## MQTT/Hermes
 
@@ -66,6 +68,30 @@ Add to your [profile](profiles.md):
 ```
 
 Implemented by [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes)
+
+## Snips NLU
+
+Uses [Snips NLU](https://github.com/snipsco/snips-nlu) to flexibly recognize sentences in the following languages: de, en, es, fr, it, ja, ko, pt_br, pt_pt, zh.
+
+Add to your [profile](profiles.md):
+
+```json
+"intent": {
+  "system": "snips",
+  "snips": {
+    "language": "",
+    "engine_dir": "snips/engine",
+    "dataset_file": "snips/dataset.yaml"
+  }
+}
+```
+
+If `intent.snips.language` is not specified, the profile's `language` is used. The `engine_dir` and `dataset_file` properties control where in your profile directory the generated engine and YAML dataset files are stored during training.
+
+Number ranges are automatically converted into `snips/number` entities. All [tags](training.md#tags) are considered Snips slots. If a Rhasspy [slots list](training.md#slots-lists) is contained within the tag, the name of the Rhasspy `$slot` will become the Snips entity name. Otherwise, the tag name is used and **shared** across intents.
+
+Implemented by [rhasspy-snips-nlu-hermes](https://github.com/rhasspy/rhasspy-snips-nlu-hermes)
+
 
 ## RasaNLU
 

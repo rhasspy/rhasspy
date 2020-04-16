@@ -36,6 +36,7 @@ The following tools/libraries help to support Rhasspy:
 * [Python 3.7](https://www.python.org)
 * [Quart](https://gitlab.com/pgjones/quart)
 * [rapidfuzz](https://github.com/rhasspy/rapidfuzz) (fuzzy string matching)
+* [Snips NLU](https://github.com/snipsco/snips-nlu) (intent recognition)
 * [snowboy](https://snowboy.kitt.ai) (wake word)
 * [Sox](http://sox.sourceforge.net) (WAV conversion)
 * [webrtcvad](https://github.com/wiseman/py-webrtcvad) (voice activity detection)
