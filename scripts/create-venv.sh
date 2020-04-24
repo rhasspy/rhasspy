@@ -119,7 +119,7 @@ echo 'Installing requirements'
 pip3 ${PIP_INSTALL} -r requirements.txt
 
 # Snips NLU: install supported languages
-# snips_lang_dir="${src_dir}/rhasspy-snips-nlu-hermes/etc/languages"
+# snips_lang_dir="${src_dir}/rhasspy-snips-nlu/etc/languages"
 # if [[ -d "${snips_lang_dir}" ]]; then
 #     pip3 ${PIP_INSTALL} "${snips_lang_dir}"/*.tar.gz
 #     for lang in de en es fr it ja ko pt_br pt_pt zh; do

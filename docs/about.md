@@ -26,6 +26,7 @@ The following tools/libraries help to support Rhasspy:
 * [KenLM](https://kheafield.com/code/kenlm/) (language modeling)
 * [MaryTTS](http://mary.dfki.de) (text to speech)
 * [Montreal Forced Aligner](https://montreal-forced-aligner.readthedocs.io/en/latest/) (acoustic models)
+* [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise)
 * [Opengrm](http://www.opengrm.org/twiki/bin/view/GRM/NGramLibrary) (language modeling)
 * [paho](https://www.eclipse.org/paho/) (network communication)
 * [Phonetisaurus](https://github.com/AdolfVonKleist/Phonetisaurus) (word pronunciations)

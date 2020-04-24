@@ -56,6 +56,9 @@ RUN if [ "$TARGETARCH" != "arm64" ]; then tar -C ${RHASSPY_VENV}/tools -xf /nati
 COPY download/kenlm-20200308_${TARGETARCH}${TARGETVARIANT}.tar.gz /kenlm.tar.gz
 RUN if [ "$TARGETARCH" != "arm64" ]; then tar -C ${RHASSPY_VENV}/tools -xf /kenlm.tar.gz; fi
 
+# Strip binaries
+RUN for f in $(find ${RHASSPY_VENV} -type f -name '*.so*'); do strip --strip-unneeded $f; done
+
 # -----------------------------------------------------------------------------
 # Runtime Image
 # -----------------------------------------------------------------------------
@@ -95,6 +98,7 @@ COPY rhasspy-wake-porcupine-hermes/ ${RHASSPY_DIR}/rhasspy-wake-porcupine-hermes
 COPY rhasspy-wake-precise-hermes/ ${RHASSPY_DIR}/rhasspy-wake-precise-hermes/
 COPY rhasspy-profile/ ${RHASSPY_DIR}/rhasspy-profile/
 COPY rhasspy-asr/ ${RHASSPY_DIR}/rhasspy-asr/
+COPY rhasspy-asr-deepspeech ${RHASSPY_DIR}/rhasspy-asr-deepspeech/
 COPY rhasspy-asr-deepspeech-hermes/ ${RHASSPY_DIR}/rhasspy-asr-deepspeech-hermes/
 COPY rhasspy-asr-pocketsphinx/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx/
 COPY rhasspy-asr-pocketsphinx-hermes/ ${RHASSPY_DIR}/rhasspy-asr-pocketsphinx-hermes/

@@ -114,3 +114,11 @@
 	path = rhasspy-snips-nlu-hermes
 	url = https://github.com/rhasspy/rhasspy-snips-nlu-hermes
 	branch = master
+[submodule "rhasspy-asr-deepspeech"]
+	path = rhasspy-asr-deepspeech
+	url = https://github.com/rhasspy/rhasspy-asr-deepspeech
+	branch = master
+[submodule "rhasspy-snips-nlu"]
+	path = rhasspy-snips-nlu
+	url = https://github.com/rhasspy/rhasspy-snips-nlu
+	branch = master

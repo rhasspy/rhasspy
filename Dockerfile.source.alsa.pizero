@@ -43,6 +43,9 @@ RUN cd /phonetisaurus && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_V
 ADD download/opengrm-1.3.4-${TARGETARCH}${TARGETVARIANT}.tar.gz /opengrm/
 RUN cd /opengrm && mv bin/* ${RHASSPY_VENV}/tools/ && mv lib/* ${RHASSPY_VENV}/tools/
 
+# Strip binaries
+RUN for f in $(find ${RHASSPY_VENV} -type f -name '*.so*'); do strip --strip-unneeded $f; done
+
 # -----------------------------------------------------------------------------
 # Runtime Image
 # -----------------------------------------------------------------------------
