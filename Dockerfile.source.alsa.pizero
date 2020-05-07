@@ -3,6 +3,7 @@ ARG TARGETARCH
 ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
+EXPOSE 12101
 
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
