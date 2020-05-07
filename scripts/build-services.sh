@@ -24,18 +24,17 @@ bash "${this_dir}/build-dists.sh"
 
 # Create service virtual environments and build
 # TODO: Add kaldi
-cat "${src_dir}/RHASSPY_SERVICES" | \
-    while read -r service_name;
-    do
-        # rhasspy-asr-pocketsphinx-hermes -> rhasspyasr_pocketsphinx_hermes
-        python_name="$(echo "${service_name}" | sed -e 's/-//' | sed -e 's/-/_/g')"
+while read -r service_name;
+do
+    # rhasspy-asr-pocketsphinx-hermes -> rhasspyasr_pocketsphinx_hermes
+    python_name="$(echo "${service_name}" | sed -e 's/-//' | sed -e 's/-/_/g')"
 
-        echo "${service_name} (${python_name})"
-        service_dir="${src_dir}/${service_name}"
-        cd "${service_dir}"
+    echo "${service_name} (${python_name})"
+    service_dir="${src_dir}/${service_name}"
+    cd "${service_dir}"
 
-        make dist
-        cp "${service_dir}/dist"/*.deb "${dist_dir}/"
+    make dist
+    cp "${service_dir}/dist"/*.deb "${dist_dir}/"
 
-        echo ""
-    done
+    echo ""
+done <"${src_dir}/RHASSPY_SERVICES"

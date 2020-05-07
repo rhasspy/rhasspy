@@ -7,7 +7,7 @@
 # - arm64 (Raspberry Pi 3B+, 4)
 # - armv6 (Raspberry Pi 1, Zero, Zero W)
 
-if [[ ! -z "$1" ]]; then
+if [[ -n "$1" ]]; then
     cpu_arch="$1"
 else
     cpu_arch="$(uname -m)"

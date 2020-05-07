@@ -16,7 +16,7 @@ fi
 profile_name=''
 user_profiles="${config_home}/rhasspy/profiles"
 
-while [[ ! -z "$1" ]]; do
+while [[ -n "$1" ]]; do
     case "$1" in
         '--profile'|'-p')
             profile_name="$2"

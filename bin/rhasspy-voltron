@@ -57,11 +57,11 @@ extra_web_args=("$@")
 certfile="${FLAGS_certfile}"
 keyfile="${FLAGS_keyfile}"
 
-if [[ ! -z "${certfile}" ]]; then
+if [[ -n "${certfile}" ]]; then
     extra_web_args+=('--certfile'  "${certfile}")
 
     # Only check for keyfile if certfile has been given
-    if [[ ! -z "${keyfile}" ]]; then
+    if [[ -n "${keyfile}" ]]; then
         extra_web_args+=('--keyfile'  "${keyfile}")
     fi
 fi
@@ -69,11 +69,11 @@ fi
 http_host="${FLAGS_http_host}"
 http_port="${FLAGS_http_port}"
 
-if [[ ! -z "${http_host}" ]]; then
+if [[ -n "${http_host}" ]]; then
     extra_web_args+=('--host' "${http_host}")
 fi
 
-if [[ ! -z "${http_port}" ]]; then
+if [[ -n "${http_port}" ]]; then
     extra_web_args+=('--port' "${http_port}")
 fi
 
@@ -81,7 +81,7 @@ fi
 extra_supervisor_args=()
 
 local_mqtt_port="${FLAGS_local_mqtt_port}"
-if [[ ! -z "${local_mqtt_port}" ]]; then
+if [[ -n "${local_mqtt_port}" ]]; then
     extra_web_args+=('--local-mqtt-port' "${local_mqtt_port}")
     extra_supervisor_args+=('--local-mqtt-port' "${local_mqtt_port}")
 fi
