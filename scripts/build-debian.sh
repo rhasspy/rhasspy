@@ -78,9 +78,8 @@ rm -rf "${debian_dir}"
 mkdir -p "${debian_dir}/DEBIAN" "${debian_dir}/usr/bin" "${debian_dir}/usr/lib"
 
 # Generate control file
-cat "${debian}/DEBIAN/control" | \
-    version="${version}" architecture="${architecture}" envsubst \
-                         > "${debian_dir}/DEBIAN/control"
+version="${version}" architecture="${architecture}" envsubst \
+    <"${debian}/DEBIAN/control" >"${debian_dir}/DEBIAN/control"
 
 # Copy bin/lib files
 cp "${debian}/bin"/* "${debian_dir}/usr/bin/"

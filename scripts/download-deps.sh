@@ -33,7 +33,7 @@ opengrm_archs=(['x86_64']='amd64' ['armv7l']='armhf' ['aarch64']='aarch64' ['arm
 
 opengrm_arch="${opengrm_archs[${cpu_arch}]}"
 opengrm_file="${download}/opengrm-1.3.4-${target_arch}.tar.gz"
-if [ ! -z "${opengrm_arch}" ] && [ ! -s "${opengrm_file}" ]; then
+if [ -n "${opengrm_arch}" ] && [ ! -s "${opengrm_file}" ]; then
     echo "Downloading opengrm (${opengrm_file})"
     curl -sSfL -o "${opengrm_file}" "https://github.com/synesthesiam/docker-opengrm/releases/download/v1.3.4/opengrm-1.3.4-${opengrm_arch}.tar.gz"
 fi
@@ -44,7 +44,7 @@ phonetisaurus_archs=(['x86_64']='amd64' ['armv7l']='armhf' ['aarch64']='aarch64'
 
 phonetisaurus_arch="${phonetisaurus_archs[${cpu_arch}]}"
 phonetisaurus_file="${download}/phonetisaurus-2019-${target_arch}.tar.gz"
-if [ ! -z "${phonetisaurus_arch}" ] && [ ! -s "${phonetisaurus_file}" ]; then
+if [ -n "${phonetisaurus_arch}" ] && [ ! -s "${phonetisaurus_file}" ]; then
     echo "Downloading phonetisaurus (${phonetisaurus_file})"
     curl -sSfL -o "${phonetisaurus_file}" "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-${phonetisaurus_arch}.tar.gz"
 fi
@@ -55,7 +55,7 @@ kaldi_archs=(['x86_64']='amd64' ['armv7l']='armhf' ['aarch64']='aarch64')
 
 kaldi_arch="${kaldi_archs[${cpu_arch}]}"
 kaldi_file="${download}/kaldi-2020-${target_arch}.tar.gz"
-if [ ! -z "${kaldi_arch}" ] && [ ! -s "${kaldi_file}" ]; then
+if [ -n "${kaldi_arch}" ] && [ ! -s "${kaldi_file}" ]; then
     echo "Downloading kaldi (${kaldi_file})"
     curl -sSfL -o "${kaldi_file}" "https://github.com/synesthesiam/docker-kaldi/releases/download/v2020.1/kaldi-2020-${kaldi_arch}.tar.gz"
 fi
@@ -66,7 +66,7 @@ precise_archs=(['x86_64']='x86_64' ['armv7l']='armv7l' ['aarch64']='aarch64')
 
 precise_arch="${precise_archs[${cpu_arch}]}"
 precise_file="${download}/precise-engine_0.3.0_${target_arch}.tar.gz"
-if [ ! -z "${precise_arch}" ] && [ ! -s "${precise_file}" ]; then
+if [ -n "${precise_arch}" ] && [ ! -s "${precise_file}" ]; then
     echo "Downloading Mycroft Precise (${precise_file})"
     curl -sSfL -o "${precise_file}" "https://github.com/MycroftAI/mycroft-precise/releases/download/v0.3.0/precise-engine_0.3.0_${precise_arch}.tar.gz"
 fi
@@ -79,7 +79,7 @@ deepspeech_arch="${deepspeech_archs[${cpu_arch}]}"
 
 # TODO: Support other platforms besides Linux
 deepspeech_file="${download}/native_client.${target_arch}.cpu.linux.0.6.1.tar.xz"
-if [ ! -z "${deepspeech_arch}" ] && [ ! -s "${deepspeech_file}" ]; then
+if [ -n "${deepspeech_arch}" ] && [ ! -s "${deepspeech_file}" ]; then
     echo "Downloading DeepSpeech native client (${deepspeech_file})"
     curl -sSfL -o "${deepspeech_file}" "https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/native_client.${deepspeech_arch}.cpu.linux.tar.xz"
 fi
@@ -90,7 +90,7 @@ kenlm_archs=(['x86_64']='amd64' ['armv7l']='armv7' ['aarch64']='arm64')
 
 kenlm_arch="${kenlm_archs[${cpu_arch}]}"
 kenlm_file="${download}/kenlm-20200308_${target_arch}.tar.gz"
-if [ ! -z "${kenlm_arch}" ] && [ ! -s "${kenlm_file}" ]; then
+if [ -n "${kenlm_arch}" ] && [ ! -s "${kenlm_file}" ]; then
     echo "Downloading KenLM (${kenlm_file})"
     curl -sSfL -o "${kenlm_file}" "https://github.com/synesthesiam/docker-kenlm/releases/download/v2020.03.28/kenlm-20200308_${kenlm_arch}.tar.gz"
 fi

@@ -28,7 +28,7 @@ done
 # Do Docker builds
 # docker_archs=('amd64' 'arm32v7' 'arm64v8' 'arm32v6')
 docker_archs=('amd64' 'arm32v7' 'arm64v8')
-if [[ ! -z "$1" ]]; then
+if [[ -n "$1" ]]; then
     docker_archs=("$@")
 fi
 

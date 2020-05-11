@@ -1,5 +1,7 @@
 # Web UI
 
+* Websocket API handle requests for satellites
+* Multiple site IDs in /api/text-to-speech
 * Multi-select in wakewords
 * Allow hotword upload
 
@@ -8,7 +10,6 @@
 * Support language model mixing during training
 * Italian nnet2 model
 * Add Julius ASR
-* Add DeepSpeech ASR
 * Add Google STT
 * Use secondary ASR for wildcard transcriptions
 
@@ -43,3 +44,7 @@
 # Documentation
 
 * Redo screen shots
+
+# Docker
+
+* Merge arm/v6 image into main manifest

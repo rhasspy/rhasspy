@@ -19,7 +19,7 @@ rhasspy_server_version='2.5.0'
 profile=''
 
 # Parse command-line arguments
-while [[ ! -z "$1" ]];
+while [[ -n "$1" ]];
 do
     if [ "$1" == "--profile" ] || [ "$1" == "-p" ]; then
         profile="$2"
@@ -115,7 +115,7 @@ export restart_pid="$!"
 
 function finish {
     echo "Exiting"
-    if [[ ! -z "${restart_pid}" ]]; then
+    if [[ -n "${restart_pid}" ]]; then
         kill "${restart_pid}"
     fi
 

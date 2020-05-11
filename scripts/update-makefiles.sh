@@ -5,8 +5,7 @@ src_dir="$(realpath "${this_dir}/..")"
 
 # -----------------------------------------------------------------------------
 
-cat "${src_dir}/RHASSPY_SERVICES" | \
-    while read -r service_name;
-    do
-        cp "${src_dir}/Makefile.service.template" "${src_dir}/${service_name}/Makefile"
-    done
+while read -r service_name;
+do
+    cp "${src_dir}/Makefile.service.template" "${src_dir}/${service_name}/Makefile"
+done <"${src_dir}/RHASSPY_SERVICES"
