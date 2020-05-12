@@ -101,7 +101,7 @@ SNOWBOY_FILE = $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
 
 VENV_DIR = $(DESTDIR)$(prefix)
 VENV_PYTHON = $(VENV_DIR)/bin/python
-VIRTUALENV_FLAGS ?= --clear --copies
+VIRTUALENV_FLAGS ?= --clear
 
 ifeq ($(VIRTUALENV),yes)
   INSTALL_PYTHON=$(VENV_PYTHON)
