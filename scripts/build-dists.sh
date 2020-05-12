@@ -14,29 +14,9 @@ mkdir -p "${dist_dir}"
 rm -f "${dist_dir}/"rhasspy*
 
 # Make dependent libraries
-while read -r lib_name;
-do
-    echo "${lib_name}"
-    cd "${src_dir}/${lib_name}" && python3 setup.py sdist --dist-dir "${dist_dir}"
-    echo ""
-done < "${src_dir}/RHASSPY_LIBRARIES"
-
-# Special cases
-for lib_name in 'rhasspy-asr-kaldi' 'rhasspy-asr-pocketsphinx';
-do
-    cd "${src_dir}/${lib_name}" && \
-        make dist && \
-        cp "dist"/*.whl "${dist_dir}/"
-done
-
-# -----------------------------------------------------------------------------
-
-# Copy to submodule download directories
 while read -r dir_name;
 do
-    echo "${src_dir}/${dir_name}/download"
-    cd "${src_dir}/${dir_name}" && \
-        mkdir -p download && \
-        rm -f download/rhasspy* && \
-        cp -f "${dist_dir}"/rhasspy* download/
+    echo "${dir_name}"
+    cd "${src_dir}/${dir_name}" && python3 setup.py sdist --dist-dir "${dist_dir}"
+    echo ""
 done < "${src_dir}/RHASSPY_DIRS"

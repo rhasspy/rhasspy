@@ -1,0 +1,423 @@
+# Makefile.in
+#
+# Copyright © 2012, 2013 Brandon Invergo <brandon@invergo.net>
+#
+# Copying and distribution of this file, with or without modification,
+# are permitted in any medium without royalty provided the copyright
+# notice and this notice are preserved.  This file is offered as-is,
+# without any warranty.
+
+# List whatever files you want to include in your source distribution here.
+# You can include whole directories but note that *everything* under that
+# directory will be included
+DISTFILES = PKG-INFO Makefile.in configure setup.py install-sh
+
+DESTDIR =
+PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
+PACKAGE_NAME = @PACKAGE_NAME@
+PACKAGE_STRING = @PACKAGE_STRING@
+PACKAGE_TARNAME = @PACKAGE_TARNAME@
+PACKAGE_DISTNAME = ${PACKAGE_NAME}-${PACKAGE_VERSION}
+PACKAGE_URL = @PACKAGE_URL@
+PACKAGE_VERSION = @PACKAGE_VERSION@
+PATH_SEPARATOR = @PATH_SEPARATOR@
+PYTHON = @PYTHON@
+VIRTUALENV = @VIRTUALENV@
+SHELL = @SHELL@
+MKDIR_P = @MKDIR_P@
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+exec_prefix = @exec_prefix@
+includedir = @includedir@
+infodir = @infodir@
+prefix = @prefix@
+srcdir = @abs_srcdir@
+datadir = @datadir@
+datarootdir = @datarootdir@
+pkgdatadir = $(datadir)/@PACKAGE_NAME@
+pkgincludedir = $(includedir)/@PACKAGE_NAME@
+
+# -----------------------------------------------------------------------------
+# Dependencies
+# -----------------------------------------------------------------------------
+
+BUILD_DIR ?= $(srcdir)/build
+DOWNLOAD_DIR ?= $(srcdir)/download
+DO_DOWNLOAD ?= curl -sSfL -o
+
+DOCKER_ARCH = @DOCKER_ARCH@
+
+ENABLE_OPENGRM = @ENABLE_OPENGRM@
+OPENGRM_ARCH = @OPENGRM_ARCH@
+OPENGRM_FROM = @OPENGRM_FROM@
+OPENGRM_PRE_FILE = $(DOWNLOAD_DIR)/opengrm-1.3.4-$(DOCKER_ARCH).tar.gz
+OPENGRM_SRC_FILE = $(DOWNLOAD_DIR)/opengrm-ngram-1.3.4.tar.gz
+OPENFST_SRC_FILE = $(DOWNLOAD_DIR)/openfst-1.6.9.tar.gz
+
+ENABLE_PHONETISAURUS = @ENABLE_PHONETISAURUS@
+PHONETISAURUS_ARCH = @PHONETISAURUS_ARCH@
+PHONETISAURUS_FROM = @PHONETISAURUS_FROM@
+PHONETISAURUS_PRE_FILE = $(DOWNLOAD_DIR)/phonetisaurus-2019-$(DOCKER_ARCH).tar.gz
+PHONETISAURUS_SRC_FILE = $(DOWNLOAD_DIR)/phonetisaurus-2019.tar.gz
+
+ENABLE_PRECISE = @ENABLE_PRECISE@
+PRECISE_ARCH = @PRECISE_ARCH@
+PRECISE_FROM = @PRECISE_FROM@
+PRECISE_FILE = $(DOWNLOAD_DIR)/precise-engine_0.3.0_$(DOCKER_ARCH).tar.gz
+
+ENABLE_POCKETSPHINX = @ENABLE_POCKETSPHINX@
+POCKETSPHINX_FILE = $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz
+
+ENABLE_KALDI = @ENABLE_KALDI@
+KALDI_ARCH = @KALDI_ARCH@
+KALDI_FROM = @KALDI_FROM@
+KALDI_PRE_FILE = $(DOWNLOAD_DIR)/kaldi-2020-$(DOCKER_ARCH).tar.gz
+KALDI_SRC_FILE = $(DOWNLOAD_DIR)/kaldi-2020.tar.gz
+
+ENABLE_JULIUS = @ENABLE_JULIUS@
+JULIUS_ARCH = @JULIUS_ARCH@
+JULIUS_FROM = @JULIUS_FROM@
+JULIUS_PRE_FILE = $(DOWNLOAD_DIR)/julius-4.5_$(DOCKER_ARCH).tar.gz
+JULIUS_SRC_FILE = $(DOWNLOAD_DIR)/julius-2019.tar.gz
+
+ENABLE_DEEPSPEECH = @ENABLE_DEEPSPEECH@
+DEEPSPEECH_ARCH = @DEEPSPEECH_ARCH@
+DEEPSPEECH_FROM = @DEEPSPEECH_FROM@
+DEEPSPEECH_FILE = $(DOWNLOAD_DIR)/native_client.$(DOCKER_ARCH).cpu.linux.0.6.1.tar.xz
+
+ENABLE_KENLM = @ENABLE_KENLM@
+KENLM_ARCH = @KENLM_ARCH@
+KENLM_FROM = @KENLM_FROM@
+KENLM_PRE_FILE = $(DOWNLOAD_DIR)/kenlm-20200308_$(DOCKER_ARCH).tar.gz
+EIGEN_SRC_FILE = $(DOWNLOAD_DIR)/eigen-3.2.8.tar.bz2
+KENLM_SRC_FILE = $(DOWNLOAD_DIR)/kenlm-20200308.tar.gz
+
+ENABLE_SNOWBOY = @ENABLE_SNOWBOY@
+SNOWBOY_FILE = $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
+
+# -----------------------------------------------------------------------------
+
+VENV_DIR = $(DESTDIR)$(prefix)
+VENV_PYTHON = $(VENV_DIR)/bin/python
+VIRTUALENV_FLAGS ?= --clear --copies
+
+ifeq ($(VIRTUALENV),yes)
+  INSTALL_PYTHON=$(VENV_PYTHON)
+else # VIRTUALENV == yes
+  INSTALL_PYTHON=$(PYTHON)
+endif # VIRTUALENV == yes
+
+.PHONY: all install uninstall distclean clean dist check installdirs
+
+all: download-init build-init opengrm phonetisaurus precise pocketsphinx kaldi julius snowboy deepspeech kenlm
+
+.PHONY: install-init install-dependencies install-rhasspy
+install: installdirs \
+         install-init \
+         install-dependencies \
+         install-rhasspy
+
+install-init:
+ifeq ($(VIRTUALENV),yes)
+	"$(PYTHON)" -m venv $(VIRTUALENV_FLAGS) "$(VENV_DIR)" || "$(PYTHON)" -m venv "$(VENV_DIR)"
+	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) --upgrade pip
+	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) wheel || true
+	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) setuptools
+endif # VIRTUALENV == yes
+
+.PHONY: install-opengrm install-phonetisaurus install-precise install-pocketsphinx install-kaldi install-julius install-snowboy install-deepspeech install-kenlm
+install-dependencies: install-opengrm \
+                      install-phonetisaurus \
+                      install-precise \
+                      install-pocketsphinx \
+                      install-kaldi \
+                      install-julius \
+                      install-snowboy \
+                      install-deepspeech \
+                      install-kenlm
+
+install-rhasspy:
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
+	chmod +x "${srcdir}/rhasspy.sh"
+	install -D "${srcdir}/rhasspy.sh" "$(DESTDIR)$(prefix)/bin/rhasspy"
+	install -D "--target-directory=$(DESTDIR)$(prefix)/bin" "${srcdir}/bin/rhasspy-voltron" "${srcdir}/bin/voltron-run"
+	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/etc" "${srcdir}/etc/shflags"
+	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/wav" "${srcdir}/etc/wav"/*.wav
+	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy" VERSION README.md LICENSE
+	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/"
+	cp -fR "${srcdir}/rhasspy-server-hermes/web" "$(DESTDIR)$(prefix)/share/rhasspy/"
+	cp -fR "${srcdir}/rhasspy-server-hermes/templates" "$(DESTDIR)$(prefix)/share/rhasspy/"
+
+# -----------------------------------------------------------------------------
+
+.PHONY: download-init
+download-init:
+	$(MKDIR_P) "$(DOWNLOAD_DIR)"
+
+.PHONY: build-init
+build-init:
+	$(MKDIR_P) "$(BUILD_DIR)"
+
+# -----------------------------------------------------------------------------
+# Opengrm: languge modeling toolkit
+# http://www.opengrm.org/twiki/bin/view/GRM/NGramLibrary
+# -----------------------------------------------------------------------------
+
+.PHONY: opengrm
+ifeq ($(ENABLE_OPENGRM),yes)
+opengrm: $(OPENGRM_PRE_FILE)
+
+install-opengrm: $(OPENGRM_PRE_FILE)
+	"$(srcdir)/scripts/install/install-opengrm.sh" "$(OPENGRM_PRE_FILE)" "$(DESTDIR)$(prefix)"
+
+  ifeq ($(OPENGRM_FROM),prebuilt)
+$(OPENGRM_PRE_FILE):
+	$(DO_DOWNLOAD) "$(OPENGRM_PRE_FILE)" "https://github.com/synesthesiam/docker-opengrm/releases/download/v1.3.4/opengrm-1.3.4-$(OPENGRM_ARCH).tar.gz"
+  else # OPENGRM_FROM
+$(OPENGRM_PRE_FILE): $(OPENFST_SRC_FILE) $(OPENGRM_SRC_FILE)
+	"$(srcdir)/scripts/build/build-opengrm.sh" "$(OPENGRM_SRC_FILE)" "$(OPENFST_SRC_FILE)" "$(BUILD_DIR)" "$(OPENGRM_PRE_FILE)"
+  endif # OPENGRM_FROM
+else # ENABLE_OPENGRM
+opengrm:
+
+install-opengrm:
+endif # ENABLE_OPENGRM
+
+$(OPENFST_SRC_FILE):
+	$(DO_DOWNLOAD) "$(OPENFST_SRC_FILE)" 'http://www.openfst.org/twiki/pub/FST/FstDownload/openfst-1.6.9.tar.gz'
+
+$(OPENGRM_SRC_FILE):
+	$(DO_DOWNLOAD) "$(OPENGRM_SRC_FILE)" 'http://www.opengrm.org/twiki/pub/GRM/NGramDownload/opengrm-ngram-1.3.4.tar.gz'
+
+# -----------------------------------------------------------------------------
+# Phonetisaurus: grapheme to phoneme
+# https://github.com/AdolfVonKleist/Phonetisaurus
+# -----------------------------------------------------------------------------
+
+.PHONY: phonetisaurus
+ifeq ($(ENABLE_PHONETISAURUS),yes)
+phonetisaurus: $(PHONETISAURUS_PRE_FILE)
+
+install-phonetisaurus: $(PHONETISAURUS_PRE_FILE)
+	"$(srcdir)/scripts/install/install-phonetisaurus.sh" "$(PHONETISAURUS_PRE_FILE)" "$(DESTDIR)$(prefix)"
+
+  ifeq ($(PHONETISAURUS_FROM),prebuit)
+$(PHONETISAURUS_PRE_FILE):
+	$(DO_DOWNLOAD) "$(PHONETISAURUS_PRE_FILE)" "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(PHONETISAURUS_ARCH).tar.gz"
+  else # PHONETISAURUS_FROM
+$(PHONETISAURUS_PRE_FILE): $(OPENFST_SRC_FILE) $(PHONETISAURUS_SRC_FILE)
+	"$(srcdir)/scripts/build/build-phonetisaurus.sh" "$(PHONETISAURUS_SRC_FILE)" "$(OPENFST_SRC_FILE)" "$(BUILD_DIR)" "$(PHONETISAURUS_PRE_FILE)"
+  endif # PHONETISAURUS_FROM
+else # ENABLE_PHONETISAURUS
+phonetisaurus:
+
+install-phonetisaurus:
+endif # ENABLE_PHONETISAURUS
+
+$(PHONETISAURUS_SRC_FILE):
+	$(DO_DOWNLOAD) "$(PHONETISAURUS_SRC_FILE)" 'https://github.com/synesthesiam/docker-phonetisaurus/raw/master/download/phonetisaurus-2019.tar.gz'
+
+# -----------------------------------------------------------------------------
+# Mycroft Precise: wake word detection
+# https://github.com/MycroftAI/mycroft-precise
+# -----------------------------------------------------------------------------
+
+.PHONY: precise install-precise
+ifeq ($(ENABLE_PRECISE),yes)
+precise: $(PRECISE_FILE)
+
+install-precise: $(PRECISE_FILE)
+	"$(srcdir)/scripts/install/install-precise.sh" "$(PRECISE_FILE)" "$(DESTDIR)$(prefix)"
+else # ENABLE_PRECISE
+precise:
+
+install-precise:
+endif # ENABLE_PRECISE
+
+$(PRECISE_FILE):
+	$(DO_DOWNLOAD) "$(PRECISE_FILE)" "https://github.com/MycroftAI/mycroft-precise/releases/download/v0.3.0/precise-engine_0.3.0_$(PRECISE_ARCH).tar.gz"
+
+# -----------------------------------------------------------------------------
+# Snowboy: wake word detection
+# https://snowboy.kitt.ai
+# -----------------------------------------------------------------------------
+
+.PHONY: snowboy install-snowboy
+ifeq ($(ENABLE_SNOWBOY),yes)
+snowboy: $(SNOWBOY_FILE)
+
+install-snowboy: $(SNOWBOY_FILE)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(SNOWBOY_FILE)"
+else # ENABLE_SNOWBOY
+snowboy:
+
+install-snowboy:
+endif # ENABLE_SNOWBOY
+
+$(SNOWBOY_FILE):
+	$(DO_DOWNLOAD) "$(SNOWBOY_FILE)" 'https://github.com/Kitt-AI/snowboy/archive/v1.3.0.tar.gz'
+
+# -----------------------------------------------------------------------------
+# CMU Pocketsphinx: speech to text
+# https://github.com/cmusphinx/pocketsphinx
+# -----------------------------------------------------------------------------
+
+.PHONY: pocketsphinx install-pocketsphinx
+ifeq ($(ENABLE_POCKETSPHINX),yes)
+pocketsphinx: $(POCKETSPHINX_FILE)
+
+install-pocketsphinx: $(POCKETSPHINX_FILE)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(POCKETSPHINX_FILE)"
+else # ENABLE_POCKETSPHINX
+pocketsphinx:
+
+install-pocketsphinx:
+endif # ENABLE_POCKETSPHINX
+
+$(POCKETSPHINX_FILE):
+	$(DO_DOWNLOAD) "$(POCKETSPHINX_FILE)" 'https://github.com/synesthesiam/pocketsphinx-python/releases/download/v1.0/pocketsphinx-python.tar.gz'
+
+# -----------------------------------------------------------------------------
+# Kaldi: speech to text
+# https://kaldi-asr.org
+# -----------------------------------------------------------------------------
+
+.PHONY: kaldi
+ifeq ($(ENABLE_KALDI),yes)
+kaldi: $(KALDI_PRE_FILE)
+
+install-kaldi: $(KALDI_PRE_FILE)
+	"$(srcdir)/scripts/install/install-kaldi.sh" "$(KALDI_PRE_FILE)" "$(DESTDIR)$(prefix)"
+
+  ifeq ($(KALDI_FROM),prebuilt)
+$(KALDI_PRE_FILE):
+	$(DO_DOWNLOAD) "$(KALDI_PRE_FILE)" "https://github.com/synesthesiam/kaldi-docker/releases/download/v1.0/kaldi_$(KALDI_ARCH).tar.gz"
+  else # KALDI_FROM
+$(KALDI_PRE_FILE): $(KALDI_SRC_FILE)
+	"$(srcdir)/scripts/build/build-kaldi.sh" "$(KALDI_SRC_FILE)" "$(BUILD_DIR)" "$(KALDI_PRE_FILE)"
+  endif # KALDI_FROM
+else # ENABLE_KALDI
+kaldi:
+
+install-kaldi:
+endif # ENABLE_KALDI
+
+$(KALDI_SRC_FILE):
+	$(DO_DOWNLOAD) "$(KALDI_SRC_FILE)" 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2020.tar.gz'
+
+# -----------------------------------------------------------------------------
+# Julius: speech to text
+# https://github.com/julius-speech/julius
+# -----------------------------------------------------------------------------
+
+.PHONY: julius
+ifeq ($(ENABLE_JULIUS),yes)
+julius: $(JULIUS_PRE_FILE)
+
+install-julius: $(JULIUS_PRE_FILE)
+	"$(srcdir)/scripts/install/install-julius.sh" "$(JULIUS_PRE_FILE)" "$(DESTDIR)$(prefix)"
+
+  ifeq ($(JULIUS_FROM),prebuilt)
+$(JULIUS_PRE_FILE):
+	$(DO_DOWNLOAD) "$(JULIUS_PRE_FILE)" "https://github.com/synesthesiam/docker-julius/releases/download/v4.5/julius-4.5_$(JULIUS_ARCH).tar.gz"
+  else # JULIUS_FROM
+$(JULIUS_PRE_FILE): $(JULIUS_SRC_FILE)
+	"$(srcdir)/scripts/build/build-julius.sh" "$(JULIUS_SRC_FILE)" "$(BUILD_DIR)" "$(JULIUS_PRE_FILE)"
+  endif # JULIUS_FROM
+else # ENABLE_JULIUS
+julius:
+
+install-julius:
+endif # ENABLE_JULIUS
+
+$(JULIUS_SRC_FILE):
+	$(DO_DOWNLOAD) "$(JULIUS_SRC_FILE)" 'https://github.com/synesthesiam/docker-julius/raw/master/download/julius-2019.tar.gz'
+
+
+# -----------------------------------------------------------------------------
+# Mozilla DeepSpeech: speech to text
+# https://github.com/mozilla/DeepSpeech
+# -----------------------------------------------------------------------------
+
+.PHONY: deepspeech install-deepspeech
+ifeq ($(ENABLE_DEEPSPEECH),yes)
+deepspeech: $(DEEPSPEECH_FILE)
+
+install-deepspeech: $(DEEPSPEECH_FILE)
+	"$(srcdir)/scripts/install/install-deepspeech.sh" "$(DEEPSPEECH_FILE)" "$(DESTDIR)$(prefix)"
+else # ENABLE_DEEPSPEECH
+deepspeech:
+
+install-deepspeech:
+endif # ENABLE_DEEPSPEECH
+
+$(DEEPSPEECH_FILE):
+	$(DO_DOWNLOAD) "$(DEEPSPEECH_FILE)" "https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/native_client.$(DEEPSPEECH_ARCH).cpu.linux.tar.xz"
+
+# -----------------------------------------------------------------------------
+# KenLM: language modeling toolkit
+# https://kheafield.com/code/kenlm/
+# -----------------------------------------------------------------------------
+
+.PHONY: kenlm install-kenlm
+ifeq ($(ENABLE_KENLM),yes)
+kenlm: $(KENLM_PRE_FILE)
+
+  ifeq ($(KENLM_FROM),prebuilt)
+$(KENLM_PRE_FILE):
+	$(DO_DOWNLOAD) "$(KENLM_PRE_FILE)" "https://github.com/synesthesiam/docker-kenlm/releases/download/v2020.03.28/kenlm-20200308_$(KENLM_ARCH).tar.gz"
+  else # KENLM_FROM
+$(KENLM_PRE_FILE): $(EIGEN_SRC_FILE) $(KENLM_SRC_FILE)
+	"$(srcdir)/scripts/build/build-kenlm.sh" "$(KENLM_SRC_FILE)" "$(EIGEN_SRC_FILE)" "$(BUILD_DIR)" "$(KENLM_PRE_FILE)"
+  endif # KENLM_FROM
+
+install-kenlm: $(KENLM_PRE_FILE)
+	"$(srcdir)/scripts/install/install-kenlm.sh" "$(KENLM_PRE_FILE)" "$(DESTDIR)$(prefix)"
+else # ENABLE_KENLM
+kenlm:
+
+install-kenlm:
+endif # ENABLE_KENLM
+
+$(KENLM_SRC_FILE):
+	$(DO_DOWNLOAD) "$(KENLM_SRC_FILE)" 'https://github.com/synesthesiam/docker-kenlm/raw/master/download/kenlm-20200308.tar.gz'
+
+$(EIGEN_SRC_FILE):
+	$(DO_DOWNLOAD) "$(EIGEN_SRC_FILE)" 'https://github.com/synesthesiam/docker-kenlm/raw/master/download/eigen-3.2.8.tar.bz2'
+
+# -----------------------------------------------------------------------------
+
+uninstall:
+ifeq ($(VIRTUALENV),yes)
+	rm -rvf "$(VENV_DIR)"
+endif
+
+
+# Delete downloaded binaries and build artifacts
+clean:
+	"$(PYTHON)" setup.py clean
+	rm -rvf "$(BUILD_DIR)"
+
+
+# Clean up the output of configure
+distclean:
+	rm -v "$(srcdir)/config.log"
+	rm -v "$(srcdir)/config.status"
+	rm -rvf "$(srcdir)/autom4te.cache"
+	rm -v "$(srcdir)/Makefile"
+
+# You can either use the setup.py sdist command or you can roll your own here
+dist:
+	"$(PYTHON)" setup.py sdist
+
+# Use the setup.py check command
+check:
+	"$(PYTHON)" setup.py check
+	"$(DEST_DIR)$(prefix)/bin/voice2json" --version
+
+# setup.py might complain if a directory doesn't exist so just in case, make the directory
+# here
+installdirs:
+	$(MKDIR_P) "$(DESTDIR)$(prefix)"

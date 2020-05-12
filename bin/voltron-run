@@ -4,44 +4,45 @@
 this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
+if [[ -z "${RHASSPY_BASE_DIR}" ]]; then
+    export RHASSPY_BASE_DIR="${src_dir}"
+fi
+
 # -----------------------------------------------------------------------------
 # Set up environment
 # -----------------------------------------------------------------------------
 
 venv="${src_dir}/.venv"
 
-if [[ ! -d "${venv}" ]]; then
-    echo "Missing virtual environment at ${venv}"
-    echo 'Did you run "make venv"?'
-    exit 1
-fi
+if [[ -d "${venv}" ]]; then
+    echo "Using virtual environment at ${venv}"
+    source "${venv}/bin/activate"
 
-source "${venv}/bin/activate"
+    # Use bin/lib from virtual environment
+    export PATH="${venv}/bin:${PATH}"
+    export LD_LIBRARY_PATH="${venv}/lib:${LD_LIBRARY_PATH}"
+
+    maybe_kaldi_dir="${venv}/lib/kaldi"
+    if [[ -d "${maybe_kaldi_dir}" ]]; then
+        export KALDI_DIR="${maybe_kaldi_dir}"
+    fi
+fi
 
 # Add submodules to Python path
-RHASSPY_DIRS=(`cat "${src_dir}/RHASSPY_DIRS"`)
-for rhasspy_dir in "${RHASSPY_DIRS[@]}"; do
-    PYTHONPATH="${src_dir}/${rhasspy_dir}:${PYTHONPATH}"
-done
+if [[ -f "${RHASSPY_BASE_DIR}/RHASSPY_DIRS" ]]; then
+    RHASSPY_DIRS=(`cat "${RHASSPY_BASE_DIR}/RHASSPY_DIRS"`)
+    for rhasspy_dir in "${RHASSPY_DIRS[@]}"; do
+        module_dir="${RHASSPY_BASE_DIR}/${rhasspy_dir}"
+        PYTHONPATH="${module_dir}:${PYTHONPATH}"
 
-export PYTHONPATH="${src_dir}:${PYTHONPATH}"
-export PATH="${this_dir}:${PATH}"
+        bin_dir="${module_dir}/bin"
+        if [[ -d "${bin_dir}" ]]; then
+            export PATH="${bin_dir}:${PATH}"
+        fi
+    done
 
-if [[ -d "${venv}/tools" ]]; then
-    export PATH="${venv}/tools:${PATH}"
-    export LD_LIBRARY_PATH="${venv}/tools:${LD_LIBRARY_PATH}"
-
-    if [[ -d "${venv}/tools/kaldi" ]]; then
-        export KALDI_DIR="${venv}/tools/kaldi"
-    fi
-
-    if [[ -d "${venv}/tools/precise-engine" ]]; then
-        export PRECISE_ENGINE_DIR="${venv}/tools/precise-engine"
-    fi
+    export PYTHONPATH="${RHASSPY_BASE_DIR}:${PYTHONPATH}"
 fi
-
-# Site packages (for PyInstaller scripts)
-export RHASSPY_SITE_PACKAGES="$(find "${venv}" -mindepth 3 -maxdepth 3 -type d -name site-packages)"
 
 # Run user command
 "$@"

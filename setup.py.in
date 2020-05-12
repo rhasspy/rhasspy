@@ -1,0 +1,165 @@
+"""Setup script for Rhasspy"""
+import typing
+from pathlib import Path
+
+import setuptools
+
+this_dir = Path(__file__).parent
+
+# -----------------------------------------------------------------------------
+
+# Load README in as long description
+long_description: str = ""
+readme_path = this_dir / "README.md"
+if readme_path.is_file():
+    long_description = readme_path.read_text()
+
+# -----------------------------------------------------------------------------
+
+
+def to_python_name(dir_name: str) -> str:
+    """Convert kebab-case directory name to python module name."""
+    # rhasspy-asr-pocketsphinx-hermes => rhasspyasr_pocketsphinx_hermes
+    python_name_parts = dir_name.split("-")
+    return "_".join(
+        [python_name_parts[0] + python_name_parts[1]] + python_name_parts[2:]
+    )
+
+
+# Build list of packages/requirements
+packages: typing.Dict[str, Path] = {}
+
+# RHASSPY_DIRS contains a list of all directories with Rhasspy libraries/services
+with open(this_dir / "RHASSPY_DIRS", "r") as packages_file:
+    for line in packages_file:
+        line = line.strip()
+        if line:
+            module_dir_name = line
+            python_name = to_python_name(module_dir_name)
+
+            # module name -> module directory
+            packages[python_name] = this_dir / module_dir_name / python_name
+
+# -----------------------------------------------------------------------------
+
+
+def is_yes(s):
+    """True if string is yes (from configure.ac)"""
+    return s.lower().strip() == "yes"
+
+
+# Strip requirements for modules that were disabled during ./configure
+
+
+# fuzzywuzzy
+enable_fuzzywuzzy = "@ENABLE_FUZZYWUZZY@"
+if not is_yes(enable_fuzzywuzzy):
+    packages.pop("rhasspyfuzzywuzzy-hermes")
+
+# pocketsphinx
+enable_wake_pocketsphinx = is_yes("@ENABLE_WAKE_POCKETSPHINX@")
+enable_stt_pocketsphinx = is_yes("@ENABLE_STT_POCKETSPHINX@")
+
+if not enable_wake_pocketsphinx:
+    packages.pop("rhasspywake_pocketsphinx_hermes")
+
+if not enable_stt_pocketsphinx:
+    packages.pop("rhasspyasr_pocketsphinx_hermes")
+
+if (not enable_wake_pocketsphinx) and (not enable_stt_pocketsphinx):
+    packages.pop("rhasspyasr_pocketsphinx")
+
+# kaldi
+enable_kaldi = is_yes("@ENABLE_KALDI@")
+if not enable_kaldi:
+    packages.pop("rhasspyasr_kaldi")
+    packages.pop("rhasspyasr_kaldi_hermes")
+
+# deepspeech
+enable_deepspeech = is_yes("@ENABLE_DEEPSPEECH@")
+if not enable_deepspeech:
+    packages.pop("rhasspyasr_deepspeech")
+    packages.pop("rhasspyasr_deepspeech_hermes")
+
+# snowboy
+enable_snowboy = is_yes("@ENABLE_SNOWBOY@")
+if not enable_snowboy:
+    packages.pop("rhasspywake_snowboy_hermes")
+
+# porcupine
+enable_porcupine = is_yes("@ENABLE_PORCUPINE@")
+if not enable_porcupine:
+    packages.pop("rhasspywake_porcupine_hermes")
+
+# snips
+enable_snips = is_yes("@ENABLE_SNIPS@")
+if not enable_snips:
+    packages.pop("rhasspysnips_nlu")
+    packages.pop("rhasspysnips_nlu_hermes")
+
+# -----------------------------------------------------------------------------
+
+# True if Rhasspy Python modules will be used directly from source instead of
+# being installed.
+in_place = is_yes("@IN_PLACE@")
+
+# Generate requirements from remaining packages
+requirements: typing.Set[str] = set()
+
+
+def add_requirements(requirements_path: Path):
+    """Add requirements from a file."""
+    if requirements_path.is_file():
+        with open(requirements_path, "r") as requirements_file:
+            for line in requirements_file:
+                line = line.strip()
+                if line:
+                    if in_place and line.startswith("rhasspy-"):
+                        # Exclude Rhasspy modules if "in-place"
+                        continue
+
+                    requirements.add(line)
+
+
+# Look in remaining module directories for requirements
+for module_python_dir in packages.values():
+
+    # rhasspy-module-directory
+    module_dir = module_python_dir.parent
+
+    if in_place:
+        # Add development requirements for in-place install
+        add_requirements(module_dir / "requirements_dev.txt")
+    else:
+        # Add module as requirement
+        version_path = module_dir / "VERSION"
+        if version_path.is_file():
+            # Use version specified in VERSION file
+            module_version = version_path.read_text().strip()
+            requirements.add(f"{module_dir.name}=={module_version}")
+        else:
+            # Use latest version
+            requirements.add(module_dir.name)
+
+    # Add requirements from module
+    add_requirements(module_dir / "requirements.txt")
+
+# -----------------------------------------------------------------------------
+
+setuptools.setup(
+    name="@PACKAGE_NAME@",
+    version="@PACKAGE_VERSION@",
+    author="Michael Hansen",
+    author_email="@PACKAGE_BUGREPORT@",
+    url="https://github.com/rhasspy/rhasspy-voltron",
+    install_requires=list(requirements),
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "License :: OSI Approved :: MIT License",
+    ],
+    long_description=long_description,
+    long_description_content_type="text/markdown",
+    python_requires=">=3.7",
+)

@@ -4,6 +4,10 @@
 this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
+if [[ -z "${RHASSPY_BASE_DIR}" ]]; then
+    export RHASSPY_BASE_DIR="${src_dir}"
+fi
+
 config_home="${XDG_CONFIG_HOME}"
 if [[ -z "${config_home}" ]]; then
     config_home="${HOME}/.config"
@@ -13,7 +17,7 @@ fi
 # Command-line Arguments
 # -----------------------------------------------------------------------------
 
-. "${src_dir}/etc/shflags"
+. "${RHASSPY_BASE_DIR}/etc/shflags"
 
 DEFINE_string 'profile' '' 'Path to profile' 'p'
 DEFINE_string 'user-profiles' "${config_home}/rhasspy/profiles" 'Directory with user profile files'
@@ -47,7 +51,6 @@ fi
 profile_dir="${user_profiles}/${profile_name}"
 
 # Set environment variables
-export RHASSPY_BASE_DIR="${src_dir}"
 export RHASSPY_PROFILE="${profile_name}"
 export RHASSPY_PROFILE_DIR="${profile_dir}"
 
@@ -100,12 +103,17 @@ echo 'Starting up...'
     "${extra_supervisor_args[@]}" \
     --debug
 
+if [[ -z "${RHASSPY_WEB_DIR}" ]]; then
+    # Look for web interface files in rhasspy-server-hermes
+    RHASSPY_WEB_DIR="${RHASSPY_BASE_DIR}/rhasspy-server-hermes/web"
+fi
+
 # Run web server
 "${this_dir}/voltron-run" \
     python3 -m rhasspyserver_hermes \
     --profile "${profile_name}" \
     --user-profiles "${user_profiles}" \
-    --web-dir "${src_dir}/rhasspy-server-hermes/web" \
+    --web-dir "${RHASSPY_WEB_DIR}" \
     "${extra_web_args[@]}" \
     &
 

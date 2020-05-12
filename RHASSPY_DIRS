@@ -19,6 +19,7 @@ rhasspy-rasa-nlu-hermes
 rhasspy-remote-http-hermes
 rhasspy-server-hermes
 rhasspy-silence
+rhasspy-snips-nlu
 rhasspy-snips-nlu-hermes
 rhasspy-speakers-cli-hermes
 rhasspy-supervisor

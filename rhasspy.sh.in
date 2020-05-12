@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+prefix="@prefix@"
+virtualenv="@VIRTUALENV@"
+export RHASSPY_BASE_DIR="${prefix}/share/rhasspy"
+export RHASSPY_WEB_DIR="${RHASSPY_BASE_DIR}/web"
+
+if [[ "${virtualenv}" = 'yes' ]]; then
+    echo "Using virtual environment at ${prefix}"
+
+    # Use virtual environment
+    source "${prefix}/bin/activate"
+fi
+
+export LD_LIBRARY_PATH="${prefix}/lib:${LD_LIBRARY_PATH}"
+export PATH="${prefix}/bin:${PATH}"
+export KALDI_DIR="${prefix}/lib/kaldi"
+
+rhasspy-voltron "$@"
