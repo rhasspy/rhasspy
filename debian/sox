@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+# Avoid use of voice2json libs when calling external sox
+LD_LIBRARY_PATH="${OLD_LD_LIBRARY_PATH}" \
+	PATH="${OLD_PATH}" \
+    sox "$@"

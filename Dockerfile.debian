@@ -1,0 +1,134 @@
+FROM python:3.7.7-stretch as base
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+        build-essential \
+        python3 python3-dev python3-pip python3-setuptools python3-venv \
+        swig portaudio19-dev libatlas-base-dev \
+        fakeroot
+
+# -----------------------------------------------------------------------------
+
+FROM base as base-amd64
+
+FROM base as base-armv7
+
+FROM base as base-arm64
+
+# -----------------------------------------------------------------------------
+
+ARG TARGETARCH
+ARG TARGETVARIANT
+FROM base-$TARGETARCH$TARGETVARIANT
+
+ENV APP_DIR=/usr/lib/rhasspy
+ENV BUILD_DIR=/build
+
+COPY VERSION ${BUILD_DIR}/
+
+# Write shared variables to /.vars
+RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\+=//')" && \
+    export VERSION="$(cat ${BUILD_DIR}/VERSION)" && \
+    export PACKAGE_NAME=rhasspy_${VERSION}_${DEBIAN_ARCH} && \
+    export DEBIAN_DIR=${BUILD_DIR}/${PACKAGE_NAME} && \
+    echo "export PACKAGE_NAME=${PACKAGE_NAME}" > /.vars && \
+    echo "export DEBIAN_ARCH=${DEBIAN_ARCH}" >> /.vars && \
+    echo "export DEBIAN_DIR=${DEBIAN_DIR}" >> /.vars
+
+RUN . /.vars && \
+    mkdir -p ${DEBIAN_DIR}/DEBIAN
+
+COPY debian/control.in /
+
+RUN . /.vars && \
+    sed -e s"/@VERSION@/${VERSION}/" -e "s/@DEBIAN_ARCH@/${DEBIAN_ARCH}/" < /control.in > ${DEBIAN_DIR}/DEBIAN/control
+
+# Directory of prebuilt tools
+COPY download/ ${BUILD_DIR}/download/
+
+COPY m4/ ${BUILD_DIR}/m4/
+COPY configure config.sub config.guess \
+     install-sh missing aclocal.m4 \
+     Makefile.in setup.py.in rhasspy.sh.in rhasspy.spec.in \
+     ${BUILD_DIR}/
+
+RUN cd ${BUILD_DIR} && \
+    ./configure --prefix=${APP_DIR}
+
+COPY scripts/install/ ${BUILD_DIR}/scripts/install/
+
+COPY etc/shflags ${BUILD_DIR}/etc/
+COPY etc/wav/ ${BUILD_DIR}/etc/wav/
+
+COPY README.md LICENSE ${BUILD_DIR}/
+
+# Copy Rhasspy source
+COPY rhasspy/ ${BUILD_DIR}/rhasspy/
+COPY rhasspy-server-hermes/ ${BUILD_DIR}/rhasspy-server-hermes/
+COPY rhasspy-wake-snowboy-hermes/ ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/
+COPY rhasspy-wake-porcupine-hermes/ ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/
+COPY rhasspy-wake-precise-hermes/ ${BUILD_DIR}/rhasspy-wake-precise-hermes/
+COPY rhasspy-profile/ ${BUILD_DIR}/rhasspy-profile/
+COPY rhasspy-asr/ ${BUILD_DIR}/rhasspy-asr/
+COPY rhasspy-asr-deepspeech ${BUILD_DIR}/rhasspy-asr-deepspeech/
+COPY rhasspy-asr-deepspeech-hermes/ ${BUILD_DIR}/rhasspy-asr-deepspeech-hermes/
+COPY rhasspy-asr-pocketsphinx/ ${BUILD_DIR}/rhasspy-asr-pocketsphinx/
+COPY rhasspy-asr-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-asr-pocketsphinx-hermes/
+COPY rhasspy-asr-kaldi/ ${BUILD_DIR}/rhasspy-asr-kaldi/
+COPY rhasspy-asr-kaldi-hermes/ ${BUILD_DIR}/rhasspy-asr-kaldi-hermes/
+COPY rhasspy-dialogue-hermes/ ${BUILD_DIR}/rhasspy-dialogue-hermes/
+COPY rhasspy-fuzzywuzzy/ ${BUILD_DIR}/rhasspy-fuzzywuzzy/
+COPY rhasspy-fuzzywuzzy-hermes/ ${BUILD_DIR}/rhasspy-fuzzywuzzy-hermes/
+COPY rhasspy-hermes/ ${BUILD_DIR}/rhasspy-hermes/
+COPY rhasspy-homeassistant-hermes/ ${BUILD_DIR}/rhasspy-homeassistant-hermes/
+COPY rhasspy-microphone-cli-hermes/ ${BUILD_DIR}/rhasspy-microphone-cli-hermes/
+COPY rhasspy-microphone-pyaudio-hermes/ ${BUILD_DIR}/rhasspy-microphone-pyaudio-hermes/
+COPY rhasspy-nlu/ ${BUILD_DIR}/rhasspy-nlu/
+COPY rhasspy-nlu-hermes/ ${BUILD_DIR}/rhasspy-nlu-hermes/
+COPY rhasspy-rasa-nlu-hermes/ ${BUILD_DIR}/rhasspy-rasa-nlu-hermes/
+COPY rhasspy-remote-http-hermes/ ${BUILD_DIR}/rhasspy-remote-http-hermes/
+COPY rhasspy-silence/ ${BUILD_DIR}/rhasspy-silence/
+COPY rhasspy-speakers-cli-hermes/ ${BUILD_DIR}/rhasspy-speakers-cli-hermes/
+COPY rhasspy-supervisor/ ${BUILD_DIR}/rhasspy-supervisor/
+COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
+COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
+
+RUN cd ${BUILD_DIR} && \
+    make && \
+    make install
+
+RUN . ${APP_DIR}/bin/activate && \
+    pip install pyinstaller
+
+COPY __main__.py rhasspy.spec ${BUILD_DIR}/
+RUN . /.vars && \
+    mkdir -p ${DEBIAN_DIR}${APP_DIR} && \
+    cd ${BUILD_DIR} && \
+    . ${APP_DIR}/bin/activate && \
+    pyinstaller --noconfirm --distpath ${APP_DIR} rhasspy.spec
+
+RUN . /.vars && \
+    mv ${APP_DIR}/* ${DEBIAN_DIR}${APP_DIR}/
+
+# Strip binaries and shared libraries
+RUN . /.vars && \
+    (find ${DEBIAN_DIR}${APP_DIR} -type f \( -name '*.so*' -or -executable \) -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
+
+COPY debian/voice2json debian/sox /tmp/
+RUN . /.vars && \
+    mkdir -p ${DEBIAN_DIR}/usr/bin && \
+    mv /tmp/voice2json ${DEBIAN_DIR}/usr/bin/ && \
+    mv /tmp/sox ${DEBIAN_DIR}${APP_DIR}/bin/
+
+# Remove remnants of virtual environment
+RUN . /.vars && \
+    rm -rf \
+        ${DEBIAN_DIR}${APP_DIR}/bin/pip* \
+        ${DEBIAN_DIR}${APP_DIR}/bin/python* \
+        ${DEBIAN_DIR}${APP_DIR}/lib/python*
+
+RUN . /.vars && \
+    cd ${BUILD_DIR} && \
+    fakeroot dpkg --build ${PACKAGE_NAME}

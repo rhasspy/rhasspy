@@ -1434,7 +1434,7 @@ Some influential environment variables:
   CXXFLAGS    C++ compiler flags
   RHASSPY_LANGUAGE
               use recommended settings for specific language
-              (ca,nl,en,fr,de,el,hi,it,kz,zh,pl,pt,es,sv,vi)
+              (ca,nl,en,fr,de,el,hi,it,kz,zh,pt,es,sv,vi)
   VIRTUALENV_FLAGS
               flags to pass to when creating virtual environment
   RHASSPY_WAKE_SYSTEM
@@ -2433,6 +2433,8 @@ ac_config_files="$ac_config_files Makefile"
 ac_config_files="$ac_config_files setup.py"
 
 ac_config_files="$ac_config_files rhasspy.sh"
+
+ac_config_files="$ac_config_files rhasspy.spec"
 
 
 ac_aux_dir=
@@ -3858,8 +3860,8 @@ case $host_cpu in #(
         is_kaldi_enabled=yes
         kaldi_arch=arm64
 
-        is_julius_enabled=no
-        julius_from=source
+        is_julius_enabled=yes
+        julius_arch=arm64
 
         is_deepspeech_enabled=no
         deepspeech_from=NONE
@@ -4959,7 +4961,7 @@ if test "x$summary_prefix" = xNONE; then :
 fi
 
 $as_echo "
-voice2json configuration summary:
+Rhasspy configuration summary:
 
 architecture: ${host_cpu}/${docker_arch}
 prefix: ${summary_prefix}
@@ -5829,6 +5831,7 @@ do
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "setup.py") CONFIG_FILES="$CONFIG_FILES setup.py" ;;
     "rhasspy.sh") CONFIG_FILES="$CONFIG_FILES rhasspy.sh" ;;
+    "rhasspy.spec") CONFIG_FILES="$CONFIG_FILES rhasspy.spec" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

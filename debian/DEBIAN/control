@@ -1,8 +1,0 @@
-Package: rhasspy
-Version: ${version}
-Section: utils
-Priority: optional
-Depends: alsa-utils,espeak,flite,sox,libstdc++6,libgfortran4,supervisor
-Architecture: ${architecture}
-Maintainer: Michael Hansen
-Description: All in one Rhasspy server

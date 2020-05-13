@@ -1,8 +1,0 @@
-Package: rhasspysatellite
-Version: ${version}
-Section: utils
-Priority: optional
-Depends: alsa-utils,espeak,flite,sox,libstdc++6,supervisor
-Architecture: ${architecture}
-Maintainer: Michael Hansen
-Description: All in one Rhasspy server for satellites

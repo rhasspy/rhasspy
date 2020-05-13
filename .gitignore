@@ -2,6 +2,7 @@
 /Makefile
 /setup.py
 /rhasspy.sh
+/rhasspy.spec
 /config.status
 
 .venv/
