@@ -203,7 +203,7 @@ phonetisaurus: $(PHONETISAURUS_PRE_FILE)
 install-phonetisaurus: $(PHONETISAURUS_PRE_FILE)
 	"$(srcdir)/scripts/install/install-phonetisaurus.sh" "$(PHONETISAURUS_PRE_FILE)" "$(DESTDIR)$(prefix)"
 
-  ifeq ($(PHONETISAURUS_FROM),prebuit)
+  ifeq ($(PHONETISAURUS_FROM),prebuilt)
 $(PHONETISAURUS_PRE_FILE):
 	$(DO_DOWNLOAD) "$(PHONETISAURUS_PRE_FILE)" "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(PHONETISAURUS_ARCH).tar.gz"
   else # PHONETISAURUS_FROM

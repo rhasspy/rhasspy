@@ -27,6 +27,3 @@ install -D "--target-directory=${output}/bin" -- "${temp_dir}/bin"/*
 
 mkdir -p "${output}/lib"
 cp -a "${temp_dir}/lib"/*.so* "${output}/lib/"
-
-mkdir -p "${output}/lib/fst"
-cp -a "${temp_dir}/lib/fst"/*.so* "${output}/lib/fst/"
