@@ -57,7 +57,7 @@ fi
 
 # Opengrm
 opengrm_file="${download}/opengrm-1.3.4-${target_arch}.tar.gz"
-if [[ -n "$(command -v ngramcount)" ]]; then
+if [[ -z "$(command -v ngramcount)" ]]; then
     echo 'Installing Opengrm'
     "${src_dir}/scripts/install-opengrm.sh" \
         "${opengrm_file}" \
@@ -72,7 +72,7 @@ fi
 
 # Phonetisaurus
 phonetisaurus_file="${download}/phonetisaurus-2019-${target_arch}.tar.gz"
-if [[ -n "$(command -v phonetisaurus-apply)" ]]; then
+if [[ -z "$(command -v phonetisaurus-apply)" ]]; then
     echo 'Installing Phonetisaurus'
     "${src_dir}/scripts/install-phonetisaurus.sh" \
         "${phonetisaurus_file}" \
