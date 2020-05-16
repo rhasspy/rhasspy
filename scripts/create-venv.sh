@@ -40,7 +40,7 @@ pip3 ${PIP_INSTALL} wheel setuptools
 # Snowboy
 if [[ -s "${download}/snowboy-1.3.0.tar.gz" ]]; then
     # Only install if not already present in venv
-    if [[ -z "$(pip3 freeze | grep '^snowboy==1.2.0b1$')" ]]; then
+    if ! pip3 freeze | grep -q '^snowboy==1.2.0b1$'; then
         echo 'Installing snowboy'
         pip3 ${PIP_INSTALL} "${download}/snowboy-1.3.0.tar.gz"
     fi
@@ -50,7 +50,7 @@ fi
 if [[ -s "${download}/pocketsphinx-python.tar.gz" ]]; then
     echo 'Installing pocketsphinx'
     # Only install if not already present in venv
-    if [[ -z "$(pip3 freeze | grep '^pocketsphinx==0.1.15$')" ]]; then
+    if ! pip3 freeze | grep -q '^pocketsphinx==0.1.15$'; then
         pip3 ${PIP_INSTALL} "${download}/pocketsphinx-python.tar.gz"
     fi
 fi
