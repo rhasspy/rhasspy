@@ -57,7 +57,6 @@ OPENGRM_SRC_FILE = $(DOWNLOAD_DIR)/opengrm-ngram-1.3.4.tar.gz
 OPENFST_SRC_FILE = $(DOWNLOAD_DIR)/openfst-1.6.9.tar.gz
 
 ENABLE_PHONETISAURUS = @ENABLE_PHONETISAURUS@
-PHONETISAURUS_ARCH = @PHONETISAURUS_ARCH@
 PHONETISAURUS_FROM = @PHONETISAURUS_FROM@
 PHONETISAURUS_PRE_FILE = $(DOWNLOAD_DIR)/phonetisaurus-2019-$(DOCKER_ARCH).tar.gz
 PHONETISAURUS_SRC_FILE = $(DOWNLOAD_DIR)/phonetisaurus-2019.tar.gz
@@ -71,13 +70,11 @@ ENABLE_POCKETSPHINX = @ENABLE_POCKETSPHINX@
 POCKETSPHINX_FILE = $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz
 
 ENABLE_KALDI = @ENABLE_KALDI@
-KALDI_ARCH = @KALDI_ARCH@
 KALDI_FROM = @KALDI_FROM@
 KALDI_PRE_FILE = $(DOWNLOAD_DIR)/kaldi-2020-$(DOCKER_ARCH).tar.gz
 KALDI_SRC_FILE = $(DOWNLOAD_DIR)/kaldi-2020.tar.gz
 
 ENABLE_JULIUS = @ENABLE_JULIUS@
-JULIUS_ARCH = @JULIUS_ARCH@
 JULIUS_FROM = @JULIUS_FROM@
 JULIUS_PRE_FILE = $(DOWNLOAD_DIR)/julius-4.5_$(DOCKER_ARCH).tar.gz
 JULIUS_SRC_FILE = $(DOWNLOAD_DIR)/julius-2019.tar.gz
@@ -88,7 +85,6 @@ DEEPSPEECH_FROM = @DEEPSPEECH_FROM@
 DEEPSPEECH_FILE = $(DOWNLOAD_DIR)/native_client.$(DOCKER_ARCH).cpu.linux.0.6.1.tar.xz
 
 ENABLE_KENLM = @ENABLE_KENLM@
-KENLM_ARCH = @KENLM_ARCH@
 KENLM_FROM = @KENLM_FROM@
 KENLM_PRE_FILE = $(DOWNLOAD_DIR)/kenlm-20200308_$(DOCKER_ARCH).tar.gz
 EIGEN_SRC_FILE = $(DOWNLOAD_DIR)/eigen-3.2.8.tar.bz2
@@ -174,7 +170,7 @@ install-opengrm: $(OPENGRM_PRE_FILE)
 
   ifeq ($(OPENGRM_FROM),prebuilt)
 $(OPENGRM_PRE_FILE):
-	$(DO_DOWNLOAD) "$(OPENGRM_PRE_FILE)" "https://github.com/synesthesiam/docker-opengrm/releases/download/v1.3.4/opengrm-1.3.4-$(OPENGRM_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(OPENGRM_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/opengrm-1.3.4_$(DOCKER_ARCH).tar.gz"
   else # OPENGRM_FROM
 $(OPENGRM_PRE_FILE): $(OPENFST_SRC_FILE) $(OPENGRM_SRC_FILE)
 	"$(srcdir)/scripts/build/build-opengrm.sh" "$(OPENGRM_SRC_FILE)" "$(OPENFST_SRC_FILE)" "$(BUILD_DIR)" "$(OPENGRM_PRE_FILE)"
@@ -205,7 +201,7 @@ install-phonetisaurus: $(PHONETISAURUS_PRE_FILE)
 
   ifeq ($(PHONETISAURUS_FROM),prebuilt)
 $(PHONETISAURUS_PRE_FILE):
-	$(DO_DOWNLOAD) "$(PHONETISAURUS_PRE_FILE)" "https://github.com/synesthesiam/docker-phonetisaurus/releases/download/v2019.1/phonetisaurus-2019-$(PHONETISAURUS_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(PHONETISAURUS_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/phonetisaurus-2019_$(DOCKER_ARCH).tar.gz"
   else # PHONETISAURUS_FROM
 $(PHONETISAURUS_PRE_FILE): $(OPENFST_SRC_FILE) $(PHONETISAURUS_SRC_FILE)
 	"$(srcdir)/scripts/build/build-phonetisaurus.sh" "$(PHONETISAURUS_SRC_FILE)" "$(OPENFST_SRC_FILE)" "$(BUILD_DIR)" "$(PHONETISAURUS_PRE_FILE)"
@@ -217,7 +213,7 @@ install-phonetisaurus:
 endif # ENABLE_PHONETISAURUS
 
 $(PHONETISAURUS_SRC_FILE):
-	$(DO_DOWNLOAD) "$(PHONETISAURUS_SRC_FILE)" 'https://github.com/synesthesiam/docker-phonetisaurus/raw/master/download/phonetisaurus-2019.tar.gz'
+	$(DO_DOWNLOAD) "$(PHONETISAURUS_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/phonetisaurus-2019.tar.gz'
 
 # -----------------------------------------------------------------------------
 # Mycroft Precise: wake word detection
@@ -293,7 +289,7 @@ install-kaldi: $(KALDI_PRE_FILE)
 
   ifeq ($(KALDI_FROM),prebuilt)
 $(KALDI_PRE_FILE):
-	$(DO_DOWNLOAD) "$(KALDI_PRE_FILE)" "https://github.com/synesthesiam/kaldi-docker/releases/download/v1.0/kaldi_$(KALDI_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(KALDI_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/kaldi-2020_$(DOCKER_ARCH).tar.gz"
   else # KALDI_FROM
 $(KALDI_PRE_FILE): $(KALDI_SRC_FILE)
 	"$(srcdir)/scripts/build/build-kaldi.sh" "$(KALDI_SRC_FILE)" "$(BUILD_DIR)" "$(KALDI_PRE_FILE)"
@@ -321,7 +317,7 @@ install-julius: $(JULIUS_PRE_FILE)
 
   ifeq ($(JULIUS_FROM),prebuilt)
 $(JULIUS_PRE_FILE):
-	$(DO_DOWNLOAD) "$(JULIUS_PRE_FILE)" "https://github.com/synesthesiam/docker-julius/releases/download/v4.5/julius-4.5_$(JULIUS_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(JULIUS_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/julius-4.5_$(DOCKER_ARCH).tar.gz"
   else # JULIUS_FROM
 $(JULIUS_PRE_FILE): $(JULIUS_SRC_FILE)
 	"$(srcdir)/scripts/build/build-julius.sh" "$(JULIUS_SRC_FILE)" "$(BUILD_DIR)" "$(JULIUS_PRE_FILE)"
@@ -333,7 +329,7 @@ install-julius:
 endif # ENABLE_JULIUS
 
 $(JULIUS_SRC_FILE):
-	$(DO_DOWNLOAD) "$(JULIUS_SRC_FILE)" 'https://github.com/synesthesiam/docker-julius/raw/master/download/julius-2019.tar.gz'
+	$(DO_DOWNLOAD) "$(JULIUS_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/julius-2019.tar.gz'
 
 
 # -----------------------------------------------------------------------------
@@ -367,7 +363,7 @@ kenlm: $(KENLM_PRE_FILE)
 
   ifeq ($(KENLM_FROM),prebuilt)
 $(KENLM_PRE_FILE):
-	$(DO_DOWNLOAD) "$(KENLM_PRE_FILE)" "https://github.com/synesthesiam/docker-kenlm/releases/download/v2020.03.28/kenlm-20200308_$(KENLM_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(KENLM_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/kenlm-20200308_$(DOCKER_ARCH).tar.gz"
   else # KENLM_FROM
 $(KENLM_PRE_FILE): $(EIGEN_SRC_FILE) $(KENLM_SRC_FILE)
 	"$(srcdir)/scripts/build/build-kenlm.sh" "$(KENLM_SRC_FILE)" "$(EIGEN_SRC_FILE)" "$(BUILD_DIR)" "$(KENLM_PRE_FILE)"
@@ -382,10 +378,10 @@ install-kenlm:
 endif # ENABLE_KENLM
 
 $(KENLM_SRC_FILE):
-	$(DO_DOWNLOAD) "$(KENLM_SRC_FILE)" 'https://github.com/synesthesiam/docker-kenlm/raw/master/download/kenlm-20200308.tar.gz'
+	$(DO_DOWNLOAD) "$(KENLM_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/kenlm-20200308.tar.gz'
 
 $(EIGEN_SRC_FILE):
-	$(DO_DOWNLOAD) "$(EIGEN_SRC_FILE)" 'https://github.com/synesthesiam/docker-kenlm/raw/master/download/eigen-3.2.8.tar.bz2'
+	$(DO_DOWNLOAD) "$(EIGEN_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/eigen-3.2.8.tar.bz2'
 
 # -----------------------------------------------------------------------------
 
