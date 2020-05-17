@@ -1,4 +1,4 @@
-FROM ubuntu:eoan as build
+FROM ubuntu:eoan as build-amd64
 
 ENV LANG C.UTF-8
 
@@ -6,6 +6,44 @@ RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
         build-essential swig libatlas-base-dev portaudio19-dev
+
+# -----------------------------------------------------------------------------
+
+FROM ubuntu:eoan as build-armv7
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends --yes \
+        python3 python3-dev python3-setuptools python3-pip python3-venv \
+        build-essential swig libatlas-base-dev portaudio19-dev
+
+# -----------------------------------------------------------------------------
+
+FROM ubuntu:eoan as build-arm64
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends --yes \
+        python3 python3-dev python3-setuptools python3-pip python3-venv \
+        build-essential swig libatlas-base-dev portaudio19-dev
+
+# -----------------------------------------------------------------------------
+
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build-armv6
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && \
+    apt-get install --no-install-recommends --yes \
+        swig libatlas-base-dev portaudio19-dev
+
+# -----------------------------------------------------------------------------
+
+ARG TARGETARCH
+ARG TARGETVARIANT
+FROM build-$TARGETARCH$TARGETVARIANT as build
 
 ENV APP_DIR=/usr/lib/rhasspy
 ENV BUILD_DIR=/build
@@ -21,7 +59,7 @@ COPY rhasspy-wake-porcupine-hermes/ ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/
 COPY rhasspy-wake-precise-hermes/ ${BUILD_DIR}/rhasspy-wake-precise-hermes/
 COPY rhasspy-profile/ ${BUILD_DIR}/rhasspy-profile/
 COPY rhasspy-asr/ ${BUILD_DIR}/rhasspy-asr/
-COPY rhasspy-asr-deepspeech ${BUILD_DIR}/rhasspy-asr-deepspeech/
+COPY rhasspy-asr-deepspeech/ ${BUILD_DIR}/rhasspy-asr-deepspeech/
 COPY rhasspy-asr-deepspeech-hermes/ ${BUILD_DIR}/rhasspy-asr-deepspeech-hermes/
 COPY rhasspy-asr-pocketsphinx/ ${BUILD_DIR}/rhasspy-asr-pocketsphinx/
 COPY rhasspy-asr-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-asr-pocketsphinx-hermes/
@@ -45,6 +83,7 @@ COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
 
 # Create Rhasspy distribution packages from source
+COPY RHASSPY_DIRS ${BUILD_DIR}/
 COPY scripts/build-dists.sh ${BUILD_DIR}/scripts/
 RUN cd ${BUILD_DIR} && \
     scripts/build-dists.sh
@@ -53,8 +92,7 @@ RUN cd ${BUILD_DIR} && \
 COPY m4/ ${BUILD_DIR}/m4/
 COPY configure config.sub config.guess \
      install-sh missing aclocal.m4 \
-     Makefile.in setup.py.in rhasspy.sh.in \
-     requirements.txt \
+     Makefile.in setup.py.in rhasspy.sh.in rhasspy.spec.in \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
@@ -64,7 +102,7 @@ COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
 COPY etc/shflags ${BUILD_DIR}/etc/
 COPY etc/wav/ ${BUILD_DIR}/etc/wav/
-
+COPY bin/rhasspy-voltron bin/voltron-run ${BUILD_DIR}/bin/
 COPY VERSION README.md LICENSE ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
@@ -98,15 +136,44 @@ FROM run as run-amd64
 RUN apt-get install --yes --no-install-recommends \
     libttspico-utils
 
+# -----------------------------------------------------------------------------
+
 FROM run as run-armv7
 
 RUN apt-get install --yes --no-install-recommends \
     libttspico-utils
 
+# -----------------------------------------------------------------------------
+
 FROM run as run-arm64
 
 RUN apt-get install --yes --no-install-recommends \
     libttspico-utils
+
+# -----------------------------------------------------------------------------
+
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
+
+ENV LANG C.UTF-8
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+        python3 \
+        libportaudio2 libatlas3-base libgfortran4 \
+        ca-certificates \
+        supervisor mosquitto \
+        perl curl sox alsa-utils jq \
+        espeak flite \
+        gstreamer1.0-tools gstreamer1.0-plugins-good
+
+# Manual PicoTTS install
+RUN curl -sSfL -o /libttspico-utils.deb \
+        'http://archive.raspberrypi.org/debian/pool/main/s/svox/libttspico-utils_1.0+git20130326-3+rpi1_armhf.deb' && \
+    curl -sSfL -p /libttspico.deb \
+        'http://archive.raspberrypi.org/debian/pool/main/s/svox/libttspico0_1.0+git20130326-3+rpi1_armhf.deb' && \
+    apt-get install --yes --no-install-recommends -f \
+        ./libttspico.deb ./libttspico-utils.deb && \
+    rm -f /libttspico-utils.deb /libttspico.deb
 
 # -----------------------------------------------------------------------------
 

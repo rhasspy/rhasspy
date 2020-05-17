@@ -21,7 +21,7 @@ FROM base as base-arm64
 
 ARG TARGETARCH
 ARG TARGETVARIANT
-FROM base-$TARGETARCH$TARGETVARIANT
+FROM base-$TARGETARCH$TARGETVARIANT as build
 
 ENV APP_DIR=/usr/lib/rhasspy
 ENV BUILD_DIR=/build
@@ -48,6 +48,13 @@ RUN . /.vars && \
 # Directory of prebuilt tools
 COPY download/ ${BUILD_DIR}/download/
 
+# Create Rhasspy distribution packages from source
+COPY RHASSPY_DIRS ${BUILD_DIR}/
+COPY scripts/build-dists.sh ${BUILD_DIR}/scripts/
+RUN cd ${BUILD_DIR} && \
+    scripts/build-dists.sh
+
+# Autoconf
 COPY m4/ ${BUILD_DIR}/m4/
 COPY configure config.sub config.guess \
      install-sh missing aclocal.m4 \
@@ -102,7 +109,7 @@ RUN cd ${BUILD_DIR} && \
 RUN . ${APP_DIR}/bin/activate && \
     pip install pyinstaller
 
-COPY __main__.py rhasspy.spec ${BUILD_DIR}/
+COPY __main__.py ${BUILD_DIR}/
 RUN . /.vars && \
     mkdir -p ${DEBIAN_DIR}${APP_DIR} && \
     cd ${BUILD_DIR} && \
@@ -116,10 +123,10 @@ RUN . /.vars && \
 RUN . /.vars && \
     (find ${DEBIAN_DIR}${APP_DIR} -type f \( -name '*.so*' -or -executable \) -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
 
-COPY debian/voice2json debian/sox /tmp/
+COPY debian/rhasspy debian/sox /tmp/
 RUN . /.vars && \
     mkdir -p ${DEBIAN_DIR}/usr/bin && \
-    mv /tmp/voice2json ${DEBIAN_DIR}/usr/bin/ && \
+    mv /tmp/rhasspy ${DEBIAN_DIR}/usr/bin/ && \
     mv /tmp/sox ${DEBIAN_DIR}${APP_DIR}/bin/
 
 # Remove remnants of virtual environment
@@ -132,3 +139,9 @@ RUN . /.vars && \
 RUN . /.vars && \
     cd ${BUILD_DIR} && \
     fakeroot dpkg --build ${PACKAGE_NAME}
+
+# -----------------------------------------------------------------------------
+
+FROM scratch
+
+COPY --from=build /build/*.deb /
