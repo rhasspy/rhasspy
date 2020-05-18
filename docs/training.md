@@ -362,8 +362,6 @@ You can use the [Words tab](usage.md#words-tab) in Rhasspy's web interface to ge
 
 ## Language Model Mixing
 
-**Not supported yet in 2.5!**
-
 Rhasspy is designed to only respond to the voice commands you specify in [sentences.ini](training.md#sentencesini), but both the Pocketsphinx and Kaldi speech to text systems are capable of transcribing open ended speech. While this will never be as good as a cloud-based system, Rhasspy [offers it as an option](speech-to-text.md#open-transcription).
 
 A middle ground between open transcription and custom voice commands is **language model mixing**. During training, Rhasspy can mix a (large) pre-built language model with the custom-generated one. You specify a **mixture weight** (0-1), which controls how much of an influence the large language model has; a mixture weight of 0 makes Rhasspy sensitive *only* to your voice commands, which is the default.

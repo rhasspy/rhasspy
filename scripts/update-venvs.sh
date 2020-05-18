@@ -32,6 +32,8 @@ fi
 
 set -e
 
+: "${PYTHON=python3}"
+
 # Create/update submodule virtual environments and build
 while read -r package_name;
 do
@@ -51,8 +53,7 @@ do
 
     if [[ ! -d .venv ]]; then
         # Create virtual environment
-        rm -rf .venv
-        python3 -m venv .venv
+        "${PYTHON}" -m venv .venv
         source .venv/bin/activate
         pip3 ${PIP_INSTALL} --upgrade pip
         pip3 ${PIP_INSTALL} --upgrade wheel setuptools
