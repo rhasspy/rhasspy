@@ -225,12 +225,6 @@
 !rhasspy-wake-pocketsphinx-hermes/MANIFEST.in
 
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/*.py
-!rhasspy-wake-porcupine-hermes/setup.py
-!rhasspy-wake-porcupine-hermes/requirements.txt
-!rhasspy-wake-porcupine-hermes/VERSION
-!rhasspy-wake-porcupine-hermes/README.md
-!rhasspy-wake-porcupine-hermes/MANIFEST.in
-
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine
 !rhasspy-wake-porcupine-hermes/setup.py
 !rhasspy-wake-porcupine-hermes/requirements.txt
