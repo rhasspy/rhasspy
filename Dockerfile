@@ -121,7 +121,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
-        python3 \
+        python3 libpython3.7 \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
         supervisor mosquitto \
@@ -158,7 +158,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
-        python3 \
+        python3 libpython3.7 \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
         supervisor mosquitto \
