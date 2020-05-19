@@ -92,3 +92,111 @@ git submodule foreach git pull origin master
 git pull origin master
 make
 ```
+
+## Windows Subsystem for Linux (WSL)
+
+If you're using Windows, you can run Rhasspy inside WSL and access its web interface from Windows. This setup is mainly
+useful when you want to work on the Rhasspy source code. If you just plan to use it as an end user you should stick
+to Docker.
+
+### Prequisites
+
+This documentation assumes that you have already set up a WSL environment. If not, you can do that by following
+[this guide](https://docs.microsoft.com/en-us/windows/wsl/install-win10). It is recommended to use Debian or a derivate
+like Ubuntu. The following steps were tested on Ubuntu 20.04 running in WSL 2.
+
+### Rhasspy
+
+Installing Rhasspy is basically the same procedure as if you were running Linux natively. Open your WSL terminal and
+follow the steps from the section [Virtual Environment](#virtual-environment).
+
+After you have started Rhasspy, open a web browser **in Windows** and open http://localhost:12101. You should see the
+Rhasspy web interface.
+
+You could use Rhasspy now, but you won't hear anything and can't interact with it with your voice because audio is not
+working. Stick to the next section to learn how to fix that.
+
+### Enabling audio
+
+WSL does not natively support audio devices. Fortunately, there is a solution for that: You can run a PulseAudio server
+on the Windows side and tell your PulseAudio clients in WSL to use the Windows PulseAudio server over the network.
+
+#### Installation on Windows
+
+You can find [pre-build binaries for Windows on this website](https://www.freedesktop.org/wiki/Software/PulseAudio/Ports/Windows/Support/).
+After downloading the zip file, extract it and make the following config changes:
+
+**etc/pulse/default.pa**:
+
+```
+From: #load-module module-native-protocol-tcp
+To:   load-module module-native-protocol-tcp auth-anonymous=1
+```
+
+Some guides use the option `auth-ip-acl` here, which is not required when you use `auth-anonymous=1` (this tells
+PulseAudio to accept every connection).
+
+**etc/pulse/daemon.pa**:
+
+```
+From: ; exit-idle-time = 20
+To:   exit-idle-time = -1
+```
+
+After that you may need to add an exception for "pulseaudio.exe" to your Firewall (at least this was required for the
+Windows Firewall). You may add a rule that allows TCP traffic for private and public networks.
+
+That’s it for the Windows side! You can launch "pulseaudio.exe" now.
+
+#### Installation on Linux
+
+Install the PulseAudio command line tools:
+
+```sh
+sudo apt install pulseaudio-utils
+```
+
+Now you need to tell PulseAudio to use the remote server, which is running on your Windows host. You can do that by
+defining an environment variable (you may want to add that line to your ".bashrc" file):
+
+```sh
+export PULSE_SERVER=tcp:$(grep nameserver /etc/resolv.conf | awk '{print $2}');
+```
+
+You can use Netcat to see if a connection to the PulseAudio server can be established:
+
+```sh
+nc -vz $(grep nameserver /etc/resolv.conf | awk '{print $2}') 4713
+```
+
+Netcat should immediately return "Connection to 4713 port [tcp/*] succeeded!".
+
+`parecord` and `paplay` should also work now.
+
+##### ALSA
+
+Rhasspy uses ALSA to play and record audio. That’s why we need to tell ALSA to use a virtual PulseAudio device. This is
+quite easy.
+
+Open "/etc/asound.conf" and insert the following content:
+
+```conf
+pcm.!default {
+    type pulse
+    # If defaults.namehint.showall is set to off in alsa.conf, then this is
+    # necessary to make this pcm show up in the list returned by
+    # snd_device_name_hint or aplay -L
+    hint.description "Default Audio Device"
+}
+ctl.!default {
+    type pulse
+}
+```
+
+"type pulse" requires some extra libraries that can be installed with the following command:
+
+```sh
+sudo apt install libasound2-plugins
+```
+
+After that `arecord` and `aplay` should work just like their PulseAudio counterparts.
