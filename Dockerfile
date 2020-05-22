@@ -166,15 +166,6 @@ RUN apt-get update && \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good
 
-# Manual PicoTTS install
-RUN curl -sSfL -o /libttspico-utils.deb \
-        'http://archive.raspberrypi.org/debian/pool/main/s/svox/libttspico-utils_1.0+git20130326-3+rpi1_armhf.deb' && \
-    curl -sSfL -p /libttspico.deb \
-        'http://archive.raspberrypi.org/debian/pool/main/s/svox/libttspico0_1.0+git20130326-3+rpi1_armhf.deb' && \
-    apt-get install --yes --no-install-recommends -f \
-        ./libttspico.deb ./libttspico-utils.deb && \
-    rm -f /libttspico-utils.deb /libttspico.deb
-
 # -----------------------------------------------------------------------------
 
 ARG TARGETARCH
