@@ -625,6 +625,8 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 IN_PLACE
+NANOTTS_FROM
+ENABLE_NANOTTS
 KENLM_FROM
 ENABLE_KENLM
 PHONETISAURUS_FROM
@@ -742,6 +744,7 @@ enable_deepspeech
 enable_speech_to_text
 enable_fuzzywuzzy
 enable_snips
+enable_nanotts
 enable_dependency_check
 '
       ac_precious_vars='build_alias
@@ -1412,6 +1415,8 @@ Optional Features:
   --disable-fuzzywuzzy    disable installation of fuzzywuzzy intent
                           recognition system
   --enable-snips          enable installation of Snips NLU intent recognition
+                          system
+  --disable-nanotts       disable installation of nanoTTS text to speech
                           system
   --disable-dependency-check
                           disable checking for external dependencies
@@ -3768,6 +3773,10 @@ phonetisaurus_from=prebuilt
 is_kenlm_enabled=UNKNOWN
 kenlm_from=prebuilt
 
+
+is_nanotts_enabled=UNKNOWN
+nanotts_from=prebuilt
+
 case $host_cpu in #(
   armv6l) :
 
@@ -3786,8 +3795,7 @@ case $host_cpu in #(
         is_kaldi_enabled=no
         kaldi_from=NONE
 
-        is_julius_enabled=no
-        julius_from=source
+        is_julius_enabled=yes
 
         is_deepspeech_enabled=no
         deepspeech_from=NONE
@@ -3796,8 +3804,9 @@ case $host_cpu in #(
 
         is_phonetisaurus_enabled=yes
 
-        is_kenlm_enabled=no
-        kenlm_from=source
+        is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
      ;; #(
   armv7l) :
 
@@ -3825,6 +3834,8 @@ case $host_cpu in #(
         is_phonetisaurus_enabled=yes
 
         is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
      ;; #(
   aarch64) :
 
@@ -3851,8 +3862,9 @@ case $host_cpu in #(
 
         is_phonetisaurus_enabled=yes
 
-        is_kenlm_enabled=no
-        kenlm_from=source
+        is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
      ;; #(
   x86_64) :
 
@@ -3880,6 +3892,8 @@ case $host_cpu in #(
         is_phonetisaurus_enabled=yes
 
         is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
      ;; #(
   *) :
      ;;
@@ -4001,6 +4015,13 @@ fi
 # Check whether --enable-snips was given.
 if test "${enable_snips+set}" = set; then :
   enableval=$enable_snips;
+fi
+
+
+
+# Check whether --enable-nanotts was given.
+if test "${enable_nanotts+set}" = set; then :
+  enableval=$enable_nanotts;
 fi
 
 
@@ -4246,13 +4267,24 @@ case $enable_kenlm in #(
      ;;
 esac
 
+case $enable_nanotts in #(
+  yes) :
+    is_nanotts_enabled=yes ;; #(
+  no) :
+    is_nanotts_enabled=no ;; #(
+  *) :
+     ;;
+esac
+
 case $enable_precompiled_binaries in #(
   no) :
 
             kaldi_from=source
+            julius_from=source
             opengrm_from=source
             phonetisaurus_from=source
             kenlm_from=source
+            nanotts_from=source
          ;; #(
   *) :
      ;;
@@ -4995,6 +5027,11 @@ $as_echo "  fuzzywuzzy: ${is_fuzzywuzzy_enabled}"
 $as_echo "  snips-nlu: ${is_snips_enabled}"
 
 $as_echo "
+text to speech:"
+
+$as_echo "  nanoTTS: ${is_nanotts_enabled} (${nanotts_from})"
+
+$as_echo "
 training:"
 
 if test "x$is_opengrm_enabled" = xyes; then :
@@ -5080,6 +5117,11 @@ PHONETISAURUS_FROM=$phonetisaurus_from
 ENABLE_KENLM=$is_kenlm_enabled
 
 KENLM_FROM=$kenlm_from
+
+
+ENABLE_NANOTTS=$is_nanotts_enabled
+
+NANOTTS_FROM=$nanotts_from
 
 
 IN_PLACE=$is_in_place

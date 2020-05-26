@@ -90,6 +90,13 @@ phonetisaurus_from=prebuilt
 is_kenlm_enabled=UNKNOWN
 kenlm_from=prebuilt
 
+dnl --------------
+dnl Text to Speech
+dnl --------------
+
+is_nanotts_enabled=UNKNOWN
+nanotts_from=prebuilt
+
 dnl Set architectures based on host CPU
 AS_CASE([$host_cpu],
     [armv6l],[
@@ -109,8 +116,7 @@ AS_CASE([$host_cpu],
         is_kaldi_enabled=no
         kaldi_from=NONE
 
-        is_julius_enabled=no
-        julius_from=source
+        is_julius_enabled=yes
 
         is_deepspeech_enabled=no
         deepspeech_from=NONE
@@ -119,8 +125,9 @@ AS_CASE([$host_cpu],
 
         is_phonetisaurus_enabled=yes
 
-        is_kenlm_enabled=no
-        kenlm_from=source
+        is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
     ],
     [armv7l],[
         dnl ARM 32-bit v7 (Pi 2/3/4)
@@ -148,6 +155,8 @@ AS_CASE([$host_cpu],
         is_phonetisaurus_enabled=yes
 
         is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
     ],
     [aarch64],[
         dnl ARM 64-bit (Pi 3/4)
@@ -174,8 +183,9 @@ AS_CASE([$host_cpu],
 
         is_phonetisaurus_enabled=yes
 
-        is_kenlm_enabled=no
-        kenlm_from=source
+        is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
     ],
     [x86_64],[
         dnl x86_64 compatible
@@ -203,6 +213,8 @@ AS_CASE([$host_cpu],
         is_phonetisaurus_enabled=yes
 
         is_kenlm_enabled=yes
+
+        is_nanotts_enabled=yes
     ])
 
 dnl ---------------------------------------------------------------------------
@@ -320,6 +332,14 @@ AC_ARG_ENABLE([fuzzywuzzy],
 AC_ARG_ENABLE([snips],
     AS_HELP_STRING([--enable-snips],
         [enable installation of Snips NLU intent recognition system]))
+
+dnl ---------------------------------------------------------------------------
+dnl Text to Speech
+dnl ---------------------------------------------------------------------------
+
+AC_ARG_ENABLE([nanotts],
+    AS_HELP_STRING([--disable-nanotts],
+        [disable installation of nanoTTS text to speech system]))
 
 dnl ---------------------------------------------------------------------------
 dnl Resolve Settings
@@ -491,13 +511,19 @@ AS_CASE([$enable_kenlm],
         [yes],[is_kenlm_enabled=yes],
         [no],[is_kenlm_enabled=no])
 
+AS_CASE([$enable_nanotts],
+        [yes],[is_nanotts_enabled=yes],
+        [no],[is_nanotts_enabled=no])
+
 dnl Determine prebuilt/source
 AS_CASE([$enable_precompiled_binaries],
         [no],[
             kaldi_from=source
+            julius_from=source
             opengrm_from=source
             phonetisaurus_from=source
             kenlm_from=source
+            nanotts_from=source
         ])
 
 dnl Pocketsphinx can be enabled for wake or speech to text
@@ -636,6 +662,11 @@ AS_ECHO(["  fuzzywuzzy: ${is_fuzzywuzzy_enabled}"])
 AS_ECHO(["  snips-nlu: ${is_snips_enabled}"])
 
 AS_ECHO(["
+text to speech:"])
+
+AS_ECHO(["  nanoTTS: ${is_nanotts_enabled} (${nanotts_from})"])
+
+AS_ECHO(["
 training:"])
 
 AS_IF([test "x$is_opengrm_enabled" = xyes],
@@ -693,6 +724,9 @@ AC_SUBST([PHONETISAURUS_FROM], [$phonetisaurus_from])
 
 AC_SUBST([ENABLE_KENLM], [$is_kenlm_enabled])
 AC_SUBST([KENLM_FROM], [$kenlm_from])
+
+AC_SUBST([ENABLE_NANOTTS], [$is_nanotts_enabled])
+AC_SUBST([NANOTTS_FROM], [$nanotts_from])
 
 AC_SUBST([IN_PLACE], [$is_in_place])
 

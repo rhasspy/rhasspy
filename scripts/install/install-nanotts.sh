@@ -9,5 +9,7 @@ fi
 nanotts="$(realpath "$1")"
 output="$(realpath "$2")"
 
-mkdir -p "${output}"
-tar -C "${output}" -xf "${nanotts}"
+mkdir -p "${output}/lib/nanotts"
+tar -C "${output}/lib/nanotts" --strip-components=1 -xf "${nanotts}"
+mv "${output}/lib/nanotts/pico/lang" "${output}/lib/nanotts/"
+ln -sf "${output}/lib/nanotts/nanotts" "${output}/bin/nanotts"

@@ -90,6 +90,11 @@ KENLM_PRE_FILE = $(DOWNLOAD_DIR)/kenlm-20200308_$(DOCKER_ARCH).tar.gz
 EIGEN_SRC_FILE = $(DOWNLOAD_DIR)/eigen-3.2.8.tar.bz2
 KENLM_SRC_FILE = $(DOWNLOAD_DIR)/kenlm-20200308.tar.gz
 
+ENABLE_NANOTTS = @ENABLE_NANOTTS@
+NANOTTS_FROM = @NANOTTS_FROM@
+NANOTTS_PRE_FILE = $(DOWNLOAD_DIR)/nanotts-20200520_$(DOCKER_ARCH).tar.gz
+NANOTTS_SRC_FILE = $(DOWNLOAD_DIR)/nanotts-20200520.tar.gz
+
 ENABLE_SNOWBOY = @ENABLE_SNOWBOY@
 SNOWBOY_FILE = $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
 
@@ -382,6 +387,34 @@ $(KENLM_SRC_FILE):
 
 $(EIGEN_SRC_FILE):
 	$(DO_DOWNLOAD) "$(EIGEN_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/eigen-3.2.8.tar.bz2'
+
+# -----------------------------------------------------------------------------
+# nanoTTS: text to speech
+# https://github.com/gmn/nanotts
+# -----------------------------------------------------------------------------
+
+.PHONY: nanotts
+ifeq ($(ENABLE_NANOTTS),yes)
+nanotts: $(NANOTTS_PRE_FILE)
+
+install-nanotts: $(NANOTTS_PRE_FILE)
+	"$(srcdir)/scripts/install/install-nanotts.sh" "$(NANOTTS_PRE_FILE)" "$(DESTDIR)$(prefix)"
+
+  ifeq ($(NANOTTS_FROM),prebuilt)
+$(NANOTTS_PRE_FILE):
+	$(DO_DOWNLOAD) "$(NANOTTS_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/nanotts-20200520_$(DOCKER_ARCH).tar.gz
+  else # NANOTTS_FROM
+$(NANOTTS_PRE_FILE): $(NANOTTS_SRC_FILE)
+	"$(srcdir)/scripts/build/build-nanotts.sh" "$(NANOTTS_SRC_FILE)" "$(BUILD_DIR)" "$(NANOTTS_PRE_FILE)"
+  endif # NANOTTS_FROM
+else # ENABLE_NANOTTS
+nanotts:
+
+install-nanotts:
+endif # ENABLE_NANOTTS
+
+$(NANOTTS_SRC_FILE):
+	$(DO_DOWNLOAD) "$(NANOTTS_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/nanotts-20200520.tar.gz
 
 # -----------------------------------------------------------------------------
 
