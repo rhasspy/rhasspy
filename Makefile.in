@@ -444,7 +444,6 @@ dist:
 # Use the setup.py check command
 check:
 	"$(PYTHON)" setup.py check
-	"$(DEST_DIR)$(prefix)/bin/voice2json" --version
 
 # setup.py might complain if a directory doesn't exist so just in case, make the directory
 # here
