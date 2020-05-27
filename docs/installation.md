@@ -6,24 +6,28 @@ Rhasspy can be installed in several different ways. The easiest way is [with Doc
 
 The easiest way to try Rhasspy is with Docker. To get started, make sure you have [Docker installed](https://docs.docker.com/install/):
 
-    curl -sSL https://get.docker.com | sh
+```bash
+$ curl -sSL https://get.docker.com | sh
+```
 
 and that your user is part of the `docker` group:
 
-    sudo usermod -a -G docker $USER
+```bash
+$ sudo usermod -a -G docker $USER
+```
 
 **Be sure to reboot** after adding yourself to the `docker` group!
 
 Next, start the [Rhasspy Docker image](https://hub.docker.com/r/rhasspy/rhasspy) in the background:
 
 ```bash
-docker run -d -p 12101:12101 \
-    --restart unless-stopped \
-    -v "$HOME/.config/rhasspy/profiles:/profiles" \
-    --device /dev/snd:/dev/snd \
-    rhasspy/rhasspy:2.5.0-pre \
-    --user-profiles /profiles \
-    --profile en
+$ docker run -d -p 12101:12101 \
+      --restart unless-stopped \
+      -v "$HOME/.config/rhasspy/profiles:/profiles" \
+      --device /dev/snd:/dev/snd \
+      rhasspy/rhasspy:2.5.0-pre \
+      --user-profiles /profiles \
+      --profile en
 ```
 
 This will start Rhasspy with the English profile (`en`) in the background (`-d`) on port 12101 (`-p`) and give Rhasspy access to your microphone (`--device`). Any changes you make to [your profile](profiles.md) will be saved to `/home/<YOUR_USER>/.config/rhasspy`.
@@ -52,7 +56,7 @@ Rhasspy runs an MQTT broker inside the Docker image on port `12183` by default. 
 To update your Rhasspy Docker image, simply run:
 
 ```bash
-docker pull rhasspy/rhasspy:2.5.0-pre
+$ docker pull rhasspy/rhasspy:2.5.0-pre
 ```
 
 ## Debian
@@ -66,31 +70,57 @@ Rhasspy will be packaged as a `.deb` file for easy non-Docker installation on De
 See the [Github documentation](https://github.com/rhasspy/rhasspy-voltron). On a Debian system, you should only need to install the necessary dependencies:
 
 ```bash
-sudo apt-get update
-sudo apt-get install \
-     python3 python3-dev python3-setuptools python3-pip python3-venv \
-     git build-essential libatlas-base-dev swig portaudio19-dev
-     supervisor mosquitto sox alsa-utils libgfortran4 \
-     espeak flite libttspico-utils \
-     perl curl patchelf ca-certificates
+$ sudo apt-get update
+$ sudo apt-get install \
+       python3 python3-dev python3-setuptools python3-pip python3-venv \
+       git build-essential libatlas-base-dev swig portaudio19-dev
+       supervisor mosquitto sox alsa-utils libgfortran4 \
+       espeak flite libttspico-utils \
+       perl curl patchelf ca-certificates
 ```
 
 and then clone/build:
 
 ```bash
-git clone --recursive https://github.com/rhasspy/rhasspy-voltron
-cd rhasspy-voltron/
-make
+$ git clone --recursive https://github.com/rhasspy/rhasspy-voltron
+$ cd rhasspy-voltron/
+$ ./configure
+$ make
+$ make install
 ```
+
+This will install Rhasspy inside a virtual environment at `$PWD/.venv` by default with **all** of the supported speech to text engines and supporting tools. When installation is finished, copy `rhasspy.sh` somewhere in your `PATH` and rename it to `rhasspy`.
+
+### Customizing Installation
+
+You can pass additional information to `configure` to avoid installing parts of Rhasspy that you won't use. For example, if you only plan to use the French language profiles, set the `RHASSPY_LANGUAGE` environment variable to `fr` when configuring your installation:
+
+```bash
+$ ./configure RHASSPY_LANGUAGE=fr
+```
+
+The installation will now be configured to install only Kaldi (if supported). If instead you want a specific speech to text system, use `RHASSPY_SPEECH_SYSTEM` like:
+
+```bash
+$ ./configure RHASSPY_SPEECH_SYSTEM=deepspeech
+```
+
+which will only enable DeepSpeech (on supported platforms). The `RHASSPY_WAKE_SYSTEM` variable controls which wake system is installed, such as `precise` or `porcupine`.
+
+To force the supporting tools to be built from source instead of downloading pre-compiled binaries, use `--disable-precompiled-binaries`. Dependencies will be compiled in a `build` directory (override with `$BUILD_DIR` during `make`), and bundled for installation in `download` (override with `$DOWNLOAD_DIR`).
+
+See `./configure --help` for additional options.
 
 ### Updating
 
 To update your Rhasspy virtual environment, you must update your code and any dependencies:
 
 ```bash
-git submodule foreach git pull origin master
-git pull origin master
-make
+$ git submodule foreach git pull origin master
+$ git pull origin master
+$ ./configure
+$ make
+$ make install
 ```
 
 ## Windows Subsystem for Linux (WSL)
@@ -153,20 +183,20 @@ That’s it for the Windows side! You can launch "pulseaudio.exe" now.
 Install the PulseAudio command line tools:
 
 ```sh
-sudo apt install pulseaudio-utils
+$ sudo apt install pulseaudio-utils
 ```
 
 Now you need to tell PulseAudio to use the remote server, which is running on your Windows host. You can do that by
 defining an environment variable (you may want to add that line to your ".bashrc" file):
 
 ```sh
-export PULSE_SERVER=tcp:$(grep nameserver /etc/resolv.conf | awk '{print $2}');
+$ export PULSE_SERVER=tcp:$(grep nameserver /etc/resolv.conf | awk '{print $2}');
 ```
 
 You can use Netcat to see if a connection to the PulseAudio server can be established:
 
 ```sh
-nc -vz $(grep nameserver /etc/resolv.conf | awk '{print $2}') 4713
+$ nc -vz $(grep nameserver /etc/resolv.conf | awk '{print $2}') 4713
 ```
 
 Netcat should immediately return "Connection to 4713 port [tcp/*] succeeded!".
@@ -196,7 +226,7 @@ ctl.!default {
 "type pulse" requires some extra libraries that can be installed with the following command:
 
 ```sh
-sudo apt install libasound2-plugins
+$ sudo apt install libasound2-plugins
 ```
 
 After that `arecord` and `aplay` should work just like their PulseAudio counterparts.
