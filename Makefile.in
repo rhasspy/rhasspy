@@ -137,7 +137,8 @@ install-dependencies: install-opengrm \
                       install-julius \
                       install-snowboy \
                       install-deepspeech \
-                      install-kenlm
+                      install-kenlm \
+                      install-nanotts
 
 install-rhasspy:
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
@@ -147,9 +148,9 @@ install-rhasspy:
 	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/etc" "${srcdir}/etc/shflags"
 	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/wav" "${srcdir}/etc/wav"/*.wav
 	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy" VERSION README.md LICENSE
-	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/web" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/templates" "$(DESTDIR)$(prefix)/share/rhasspy/"
+	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/"
 
 # -----------------------------------------------------------------------------
 
@@ -402,7 +403,7 @@ install-nanotts: $(NANOTTS_PRE_FILE)
 
   ifeq ($(NANOTTS_FROM),prebuilt)
 $(NANOTTS_PRE_FILE):
-	$(DO_DOWNLOAD) "$(NANOTTS_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/nanotts-20200520_$(DOCKER_ARCH).tar.gz
+	$(DO_DOWNLOAD) "$(NANOTTS_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/nanotts-20200520_$(DOCKER_ARCH).tar.gz"
   else # NANOTTS_FROM
 $(NANOTTS_PRE_FILE): $(NANOTTS_SRC_FILE)
 	"$(srcdir)/scripts/build/build-nanotts.sh" "$(NANOTTS_SRC_FILE)" "$(BUILD_DIR)" "$(NANOTTS_PRE_FILE)"
@@ -414,7 +415,7 @@ install-nanotts:
 endif # ENABLE_NANOTTS
 
 $(NANOTTS_SRC_FILE):
-	$(DO_DOWNLOAD) "$(NANOTTS_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/nanotts-20200520.tar.gz
+	$(DO_DOWNLOAD) "$(NANOTTS_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/nanotts-20200520.tar.gz'
 
 # -----------------------------------------------------------------------------
 

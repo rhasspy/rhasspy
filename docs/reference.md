@@ -459,6 +459,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
 * <a id="api_listen_for_wake"><tt>/api/listen-for-wake</tt></a>
     * POST "on" to have Rhasspy listen for a wake word
     * POST "off" to disable wake word
+    * `?siteId=site1,site2,...` to apply to specific site(s)
 * <a id="api_lookup"><tt>/api/lookup</tt></a>
     * POST word as plain text to look up or guess pronunciation
     * `?n=<number>` - return at most `n` guessed pronunciations
@@ -476,6 +477,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
 * <a id="api_play_wav"><tt>/api/play-wav</tt></a>
     * POST to play WAV data
     * Make sure to set `Content-Type` to `audio/wav`
+    * `?siteId=site1,site2,...` to apply to specific site(s)
 * <a id="api_profile"><tt>/api/profile</tt></a>
     * GET the JSON for your profile, or POST to overwrite it
     * `?layers=profile` to only see settings different from `defaults.json`
@@ -520,6 +522,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * `?voice=<voice>` - override default TTS voice
     * `?language=<language>` - override default TTS language or locale
     * `?repeat=true` - have Rhasspy repeat the last sentence it spoke
+    * `?siteId=site1,site2,...` to apply to specific site(s)
 * <a id="api_train"><tt>/api/train</tt></a>
     * POST to re-train your profile
 * <a id="api_tts_voices"><tt>/api/tts-voices</tt></a>

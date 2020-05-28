@@ -1,18 +1,27 @@
 #!/usr/bin/env bash
-prefix="@prefix@"
-virtualenv="@VIRTUALENV@"
-export RHASSPY_BASE_DIR="${prefix}/share/rhasspy"
-export RHASSPY_WEB_DIR="${RHASSPY_BASE_DIR}/web"
+in_place="@IN_PLACE@"
 
-if [[ "${virtualenv}" = 'yes' ]]; then
-    echo "Using virtual environment at ${prefix}"
+if [[ "${in_place}" == 'yes' ]]; then
+    # Run directly from source code
+    this_dir="$( cd "$( dirname "$0" )" && pwd )"
+    "${this_dir}/bin/rhasspy-voltron" "$@"
+else
+    # Use virtual environment as a prefix
+    prefix="@prefix@"
+    virtualenv="@VIRTUALENV@"
+    export RHASSPY_BASE_DIR="${prefix}/share/rhasspy"
+    export RHASSPY_WEB_DIR="${RHASSPY_BASE_DIR}/web"
 
-    # Use virtual environment
-    source "${prefix}/bin/activate"
+    if [[ "${virtualenv}" = 'yes' ]]; then
+        echo "Using virtual environment at ${prefix}"
+
+        # Use virtual environment
+        source "${prefix}/bin/activate"
+    fi
+
+    export LD_LIBRARY_PATH="${prefix}/lib:${LD_LIBRARY_PATH}"
+    export PATH="${prefix}/bin:${PATH}"
+    export KALDI_DIR="${prefix}/lib/kaldi"
+
+    rhasspy-voltron "$@"
 fi
-
-export LD_LIBRARY_PATH="${prefix}/lib:${LD_LIBRARY_PATH}"
-export PATH="${prefix}/bin:${PATH}"
-export KALDI_DIR="${prefix}/lib/kaldi"
-
-rhasspy-voltron "$@"
