@@ -26,6 +26,8 @@ DEFINE_string 'keyfile' '' 'SSL private key file (optional)'
 DEFINE_string 'http-host' '' 'Change host for web server (default: localhost)'
 DEFINE_string 'http-port' '' 'Change port for web server (default: 12101)'
 DEFINE_string 'local-mqtt-port' '' 'Change internal MQTT port (default: 12183)'
+DEFINE_boolean 'web-server' true 'Run Rhasspy web server'
+DEFINE_boolean 'generate-conf' true 'Generate supervisord conf from profile'
 
 FLAGS "$@" || exit $?
 eval set -- "${FLAGS_ARGV}"
@@ -46,6 +48,14 @@ user_profiles="${FLAGS_user_profiles}"
 if [[ -z "${user_profiles}" ]]; then
     echo "--user-profiles is required"
     exit 1
+fi
+
+if [[ "${FLAGS_web_server}" -eq "${FLAGS_FALSE}" ]]; then
+    no_web_server='true'
+fi
+
+if [[ "${FLAGS_generate_conf}" -eq "${FLAGS_FALSE}" ]]; then
+    no_generate_conf='true'
 fi
 
 profile_dir="${user_profiles}/${profile_name}"
@@ -95,36 +105,41 @@ fi
 conf_path="${profile_dir}/supervisord.conf"
 echo 'Starting up...'
 
-"${this_dir}/voltron-run" \
-    python3 -m rhasspysupervisor \
-    --profile "${profile_name}" \
-    --user-profiles "${user_profiles}" \
-    --docker-compose '' \
-    "${extra_supervisor_args[@]}" \
-    --debug
+if [[ -z "${no_generate_conf}" ]]; then
+    # Re-generate supervisord conf from profile
+    "${this_dir}/voltron-run" \
+        python3 -m rhasspysupervisor \
+        --profile "${profile_name}" \
+        --user-profiles "${user_profiles}" \
+        --docker-compose '' \
+        "${extra_supervisor_args[@]}" \
+        --debug
+fi
 
 if [[ -z "${RHASSPY_WEB_DIR}" ]]; then
     # Look for web interface files in rhasspy-server-hermes
     RHASSPY_WEB_DIR="${RHASSPY_BASE_DIR}/rhasspy-server-hermes/web"
 fi
 
-# Run web server
-"${this_dir}/voltron-run" \
-    python3 -m rhasspyserver_hermes \
-    --profile "${profile_name}" \
-    --user-profiles "${user_profiles}" \
-    --web-dir "${RHASSPY_WEB_DIR}" \
-    "${extra_web_args[@]}" \
-    &
+if [[ -z "${no_web_server}" ]]; then
+    # Run web server
+    "${this_dir}/voltron-run" \
+        python3 -m rhasspyserver_hermes \
+        --profile "${profile_name}" \
+        --user-profiles "${user_profiles}" \
+        --web-dir "${RHASSPY_WEB_DIR}" \
+        "${extra_web_args[@]}" \
+        &
 
-# Kill the process above when this terminal exits
-web_pid=$!
+    # Kill the process above when this terminal exits
+    web_pid=$!
 
-function finish {
-    kill "${web_pid}"
-}
+    function finish {
+        kill "${web_pid}"
+    }
 
-# trap finish EXIT
+    trap finish EXIT
+fi
 
 # Run assistant
 log_path="${profile_dir}/supervisord.log"
