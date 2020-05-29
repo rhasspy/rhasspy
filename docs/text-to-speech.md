@@ -9,7 +9,9 @@ The following table summarizes language support for the various text to speech s
 | [espeak](text-to-speech.md#espeak)          | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 | [flite](text-to-speech.md#flite)            | &#x2713; |          |          |          |          |          |          |          | &#x2713; |          |          |          |          |
 | [picotts](text-to-speech.md#picotts)        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |
+| [nanotts](text-to-speech.md#nanotts)        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |
 | [marytts](text-to-speech.md#marytts)        | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |          |          |          |          |          |
+| [opentts](text-to-speech.md#opentts)        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 | [wavenet](text-to-speech.md#google-wavenet) | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |
 
 ---
@@ -84,9 +86,28 @@ Add to your [profile](profiles.md):
 
 Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
 
+## NanoTTS
+
+Uses an [improved fork](https://github.com/gmn/nanotts) of SVOX's picoTTS for text to speech.
+
+Included languages are `en-US`, `en-GB`, `de-DE`, `es-ES`, `fr-FR` and `it-IT`.
+
+Add to your [profile](profiles.md):
+
+```json
+"text_to_speech": {
+  "system": "nanotts",
+  "nanotts": {
+    "language": "en-GB"
+  }
+}
+```
+
+Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
+
 ## MaryTTS
 
-Uses a remote [MaryTTS](http://mary.dfki.de/) web server. Supported languages include German, British and American English, French, Italian, Luxembourgish, Russian, Swedish, Telugu, and Turkish. A [MaryTTS Docker image](https://hub.docker.com/r/synesthesiam/marytts) is available, though only the default voice is included.
+Uses a remote [MaryTTS](http://mary.dfki.de/) web server. Supported languages include German, British and American English, French, Italian, Luxembourgish, Russian, Swedish, Telugu, and Turkish. A [MaryTTS Docker image](https://hub.docker.com/r/synesthesiam/marytts) is available with many voices included.
 
 Add to your [profile](profiles.md):
 
@@ -104,45 +125,24 @@ Add to your [profile](profiles.md):
 To run the Docker image, simply execute:
 
 ```bash
-docker run -it -p 59125:59125 synesthesiam/marytts:5.2
+$ docker run -it -p 59125:59125 synesthesiam/marytts:5.2
 ```
 
 and visit [http://localhost:59125](http://localhost:59125) after it starts. 
 
 If you're using [docker compose](https://docs.docker.com/compose/), add the following to your docker-compose.yml file:
 
-    marytts:
-      image: synesthesiam/marytts:5.2
-      restart: unless-stopped
-      ports:
-        - "59125:59125"
-
-When using docker-compose, set `marytts.url` in your profile to be `http://marytts:59125`.  This will allow rhasspy, from within 
-its docker container, to resolve and connect to marytts (its sibling container).
-
-
-### Adding Voices
-
-For more English voices, run the following commands in a Bash shell:
-
-```bash
-mkdir -p marytts-5.2/download
-for voice in dfki-prudence dfki-poppy dfki-obadiah dfki-spike cmu-bdl cmu-rms;
-  do wget -O marytts-5.2/download/voice-${voice}-hsmm-5.2.zip https://github.com/marytts/voice-${voice}-hsmm/releases/download/v5.2/voice-${voice}-hsmm-5.2.zip;
-  unzip -d marytts-5.2 marytts-5.2/download/voice-${voice}-hsmm-5.2.zip;
-done
+```yaml
+services:
+  marytts:
+    image: synesthesiam/marytts:5.2
+    ports:
+      - 59125:59125
 ```
 
-Now run the Docker image again with the following command (in the same directory):
+When using docker-compose, set `marytts.url` in your profile to be `http://marytts:59125`.  This will allow Rhasspy to resolve the address of its sibling container.
 
-```bash
-voice=dfki-prudence
-docker run -it -p 59125:59125 -v "$(pwd)/marytts-5.2/lib/voice-${voice}-hsmm-5.2.jar:/marytts/lib/voice-${voice}-hsmm-5.2.jar" synesthesiam/marytts:5.2
-```
-
-Change the first line to select the voice you'd like to add. It's not recommended to link in all of the voices at once, since MaryTTS seems to load them all into memory and overwhelm the RAM of a Raspberry Pi.
-
-See `rhasspy.tts.MaryTTSSentenceSpeaker** for details.
+To save memory when running on a Raspberry Pi, considering [restricting the loaded voices](https://github.com/synesthesiam/docker-marytts#restricting-voices) by passing one or more `--voice <VOICE>` command-line arguments to the Docker container.
 
 ### Audio Effects
 
@@ -175,6 +175,66 @@ To use these effects within Rhasspy, set `text_to_speech.marytts.effects` within
 
 You can determine the names of the parameters by examining the web interface [http://localhost:59125](http://localhost:59125)
 using your browser's Developer Tools.
+
+Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
+
+## OpenTTS
+
+Uses a remote [OpenTTS](https://github.com/synesthesiam/opentts) web server. Supports many different text to speech systems, including [Mozilla TTS](https://hub.docker.com/r/synesthesiam/mozilla-tts).
+
+Add to your [profile](profiles.md):
+
+```json
+"text_to_speech": {
+  "system": "opentts",
+  "opentts": {
+    "url": "http://localhost:5500",
+    "voice": "nanaotts:en-GB"
+  }
+}
+```
+
+Voices in OpenTTS have the format `<system>:<voice>` where `<system>` is the text to speech system (e.g., `espeak`, `flite`, `festival`, `nanotts`, `marytts`, `mozillatts`) and `<voice>` is the id of the voice within that system. Visit the test page at [http://localhost:5500](http://localhost:5500) to see and test available voices.
+
+To run the Docker image, simply execute:
+
+```bash
+$ docker run -it -p 5500:5500 synesthesiam/opentts
+```
+
+and visit [http://localhost:5500](http://localhost:5500) after it starts. 
+
+If you're using [docker compose](https://docs.docker.com/compose/), add the following to your docker-compose.yml file:
+
+```yaml
+services:
+  opentts:
+    image: synesthesiam/opentts
+    ports:
+      - 5500:5500
+```
+        
+To run the full suite of text to speech systems offered by OpenTTS, add:
+
+```yaml
+services:
+  opentts:
+    image: synesthesiam/opentts
+    ports:
+      - 5500:5500
+    command: --marytts-url http://marytts:59125 --mozillatts-url http://mozillatts:5002
+    tty: true
+  marytts:
+    image: synesthesiam/marytts:5.2
+    tty: true
+  mozillatts:
+    image: synesthesiam/mozilla-tts
+    tty: true
+```
+
+**NOTE:** Mozilla TTS will not run on a Raspberry Pi.
+
+When using docker-compose, set `opentts.url` in your profile to be `http://opentts:5500`.  This will allow Rhasspy to resolve the address of its sibling container.
 
 Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
 
@@ -284,5 +344,3 @@ Add to your [profile](profiles.md):
   "system": "dummy"
 }
 ```
-
-See `rhasspy.tts.DummySentenceSpeaker` for details.
