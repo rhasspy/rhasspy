@@ -22,8 +22,10 @@ Next, start the [Rhasspy Docker image](https://hub.docker.com/r/rhasspy/rhasspy)
 
 ```bash
 $ docker run -d -p 12101:12101 \
+      --name rhasspy \
       --restart unless-stopped \
       -v "$HOME/.config/rhasspy/profiles:/profiles" \
+      -v "/etc/localtime:/etc/localtime:ro" \
       --device /dev/snd:/dev/snd \
       rhasspy/rhasspy:2.5.0-pre \
       --user-profiles /profiles \
@@ -39,9 +41,11 @@ If you're using [docker compose](https://docs.docker.com/compose/), add the foll
 ```yaml
 rhasspy:
     image: "rhasspy/rhasspy:2.5.0-pre"
+    container_name: rhasspy
     restart: unless-stopped
     volumes:
         - "$HOME/.config/rhasspy/profiles:/profiles"
+        - "/etc/localtime:/etc/localtime:ro"
     ports:
         - "12101:12101"
     devices:
