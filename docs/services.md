@@ -135,6 +135,8 @@ Listens to WAV chunks and transcribes voice commands. See [Speech to Text](speec
     * Implements [kaldi](speech-to-text.md#kaldi)
 * [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes)
     * Implements [pocketsphinx](speech-to-text.md#pocketsphinx)
+* [rhasspy-asr-deepspeech-hermes](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes)
+    * Implements [deepspeech](speech-to-text.md#deepspeech)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_speech_to_text) for speech recognition
     * Implements [remote](speech-to-text.md#remote-http-server) (`--asr-url`) and [command](speech-to-text.md#command) (`--asr-command`)
@@ -240,7 +242,7 @@ Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) f
 
 * [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
     * Calls external program for text to speech
-    * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), [marytts](text-to-speech.md#marytts), and [command](text-to-speech.md#command)
+    * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), [nanoTTS](text-to-speech.md#nanotts), [marytts](text-to-speech.md#marytts), [opentts](text-to-speech.md#opentts), and [command](text-to-speech.md#command)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_text_to_speech) for text to speech
     * Implements [remote](text-to-speech.md#remote) (`--tts-url`) and [command](text-to-speech.md#command) (`--tts-command`)

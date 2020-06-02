@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<svg viewBox="0 0 640 120" xmlns="http://www.w3.org/2000/svg" xmlns:inkspace="http://www.inkscape.org/namespaces/inkscape" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs id="defs_block">
+    <filter height="1.504" id="filter_blur" inkspace:collect="always" width="1.1575" x="-0.07875" y="-0.252">
+      <feGaussianBlur id="feGaussianBlur3780" inkspace:collect="always" stdDeviation="4.2" />
+    </filter>
+  </defs>
+  <title>blockdiag</title>
+  <desc>blockdiag {
+    "Web Interface" [shape="cloud"]
+    "Dialogue Manager" [shape="roundedbox", color="yellow"]
+    "Sub-System Actors" [shape="roundedbox", stacked]
+    
+    "Web Interface" &lt;-&gt; "Dialogue Manager" &lt;-&gt; "Sub-System Actors";
+}
+</desc>
+  <path d="M 87 62 A20,8 0 0 1 107 54 A20,6 0 0 1 157 54 A20,8 0 0 1 177 62 A20,8 0 0 1 177 78 A20,20 0 0 1 147 78 A20,20 0 0 1 117 78 A20,20 0 0 1 87 78 A20,8 0 0 1 87 62" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <path d="M 267 46 L 379 46 A8,8 0 0 1 387 54 L 387 78 A8,8 0 0 1 379 86 L 267 86 A8,8 0 0 1 259 78 L 259 54 A8,8 0 0 1 267 46" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <path d="M 467 54 L 579 54 A8,8 0 0 1 587 62 L 587 86 A8,8 0 0 1 579 94 L 467 94 A8,8 0 0 1 459 86 L 459 62 A8,8 0 0 1 467 54" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <path d="M 463 50 L 575 50 A8,8 0 0 1 583 58 L 583 82 A8,8 0 0 1 575 90 L 463 90 A8,8 0 0 1 455 82 L 455 58 A8,8 0 0 1 463 50" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <path d="M 459 46 L 571 46 A8,8 0 0 1 579 54 L 579 78 A8,8 0 0 1 571 86 L 459 86 A8,8 0 0 1 451 78 L 451 54 A8,8 0 0 1 459 46" fill="rgb(0,0,0)" stroke="rgb(0,0,0)" style="filter:url(#filter_blur);opacity:0.7;fill-opacity:1" />
+  <path d="M 84 56 A20,8 0 0 1 104 48 A20,6 0 0 1 154 48 A20,8 0 0 1 174 56 A20,8 0 0 1 174 72 A20,20 0 0 1 144 72 A20,20 0 0 1 114 72 A20,20 0 0 1 84 72 A20,8 0 0 1 84 56" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="71" x="129.5" y="65">Web Interface</text>
+  <path d="M 264 40 L 376 40 A8,8 0 0 1 384 48 L 384 72 A8,8 0 0 1 376 80 L 264 80 A8,8 0 0 1 256 72 L 256 48 A8,8 0 0 1 264 40" fill="rgb(255,255,0)" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="94" x="320.0" y="66">Dialogue Manager</text>
+  <path d="M 464 48 L 576 48 A8,8 0 0 1 584 56 L 584 80 A8,8 0 0 1 576 88 L 464 88 A8,8 0 0 1 456 80 L 456 56 A8,8 0 0 1 464 48" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" />
+  <path d="M 460 44 L 572 44 A8,8 0 0 1 580 52 L 580 76 A8,8 0 0 1 572 84 L 460 84 A8,8 0 0 1 452 76 L 452 52 A8,8 0 0 1 460 44" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" />
+  <path d="M 456 40 L 568 40 A8,8 0 0 1 576 48 L 576 72 A8,8 0 0 1 568 80 L 456 80 A8,8 0 0 1 448 72 L 448 48 A8,8 0 0 1 456 40" fill="rgb(255,255,255)" stroke="rgb(0,0,0)" />
+  <text fill="rgb(0,0,0)" font-family="sans-serif" font-size="11" font-style="normal" font-weight="normal" text-anchor="middle" textLength="96" x="512.0" y="67">Sub-System Actors</text>
+  <path d="M 200 60 L 248 60" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="193,60 200,56 200,64 193,60" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="255,60 248,56 248,64 255,60" stroke="rgb(0,0,0)" />
+  <path d="M 392 60 L 440 60" fill="none" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="385,60 392,56 392,64 385,60" stroke="rgb(0,0,0)" />
+  <polygon fill="rgb(0,0,0)" points="447,60 440,56 440,64 447,60" stroke="rgb(0,0,0)" />
+</svg>

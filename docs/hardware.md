@@ -24,15 +24,17 @@ The table below summarizes architecture compatibility with Rhasspy's components:
 |                        | [rasaNLU](intent-recognition.md#rasanlu)       | &#x2713; | &#x2713; | &#x2713; |          |
 | **Text to Speech**     | [espeak](text-to-speech.md#espeak)             | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [flite](text-to-speech.md#flite)               | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
-|                        | [picotts](text-to-speech.md#picotts)           | &#x2713; | &#x2713; |          | &#x2713; |
+|                        | [picotts](text-to-speech.md#picotts)           | &#x2713; | &#x2713; |          |          |
+|                        | [picotts](text-to-speech.md#nanotts)           | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [marytts](text-to-speech.md#marytts)           | &#x2713; | &#x2713; | &#x2713; |          |
+|                        | [opentts](text-to-speech.md#opentts)           | &#x2713; | &#x2713; | &#x2713; |          |
 |                        | [wavenet](text-to-speech.md#google-wavenet)    | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 
 ## Raspberry Pi
 
-To run Rhasspy on a Raspberry Pi, you'll need at least a 4 GB SD card and a good power supply. I highly recommend the [CanaKit Starter Kit](https://www.amazon.com/CanaKit-Raspberry-Starter-Premium-Black/dp/B07BCC8PK7), which includes a 32 GB SD card, a 2.5 A power supply, and a case.
+To run Rhasspy on a Raspberry Pi, you'll need at least a 4 GB SD card and a good power supply. I highly recommend the [CanaKit Starter Kit](https://www.amazon.com/CanaKit-Raspberry-4GB-Starter-Kit/dp/B07V5JTMV9), which includes a 32 GB SD card, a good power supply, and a case.
 
-Some components of Rhasspy will not work on the Raspberry Pi 3 B+ model with a 64-bit operating system (`aarch64`). As of the time of this writing, these are:
+Some components of Rhasspy will not work on the Raspberry Pi 3/4 with a 64-bit operating system (`aarch64`). As of the time of this writing, these are:
 
 * [DeepSpeech](speech-to-text.md#deepspeech) (speech to text)
 * [snowboy](wake-word.md#snowboy) (wake word)

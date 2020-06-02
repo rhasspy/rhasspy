@@ -25,7 +25,7 @@ $ docker run -d -p 12101:12101 \
       --restart unless-stopped \
       -v "$HOME/.config/rhasspy/profiles:/profiles" \
       --device /dev/snd:/dev/snd \
-      rhasspy/rhasspy:2.5.0-pre \
+      rhasspy/rhasspy \
       --user-profiles /profiles \
       --profile en
 ```
@@ -38,7 +38,7 @@ If you're using [docker compose](https://docs.docker.com/compose/), add the foll
 
 ```yaml
 rhasspy:
-    image: "rhasspy/rhasspy:2.5.0-pre"
+    image: "rhasspy/rhasspy"
     restart: unless-stopped
     volumes:
         - "$HOME/.config/rhasspy/profiles:/profiles"
@@ -51,12 +51,42 @@ rhasspy:
 
 Rhasspy runs an MQTT broker inside the Docker image on port `12183` by default. Connecting to this broker will let you interact with Rhasspy over its [MQTT API](reference.md#mqtt-api).
 
+### Raspberry Pi Zero
+
+Docker on the Raspberry Pi Zero appears to be broken, and will pull the wrong Docker image by default. To fix this, you must enable "experimental" features in your Docker daemon and explicitly specify the platform.
+
+First, edit your `/etc/docker/daemon.json` file (create it if it doesn't exist using `sudo`) and add the following content:
+
+```json
+{
+  "experimental": true
+}
+```
+
+Next, restart your Docker daemon by running:
+
+```bash
+$ sudo systemctl restart docker
+```
+
+Finally, pull the correct Docker image:
+
+```bash
+$ docker pull --platform linux/arm/v6 rhasspy/rhasspy
+```
+
 ### Updating
 
 To update your Rhasspy Docker image, simply run:
 
 ```bash
-$ docker pull rhasspy/rhasspy:2.5.0-pre
+$ docker pull rhasspy/rhasspy
+```
+
+If you're using a Raspberry Pi Zero, make sure to specify the platform:
+
+```bash
+$ docker pull --platform linux/arm/v6 rhasspy/rhasspy
 ```
 
 ## Debian
