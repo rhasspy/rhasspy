@@ -181,4 +181,6 @@ RUN wget -O - "https://github.com/synesthesiam/prebuilt-apps/releases/download/v
 
 RUN cp ${APP_DIR}/bin/rhasspy /usr/bin/
 
+EXPOSE 12101
+
 ENTRYPOINT ["bash", "/usr/bin/rhasspy"]
