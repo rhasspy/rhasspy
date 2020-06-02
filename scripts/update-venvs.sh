@@ -1,10 +1,14 @@
 #!/usr/bin/env bash
 skip_dists=''
+delete_venvs=''
 
 while [[ -n "$1" ]]; do
     case "$1" in
         '--skip-dists')
             skip_dists='yes'
+            ;;
+        '--delete-venvs')
+            delete_venvs='yes'
             ;;
     esac
 
@@ -49,6 +53,11 @@ do
         echo 'Skipping (no requirements.txt)'
         echo ''
         continue
+    fi
+
+    if [[ ! -z "${delete_venvs}" ]]; then
+        echo 'Deleting virtual environment'
+        rm -rf .venv
     fi
 
     if [[ ! -d .venv ]]; then
