@@ -175,10 +175,6 @@ FROM run-$TARGETARCH$TARGETVARIANT
 ENV APP_DIR=/usr/lib/rhasspy
 COPY --from=build ${APP_DIR}/ ${APP_DIR}/
 
-# Install prebuilt nanoTTS
-RUN wget -O - "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/nanotts-20200520_${TARGETARCH}${TARGETVARIANT}.tar.gz" | \
-    tar -C /usr -xzf -
-
 RUN cp ${APP_DIR}/bin/rhasspy /usr/bin/
 
 EXPOSE 12101
