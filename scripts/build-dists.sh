@@ -27,6 +27,7 @@ done < "${src_dir}/RHASSPY_DIRS"
 while read -r dir_name;
 do
     download_dir="${src_dir}/${dir_name}/download"
+    mkdir -p "${download_dir}"
 
     # Clear old Rhasspy libraries
     rm -f "${download_dir}"/rhasspy*.tar.gz
