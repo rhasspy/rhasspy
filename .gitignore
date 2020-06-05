@@ -16,6 +16,5 @@ pyinstaller/
 site/
 web/
 download/
-debian/rhasspy*
 
 *.log
