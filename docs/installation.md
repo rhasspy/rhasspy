@@ -99,10 +99,10 @@ Pre-compiled packages are available for Debian-based distributions (Ubuntu, Rasp
 
 Download the appropriate `.deb` file for your CPU architecture:
 
-* [amd64](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_amd64.deb) - Desktops, laptops, and servers
-* [armhf](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_armhf.deb) - Raspberry Pi 2, and 3 (armv7)
-* [arm64](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_arm64.deb) - Raspberry Pi 3+, 4
-* [armel](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_armel.deb) - Raspberry Pi 0, 1
+* [amd64](https://github.com/rhasspy/rhasspy/releases/download/v2.5.0/rhasspy_2.5.0_amd64.deb) - Desktops, laptops, and servers
+* [armhf](https://github.com/rhasspy/rhasspy/releases/download/v2.5.0/rhasspy_2.5.0_armhf.deb) - Raspberry Pi 2, and 3 (armv7)
+* [arm64](https://github.com/rhasspy/rhasspy/releases/download/v2.5.0/rhasspy_2.5.0_arm64.deb) - Raspberry Pi 3+, 4
+* [armel](https://github.com/rhasspy/rhasspy/releases/download/v2.5.0/rhasspy_2.5.0_armel.deb) - Raspberry Pi 0, 1
 
 If you're unsure about your architecture, run:
 
