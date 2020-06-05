@@ -144,13 +144,13 @@ install-rhasspy:
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
 	chmod +x "${srcdir}/rhasspy.sh"
 	install -D "${srcdir}/rhasspy.sh" "$(DESTDIR)$(prefix)/bin/rhasspy"
-	install -D "--target-directory=$(DESTDIR)$(prefix)/bin" "${srcdir}/bin/rhasspy-voltron" "${srcdir}/bin/voltron-run"
+	install -D "--target-directory=$(DESTDIR)$(prefix)/bin" "${srcdir}/bin/rhasspy-voltron" "${srcdir}/bin/voltron-run" || true
 	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/etc" "${srcdir}/etc/shflags"
-	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/wav" "${srcdir}/etc/wav"/*.wav
+	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/etc/wav" "${srcdir}/etc/wav"/*.wav
 	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy" VERSION README.md LICENSE
 	cp -fR "${srcdir}/rhasspy-server-hermes/web" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/templates" "$(DESTDIR)$(prefix)/share/rhasspy/"
-	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/"
+	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/" || true
 
 # -----------------------------------------------------------------------------
 

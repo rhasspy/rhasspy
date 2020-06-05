@@ -33,7 +33,8 @@ RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[
     export VERSION="$(cat ${BUILD_DIR}/VERSION)" && \
     export PACKAGE_NAME=rhasspy_${VERSION}_${DEBIAN_ARCH} && \
     export DEBIAN_DIR=${BUILD_DIR}/${PACKAGE_NAME} && \
-    echo "export PACKAGE_NAME=${PACKAGE_NAME}" > /.vars && \
+    echo "export VERSION=${VERSION}" > /.vars && \
+    echo "export PACKAGE_NAME=${PACKAGE_NAME}" >> /.vars && \
     echo "export DEBIAN_ARCH=${DEBIAN_ARCH}" >> /.vars && \
     echo "export DEBIAN_DIR=${DEBIAN_DIR}" >> /.vars
 
@@ -103,6 +104,7 @@ COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
 
 RUN cd ${BUILD_DIR} && \
+    export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/dist" \
     make && \
     make install
 
@@ -127,7 +129,15 @@ COPY debian/rhasspy debian/sox /tmp/
 RUN . /.vars && \
     mkdir -p ${DEBIAN_DIR}/usr/bin && \
     mv /tmp/rhasspy ${DEBIAN_DIR}/usr/bin/ && \
-    mv /tmp/sox ${DEBIAN_DIR}${APP_DIR}/bin/
+    mv /tmp/sox ${DEBIAN_DIR}${APP_DIR}/bin/ && \
+    mkdir -p ${DEBIAN_DIR}/rhasspyprofile && \
+    mv ${BUILD_DIR}/rhasspyprofile/profiles ${DEBIAN_DIR}/rhasspyprofile/
+    mkdir -p ${DEBIAN_DIR}/rhasspywake_porcupine_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine ${DEBIAN_DIR}/rhasspywake_porcupine_hermes/ && \
+    mkdir -p ${DEBIAN_DIR}/rhasspywake_precise_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models ${DEBIAN_DIR}/rhasspywake_precise_hermes/ && \
+    mkdir -p ${DEBIAN_DIR}/rhasspywake_snowboy_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/models ${DEBIAN_DIR}/rhasspywake_snowboy_hermes/
 
 # Remove remnants of virtual environment
 RUN . /.vars && \
