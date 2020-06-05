@@ -419,7 +419,7 @@ This may take a long time to complete, and will reboot your Pi when finished. On
 $ arecord -L
 ```
 
-If you see your microphone listed, installation was successful.
+If you see your microphone listed, installation was successful (something like `seeed2micvoicerec`). When configuring Rhasspy, set audio recording system to `arecord` and the device to `plughw:CARD=seeed2micvoicec,DEV=0`
 
 ### Installing Rhasspy
 
