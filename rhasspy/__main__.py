@@ -23,7 +23,6 @@ _COMMANDS = [
     "rasa-nlu-hermes",
     "profile",
     "remote-http-hermes",
-    "silence",
     "server-hermes",
     "speakers-cli-hermes",
     "supervisor",
