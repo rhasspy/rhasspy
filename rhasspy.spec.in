@@ -42,7 +42,7 @@ def is_yes(s):
 
 
 # Options from ./configure
-enable_fuzzywuzzy = "@ENABLE_FUZZYWUZZY@"
+enable_fuzzywuzzy = is_yes("@ENABLE_FUZZYWUZZY@")
 enable_wake_pocketsphinx = is_yes("@ENABLE_WAKE_POCKETSPHINX@")
 enable_stt_pocketsphinx = is_yes("@ENABLE_STT_POCKETSPHINX@")
 enable_kaldi = is_yes("@ENABLE_KALDI@")
@@ -55,10 +55,13 @@ enable_snips = is_yes("@ENABLE_SNIPS@")
 # Add optional paths/imports
 optional_pathex = []
 optional_imports = []
+optional_datas = []
 
 if enable_fuzzywuzzy:
     optional_pathex.extend(["rhasspy-fuzzywuzzy", "rhasspy-fuzzywuzzy-hermes"])
-    optional_imports.extend(["rhasspyfuzzywuzzy", "rhasspyfuzzywuzzy_hermes.__main__"])
+    optional_imports.extend(
+        ["rhasspyfuzzywuzzy.__main__", "rhasspyfuzzywuzzy_hermes.__main__"]
+    )
 
 if enable_wake_pocketsphinx or enable_stt_pocketsphinx:
     optional_imports.extend(["pocketsphinx"])
@@ -68,30 +71,43 @@ if enable_stt_pocketsphinx:
         ["rhasspy-asr-pocketsphinx", "rhasspy-asr-pocketsphinx-hermes"]
     )
     optional_imports.extend(
-        ["rhasspyasr_pocketsphinx", "rhasspyasr_pocketsphinx_hermes.__main__"]
-    )
-
-if enable_wake_pocketsphinx:
-    optional_pathex.extend(
-        ["rhasspy-wake-pocketsphinx", "rhasspywake-pocketsphinx-hermes"]
-    )
-    optional_imports.extend(
-        ["rhasspywake_pocketsphinx", "rhasspywake_pocketsphinx_hermes.__main__"]
+        ["rhasspyasr_pocketsphinx.__main__", "rhasspyasr_pocketsphinx_hermes.__main__"]
     )
 
 if enable_kaldi:
     optional_pathex.extend(["rhasspy-asr-kaldi", "rhasspy-asr-kaldi-hermes"])
-    optional_imports.extend(["rhasspyasr_kaldi", "rhasspyasr_kaldi_hermes.__main__"])
+    optional_imports.extend(
+        ["rhasspyasr_kaldi.__main__", "rhasspyasr_kaldi_hermes.__main__"]
+    )
 
 if enable_deepspeech:
     optional_pathex.extend(["rhasspy-asr-deepspeech", "rhasspy-asr-deepspeech-hermes"])
     optional_imports.extend(
-        ["deepspeech", "rhasspyasr_deepspeech", "rhasspyasr_deepspeech_hermes.__main__"]
+        [
+            "deepspeech",
+            "rhasspyasr_deepspeech.__main__",
+            "rhasspyasr_deepspeech_hermes.__main__",
+        ]
     )
+
+if enable_wake_pocketsphinx:
+    optional_pathex.extend(["rhasspywake-pocketsphinx-hermes"])
+    optional_imports.extend(["rhasspywake_pocketsphinx_hermes.__main__"])
 
 if enable_snowboy:
     optional_pathex.extend(["rhasspy-wake-snowboy-hermes"])
     optional_imports.extend(["snowboy", "rhasspywake_snowboy_hermes.__main__"])
+    optional_datas.extend(copy_metadata("snowboy"))
+
+    # Add snowboy resources
+    for site_dir in site_dirs:
+        site_dir = Path(site_dir)
+        resources_dir = site_dir / "snowboy" / "resources"
+        if resources_dir.is_dir():
+            optional_datas.extend(
+                (str(p), str(p.relative_to(site_dir).parent))
+                for p in resources_dir.rglob("*")
+            )
 
 if enable_porcupine:
     optional_pathex.extend(["rhasspy-wake-porcupine-hermes"])
@@ -103,7 +119,9 @@ if enable_precise:
 
 if enable_snips:
     optional_pathex.extend(["rhasspy-snips-nlu", "rhasspy-snips-nlu-hermes"])
-    optional_imports.extend(["rhasspysnips_nlu", "rhasspysnips_nlu_hermes.__main__"])
+    optional_imports.extend(
+        ["rhasspysnips_nlu.__main__", "rhasspysnips_nlu_hermes.__main__"]
+    )
 
 # -----------------------------------------------------------------------------
 
@@ -126,9 +144,10 @@ a = Analysis(
         "rhasspy-speakers-cli-hermes",
         "rhasspy-supervisor",
         "rhasspy-tts-cli-hermes",
-    ],
+    ]
+    + optional_pathex,
     binaries=[(p, ".") for p in found_artifacts.values()],
-    datas=copy_metadata("webrtcvad"),
+    datas=copy_metadata("webrtcvad") + optional_datas,
     hiddenimports=[
         "aiofiles",
         "aiohttp",
@@ -152,7 +171,8 @@ a = Analysis(
         "rhasspyspeakers_cli_hermes.__main__",
         "rhasspysupervisor.__main__",
         "rhasspytts_cli_hermes.__main__",
-    ],
+    ]
+    + optional_imports,
     hookspath=[],
     runtime_hooks=[],
     excludes=[],
