@@ -26,7 +26,7 @@ The top bar of the web interface lets you perform some global actions on Rhasspy
 * The green `Train` button will re-train your profile
 * The red `Restart` button forces Rhasspy to restart
 
-### Test Page
+### Home Page
 
 Test voice and text commands.
 

@@ -1,116 +1,177 @@
-# Rhasspy Voltron
+# Rhasspy Voice Assistant
 
-Runs Rhasspy services using [supervisord](http://supervisord.org/). Service configuration is automatically generated using [rhasspy-supervisor](https://github.com/rhasspy/rhasspy-supervisor).
+![Rhasspy 2.5 logo](docs/img/rhasspy25.png)
 
-## Available Services
+Rhasspy (pronounced RAH-SPEE) is an [open source](https://github.com/rhasspy), fully offline set of [voice assistant services](#services) for [many human languages](#supported-languages) that works well with:
 
-* Audio Recording
-    * [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)
-    * [rhasspy-microphone-pyaudio-hermes](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes)
-* Audio Playback
-    * [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
-* Wake Word Detection
-    * [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes)
-    * [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)
-    * [rhasspy-wake-snowboy-hermes](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes)
-    * [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes)
-* Speech to Text (ASR)
-    * [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes) built on [rhasspy-asr-kaldi](https://github.com/rhasspy/rhasspy-asr-kaldi)
-    * [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes) built on [rhasspy-asr-pocketsphinx](https://github.com/rhasspy/rhasspy-asr-pocketsphinx)
-    * [rhasspy-asr-deepspeech-hermes](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes) built on [rhasspy-asr-deepspeech](https://github.com/rhasspy/rhasspy-asr-deepspeech)
-    * Built on [rhasspy-asr](https://github.com/rhasspy/rhasspy-asr) library ([pypi](https://pypi.org/project/rhasspy-asr/))
-    * Uses [rhasspy-silence](https://github.com/rhasspy/rhasspy-silence) library ([pypi](https://pypi.org/project/rhasspy-silence/))
-* Intent Recognition (NLU)
-    * [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes) built on ([rhasspy-fuzzywuzzy](https://github.com/rhasspy/rhasspy-fuzzywuzzy))
-    * [rhasspy-nlu-hermes](https://github.com/rhasspy/rhasspy-nlu-hermes) built on ([rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu))
-    * [rhasspy-rasa-nlu-hermes](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes) built on ([rhasspy-rasa-nlu](https://github.com/rhasspy/rhasspy-rasa-nlu))
-    * [rhasspy-snips-nlu-hermes](https://github.com/rhasspy/rhasspy-snips-nlu-hermes) built on ([rhasspy-snips-nlu](https://github.com/rhasspy/rhasspy-snips-nlu))
-* Text to Speech (TTS)
-    * [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
-* Dialogue Management
-    * [rhasspy-dialogue-hermes](https://github.com/rhasspy/rhasspy-dialogue-hermes)
-* Remote/Command
-    * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
-    * [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
+* [Hermes protocol](https://docs.snips.ai/reference/hermes) compatible services ([Snips.AI](https://snips.ai/))
+* [Home Assistant](https://www.home-assistant.io/) and [Hass.io](https://www.home-assistant.io/hassio/)
+* [Node-RED](https://nodered.org)
+* [Jeedom](https://www.jeedom.com)
+* [OpenHAB](https://www.openhab.org)
 
-## Interface
+You specify voice commands in a [template language](https://rhasspy.readthedocs.io/en/latest/training/):
 
-* [rhasspy-server-hermes](https://github.com/rhasspy/rhasspy-server-hermes)
+```ini
+[LightState]
+states = (on | off)
+turn (<states>){state} [the] light
+```
 
+and Rhasspy will produce [JSON](https://json.org) events that can trigger action in home automation software, such as a [Node-RED flow](https://rhasspy.readthedocs.io/en/latest/usage/#node-red):
+
+```json
+{
+    "text": "turn on the light",
+    "intent": {
+        "name": "LightState"
+    },
+    "slots": {
+        "state": "on"
+    }
+}
+```
+
+Rhasspy is <strong>optimized for</strong>:
+
+* Working with external services via [MQTT](https://rhasspy.readthedocs.io/en/latest/usage/#mqtt), [HTTP](https://rhasspy.readthedocs.io/en/latest/usage/#http-api), and [Websockets](https://rhasspy.readthedocs.io/en/latest/usage/#websocket-events)
+    * Home Assistant and Hass.IO have [built-in support](https://rhasspy.readthedocs.io/en/latest/usage/#home-assistant)
+* Pre-specified voice commands that are described well [by a grammar](https://rhasspy.readthedocs.io/en/latest/training/#sentencesini)
+    * You can also do [open-ended speech recognition](https://rhasspy.readthedocs.io/en/latest/speech-to-text/#open-transcription)
+* Voice commands with [uncommon words or pronunciations](https://rhasspy.readthedocs.io/en/latest/usage/#words-tab)
+    * New words are added phonetically with [automated assistance](https://github.com/AdolfVonKleist/Phonetisaurus)
+    
+## Web Interface
+
+Rhasspy comes with a [snazzy web interface](https://rhasspy.readthedocs.io/en/latest/usage/#web-interface) that lets you configure, program, and test your voice assistant remotely from your web browser. All of the web UI's functionality is exposed in a comprehensive [HTTP API](https://rhasspy.readthedocs.io/en/latest/reference/#http-api).
+
+![Test page in web interface](docs/img/web-speech.png)
 
 ## Getting Started
 
-Before building Rhasspy, you will need some support packages:
+Ready to try Rhasspy? Follow the steps below or check out the [Getting Started Guide](https://rhasspy.readthedocs.io/en/latest/tutorials/#getting-started-guide).
 
-* `python3*` (Python)
-* `git` (clone repo)
-* `build-essential` (compiler)
-* `libatlas-base-dev` (snowboy)
-* `swig` (snowboy/pocketsphinx)
-* `portaudio19-dev` (pocketsphinx)
+1. Make sure you have the [necessary hardware](https://rhasspy.readthedocs.io/en/latest/hardware/)
+2. Choose an [installation method](https://rhasspy.readthedocs.io/en/latest/installation/)
+3. Access the [web interface](https://rhasspy.readthedocs.io/en/latest/usage/#web-interface) to download a profile
+4. Author your [custom voice commands](https://rhasspy.readthedocs.io/en/latest/training/) and train Rhasspy
+5. Connect Rhasspy to other software like [Home Assistant](https://rhasspy.readthedocs.io/en/latest/usage/#home-assistant) or a [Node-RED](https://rhasspy.readthedocs.io/en/latest/usage/#node-red) flow by:
+    * Sending and receiving [Hermes MQTT messages](https://rhasspy.readthedocs.io/en/latest/services/)
+    * Using Rhasspy's [HTTP API](https://rhasspy.readthedocs.io/en/latest/usage/#http-api)
+    * Connecting a Websocket to one of Rhasspy's [websocket](https://rhasspy.readthedocs.io/en/latest/usage/#http-api)
 
-```bash
-$ sudo apt-get update
-$ sudo apt-get install \
-    python3 python3-dev python3-setuptools python3-pip python3-venv \
-    git build-essential libatlas-base-dev swig portaudio19-dev
-```
+## Getting Help
 
-Install runtime dependencies:
+If you have problems, please stop by the [Rhasspy community site](https://community.rhasspy.org) or [open a GitHub issue](https://github.com/synesthesiam/rhasspy/issues).
 
-* `supervisord` (process management)
-* `mosquitto` (MQTT broker)
-* `sox` (WAV conversion)
-* `alsa-utils` (record/play audio)
-* `libgfortran4` (Kaldi)
-* Text to speech
-    * `espeak`
-    * `flite`
-    * `libttspico-utils`
-* Miscellaneous
-    * `perl`
-    * `curl`
-    * `patchelf`
-    * `ca-certificates`
+## Supported Languages
 
-```bash
-$ sudo apt-get update
-$ sudo apt-get install \
-    supervisor mosquitto sox alsa-utils libgfortran4 \
-    libfst-tools libngram-tools \
-    espeak flite libttspico-utils \
-    perl curl patchelf ca-certificates
-```
+Rhasspy supports the following languages:
 
-If you can an error regarding `libttspico-utils`, you can skip installing it.
-The necessary `.deb` files can be manually downloaded and installed from [http://archive.raspberrypi.org/debian/pool/main/s/svox/](http://archive.raspberrypi.org/debian/pool/main/s/svox/). You will need `libttspico-utils` and `libttspico0` packages with matching versions.
+* English (`en`)
+    * [Kaldi](https://github.com/synesthesiam/en-us_kaldi-zamia)
+    * [Pocketsphinx](https://github.com/synesthesiam/en-us_pocketsphinx-cmu)
+    * [DeepSpeech](https://github.com/synesthesiam/en-us_deepspeech-mozilla)
+* German (Deutsch, `de`)
+    * [Kaldi](https://github.com/synesthesiam/de_kaldi-zamia)
+    * [Pocketsphinx](https://github.com/synesthesiam/de_pocketsphinx-cmu)
+    * [DeepSpeech](https://github.com/synesthesiam/de_deepspeech-aashishag)
+* Spanish (Español, `es`)
+    * [Pocketsphinx](https://github.com/synesthesiam/es_pocketsphinx-cmu)
+* French (Français, `fr`)
+    * [Kaldi](https://github.com/synesthesiam/fr_kaldi-guyot)
+    * [Pocketsphinx](https://github.com/synesthesiam/fr_pocketsphinx-cmu)
+* Italian (Italiano, `it`)
+    * [Pocketsphinx](https://github.com/synesthesiam/it_pocketsphinx-cmu)
+* Dutch (Nederlands, `nl`)
+    * [Kaldi](https://github.com/synesthesiam/nl_kaldi-cgn)
+    * [Pocketsphinx](https://github.com/synesthesiam/nl_pocketsphinx-cmu)
+* Russian (Русский, `ru`)
+    * [Pocketsphinx](https://github.com/synesthesiam/ru_pocketsphinx-cmu)
+* Greek (Ελληνικά, `el`)
+    * [Pocketsphinx](https://github.com/synesthesiam/el-gr_pocketsphinx-cmu)
+* Hindi (Devanagari, `hi`)
+    * [Pocketsphinx](https://github.com/synesthesiam/hi_pocketsphinx-cmu)
+* Mandarin (中文, `zh`)
+    * [Pocketsphinx](https://github.com/synesthesiam/zh-cn_pocketsphinx-cmu)
+* Vietnamese (`vi`)
+    * [Kaldi](https://github.com/synesthesiam/vi_kaldi-montreal)
+* Portuguese (Português, `pt`)
+    * [Pocketsphinx](https://github.com/synesthesiam/pt-br_pocketsphinx-cmu)
+* Swedish (`sv`)
+    * [Kaldi](https://github.com/synesthesiam/sv_kaldi-montreal)
+* Catalan (`ca`)
+    * [Pocketsphinx](https://github.com/synesthesiam/ca-es_pocketsphinx-cmu)
 
-Clone the repo and build:
+## Services
 
-```bash
-$ git clone --recurse-submodules https://github.com/rhasspy/rhasspy-voltron
-$ cd rhasspy-voltron/
-$ ./configure --enable-in-place
-$ make
-$ make install
-```
+As of version 2.5, Rhasspy is composed of [independent services](https://rhasspy.readthedocs.io/en/latest/services/) that coordinate over [MQTT](https://mqtt.org) using a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes).
 
-This will create a virtual environment at `rhasspy-voltron/.venv` and install **all** speech/wake systems and tools for training. The `--enable-in-place` option will allow you to modify Rhasspy's source code and re-run "in place" without having to install again.
+![Rhasspy services](img/services.png)
 
-You can customize your installation by looking at the options in `./configure --help` For example, to only install [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise) for wake word detection and [Kaldi](https://kaldi-asr.org) for speech recognition, run:
+You can easily extend or replace functionality in Rhasspy by using the [appropriate messages](https://rhasspy.readthedocs.io/en/latest/reference/#mqtt-api). Many of these messages can be also sent and received over the [HTTP API](https://rhasspy.readthedocs.io/en/latest/reference/#http-api) and the [Websocket API](https://rhasspy.readthedocs.io/en/latest/reference/#websocket-api).
 
-```bash
-$ ./configure --enable-in-place RHASSPY_WAKE_SYSTEM=precise RHASSPY_SPEECH_SYSTEM=kaldi
-```
+## Intended Audience
 
-This will save you from downloading and installing parts of Rhasspy you don't plan to use. You can use the "recommmended" settings for a specific language by passing the `RHASSPY_LANGUAGE` option:
+Rhasspy is intended for savvy amateurs or advanced users that want to have a **private** voice interface to their chosen home automation software. There are many other voice assistants, but none (to my knowledge) that:
 
-```bash
-$ ./configure --enable-in-place RHASSPY_LANGUAGE=nl
-```
+1. Can function **completely disconnected from the Internet**
+2. Are entirely free/open source with a permissive license
+3. Work well with freely available home automation software
 
-Rhasspy has [Pocketsphinx and Kaldi Dutch profiles](https://github.com/synesthesiam/voice2json-profiles#supported-languages), and does not yet support [Kaldi](https://kaldi-asr.org) on `armv6` CPUs. With `RHASSPY_LANGUAGE=nl` set, Rhasspy will only enable [Pocketsphinx](https://github.com/cmusphinx/pocketsphinx) on a Raspberry Pi 0/1 (`armv6`). On other CPUs, [Kaldi](https://kaldi-asr.org) will be enabled instead.
+If you feel comfortable sending your voice commands through the Internet for someone else to process, or are not comfortable customizing software to handle intents, I recommend taking a look at [Mycroft](https://mycroft.ai).
 
-## Running
+## Contributing
 
-Run the `bin/rhasspy-voltron` script with a `--profile <LANGUAGE>` argument.
+Community contributions are welcomed! There are many different ways to contribute:
+
+* Pull requests for bug fixes, new features, or corrections to the documentation
+* Help with any of the [supported language profiles](#supported-languages), including:
+    * Testing to make sure the acoustic models and default pronunciation dictionaries are working
+    * Translations of the [sample voice commands](https://github.com/synesthesiam/en-us_pocketsphinx-cmu/blob/master/sentences.ini)
+    * Example WAV files of you speaking with text transcriptions for performance testing
+* [Contributing to Mozilla Common Voice](https://voice.mozilla.org/)
+* Assist other [Rhasspy community members](https://community.rhasspy.org)
+* Suggest or implement new features
+
+## Development Status
+
+The various repositories also have their own issue tracker to follow and discuss development of these specific components. Here's the status of all repositories:
+
+| Repository                                                                                        | Tests                                                                                                                                                                    | Open issues                                                                                                                                                               | Open pull requests                                                                                                                                                                 |
+| ----------                                                                                        | -----                                                                                                                                                                    | -----------                                                                                                                                                               | ------------------                                                                                                                                                                 |
+| [rhasspy](https://github.com/rhasspy/rhasspy)                                                     | [![Tests](https://github.com/rhasspy/rhasspy/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy/actions)                                                     | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy)](https://github.com/rhasspy/rhasspy/issues)                                                     | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy)](https://github.com/rhasspy/rhasspy/pulls)                                                     |
+| [rhasspy-asr](https://github.com/rhasspy/rhasspy-asr)                                             | [![Tests](https://github.com/rhasspy/rhasspy-asr/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr/actions)                                             | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr)](https://github.com/rhasspy/rhasspy-asr/issues)                                             | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr)](https://github.com/rhasspy/rhasspy-asr/pulls)                                             |
+| [rhasspy-asr-deepspeech](https://github.com/rhasspy/rhasspy-asr-deepspeech)                       | [![Tests](https://github.com/rhasspy/rhasspy-asr-deepspeech/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr-deepspeech/actions)                       | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr-deepspeech)](https://github.com/rhasspy/rhasspy-asr-deepspeech/issues)                       | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr-deepspeech)](https://github.com/rhasspy/rhasspy-asr-deepspeech/pulls)                       |
+| [rhasspy-asr-deepspeech-hermes](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes)         | [![Tests](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes/actions)         | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr-deepspeech-hermes)](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes/issues)         | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr-deepspeech-hermes)](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes/pulls)         |
+| [rhasspy-asr-kaldi](https://github.com/rhasspy/rhasspy-asr-kaldi)                                 | [![Tests](https://github.com/rhasspy/rhasspy-asr-kaldi/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr-kaldi/actions)                                 | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr-kaldi)](https://github.com/rhasspy/rhasspy-asr-kaldi/issues)                                 | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr-kaldi)](https://github.com/rhasspy/rhasspy-asr-kaldi/pulls)                                 |
+| [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)                   | [![Tests](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes/actions)                   | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr-kaldi-hermes)](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes/issues)                   | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr-kaldi-hermes)](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes/pulls)                   |
+| [rhasspy-asr-pocketsphinx](https://github.com/rhasspy/rhasspy-asr-pocketsphinx)                   | [![Tests](https://github.com/rhasspy/rhasspy-asr-pocketsphinx/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr-pocketsphinx/actions)                   | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr-pocketsphinx)](https://github.com/rhasspy/rhasspy-asr-pocketsphinx/issues)                   | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr-pocketsphinx)](https://github.com/rhasspy/rhasspy-asr-pocketsphinx/pulls)                   |
+| [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes)     | [![Tests](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes/actions)     | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-asr-pocketsphinx-hermes)](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes/issues)     | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-asr-pocketsphinx-hermes)](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes/pulls)     |
+| [rhasspy-client](https://github.com/rhasspy/rhasspy-client)                                       | [![Tests](https://github.com/rhasspy/rhasspy-client/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-client/actions)                                       | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-client)](https://github.com/rhasspy/rhasspy-client/issues)                                       | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-client)](https://github.com/rhasspy/rhasspy-client/pulls)                                       |
+| [rhasspy-dialogue-hermes](https://github.com/rhasspy/rhasspy-dialogue-hermes)                     | [![Tests](https://github.com/rhasspy/rhasspy-dialogue-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-dialogue-hermes/actions)                     | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-dialogue-hermes)](https://github.com/rhasspy/rhasspy-dialogue-hermes/issues)                     | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-dialogue-hermes)](https://github.com/rhasspy/rhasspy-dialogue-hermes/pulls)                     |
+| [rhasspy-fuzzywuzzy](https://github.com/rhasspy/rhasspy-fuzzywuzzy)                               | [![Tests](https://github.com/rhasspy/rhasspy-fuzzywuzzy/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-fuzzywuzzy/actions)                               | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-fuzzywuzzy)](https://github.com/rhasspy/rhasspy-fuzzywuzzy/issues)                               | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-fuzzywuzzy)](https://github.com/rhasspy/rhasspy-fuzzywuzzy/pulls)                               |
+| [rhasspy-fuzzywuzzy-hermes](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes)                 | [![Tests](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes/actions)                 | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-fuzzywuzzy-hermes)](https://github.com/rhasspy/rhasspy-fuzzywuzzy-hermes/issues)                 | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-fuzzywuzzy)](https://github.com/rhasspy/rhasspy-fuzzywuzzy/pulls)                               |
+| [rhasspy-hermes](https://github.com/rhasspy/rhasspy-hermes)                                       | [![Tests](https://github.com/rhasspy/rhasspy-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-hermes/actions)                                       | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-hermes)](https://github.com/rhasspy/rhasspy-hermes/issues)                                       | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-hermes)](https://github.com/rhasspy/rhasspy-hermes/pulls)                                       |
+| [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)           | [![Tests](https://github.com/rhasspy/rhasspy-homeassistant-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-homeassistant-hermes/actions)           | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-homeassistant-hermes)](https://github.com/rhasspy/rhasspy-homeassistant-hermes/issues)           | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-homeassistant-hermes)](https://github.com/rhasspy/rhasspy-homeassistant-hermes/pulls)           |
+| [rhasspy-microphone-cli-hermes](https://github.com/rhasspy/rhasspy-microphone-cli-hermes)         | [![Tests](https://github.com/rhasspy/rhasspy-microphone-cli-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-microphone-cli-hermes/actions)         | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-microphone-cli-hermes)](https://github.com/rhasspy/rhasspy-microphone-cli-hermes/issues)         | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-microphone-cli-hermes)](https://github.com/rhasspy/rhasspy-microphone-cli-hermes/pulls)         |
+| [rhasspy-microphone-pyaudio-hermes](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-microphone-pyaudio-hermes)](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-microphone-pyaudio-hermes)](https://github.com/rhasspy/rhasspy-microphone-pyaudio-hermes/pulls) |
+| [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu)                                             | [![Tests](https://github.com/rhasspy/rhasspy-nlu/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-nlu/actions)                                             | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-nlu)](https://github.com/rhasspy/rhasspy-nlu/issues)                                             | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-nlu)](https://github.com/rhasspy/rhasspy-nlu/pulls)                                             |
+| [rhasspy-nlu-hermes](https://github.com/rhasspy/rhasspy-nlu-hermes)                               | [![Tests](https://github.com/rhasspy/rhasspy-nlu-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-nlu-hermes/actions)                               | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-nlu-hermes)](https://github.com/rhasspy/rhasspy-nlu-hermes/issues)                               | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-nlu-hermes)](https://github.com/rhasspy/rhasspy-nlu-hermes/pulls)                               |
+| [rhasspy-rasa-nlu-hermes](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes)                     | [![Tests](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes/actions)                     | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-rasa-nlu-hermes)](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes/issues)                     | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-rasa-nlu-hermes)](https://github.com/rhasspy/rhasspy-rasa-nlu-hermes/pulls)                     |
+| [rhasspy-profile](https://github.com/rhasspy/rhasspy-profile)                                     | [![Tests](https://github.com/rhasspy/rhasspy-profile/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-profile/actions)                                     | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-profile)](https://github.com/rhasspy/rhasspy-profile/issues)                                     | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-profile)](https://github.com/rhasspy/rhasspy-profile/pulls)                                     |
+| [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)               | [![Tests](https://github.com/rhasspy/rhasspy-remote-http-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-remote-http-hermes/actions)               | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-remote-http-hermes)](https://github.com/rhasspy/rhasspy-remote-http-hermes/issues)               | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-remote-http-hermes)](https://github.com/rhasspy/rhasspy-remote-http-hermes/pulls)               |
+| [rhasspy-satellite](https://github.com/rhasspy/rhasspy-satellite)                                 | [![Tests](https://github.com/rhasspy/rhasspy-satellite/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-satellite/actions)                                 | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-satellite)](https://github.com/rhasspy/rhasspy-satellite/issues)                                 | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-satellite)](https://github.com/rhasspy/rhasspy-satellite/pulls)                                 |
+| [rhasspy-server-hermes](https://github.com/rhasspy/rhasspy-server-hermes)                         | [![Tests](https://github.com/rhasspy/rhasspy-server-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-server-hermes/actions)                         | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-server-hermes)](https://github.com/rhasspy/rhasspy-server-hermes/issues)                         | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-server-hermes)](https://github.com/rhasspy/rhasspy-server-hermes/pulls)                         |
+| [rhasspy-snips-nlu](https://github.com/rhasspy/rhasspy-snips-nlu)                                 | [![Tests](https://github.com/rhasspy/rhasspy-snips-nlu/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-snips-nlu/actions)                                 | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-snips-nlu)](https://github.com/rhasspy/rhasspy-snips-nlu/issues)                                 | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-snips-nlu)](https://github.com/rhasspy/rhasspy-snips-nlu/pulls)                                 |
+| [rhasspy-snips-nlu-hermes](https://github.com/rhasspy/rhasspy-snips-nlu-hermes)                   | [![Tests](https://github.com/rhasspy/rhasspy-snips-nlu-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-snips-nlu-hermes/actions)                   | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-snips-nlu-hermes)](https://github.com/rhasspy/rhasspy-snips-nlu-hermes/issues)                   | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-snips-nlu-hermes)](https://github.com/rhasspy/rhasspy-snips-nlu-hermes/pulls)                   |
+ [rhasspy-silence](https://github.com/rhasspy/rhasspy-silence) | [![Tests](https://github.com/rhasspy/rhasspy-silence/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-silence/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-silence)](https://github.com/rhasspy/rhasspy-silence/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-silence)](https://github.com/rhasspy/rhasspy-silence/pulls) |
+| [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-speakers-cli-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-speakers-cli-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-speakers-cli-hermes)](https://github.com/rhasspy/rhasspy-speakers-cli-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-speakers-cli-hermes)](https://github.com/rhasspy/rhasspy-speakers-cli-hermes/pulls) |
+| [rhasspy-supervisor](https://github.com/rhasspy/rhasspy-supervisor) | [![Tests](https://github.com/rhasspy/rhasspy-supervisor/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-supervisor/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-supervisor)](https://github.com/rhasspy/rhasspy-supervisor/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-supervisor)](https://github.com/rhasspy/rhasspy-supervisor/pulls) |
+| [rhasspy-tag-action](https://github.com/rhasspy/rhasspy-tag-action) | [![Tests](https://github.com/rhasspy/rhasspy-tag-action/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-tag-action/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-tag-action)](https://github.com/rhasspy/rhasspy-tag-action/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-tag-action)](https://github.com/rhasspy/rhasspy-tag-action/pulls) |
+| [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-tts-cli-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-tts-cli-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-tts-cli-hermes)](https://github.com/rhasspy/rhasspy-tts-cli-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-tts-cli-hermes)](https://github.com/rhasspy/rhasspy-tts-cli-hermes/pulls) |
+| [rhasspy-voltron](https://github.com/rhasspy/rhasspy-voltron) | [![Tests](https://github.com/rhasspy/rhasspy-voltron/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-voltron/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-voltron)](https://github.com/rhasspy/rhasspy-voltron/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-voltron)](https://github.com/rhasspy/rhasspy-voltron/pulls) |
+| [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-pocketsphinx-hermes)](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-pocketsphinx-hermes)](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes/pulls) |
+| [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-precise-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-precise-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-precise-hermes)](https://github.com/rhasspy/rhasspy-wake-precise-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-precise-hermes)](https://github.com/rhasspy/rhasspy-wake-precise-hermes/pulls) |
+| [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-porcupine-hermes)](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-porcupine-hermes)](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/pulls) |
+| [rhasspy-wake-snowboy-hermes](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-snowboy-hermes)](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-snowboy-hermes)](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/pulls) |

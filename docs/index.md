@@ -1,6 +1,6 @@
 # Rhasspy Voice Assistant
 
-![Rhasspy logo](img/rhasspy.png)
+![Rhasspy 2.5 logo](img/rhasspy25.png)
 
 Rhasspy (pronounced RAH-SPEE) is an [open source](https://github.com/rhasspy), fully offline set of [voice assistant services](#services) for [many human languages](#supported-languages) that works well with:
 
