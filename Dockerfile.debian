@@ -125,19 +125,21 @@ RUN . /.vars && \
 RUN . /.vars && \
     (find ${DEBIAN_DIR}${APP_DIR} -type f \( -name '*.so*' -or -executable \) -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
 
-COPY debian/rhasspy debian/sox /tmp/
+COPY debian/rhasspy debian/sox debian/fix-rhasspy-scripts.sh /tmp/
 RUN . /.vars && \
+    export PYINST_DIR=${DEBIAN_DIR}${APP_DIR}/rhasspy && \
     mkdir -p ${DEBIAN_DIR}/usr/bin && \
     mv /tmp/rhasspy ${DEBIAN_DIR}/usr/bin/ && \
     mv /tmp/sox ${DEBIAN_DIR}${APP_DIR}/bin/ && \
-    mkdir -p ${DEBIAN_DIR}/rhasspyprofile && \
-    mv ${BUILD_DIR}/rhasspyprofile/profiles ${DEBIAN_DIR}/rhasspyprofile/
-    mkdir -p ${DEBIAN_DIR}/rhasspywake_porcupine_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine ${DEBIAN_DIR}/rhasspywake_porcupine_hermes/ && \
-    mkdir -p ${DEBIAN_DIR}/rhasspywake_precise_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models ${DEBIAN_DIR}/rhasspywake_precise_hermes/ && \
-    mkdir -p ${DEBIAN_DIR}/rhasspywake_snowboy_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/models ${DEBIAN_DIR}/rhasspywake_snowboy_hermes/
+    mkdir -p ${PYINST_DIR}/rhasspyprofile && \
+    mv ${BUILD_DIR}/rhasspy-profile/rhasspyprofile/profiles ${PYINST_DIR}/rhasspyprofile/ && \
+    mkdir -p ${PYINST_DIR}/rhasspywake_porcupine_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine ${PYINST_DIR}/rhasspywake_porcupine_hermes/ && \
+    mkdir -p ${PYINST_DIR}/rhasspywake_precise_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models ${PYINST_DIR}/rhasspywake_precise_hermes/ && \
+    mkdir -p ${PYINST_DIR}/rhasspywake_snowboy_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/models ${PYINST_DIR}/rhasspywake_snowboy_hermes/ && \
+    bash /tmp/fix-rhasspy-scripts.sh ${DEBIAN_DIR}${APP_DIR}/bin/rhasspy-*
 
 # Remove remnants of virtual environment
 RUN . /.vars && \
