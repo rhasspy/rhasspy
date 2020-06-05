@@ -17,6 +17,14 @@ FROM base as base-armv7
 
 FROM base as base-arm64
 
+FROM balenalib/raspberry-pi-debian-python:3.7-stretch-build as base-armv6
+
+ENV LANG C.UTF-8
+
+RUN install_packages \
+        swig portaudio19-dev libatlas-base-dev \
+        fakeroot
+
 # -----------------------------------------------------------------------------
 
 ARG TARGETARCH
