@@ -1,6 +1,7 @@
 # Tutorials
 
 * [Getting Started Guide](#getting-started-guide)
+* [From Scratch on a Raspberry Pi](#from-scratch-on-a-raspberry-pi)
 * [Server with Satellites](#server-with-satellites)
 
 ## Getting Started Guide
@@ -286,6 +287,209 @@ done
 ```
 
 This script loops indefinitely and waits for an MQTT message on `hermes/intent/#` (the `#` is encoded as `%23` in the URL). When a message is received, the "input" field of the payload is extracted with [`jq`](https://stedolan.github.io/jq) and then passed to Rhasspy's [`/api/text-to-speech`](reference.md#api_text_to_speech) HTTP endpoint.
+
+---
+
+## From Scratch on a Raspberry Pi
+
+This guide will cover installing Rhasspy on a Raspberry Pi from scratch using [Docker](installation.md#docker). This guide will step you through setting up Rhasspy immediately after [installation](installation.md). This guide was tested with the following hardware and software:
+
+* Raspberry Pi 3B+
+* 32 GB SD card
+* Raspberry Pi OS (32-bit) Lite
+* ReSpeaker 2mic HAT
+* 3.5 mm speakers
+
+### Purchasing a Raspberry Pi
+
+I highly recommend buying a [CanaKit Raspberry Pi kit](https://www.amazon.com/CanaKit-Raspberry-4GB-Starter-Kit/dp/B07V5JTMV9), which includes everything you need to get started. At a minimum you need a Pi, an SD card, a power supply, and a microphone. You'll probably want a speaker too, but it's optional.
+
+Be careful when choosing a kit and a microphone. The [ReSpeaker 2mic HAT](https://respeaker.io/2_mic_array/) plugs into the GPIO pins on the Pi, which means you won't be able to easly enclose it in the kit's case or use the included fan.
+
+### Setting up the SD Card
+
+We will be installing Raspberry Pi OS Lite, a "headless" and lightweight version of the Raspberry Pi operating system. Without a GUI or desktop, you will need to SSH (remote access) into the Pi to complete the installation. We'll make sure to enable SSH and WiFi before booting the Pi for the first time.
+
+On your desktop, start by downloading [Raspberry Pi OS (32-bit) Lite](https://www.raspberrypi.org/downloads/raspberry-pi-os/) (about 400 MB). If possible, please use the Torrent file and seed it for others. Once downloaded, I had a file named `2020-05-27-raspios-buster-lite-armhf.zip` that was 452.7 MB.
+
+In order to "burn" the image to your Pi's SD card, you need to also download and install the [Raspberry Pi Imager](https://www.raspberrypi.org/downloads/). I downloaded the "Raspberry Pi Imager for Ubuntu", which was a file named `imager_amd64.deb`. This file can either be double-clicked to launch an installer or installed through the command line with:
+
+```sh
+$ sudo apt install ./imager_amd64.deb
+```
+
+Once installed, run the imager using your typical application launcher ("Start" menu) or by running `rpi-imager` on Linux.
+
+![Raspberry Pi Imager](img/from-scratch/rpi-imager.png)
+
+Insert your SD card into the SD card reader that came with your kit, and put in your desktop computer.
+
+![SD card reader](img/from-scratch/sdcard-reader.png)
+
+In the imager, click the "CHOOSE OS" button, **scroll to the bottom**, and click "Use custom".
+
+![Imager custom OS](img/from-scratch/rpi-imager-custom-os.png)
+
+Browse to where you downloaded the Raspberry Pi OS image (a zip file, about 400 MB) and open it.
+
+Next, click "CHOOSE SD CARD" and select your SD card. **Be careful not to pick an external drive you may have plugged in!**
+
+Lastly, click the "WRITE" button and enter your admin password. It may take some time to finish, so be patient.
+
+#### Enabling SSH and WiFi
+
+After writing the Raspberry Pi OS to your SD card, browse the "boot" volume on your desktop computer. You may need to unplug and replug the SD card reader first. You should see a bunch of files that start with "bcm" and some others that start with "kernel".
+
+Create a new, empty file in the top-level directory of the `boot` volume named `ssh` (lower case, no file extension). The presence of this file will tell the Raspberry Pi to enable SSH on boot.
+
+To enable WiFi, create a file in the top-level directory of the `boot` volumed named `wpa_supplicant.conf` edit it with a text editor. Paste in the following content (taken from [here](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md)) and save the file:
+
+```
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=<Insert 2 letter ISO 3166-1 country code here>
+
+network={
+ ssid="<Name of your wireless LAN>"
+ psk="<Password for your wireless LAN>"
+}
+```
+
+Using this list of [country codes](https://en.wikipedia.org/wiki/ISO_3166-1#Current_codes), mine looks like this:
+
+```
+ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+update_config=1
+country=US
+
+network={
+ ssid="MySuperCoolWiFi"
+ psk="MySuperCoolPassword"
+}
+```
+
+After saving the file, eject the SD card from your computer and insert it into the Pi. We're ready to boot!
+
+### Booting the Pi for the First Time
+
+Ensure that your microphone and SD card are inserted into your Raspberry Pi. If you have a spare HDMI monitor, I'd highly recommend plugging it in so you can get the Pi's IP address and see if there were any problems during boot.
+
+Once everything is connected, go ahead and plug your power supply into the Pi. You should see some raspberry icons in the upper left and scrolling text as it boots. When it comes to the login prompt, read upwards until you find a line that says "My IP address is ..." (probaby starts with 192.168). My Pi's IP address was 192.168.1.26, but yours is likely different.
+
+From a terminal on your desktop computer, try pinging your Pi (where `<IP_ADDRESS>` is your Pi's IP address).
+
+```sh
+$ ping <IP_ADDRESS>
+```
+
+If you see something like `64 bytes from <IP_ADDRESS>: icmp_seq=1 ttl=64 time=50.0 ms` then all is well. Hit CTRL+C to stop pinging.
+
+All of the next steps must be done on the Raspberry Pi itself. You can either connect a keyboard/monitor to the Pi or SSH in remotely. Login locally with the user name `pi` and the password `raspberry` (lower case). To SSH in remotely, execute the following command from a terminal on your desktop computer (where `<IP_ADDRESS>` is your Pi's IP address):
+
+```sh
+$ ssh pi@<IP_ADDRESS>
+```
+
+You will probably receive a message complaining that the "authenticity of host" cannot be established. Type "yes" and hit ENTER. The password is `raspberry` (lower case).
+
+If you see a prompt like this, all is well:
+
+```sh
+pi@raspberrypi:~ $ 
+```
+
+### Installing Microphone Drivers
+
+If you're using the [ReSpeaker 2mic HAT](https://respeaker.io/2_mic_array/), you need to install the driver before continuing. If not, proceed to the [Installing Rhasspy](#installing-rhasspy) step.
+
+We'll following the official instructions from the [seeed-voicecard GitHub page](https://github.com/respeaker/seeed-voicecard). On your Raspberry Pi, enter the following commands:
+
+```sh
+$ sudo apt-get update
+$ sudo apt-get install --yes git
+$ git clone https://github.com/respeaker/seeed-voicecard
+$ cd seeed-voicecard
+$ sudo ./install.sh
+$ sudo reboot
+```
+
+This may take a long time to complete, and will reboot your Pi when finished. Once your Pi reboots, log in and check if your microphone is available:
+
+```sh
+$ arecord -L
+```
+
+If you see your microphone listed, installation was successful.
+
+### Installing Rhasspy
+
+We will be using the [Docker](installation.md#docker) install method for Rhasspy, since its the simplest way to get started and keep updated for beginners.
+
+On your Pi, enter the following command:
+
+```sh
+$ curl -sSL https://get.docker.com | sh
+```
+
+After Docker is installed, you'll need to add the `pi` user to the `docker` group:
+
+```sh
+$ sudo usermod -aG docker pi
+```
+
+and then reboot the Pi:
+
+```sh
+$ sudo reboot
+```
+
+After the Pi reboots, log into it again (either locally or via SSH) and pull the Rhasspy Docker image:
+
+```sh
+$ docker pull rhasspy/rhasspy
+```
+
+If you're running Rhasspy on a Raspberry Pi Zero, please follow [these instructions](http://localhost:8000/installation/#raspberry-pi-zero) instead.
+
+After downloading and extracting the Rhasspy Docker image, start it running with this command:
+
+```sh
+$ docker run -it -p 12101:12101 \
+      -v "$HOME/.config/rhasspy/profiles:/profiles" \
+      -v "/etc/localtime:/etc/localtime:ro" \
+      --device /dev/snd:/dev/snd \
+      rhasspy/rhasspy \
+      --user-profiles /profiles \
+      --profile en
+```
+
+Replace `--profile en` with your preferred [supported language](index.md#supported-languages). This command will run Docker in an interactive mode so you can see the output from each of Rhasspy's [services](services.md).
+
+After a flurry of messages, you should see something like:
+
+```
+Running on http://0.0.0.0:12101 (CTRL + C to quit)
+```
+
+that indicates the web server is up and running. On your desktop computer, open your web browser and visit `http://<IP_ADDRESS>:12101` where `<IP_ADDRESS>` is the IP address of your Pi. You should see the Rhasspy web interface.
+
+![Rhasspy web interface](img/from-scratch/rhasspy-web-interface.png)
+
+Congratulations! From here, you can follow the [getting started guide](#getting-started-guide) to configure your voice assistant. Hit CTRL+C at any time to exit Rhasspy and return to your command prompt.
+
+If you'd like to keep Rhasspy running the background on your Pi and automatically start up after a reboot, run the following command:
+
+```sh
+$ docker run -d -p 12101:12101 \
+      --name rhasspy \
+      --restart unless-stopped \
+      -v "$HOME/.config/rhasspy/profiles:/profiles" \
+      -v "/etc/localtime:/etc/localtime:ro" \
+      --device /dev/snd:/dev/snd \
+      rhasspy/rhasspy \
+      --user-profiles /profiles \
+      --profile en
+```
 
 ---
 

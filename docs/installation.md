@@ -1,6 +1,6 @@
 # Install
 
-Rhasspy can be installed in several different ways. The easiest way is [with Docker](#docker), which will pull a 1.5-2GB image with all of the [officially supported services](https://github.com/rhasspy/rhasspy-voltron).
+Rhasspy can be installed in several different ways. The easiest way is [with Docker](#docker), which will pull a 1.5-2GB image with all of the [officially supported services](https://github.com/rhasspy/rhasspy).
 
 ## Docker
 
@@ -95,13 +95,38 @@ $ docker pull --platform linux/arm/v6 rhasspy/rhasspy
 
 ## Debian
 
-**Coming soon**
+Pre-compiled packages are available for Debian-based distributions (Ubuntu, Raspberry Pi OS, etc.) on `amd64`, `armhf`, `armel`, and `arm64` (`aarch64`) architectures. These packages are built using Docker and `dpkg`.
 
-Rhasspy will be packaged as a `.deb` file for easy non-Docker installation on Debian, Ubuntu, and Raspbian.
+Download the appropriate `.deb` file for your CPU architecture:
+
+* [amd64](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_amd64.deb) - Desktops, laptops, and servers
+* [armhf](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_armhf.deb) - Raspberry Pi 2, and 3 (armv7)
+* [arm64](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_arm64.deb) - Raspberry Pi 3+, 4
+* [armel](https://github.com/rhasspy/rhasspy/releases/download/v2.5.00/rhasspy_2.5.0_armel.deb) - Raspberry Pi 0, 1
+
+If you're unsure about your architecture, run:
+
+```bash
+$ dpkg-architecture | grep DEB_BUILD_ARCH=
+```
+
+which will output something like:
+
+```bash
+DEB_BUILD_ARCH=amd64
+```
+
+Next, install the `.deb` file:
+
+```bash
+$ sudo apt install /path/to/rhasspy_<VERSION>_<ARCH>.deb
+```
+
+where where `<VERSION>` is Rhasspy's version (probably 2.5.0) and `<ARCH>` is your build architecture.
 
 ## Virtual Environment
 
-See the [Github documentation](https://github.com/rhasspy/rhasspy-voltron). On a Debian system, you should only need to install the necessary dependencies:
+See the [Github documentation](https://github.com/rhasspy/rhasspy). On a Debian system, you should only need to install the necessary dependencies:
 
 ```bash
 $ sudo apt-get update
@@ -116,8 +141,8 @@ $ sudo apt-get install \
 and then clone/build:
 
 ```bash
-$ git clone --recursive https://github.com/rhasspy/rhasspy-voltron
-$ cd rhasspy-voltron/
+$ git clone --recursive https://github.com/rhasspy/rhasspy
+$ cd rhasspy/
 $ ./configure
 $ make
 $ make install
