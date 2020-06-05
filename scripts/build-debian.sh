@@ -2,7 +2,7 @@
 set -e
 
 if [[ -z "$1" ]]; then
-    echo "Usage: build-debian dist/ [target] [target]"
+    echo "Usage: build-debian dist/"
     exit 1
 fi
 
@@ -18,72 +18,40 @@ version="$(cat "${src_dir}/VERSION")"
 
 # -----------------------------------------------------------------------------
 
-if [[ -z "${NOBUILDX}" ]]; then
-    if [[ -z "$1" ]]; then
-        platforms=('linux/amd64' 'linux/arm/v7' 'linux/arm64')
-    else
-        platforms=("$@")
-    fi
-
-    function join { local IFS="$1"; shift; echo "$*"; }
-    platform_str=$(join ',' ${platforms[@]})
-else
-    if [[ -z "$1" ]]; then
-        echo "Platform is required with NOBUILDX"
-        exit 1
-    fi
-
-    platforms=("$@")
-fi
+: "${PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64,linux/arm/v6}"
 
 # ------------------------------------------------------------------------------
 
-: "${DOCKER_REGISTRY=docker.io}"
+rm -f "${dist_dir}/rhasspy_${version}_"*.deb
 
 echo "Building..."
+docker buildx build \
+       "${src_dir}" \
+       -f "${src_dir}/Dockerfile.debian" \
+       "--platform=${PLATFORMS}" \
+       --output "type=local,dest=${dist_dir}"
 
-if [[ -z "${NOBUILDX}" ]]; then
-    docker buildx build \
-           "${src_dir}" \
-           -f "${src_dir}/Dockerfile.debian" \
-           "--platform=${platform_str}" \
-           --build-arg "DOCKER_REGISTRY=${DOCKER_REGISTRY}" \
-           --tag "${DOCKER_REGISTRY}/rhasspy-debian" \
-           --push
-else
-    docker build \
-           "${src_dir}"  \
-           -f "${src_dir}/Dockerfile.debian" \
-           --build-arg "DOCKER_REGISTRY=${DOCKER_REGISTRY}" \
-           -t "${DOCKER_REGISTRY}/rhasspy-debian"
+# Manually copy out
+in_amd64="${dist_dir}/linux_amd64/rhasspy_${version}_amd64.deb"
+out_amd64="${dist_dir}/rhasspy_${version}_amd64.deb"
+if [[ -f "${in_amd64}" ]]; then
+    cp "${in_amd64}" "${out_amd64}"
 fi
 
-# ------------------------------------------------------------------------------
+in_armhf="${dist_dir}/linux_arm_v7/rhasspy_${version}_armhf.deb"
+out_armhf="${dist_dir}/rhasspy_${version}_armhf.deb"
+if [[ -f "${in_armhf}" ]]; then
+    cp "${in_armhf}" "${out_armhf}"
+fi
 
-declare -A platform_to_debian
-platform_to_debian=(['linux/amd64']='amd64' ['linux/arm/v6']='armel' ['linux/arm/v7']='armhf' ['linux/arm64']='arm64')
+in_arm64="${dist_dir}/linux_arm64/rhasspy_${version}_arm64.deb"
+out_arm64="${dist_dir}/rhasspy_${version}_arm64.deb"
+if [[ -f "${in_arm64}" ]]; then
+    cp "${in_arm64}" "${out_arm64}"
+fi
 
-for platform in "${platforms[@]}"; do
-    echo "Packaging..."
-    debian_arch="${platform_to_debian["${platform}"]}"
-    package_name="rhasspy_${version}_${debian_arch}"
-
-    if [[ -z "${NOBUILDX}" ]]; then
-        docker pull \
-               --platform "${platform}" \
-               "${DOCKER_REGISTRY}/rhasspy-debian"
-
-        docker run \
-               --platform "${platform}" \
-               --rm -i --entrypoint /bin/cat \
-               "${DOCKER_REGISTRY}/rhasspy-debian" \
-               "/build/${package_name}.deb" > "${dist_dir}/${package_name}.deb"
-    else
-        docker run \
-               --rm -i --entrypoint /bin/cat \
-               "${DOCKER_REGISTRY}/rhasspy-debian" \
-               "/build/${package_name}.deb" > "${dist_dir}/${package_name}.deb"
-    fi
-
-    echo "Wrote ${dist_dir}/${package_name}.deb"
-done
+in_armel="${dist_dir}/linux_arm_v6/rhasspy_${version}_armhf.deb"
+out_armel="${dist_dir}/rhasspy_${version}_armel.deb"
+if [[ -f "${in_armel}" ]]; then
+    cp "${in_armel}" "${out_armel}"
+fi
