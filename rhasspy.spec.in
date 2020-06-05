@@ -9,6 +9,9 @@ block_cipher = None
 
 prefix = Path("@prefix@")
 
+# -----------------------------------------------------------------------------
+
+# Gather directories with site packages
 site_dirs = site.getsitepackages()
 lib_dir = prefix / "lib"
 for lib_python_dir in lib_dir.glob("python*"):
@@ -30,12 +33,126 @@ for site_dir in site_dirs:
 missing_artifacts = set(artifacts) - set(found_artifacts)
 assert not missing_artifacts, missing_artifacts
 
+# -----------------------------------------------------------------------------
+
+
+def is_yes(s):
+    """True if string is yes (from configure.ac)"""
+    return s.lower().strip() == "yes"
+
+
+# Options from ./configure
+enable_fuzzywuzzy = "@ENABLE_FUZZYWUZZY@"
+enable_wake_pocketsphinx = is_yes("@ENABLE_WAKE_POCKETSPHINX@")
+enable_stt_pocketsphinx = is_yes("@ENABLE_STT_POCKETSPHINX@")
+enable_kaldi = is_yes("@ENABLE_KALDI@")
+enable_deepspeech = is_yes("@ENABLE_DEEPSPEECH@")
+enable_snowboy = is_yes("@ENABLE_SNOWBOY@")
+enable_porcupine = is_yes("@ENABLE_PORCUPINE@")
+enable_precise = is_yes("@ENABLE_PRECISE@")
+enable_snips = is_yes("@ENABLE_SNIPS@")
+
+# Add optional paths/imports
+optional_pathex = []
+optional_imports = []
+
+if enable_fuzzywuzzy:
+    optional_pathex.extend(["rhasspy-fuzzywuzzy", "rhasspy-fuzzywuzzy-hermes"])
+    optional_imports.extend(["rhasspyfuzzywuzzy", "rhasspyfuzzywuzzy_hermes.__main__"])
+
+if enable_wake_pocketsphinx or enable_stt_pocketsphinx:
+    optional_imports.extend(["pocketsphinx"])
+
+if enable_stt_pocketsphinx:
+    optional_pathex.extend(
+        ["rhasspy-asr-pocketsphinx", "rhasspy-asr-pocketsphinx-hermes"]
+    )
+    optional_imports.extend(
+        ["rhasspyasr_pocketsphinx", "rhasspyasr_pocketsphinx_hermes.__main__"]
+    )
+
+if enable_wake_pocketsphinx:
+    optional_pathex.extend(
+        ["rhasspy-wake-pocketsphinx", "rhasspywake-pocketsphinx-hermes"]
+    )
+    optional_imports.extend(
+        ["rhasspywake_pocketsphinx", "rhasspywake_pocketsphinx_hermes.__main__"]
+    )
+
+if enable_kaldi:
+    optional_pathex.extend(["rhasspy-asr-kaldi", "rhasspy-asr-kaldi-hermes"])
+    optional_imports.extend(["rhasspyasr_kaldi", "rhasspyasr_kaldi_hermes.__main__"])
+
+if enable_deepspeech:
+    optional_pathex.extend(["rhasspy-asr-deepspeech", "rhasspy-asr-deepspeech-hermes"])
+    optional_imports.extend(
+        ["deepspeech", "rhasspyasr_deepspeech", "rhasspyasr_deepspeech_hermes.__main__"]
+    )
+
+if enable_snowboy:
+    optional_pathex.extend(["rhasspy-wake-snowboy-hermes"])
+    optional_imports.extend(["snowboy", "rhasspywake_snowboy_hermes.__main__"])
+
+if enable_porcupine:
+    optional_pathex.extend(["rhasspy-wake-porcupine-hermes"])
+    optional_imports.extend(["rhasspywake_porcupine_hermes.__main__"])
+
+if enable_precise:
+    optional_pathex.extend(["rhasspy-wake-precise-hermes"])
+    optional_imports.extend(["rhasspywake_precise_hermes.__main__"])
+
+if enable_snips:
+    optional_pathex.extend(["rhasspy-snips-nlu", "rhasspy-snips-nlu-hermes"])
+    optional_imports.extend(["rhasspysnips_nlu", "rhasspysnips_nlu_hermes.__main__"])
+
+# -----------------------------------------------------------------------------
+
 a = Analysis(
     [Path.cwd() / "__main__.py"],
-    pathex=["."],
+    pathex=[
+        ".",
+        "rhasspy-asr",
+        "rhasspy-dialogue-hermes",
+        "rhasspy-hermes",
+        "rhasspy-homeassistant-hermes",
+        "rhasspy-microphone-cli-hermes",
+        "rhasspy-microphone-pyaudio-hermes",
+        "rhasspy-nlu",
+        "rhasspy-nlu-hermes",
+        "rhasspy-profile",
+        "rhasspy-remote-http-hermes",
+        "rhasspy-server-hermes",
+        "rhasspy-silence",
+        "rhasspy-speakers-cli-hermes",
+        "rhasspy-supervisor",
+        "rhasspy-tts-cli-hermes",
+    ],
     binaries=[(p, ".") for p in found_artifacts.values()],
     datas=copy_metadata("webrtcvad"),
-    hiddenimports=["networkx"],
+    hiddenimports=[
+        "aiofiles",
+        "aiohttp",
+        "networkx",
+        "num2words",
+        "pyaudio",
+        "rhasspyasr",
+        "rhasspydialogue_hermes.__main__",
+        "rhasspyhermes.__main__",
+        "rhasspyhomeassistant_hermes.__main__",
+        "rhasspymicrophone_cli_hermes.__main__",
+        "rhasspymicrophone_pyaudio_hermes.__main__",
+        "rhasspynlu",
+        "rhasspynlu.__main__",
+        "rhasspynlu_hermes.__main__",
+        "rhasspyprofile.__main__",
+        "rhasspyrasa_nlu_hermes.__main__",
+        "rhasspyremote_http_hermes.__main__",
+        "rhasspyserver_hermes.__main__",
+        "rhasspysilence.__main__",
+        "rhasspyspeakers_cli_hermes.__main__",
+        "rhasspysupervisor.__main__",
+        "rhasspytts_cli_hermes.__main__",
+    ],
     hookspath=[],
     runtime_hooks=[],
     excludes=[],

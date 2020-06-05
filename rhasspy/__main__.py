@@ -6,6 +6,7 @@ _LOGGER = logging.getLogger(__name__)
 # -----------------------------------------------------------------------------
 
 _COMMANDS = [
+    "asr-deepspeech-hermes",
     "asr-pocketsphinx",
     "asr-pocketsphinx-hermes",
     "asr-kaldi",
@@ -14,10 +15,12 @@ _COMMANDS = [
     "fuzzywuzzy",
     "fuzzywuzzy-hermes",
     "hermes",
+    "homeassistant-hermes",
     "microphone-cli-hermes",
     "microphone-pyaudio-hermes",
     "nlu",
     "nlu-hermes",
+    "rasa-nlu-hermes",
     "profile",
     "remote-http-hermes",
     "silence",
@@ -27,6 +30,7 @@ _COMMANDS = [
     "tts-cli-hermes",
     "wake-pocketsphinx-hermes",
     "wake-porcupine-hermes",
+    "wake-precise-hermes",
     "wake-snowboy-hermes",
 ]
 
