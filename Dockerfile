@@ -5,7 +5,8 @@ ENV LANG C.UTF-8
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
-        build-essential swig libatlas-base-dev portaudio19-dev
+        build-essential swig libatlas-base-dev portaudio19-dev \
+        curl
 
 # -----------------------------------------------------------------------------
 
@@ -16,7 +17,8 @@ ENV LANG C.UTF-8
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
-        build-essential swig libatlas-base-dev portaudio19-dev
+        build-essential swig libatlas-base-dev portaudio19-dev \
+        curl
 
 # -----------------------------------------------------------------------------
 
@@ -27,7 +29,8 @@ ENV LANG C.UTF-8
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
-        build-essential swig libatlas-base-dev portaudio19-dev
+        build-essential swig libatlas-base-dev portaudio19-dev \
+        curl
 
 # -----------------------------------------------------------------------------
 
@@ -37,7 +40,8 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
-        swig libatlas-base-dev portaudio19-dev
+        swig libatlas-base-dev portaudio19-dev \
+        curl
 
 # -----------------------------------------------------------------------------
 
