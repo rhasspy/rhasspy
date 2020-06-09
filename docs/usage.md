@@ -85,7 +85,51 @@ Direct interface for editing your [profile](profiles.md).
 ## Home Assistant
 
 Rhasspy communicates with Home Assistant directly over its [REST API](https://developers.home-assistant.io/docs/en/external_api_rest.html).
-Specifically, Rhasspy intents are POST-ed to the [events endpoint](https://developers.home-assistant.io/docs/en/external_api_rest.html#post-api-events-lt-event_type).
+Specifically, Rhasspy intents are POST-ed to the `/api/intents/handle` endpoint.
+
+You **must** add `intent:` to your Home Assistant `configuration.yaml` to enable the endpoint.
+
+To get started, check out the [built-in intents](https://developers.home-assistant.io/docs/intent_builtin/). You can trigger them by simply naming your Rhasspy intents the same:
+
+```ini
+[HassTurnOn]
+turn on the (bedroom light){name}
+
+[HassTurnOff]
+turn off the (bedroom light){name}
+```
+
+If you have an entity named "bedroom light" in Home Assistant, you can now turn it on and off from Rhasspy!
+
+Adding a custom intent to Home Assistant is done with the [intent script](https://www.home-assistant.io/integrations/intent_script) component. For example, a `GetTemperature` intent in Rhasspy might be defined as:
+
+```ini
+[GetTemperature]
+whats the temperature
+```
+
+In Home Assistant's `configuration.yaml` file, add:
+
+```yaml
+intent_script:
+  GetTemperature:  # Intent type
+    speech:
+      text: We have {{ states.sensor.temperature }} degrees
+    action:
+      service: notify.notify
+      data_template:
+        message: Hello from an intent!
+```
+
+Assuming you have a sensor configured in Home Assistant, you should now be able to ask "what's the temperature" and have Rhasspy speak the response.
+
+### Automatically Downloading Entities
+
+See the [Home Assistant example](https://github.com/rhasspy/rhasspy/tree/master/examples/homeassistant) for a full set of example sentences, slots, and slot programs that will automatically download entity names from your Home Assistant server.
+
+### Events Instead of Intents
+
+Rhasspy can also communicate with Home Assistant using the [events endpoint](https://developers.home-assistant.io/docs/en/external_api_rest.html#post-api-events-lt-event_type). If you choose this communication method, you must write your own automation scripts to handle these events.
 
 If you have a Rhasspy intent named `ChangeLightColor` with `name` and `color` slots like in the [RGB light example](index.md#rgb-light-example), then Home Assistant will receive an event of type `rhasspy_ChangeLightColor` whose event data is:
 
@@ -108,8 +152,6 @@ automation:
   action:
     ...
 ```
-
-You've now added offline, private voice commands to your Home Assistant. Happy automating!
 
 ### Getting the Spoken Text
 
