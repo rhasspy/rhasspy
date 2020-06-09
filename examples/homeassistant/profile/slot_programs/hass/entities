@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Downloads available entities from a running Home Assistant server using the
+# REST API and prints their friendly names as slot values.
+#
+# Requires: curl, jq, bash to be installed
+#
+# Assumes that you have configured Home Assistant in Rhasspy already, and that a
+# long-lived access token is being used for authentication.
+#
+# Each argument to the script in the name of a domain to filter on.
+# For example: $hass/entities,light,switch will only return entities whose ids
+# start with "light." and "switch."
+# If no arguments are provided, all entities will be returned.
+#
+# NOTE: This script will not currently work with a custom HTTPS certificate.
+# Look at the home_assistant.pem_file and home_assistant.key_file profile
+# settings if you want to add it.
+
+set -e
+
+# Read Rhasspy profile JSON
+profile="${RHASSPY_PROFILE_DIR}/profile.json"
+
+# Example: http://localhost:8123
+url="$(jq --raw-output .home_assistant.url < "${profile}")"
+
+# Long-lived access token
+token="$(jq --raw-output .home_assistant.access_token < "${profile}")"
+
+# -----------------------------------------------------------------------------
+
+# Use REST api to list the states of all Home Assistant entities.
+# Returns a JSON list of entitiy states.
+# We use jq to reformat this as a two-column list with the format: <entity_id> <friendly_name>.
+echo "GET ${url}/api/states" >&2
+curl -X GET \
+     -H "Authorization: Bearer ${token}" \
+     -H 'Content-Type: application/json' \
+     "${url}/api/states"  | \
+    jq --raw-output '.[] as $e | "\($e.entity_id) \($e.attributes.friendly_name)"' | \
+    while read -r entity_id friendly_name;
+    do
+        # Debug to stderr
+        echo "${entity_id} ${friendly_name}" >&2
+
+        if [[ ! -z "$1" ]]; then
+            # Filter based on domain
+            for domain in "$@";
+            do
+                # Check if entity id starts with domain and a dot
+                domain_regex="^${domain}\."
+                if [[ "${entity_id}" =~ $domain_regex ]]; then
+                    echo "${friendly_name}"
+                    break
+                fi
+            done
+        else
+            # All entities
+            echo "${friendly_name}"
+        fi
+    done

@@ -1,0 +1,21 @@
+version: '2'
+services:
+  rhasspy:
+    image: rhasspy/rhasspy
+    ports:
+      - 12101:12101
+    volumes:
+      - ${HOME}/.config/rhasspy/profiles:/profiles
+      - /etc/localtime:/etc/localtime:ro
+    devices:
+        - /dev/snd:/dev/snd
+    command: --user-profiles /profiles --profile en
+    tty: true
+  homeassistant:
+    image: homeassistant/home-assistant
+    ports:
+      - 8123:8123
+    volumes:
+      - ./config:/config
+      - /etc/localtime:/etc/localtime:ro
+    tty: true
