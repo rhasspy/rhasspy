@@ -20,6 +20,32 @@ version="$(cat "${src_dir}/VERSION")"
 
 : "${PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64,linux/arm/v6}"
 
+DOCKERFILE="${src_dir}/Dockerfile.debian"
+
+if [[ -z "${NO_PROXY}" ]]; then
+    export PROXY_IP="$(hostname -I | awk '{print $1}')"
+    export PROXY_PORT=3142
+    export PROXY="${PROXY_IP}:${PROXY_PORT}"
+    export PYPI_PORT=4000
+    export PYPI="${PROXY_IP}:${PYPI_PORT}"
+    export PYPI_HOST="${PROXY_IP}"
+
+    # Use temporary file instead
+    temp_dockerfile="$(mktemp -p "${src_dir}")"
+    function cleanup {
+        rm -f "${temp_dockerfile}"
+    }
+
+    trap cleanup EXIT
+
+    # Run through pre-processor to replace variables
+    "${src_dir}/docker/preprocess.sh" < "${DOCKERFILE}" > "${temp_dockerfile}"
+    DOCKERFILE="${temp_dockerfile}"
+
+    echo "Debian proxy: ${PROXY}"
+    echo "PyPI proxy: ${PYPI}"
+fi
+
 # ------------------------------------------------------------------------------
 
 rm -f "${dist_dir}/rhasspy_${version}_"*.deb
@@ -27,9 +53,10 @@ rm -f "${dist_dir}/rhasspy_${version}_"*.deb
 echo "Building..."
 docker buildx build \
        "${src_dir}" \
-       -f "${src_dir}/Dockerfile.debian" \
+       -f "${DOCKERFILE}" \
        "--platform=${PLATFORMS}" \
-       --output "type=local,dest=${dist_dir}"
+       --output "type=local,dest=${dist_dir}" \
+       "$@"
 
 # Manually copy out
 in_amd64="${dist_dir}/linux_amd64/rhasspy_${version}_amd64.deb"
