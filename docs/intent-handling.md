@@ -32,9 +32,32 @@ Add to your [profile](profiles.md):
 
 If you're running Rhasspy as an add-on inside [Hass.io](https://www.home-assistant.io/hassio/), the access token is [automatically provided](https://developers.home-assistant.io/docs/en/hassio_addon_communication.html#hassio-api). Otherwise, you'll need to create a [long-lived access token](https://www.home-assistant.io/docs/authentication/) and set `home_assistant.access_token` manually.
 
+See the [Home Assistant Example](https://github.com/rhasspy/rhasspy/tree/master/examples/homeassistant) for sentences that use Home Assistant's [built-in intents](https://developers.home-assistant.io/docs/intent_builtin/) and a [slot program](training.md#slot-programs) can automatically download the names of your entities.
+
+When an intent is triggered, any speech received from Home Assistant is automatically forwarded to your [text to speech system](text-to-speech.md).
+
+### Intents
+
+Home Assistant can accept intents directly from Rhasspy using an HTTP endpoint. Add the following to your `configuration.yaml` file:
+
+```yaml
+intent:
+```
+
+This will enable intents over the HTTP endponit. Next, write [intent scripts](https://www.home-assistant.io/integrations/intent_script) to handle each Rhasspy intent:
+
+```yaml
+intent_script:
+  ChangeLightColor:
+    action:
+      ...
+```
+
+The possible [actions](https://www.home-assistant.io/docs/automation/action/) are the same as in automations.
+
 ### Events
 
-Rhasspy will send Home Assistant an event every time an intent is recognized through its [REST API](https://developers.home-assistant.io/docs/en/external_api_rest.html#post-api-events-lt-event-type). The type of the event is determined by the name of the intent, and the event data comes from the tagged words in your [sentences](training.md#sentencesini).
+Rhasspy can also send Home Assistant an event every time an intent is recognized through its [REST API](https://developers.home-assistant.io/docs/en/external_api_rest.html#post-api-events-lt-event-type). The type of the event is determined by the name of the intent, and the event data comes from the tagged words in your [sentences](training.md#sentencesini).
 
 For example, if you have an intent like:
 
@@ -71,27 +94,6 @@ In order to do something with the `rhasspy_ChangeLightColor` event, create an au
   action:
     ...
 ```
-
-See the documentation on [actions](https://www.home-assistant.io/docs/automation/action/) for the different things you can do with Home Assistant.
-
-### Intents
-
-More recent versions of Home Assistant can accept intents directly. Add the following to your `configuration.yaml` file:
-
-```yaml
-intent:
-```
-
-This will enable intents over the HTTP API. Next, write [intent scripts](https://www.home-assistant.io/integrations/intent_script) to handle each Rhasspy intent:
-
-```yaml
-intent_script:
-  ChangeLightColor:
-    action:
-      ...
-```
-
-The possible [actions](https://www.home-assistant.io/docs/automation/action/) are the same as in automations.
 
 Implemented by [rhasspy-homeassistant-hermes](https://github.com/rhasspy/rhasspy-homeassistant-hermes)
 
