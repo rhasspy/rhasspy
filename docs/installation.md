@@ -134,7 +134,7 @@ $ sudo apt-get install \
        python3 python3-dev python3-setuptools python3-pip python3-venv \
        git build-essential libatlas-base-dev swig portaudio19-dev \
        supervisor mosquitto sox alsa-utils libgfortran4 \
-       espeak flite libttspico-utils \
+       espeak flite \
        perl curl patchelf ca-certificates
 ```
 
@@ -143,25 +143,27 @@ and then clone/build:
 ```bash
 $ git clone --recursive https://github.com/rhasspy/rhasspy
 $ cd rhasspy/
-$ ./configure
+$ ./configure --enable-in-place
 $ make
 $ make install
 ```
 
 This will install Rhasspy inside a virtual environment at `$PWD/.venv` by default with **all** of the supported speech to text engines and supporting tools. When installation is finished, copy `rhasspy.sh` somewhere in your `PATH` and rename it to `rhasspy`.
 
+The `--enable-in-place` option will use the source files in the Rhasspy submodules (e.g., `rhasspy-nlu-hermes/rhasspynlu_hermes`) directly instead of installing them with `pip`. This allows you to change the code and simply re-run `rhasspy.sh` with the modifications.
+
 ### Customizing Installation
 
 You can pass additional information to `configure` to avoid installing parts of Rhasspy that you won't use. For example, if you only plan to use the French language profiles, set the `RHASSPY_LANGUAGE` environment variable to `fr` when configuring your installation:
 
 ```bash
-$ ./configure RHASSPY_LANGUAGE=fr
+$ ./configure RHASSPY_LANGUAGE=fr --enable-in-place
 ```
 
 The installation will now be configured to install only Kaldi (if supported). If instead you want a specific speech to text system, use `RHASSPY_SPEECH_SYSTEM` like:
 
 ```bash
-$ ./configure RHASSPY_SPEECH_SYSTEM=deepspeech
+$ ./configure RHASSPY_SPEECH_SYSTEM=deepspeech --enable-in-place
 ```
 
 which will only enable DeepSpeech (on supported platforms). The `RHASSPY_WAKE_SYSTEM` variable controls which wake system is installed, such as `precise` or `porcupine`.
@@ -177,7 +179,7 @@ To update your Rhasspy virtual environment, you must update your code and any de
 ```bash
 $ git submodule foreach git pull origin master
 $ git pull origin master
-$ ./configure
+$ ./configure --enable-in-place
 $ make
 $ make install
 ```
