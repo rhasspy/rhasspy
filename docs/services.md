@@ -27,6 +27,28 @@ Most messages contain a string `siteId` property, whose default value is "defaul
 
 ---
 
+## Internal vs. External MQTT
+
+Rhasspy operates in one of two MQTT modes: internal or external. If you want to interact with Rhasspy over MQTT or use a [server with satellites](tutorials.md#server-with-satellites), it's important to understand the difference.
+
+### Internal MQTT
+
+When Rhasspy is configured for internal MQTT (the default), a [`mosquitto`](https://mosquitto.org/) broker is automatically started on port 12183 (override with `--local-mqtt-port`). All of Rhasspy's services will connect to this private broker and send messages through it.
+
+![Internal MQTT broker](img/mqtt-internal.svg)
+
+If you're running Rhasspy inside [Docker](installation.md#docker), make sure to add `-p 12183:12183` to expose this port. Any downstream MQTT tools, like `mosquitto_pub` or `NodeRED` will need to have the MQTT port changed to 12183.
+
+### External MQTT
+
+If you have your own MQTT broker that you'd like Rhasspy to share, configure it for external MQTT mode. In this mode, Rhasspy will simply connect all of its services to your broker.
+
+![External MQTT broker](img/mqtt-external.svg)
+
+Streaming audio from your [microphone](audio-input.md) can sometimes cause congestion in an MQTT broker shared by many different services. For these scenarios, it's recommended to enable [UDP audio streaming](tutorials.md#udp-audio-streaming) for **both** the Rhasspy audio input service and wake word service. This will disable MQTT audio streaming until the wake word has been detected, and again after a voice command has been spoken.
+
+---
+
 ## Web Server
 
 Provides a [graphical web interface](usage.md#web-interface) for managing Rhasspy, and handles downloading language-specific profile artifacts.

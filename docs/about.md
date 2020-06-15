@@ -26,6 +26,7 @@ The following tools/libraries help to support Rhasspy:
 * [KenLM](https://kheafield.com/code/kenlm/) (language modeling)
 * [MaryTTS](http://mary.dfki.de) (text to speech)
 * [Montreal Forced Aligner](https://montreal-forced-aligner.readthedocs.io/en/latest/) (acoustic models)
+* [mosquitto](https://mosquitto.org/) (MQTT broker)
 * [Mycroft Precise](https://github.com/MycroftAI/mycroft-precise)
 * [nanoTTS](https://github.com/gmn/nanotts) (text to speech)
 * [Opengrm](http://www.opengrm.org/twiki/bin/view/GRM/NGramLibrary) (language modeling)
