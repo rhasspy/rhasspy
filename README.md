@@ -41,6 +41,8 @@ Rhasspy is <strong>optimized for</strong>:
 * Voice commands with [uncommon words or pronunciations](https://rhasspy.readthedocs.io/en/latest/usage/#words-tab)
     * New words are added phonetically with [automated assistance](https://github.com/AdolfVonKleist/Phonetisaurus)
     
+If you'd like more details about how Rhasspy works, see [the whitepaper](whitepaper.md).
+
 ## Web Interface
 
 Rhasspy comes with a [snazzy web interface](https://rhasspy.readthedocs.io/en/latest/usage/#web-interface) that lets you configure, program, and test your voice assistant remotely from your web browser. All of the web UI's functionality is exposed in a comprehensive [HTTP API](https://rhasspy.readthedocs.io/en/latest/reference/#http-api).
