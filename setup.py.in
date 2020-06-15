@@ -54,7 +54,7 @@ def is_yes(s):
 # fuzzywuzzy
 enable_fuzzywuzzy = is_yes("@ENABLE_FUZZYWUZZY@")
 if not enable_fuzzywuzzy:
-    packages.pop("rhasspyfuzzywuzzy-hermes")
+    packages.pop("rhasspyfuzzywuzzy_hermes")
 
 # pocketsphinx
 enable_wake_pocketsphinx = is_yes("@ENABLE_WAKE_POCKETSPHINX@")
