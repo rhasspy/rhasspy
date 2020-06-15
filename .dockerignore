@@ -46,6 +46,7 @@
 !rhasspy-asr-deepspeech/README.md
 !rhasspy-asr-deepspeech/MANIFEST.in
 
+!rhasspy-asr-deepspeech-hermes/bin/rhasspy-asr-deepspeech-hermes
 !rhasspy-asr-deepspeech-hermes/rhasspyasr_deepspeech_hermes/*.py
 !rhasspy-asr-deepspeech-hermes/setup.py
 !rhasspy-asr-deepspeech-hermes/requirements.txt
@@ -60,6 +61,7 @@
 !rhasspy-asr-pocketsphinx/README.md
 !rhasspy-asr-pocketsphinx/MANIFEST.in
 
+!rhasspy-asr-pocketsphinx-hermes/bin/rhasspy-asr-pocketsphinx-hermes
 !rhasspy-asr-pocketsphinx-hermes/rhasspyasr_pocketsphinx_hermes/*.py
 !rhasspy-asr-pocketsphinx-hermes/setup.py
 !rhasspy-asr-pocketsphinx-hermes/requirements.txt
@@ -74,6 +76,7 @@
 !rhasspy-asr-kaldi/README.md
 !rhasspy-asr-kaldi/MANIFEST.in
 
+!rhasspy-asr-kaldi-hermes/bin/rhasspy-asr-kaldi-hermes
 !rhasspy-asr-kaldi-hermes/rhasspyasr_kaldi_hermes/*.py
 !rhasspy-asr-kaldi-hermes/setup.py
 !rhasspy-asr-kaldi-hermes/requirements.txt
@@ -81,6 +84,7 @@
 !rhasspy-asr-kaldi-hermes/README.md
 !rhasspy-asr-kaldi-hermes/MANIFEST.in
 
+!rhasspy-dialogue-hermes/bin/rhasspy-dialogue-hermes
 !rhasspy-dialogue-hermes/rhasspydialogue_hermes/*.py
 !rhasspy-dialogue-hermes/setup.py
 !rhasspy-dialogue-hermes/requirements.txt
@@ -95,6 +99,7 @@
 !rhasspy-fuzzywuzzy/README.md
 !rhasspy-fuzzywuzzy/MANIFEST.in
 
+!rhasspy-fuzzywuzzy-hermes/bin/rhasspy-fuzzywuzzy-hermes
 !rhasspy-fuzzywuzzy-hermes/rhasspyfuzzywuzzy_hermes/*.py
 !rhasspy-fuzzywuzzy-hermes/setup.py
 !rhasspy-fuzzywuzzy-hermes/requirements.txt
@@ -109,6 +114,7 @@
 !rhasspy-hermes/README.md
 !rhasspy-hermes/MANIFEST.in
 
+!rhasspy-homeassistant-hermes/bin/rhasspy-homeassistant-hermes
 !rhasspy-homeassistant-hermes/rhasspyhomeassistant_hermes/*.py
 !rhasspy-homeassistant-hermes/setup.py
 !rhasspy-homeassistant-hermes/requirements.txt
@@ -116,6 +122,7 @@
 !rhasspy-homeassistant-hermes/README.md
 !rhasspy-homeassistant-hermes/MANIFEST.in
 
+!rhasspy-microphone-cli-hermes/bin/rhasspy-microphone-cli-hermes
 !rhasspy-microphone-cli-hermes/rhasspymicrophone_cli_hermes/*.py
 !rhasspy-microphone-cli-hermes/setup.py
 !rhasspy-microphone-cli-hermes/requirements.txt
@@ -123,6 +130,7 @@
 !rhasspy-microphone-cli-hermes/README.md
 !rhasspy-microphone-cli-hermes/MANIFEST.in
 
+!rhasspy-microphone-pyaudio-hermes/bin/rhasspy-microphone-pyaudio-hermes
 !rhasspy-microphone-pyaudio-hermes/rhasspymicrophone_pyaudio_hermes/*.py
 !rhasspy-microphone-pyaudio-hermes/setup.py
 !rhasspy-microphone-pyaudio-hermes/requirements.txt
@@ -137,6 +145,7 @@
 !rhasspy-nlu/README.md
 !rhasspy-nlu/MANIFEST.in
 
+!rhasspy-nlu-hermes/bin/rhasspy-nlu-hermes
 !rhasspy-nlu-hermes/rhasspynlu_hermes/*.py
 !rhasspy-nlu-hermes/setup.py
 !rhasspy-nlu-hermes/requirements.txt
@@ -151,6 +160,7 @@
 !rhasspy-profile/README.md
 !rhasspy-profile/MANIFEST.in
 
+!rhasspy-rasa-nlu-hermes/bin/rhasspy-rasa-nlu-hermes
 !rhasspy-rasa-nlu-hermes/rhasspyrasa_nlu_hermes/*.py
 !rhasspy-rasa-nlu-hermes/setup.py
 !rhasspy-rasa-nlu-hermes/requirements.txt
@@ -166,6 +176,7 @@
 !rhasspy-snips-nlu/MANIFEST.in
 !rhasspy-snips-nlu/etc/languages/*.tar.gz
 
+!rhasspy-snips-nlu-hermes/bin/rhasspy-snips-nlu-hermes
 !rhasspy-snips-nlu-hermes/rhasspysnips_nlu_hermes/*.py
 !rhasspy-snips-nlu-hermes/setup.py
 !rhasspy-snips-nlu-hermes/requirements.txt
@@ -173,6 +184,7 @@
 !rhasspy-snips-nlu-hermes/README.md
 !rhasspy-snips-nlu-hermes/MANIFEST.in
 
+!rhasspy-remote-http-hermes/bin/rhasspy-remote-http-hermes
 !rhasspy-remote-http-hermes/rhasspyremote_http_hermes/*.py
 !rhasspy-remote-http-hermes/setup.py
 !rhasspy-remote-http-hermes/requirements.txt
@@ -180,6 +192,7 @@
 !rhasspy-remote-http-hermes/README.md
 !rhasspy-remote-http-hermes/MANIFEST.in
 
+!rhasspy-server-hermes/bin/rhasspy-server-hermes
 !rhasspy-server-hermes/rhasspyserver_hermes/*.py
 !rhasspy-server-hermes/setup.py
 !rhasspy-server-hermes/requirements.txt
@@ -196,6 +209,7 @@
 !rhasspy-silence/README.md
 !rhasspy-silence/MANIFEST.in
 
+!rhasspy-speakers-cli-hermes/bin/rhasspy-speakers-cli-hermes
 !rhasspy-speakers-cli-hermes/rhasspyspeakers_cli_hermes/*.py
 !rhasspy-speakers-cli-hermes/setup.py
 !rhasspy-speakers-cli-hermes/requirements.txt
@@ -210,6 +224,7 @@
 !rhasspy-supervisor/README.md
 !rhasspy-supervisor/MANIFEST.in
 
+!rhasspy-tts-cli-hermes/bin/rhasspy-tts-cli-hermes
 !rhasspy-tts-cli-hermes/rhasspytts_cli_hermes/*.py
 !rhasspy-tts-cli-hermes/setup.py
 !rhasspy-tts-cli-hermes/requirements.txt
@@ -217,6 +232,7 @@
 !rhasspy-tts-cli-hermes/README.md
 !rhasspy-tts-cli-hermes/MANIFEST.in
 
+!rhasspy-wake-pocketsphinx-hermes/bin/rhasspy-wake-pocketsphinx-hermes
 !rhasspy-wake-pocketsphinx-hermes/rhasspywake_pocketsphinx_hermes/*.py
 !rhasspy-wake-pocketsphinx-hermes/setup.py
 !rhasspy-wake-pocketsphinx-hermes/requirements.txt
@@ -224,6 +240,7 @@
 !rhasspy-wake-pocketsphinx-hermes/README.md
 !rhasspy-wake-pocketsphinx-hermes/MANIFEST.in
 
+!rhasspy-wake-porcupine-hermes/bin/rhasspy-wake-porcupine-hermes
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/*.py
 !rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine
 !rhasspy-wake-porcupine-hermes/setup.py
@@ -232,6 +249,7 @@
 !rhasspy-wake-porcupine-hermes/README.md
 !rhasspy-wake-porcupine-hermes/MANIFEST.in
 
+!rhasspy-wake-precise-hermes/bin/rhasspy-wake-precise-hermes
 !rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/*.py
 !rhasspy-wake-precise-hermes/setup.py
 !rhasspy-wake-precise-hermes/requirements.txt
@@ -240,6 +258,7 @@
 !rhasspy-wake-precise-hermes/MANIFEST.in
 !rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models
 
+!rhasspy-wake-snowboy-hermes/bin/rhasspy-wake-snowboy-hermes
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/*.py
 !rhasspy-wake-snowboy-hermes/setup.py
 !rhasspy-wake-snowboy-hermes/requirements.txt

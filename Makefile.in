@@ -43,6 +43,8 @@ pkgincludedir = $(includedir)/@PACKAGE_NAME@
 # Dependencies
 # -----------------------------------------------------------------------------
 
+IN_PLACE = @IN_PLACE@
+
 BUILD_DIR ?= $(srcdir)/build
 DOWNLOAD_DIR ?= $(srcdir)/download
 DO_DOWNLOAD ?= curl -sSfL -o
@@ -143,6 +145,7 @@ install-dependencies: install-opengrm \
 install-rhasspy:
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
 	chmod +x "${srcdir}/rhasspy.sh"
+ifneq ($(IN_PLACE),yes)
 	install -D "${srcdir}/rhasspy.sh" "$(DESTDIR)$(prefix)/bin/rhasspy"
 	install -D "--target-directory=$(DESTDIR)$(prefix)/bin" "${srcdir}/bin/rhasspy-voltron" "${srcdir}/bin/voltron-run" || true
 	install -D "--target-directory=$(DESTDIR)$(prefix)/share/rhasspy/etc" "${srcdir}/etc/shflags"
@@ -151,6 +154,7 @@ install-rhasspy:
 	cp -fR "${srcdir}/rhasspy-server-hermes/web" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/templates" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/" || true
+endif  # IN_PLACE
 
 # -----------------------------------------------------------------------------
 
