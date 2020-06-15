@@ -108,11 +108,11 @@ COPY configure config.sub config.guess \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
-    ./configure --enable-in-place --prefix=${APP_DIR}
+    ./configure --enable-in-place --prefix=${APP_DIR}/.venv
 
 COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
-COPY VERSION README.md LICENSE RHASSPY_DIRS ${BUILD_DIR}/
+COPY RHASSPY_DIRS ${BUILD_DIR}/
 
 # IFDEF PYPI
 #! ENV PIP_INDEX_URL=http://${PYPI}/simple/
@@ -185,7 +185,7 @@ ARG TARGETVARIANT
 FROM run-$TARGETARCH$TARGETVARIANT
 
 ENV APP_DIR=/usr/lib/rhasspy
-COPY --from=build ${APP_DIR}/ ${APP_DIR}/.venv/
+COPY --from=build ${APP_DIR}/ ${APP_DIR}/
 
 COPY etc/shflags ${APP_DIR}/etc/
 COPY etc/wav/ ${APP_DIR}/etc/wav/
