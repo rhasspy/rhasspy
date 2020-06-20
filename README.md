@@ -125,16 +125,7 @@ If you feel comfortable sending your voice commands through the Internet for som
 
 ## Contributing
 
-Community contributions are welcomed! There are many different ways to contribute:
-
-* Pull requests for bug fixes, new features, or corrections to the documentation
-* Help with any of the [supported language profiles](#supported-languages), including:
-    * Testing to make sure the acoustic models and default pronunciation dictionaries are working
-    * Translations of the [sample voice commands](https://github.com/synesthesiam/en-us_pocketsphinx-cmu/blob/master/sentences.ini)
-    * Example WAV files of you speaking with text transcriptions for performance testing
-* [Contributing to Mozilla Common Voice](https://voice.mozilla.org/)
-* Assist other [Rhasspy community members](https://community.rhasspy.org)
-* Suggest or implement new features
+Community contributions are welcomed! There are many different [ways to contribute](docs/contributing.md), both as a developer and a non-developer.
 
 ## Development Status
 

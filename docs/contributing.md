@@ -14,6 +14,17 @@ If the issue applies to Rhasspy in general, open your [issue in the rhasspy repo
 
 Make sure to check first if someone else hasn't opened a relevant issue yet. Maybe you can find the solution to your problem there, or maybe you can add your insight to it to help.
 
+## Other ways to contribute
+
+There are many other ways to contribute as a non-developer:
+
+* Help with any of the [supported language profiles](#supported-languages), including:
+    * Testing to make sure the acoustic models and default pronunciation dictionaries are working
+    * Translations of the [sample voice commands](https://github.com/synesthesiam/en-us_pocketsphinx-cmu/blob/master/sentences.ini)
+    * Example WAV files of you speaking with text transcriptions for performance testing
+* [Contributing to Mozilla Common Voice](https://voice.mozilla.org/)
+* Assist other [Rhasspy community members](https://community.rhasspy.org)
+
 ## Setting up a development environment
 
 Rhasspy is actively seeking contributions. If you want to start developing, [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the repository, clone your fork and install the project's (development) dependencies in a Python virtual environment:
