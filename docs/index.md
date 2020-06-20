@@ -125,4 +125,4 @@ If you feel comfortable sending your voice commands through the Internet for som
 
 ## Contributing
 
-Community contributions are welcomed! There are many different [ways to contribute](docs/contributing.md), both as a developer and a non-developer.
+Community contributions are welcomed! There are many different [ways to contribute](contributing.md), both as a developer and a non-developer.
