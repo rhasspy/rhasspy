@@ -138,7 +138,7 @@ RUN apt-get update && \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
         supervisor mosquitto \
-        perl curl sox alsa-utils jq \
+        perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good
 
@@ -174,7 +174,7 @@ RUN install_packages \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
         supervisor mosquitto \
-        perl curl sox alsa-utils jq \
+        perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good
 
