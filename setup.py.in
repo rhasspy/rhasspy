@@ -136,7 +136,7 @@ for module_python_dir in packages.values():
         if version_path.is_file():
             # Use version specified in VERSION file
             module_version = version_path.read_text().strip()
-            requirements.add(f"{module_dir.name}=={module_version}")
+            requirements.add(f"{module_dir.name}~={module_version}")
         else:
             # Use latest version
             requirements.add(module_dir.name)

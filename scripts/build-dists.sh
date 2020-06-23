@@ -35,7 +35,7 @@ do
     # Copy required libraries
     while read -r lib_name;
     do
-        dist_name="$(echo "${lib_name}" | sed -e 's/==/-/').tar.gz"
+        dist_name="$(echo "${lib_name}" | sed -e 's/[=~]=/-/').tar.gz"
         cp "${dist_dir}/${dist_name}" "${download_dir}/"
         echo "${dir_name} <- ${dist_name}"
     done < <(grep '^rhasspy-' "${src_dir}/${dir_name}/requirements.txt")
