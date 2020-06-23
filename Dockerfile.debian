@@ -45,7 +45,7 @@ ENV BUILD_DIR=/build
 COPY VERSION ${BUILD_DIR}/
 
 # Write shared variables to /.vars
-RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\+=//')" && \
+RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\\+=//')" && \
     export VERSION="$(cat ${BUILD_DIR}/VERSION)" && \
     export PACKAGE_NAME=rhasspy_${VERSION}_${DEBIAN_ARCH} && \
     export DEBIAN_DIR=${BUILD_DIR}/${PACKAGE_NAME} && \
