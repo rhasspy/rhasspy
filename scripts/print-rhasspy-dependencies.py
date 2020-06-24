@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import re
 from pathlib import Path
 
 _DIR = Path(__file__).parent
@@ -25,7 +26,7 @@ def main():
                     if not req_line:
                         continue
 
-                    req_name, req_version = req_line.split("==")
+                    req_name, req_version = re.split(r"[~=]=", req_line)
                     if not req_line.startswith("rhasspy-"):
                         continue
 

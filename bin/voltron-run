@@ -45,4 +45,4 @@ if [[ -f "${RHASSPY_BASE_DIR}/RHASSPY_DIRS" ]]; then
 fi
 
 # Run user command
-"$@"
+exec "$@"

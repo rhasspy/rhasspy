@@ -477,6 +477,9 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
 * <a id="api_phonemes"><tt>/api/phonemes</tt></a>
     * GET example phonemes from speech recognizer for your profile
     * See `phoneme_examples.txt` in your profile directory
+* <a id="api_play_recording"><tt>/api/play-recording</tt></a>
+    * POST to play last recorded voice command
+    * GET to download WAV data from last recorded voice command
 * <a id="api_play_wav"><tt>/api/play-wav</tt></a>
     * POST to play WAV data
     * Make sure to set `Content-Type` to `audio/wav`
