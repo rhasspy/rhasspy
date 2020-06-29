@@ -19,12 +19,10 @@ jobs:
         with:
           buildx-version: latest
           qemu-version: latest
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v1
-        with:
-          python-version: ${{ matrix.python-version }}
       - name: Checkout code
         uses: actions/checkout@v1
+        with:
+          submodules: true
       - name: Deploy image
         run: |
           docker login --username rhasspy --password "$DOCKER_PASSWORD"
