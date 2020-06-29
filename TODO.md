@@ -37,10 +37,6 @@
 
 # Dialogue Management
 
-# MQTT
-
-* TLS support
-
 # Documentation
 
 * Redo screen shots
