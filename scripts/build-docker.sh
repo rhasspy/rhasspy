@@ -5,6 +5,9 @@ set -e
 this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
+download="${src_dir}/download"
+mkdir -p "${download}"
+
 version="$(cat "${src_dir}/VERSION")"
 
 # -----------------------------------------------------------------------------
