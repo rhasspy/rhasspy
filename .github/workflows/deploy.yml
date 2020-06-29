@@ -1,7 +1,7 @@
 ---
 name: Deploy
 
-on: [deployment]
+on: [push, pull_request]
 
 jobs:
   test:
