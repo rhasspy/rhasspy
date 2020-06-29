@@ -121,7 +121,7 @@ where "en" is replaced with your profile's language or the value of `intent.rasa
 
 ### Installing Rasa NLU
 
-If you have Docker, Rasa NLU can be run with:
+If you have Docker, Rasa NLU can be run with (only on the Linux/amd64 architecture):
 
 ```bash
 docker run -it -v "$(pwd):/app" -p 5005:5005 rasa/rasa:latest-spacy-en run --enable-api
