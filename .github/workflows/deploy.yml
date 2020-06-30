@@ -29,3 +29,4 @@ jobs:
           scripts/build-docker.sh
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+          DO_DOWNLOAD: curl -sSfL --insecure -o
