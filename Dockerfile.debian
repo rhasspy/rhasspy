@@ -100,7 +100,7 @@ COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-he
 COPY RHASSPY_DIRS ${BUILD_DIR}/
 COPY scripts/build-dists.sh ${BUILD_DIR}/scripts/
 RUN cd ${BUILD_DIR} && \
-    scripts/build-dists.sh
+    scripts/build-dists.sh --no-copy
 
 # Autoconf
 COPY m4/ ${BUILD_DIR}/m4/
