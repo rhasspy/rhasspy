@@ -26,7 +26,8 @@ jobs:
       - name: Deploy image
         run: |
           docker login --username rhasspy --password "$DOCKER_PASSWORD"
+          mkdir -p download
+          scripts/download-dependencies.sh
           scripts/build-docker.sh
         env:
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-          DO_DOWNLOAD: curl -sSfL --insecure -o
