@@ -1,4 +1,30 @@
-FROM ubuntu:eoan as build-amd64
+# -----------------------------------------------------------------------------
+# Dockerfile for Rhasspy (https://github.com/rhasspy/rhasspy)
+# Requires Docker buildx: https://docs.docker.com/buildx/working-with-buildx/
+# See scripts/build-docker.sh
+#
+# Builds a multi-arch image for amd64/armv6/armv7/arm64.
+# The virtual environment from the build stage is copied over to the run stage.
+# The Rhasspy source code is then copied into the run stage and executed within
+# that virtual environment.
+#
+# Build stages are named build-$TARGETARCH$TARGETVARIANT, so build-amd64,
+# build-armv6, etc. Run stages are named similarly.
+#
+# armv6 images (Raspberry Pi 0/1) are derived from balena base images:
+# https://www.balena.io/docs/reference/base-images/base-images/#balena-base-images
+#
+# The IFDEF statements are handled by docker/preprocess.sh. These are just
+# comments that are uncommented if the environment variable after the IFDEF is
+# not empty.
+#
+# The build-docker.sh script will optionally add apt/pypi proxies running locally:
+# * apt - https://docs.docker.com/engine/examples/apt-cacher-ng/ 
+# * pypi - https://github.com/jayfk/docker-pypi-cache
+# -----------------------------------------------------------------------------
+
+# Build stage for amd64/armv7/arm64
+FROM ubuntu:eoan as build-ubuntu
 
 ENV LANG C.UTF-8
 
@@ -12,41 +38,16 @@ RUN apt-get update && \
         build-essential swig libatlas-base-dev portaudio19-dev \
         curl ca-certificates
 
-# -----------------------------------------------------------------------------
+FROM build-ubuntu as build-amd64
 
-FROM ubuntu:eoan as build-armv7
+FROM build-ubuntu as build-armv7
 
-ENV LANG C.UTF-8
-
-# IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
-RUN apt-get update && \
-    apt-get install --no-install-recommends --yes \
-        python3 python3-dev python3-setuptools python3-pip python3-venv \
-        build-essential swig libatlas-base-dev portaudio19-dev \
-        curl ca-certificates
+FROM build-ubuntu as build-arm64
 
 # -----------------------------------------------------------------------------
 
-FROM ubuntu:eoan as build-arm64
-
-ENV LANG C.UTF-8
-
-# IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
-RUN apt-get update && \
-    apt-get install --no-install-recommends --yes \
-        python3 python3-dev python3-setuptools python3-pip python3-venv \
-        build-essential swig libatlas-base-dev portaudio19-dev \
-        curl ca-certificates
-
-# -----------------------------------------------------------------------------
-
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build-armv6
+# Build stage for armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200604 as build-armv6
 
 ENV LANG C.UTF-8
 
@@ -58,6 +59,8 @@ RUN install_packages \
         swig libatlas-base-dev portaudio19-dev \
         curl ca-certificates
 
+# -----------------------------------------------------------------------------
+# Build
 # -----------------------------------------------------------------------------
 
 ARG TARGETARCH
@@ -129,7 +132,8 @@ RUN (find ${APP_DIR} -type f -executable -print0 | xargs -0 strip --strip-unneed
 
 # -----------------------------------------------------------------------------
 
-FROM ubuntu:eoan as run
+# Run stage for amd64/armv7/arm64
+FROM ubuntu:eoan as run-ubuntu
 
 ENV LANG C.UTF-8
 
@@ -141,32 +145,19 @@ RUN apt-get update && \
         supervisor mosquitto \
         perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
-        gstreamer1.0-tools gstreamer1.0-plugins-good
+        gstreamer1.0-tools gstreamer1.0-plugins-good \
+        libttspico-utils
+
+FROM run-ubuntu as run-amd64
+
+FROM run-ubuntu as run-armv7
+
+FROM run-ubuntu as run-arm64
 
 # -----------------------------------------------------------------------------
 
-FROM run as run-amd64
-
-RUN apt-get install --yes --no-install-recommends \
-    libttspico-utils
-
-# -----------------------------------------------------------------------------
-
-FROM run as run-armv7
-
-RUN apt-get install --yes --no-install-recommends \
-    libttspico-utils
-
-# -----------------------------------------------------------------------------
-
-FROM run as run-arm64
-
-RUN apt-get install --yes --no-install-recommends \
-    libttspico-utils
-
-# -----------------------------------------------------------------------------
-
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
+# Run stage for armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-run-20200604 as run-armv6
 
 ENV LANG C.UTF-8
 
@@ -179,6 +170,8 @@ RUN install_packages \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good
 
+# -----------------------------------------------------------------------------
+# Run
 # -----------------------------------------------------------------------------
 
 ARG TARGETARCH

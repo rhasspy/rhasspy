@@ -114,7 +114,7 @@ endif # VIRTUALENV == yes
 
 .PHONY: all install uninstall distclean clean dist check installdirs
 
-all: download-init build-init opengrm phonetisaurus precise pocketsphinx kaldi julius snowboy deepspeech kenlm
+all: download-init build-init opengrm phonetisaurus precise pocketsphinx kaldi julius snowboy deepspeech kenlm nanotts
 
 .PHONY: install-init install-dependencies install-rhasspy
 install: installdirs \

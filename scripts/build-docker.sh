@@ -8,8 +8,6 @@ src_dir="$(realpath "${this_dir}/..")"
 download="${src_dir}/download"
 mkdir -p "${download}"
 
-version="$(cat "${src_dir}/VERSION")"
-
 # -----------------------------------------------------------------------------
 
 : "${PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64,linux/arm/v6}"
