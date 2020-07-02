@@ -122,3 +122,6 @@
 	path = rhasspy-snips-nlu
 	url = https://github.com/rhasspy/rhasspy-snips-nlu
 	branch = master
+[submodule "rhasspy-tts-wavenet-hermes"]
+	path = rhasspy-tts-wavenet-hermes
+	url = https://github.com/rhasspy/rhasspy-tts-wavenet-hermes
