@@ -41,7 +41,15 @@ Rhasspy is <strong>optimized for</strong>:
 * Voice commands with [uncommon words or pronunciations](usage.md#words-tab)
     * New words are added phonetically with [automated assistance](https://github.com/AdolfVonKleist/Phonetisaurus)
     
-If you'd like more details about how Rhasspy works, see [the whitepaper](whitepaper.md).
+## Learn More
+
+* [Video Demonstration](https://www.youtube.com/watch?v=IsAlz76PXJQ)
+    * [Rhasspy In-Depth Series](https://www.youtube.com/playlist?list=PL0SUCSMtqzGE9z3oRFoPcz7wIM5XdIzQr)
+* Documentation
+    * [Getting Started Guide](tutorials.md#getting-started-guide)
+    * [Why Rhasspy?](why-rhasspy.md)
+    * [Whitepaper](whitepaper.md)
+* [Community Discourse]((https://community.rhasspy.org)
     
 ## Web Interface
 
