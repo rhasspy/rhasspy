@@ -232,6 +232,14 @@
 !rhasspy-tts-cli-hermes/README.md
 !rhasspy-tts-cli-hermes/MANIFEST.in
 
+!rhasspy-tts-wavenet-hermes/bin/rhasspy-tts-wavenet-hermes
+!rhasspy-tts-wavenet-hermes/rhasspytts_wavenet_hermes/*.py
+!rhasspy-tts-wavenet-hermes/setup.py
+!rhasspy-tts-wavenet-hermes/requirements.txt
+!rhasspy-tts-wavenet-hermes/VERSION
+!rhasspy-tts-wavenet-hermes/README.md
+!rhasspy-tts-wavenet-hermes/MANIFEST.in
+
 !rhasspy-wake-pocketsphinx-hermes/bin/rhasspy-wake-pocketsphinx-hermes
 !rhasspy-wake-pocketsphinx-hermes/rhasspywake_pocketsphinx_hermes/*.py
 !rhasspy-wake-pocketsphinx-hermes/setup.py

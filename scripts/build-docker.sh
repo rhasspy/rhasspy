@@ -44,5 +44,6 @@ docker buildx build \
         "--platform=${PLATFORMS}" \
         --build-arg "DOCKER_REGISTRY=${DOCKER_REGISTRY}" \
         --tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest" \
+        --tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:${version}" \
         --push \
         "$@"

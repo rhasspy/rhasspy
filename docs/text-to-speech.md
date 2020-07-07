@@ -115,7 +115,7 @@ Add to your [profile](profiles.md):
 "text_to_speech": {
   "system": "marytts",
   "marytts": {
-    "url": "http://localhost:59125",
+    "url": "http://localhost:59125/process",
     "voice": "cmu-slt",
     "locale": "en-US"
   }
@@ -128,7 +128,7 @@ To run the Docker image, simply execute:
 $ docker run -it -p 59125:59125 synesthesiam/marytts:5.2
 ```
 
-and visit [http://localhost:59125](http://localhost:59125) after it starts. 
+and visit [http://localhost:59125](http://localhost:59125) after it starts.
 
 If you're using [docker compose](https://docs.docker.com/compose/), add the following to your docker-compose.yml file:
 
@@ -140,7 +140,7 @@ services:
       - 59125:59125
 ```
 
-When using docker-compose, set `marytts.url` in your profile to be `http://marytts:59125`.  This will allow Rhasspy to resolve the address of its sibling container.
+When using docker-compose, set `marytts.url` in your profile to be `http://marytts:59125/process`.  This will allow Rhasspy to resolve the address of its sibling container.
 
 To save memory when running on a Raspberry Pi, considering [restricting the loaded voices](https://github.com/synesthesiam/docker-marytts#restricting-voices) by passing one or more `--voice <VOICE>` command-line arguments to the Docker container.
 
@@ -151,14 +151,13 @@ To save memory when running on a Raspberry Pi, considering [restricting the load
 MaryTTS is capable of applying several audio effects when producing speech.  See the web interface at [http://localhost:59125](http://localhost:59125)
 to experiment with this.
 
-
 To use these effects within Rhasspy, set `text_to_speech.marytts.effects` within your profile, for example:
 
 ```json
 "text_to_speech": {
    "system": "marytts",
    "marytts": {
-        "url": "http://localhost:59125",
+        "url": "http://localhost:59125/process",
         "effects": {
             "effect_Volume_selected": "on",
             "effect_Volume_parameters": "amount=0.9;",
@@ -202,7 +201,7 @@ To run the Docker image, simply execute:
 $ docker run -it -p 5500:5500 synesthesiam/opentts
 ```
 
-and visit [http://localhost:5500](http://localhost:5500) after it starts. 
+and visit [http://localhost:5500](http://localhost:5500) after it starts.
 
 If you're using [docker compose](https://docs.docker.com/compose/), add the following to your docker-compose.yml file:
 
@@ -213,7 +212,7 @@ services:
     ports:
       - 5500:5500
 ```
-        
+
 To run the full suite of text to speech systems offered by OpenTTS, add:
 
 ```yaml
@@ -240,8 +239,6 @@ Implemented by [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-c
 
 ## Google WaveNet
 
-**Not supported yet in 2.5!**
-
 Uses Google's [WaveNet](https://cloud.google.com/text-to-speech/docs/wavenet) text to speech system. This **requires a Google account and an internet connection to function**. Rhasspy will cache WAV files for previously spoken sentences, but you will be sending Google information for every new sentence that Rhasspy speaks.
 
 Add to your [profile](profiles.md):
@@ -256,8 +253,7 @@ Add to your [profile](profiles.md):
     "language_code": "en-US",
     "sample_rate": 22050,
     "url": "https://texttospeech.googleapis.com/v1/text:synthesize",
-    "voice": "Wavenet-C",
-    "fallback_tts": "espeak"
+    "voice": "Wavenet-C"
   }
 }
 ```
@@ -265,8 +261,6 @@ Add to your [profile](profiles.md):
 Before using WaveNet, you must set up a Google cloud account and [generate a JSON credentials file](https://cloud.google.com/text-to-speech/docs/reference/libraries#setting_up_authentication). Save the JSON credentials file to wherever `wavenet.credentials_json` points to in your profile directory. You may also need to visit your Google cloud account settings and enable the text-to-speech API.
 
 WAV files of each sentence are cached in `wavenet.cache_dir` in your profile directory. Sentences are cached based on their text and the `gender`, `voice`, `language_code`, and `sample_rate` of the `wavenet` system. Changing any of these things will require using the Google API.
-
-If there are problems using the Google API (e.g., your internet connection fails), Rhasspy will switch over to the text to speech system given in `wavenet.fallback_tts`. The settings for the fallback system will be loaded from your profile as expected.
 
 Contributed by [Romkabouter](https://github.com/Romkabouter).
 

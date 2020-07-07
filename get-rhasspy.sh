@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+# Verify presence of docker and docker-compose
 if [[ -z "$(command -v docker)" ]]; then
     echo "Docker is required"
     exit 1
@@ -10,8 +11,9 @@ if [[ -z "$(command -v docker-compose)" ]]; then
     exit 1
 fi
 
-rhasspy_supervisor_version='0.1.3'
-rhasspy_server_version='2.5.0'
+# Docker container versions
+rhasspy_supervisor_version='latest'
+rhasspy_server_version='latest'
 
 # -----------------------------------------------------------------------------
 
@@ -49,6 +51,7 @@ user_profiles="${config_home}/rhasspy/profiles"
 # Runs Docker container with rhasspy-supervisor tool.
 # This reads a Rhasspy JSON profile and writes a Docker compose YAML file.
 function rhasspy_supervisor {
+    # Run rhasspy/rhasspy-supervisor tool
     docker run -it \
            --user "$(id -u):$(id -g)" \
            -v "${user_profiles}:${user_profiles}" \
@@ -56,20 +59,29 @@ function rhasspy_supervisor {
            "$@"
 }
 
+if [[ -z "${RHASSPY_BASE_DIR}" ]]; then
+    # Base directory is inside rhasspy-server-hermes container
+    export RHASSPY_BASE_DIR='/usr/lib/rhasspy-server-hermes'
+fi
+
 # Runs a Docker container with rhasspy-server-hermes service.
 # The web server frontend to Rhasspy, available on HTTP port 12101.
 function rhasspy_server {
+    # Run rhasspy/rhasspy-server-hermes web server
     docker run -it \
            --user "$(id -u):$(id -g)" \
            --network host \
            -v "${user_profiles}:${user_profiles}" \
            "rhasspy/rhasspy-server-hermes:${rhasspy_server_version}" \
+           --web-dir '/usr/lib/rhasspy-server-hermes/web' \
            "$@"
 }
 
 # -----------------------------------------------------------------------------
 
-# Clean up profile
+# Clean up supervisord artifacts.
+# If a supervisord.pid file is present, Rhasspy will think it's running under
+# supervisord instead.
 pid_file="${user_profiles}/${profile}/supervisord.pid"
 rm -f "${pid_file}"
 
@@ -85,8 +97,13 @@ rhasspy_supervisor \
 
 compose_file="${user_profiles}/${profile}/docker-compose.yml"
 
+# Stop on error going forward
+set -e
+
 # Start Rhasspy services
 docker-compose --file "${compose_file}" up --detach
+
+# Signal successful startup
 touch "${running_file}"
 
 # Watch for a restart signal in the background
@@ -94,6 +111,8 @@ touch "${running_file}"
     while true;
     do
         sleep 0.5
+
+        # Check for presence of restart file
         if [[ -f "${restart_file}" ]];
         then
             # Restart Rhasspy services

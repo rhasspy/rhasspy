@@ -296,6 +296,7 @@ The `!name` syntax calls a converter by name. Rhasspy includes several built-in 
 * int - convert to integer
 * float - convert to real
 * bool - convert to boolean
+    * `False` for zero or "false" (case insensitive)
 * lower - lower-case
 * upper - upper-case
 
