@@ -35,9 +35,6 @@ Add to your [profile](profiles.md):
 "wake": {
   "system": "porcupine",
   "porcupine": {
-    "library_path": "porcupine/libpv_porcupine.so",
-    "model_path": "porcupine/porcupine_params.pv",
-    "keyword_path": "porcupine/porcupine.ppn",
     "sensitivity": 0.5
   }
 },
