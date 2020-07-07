@@ -46,7 +46,7 @@ RUN apt-get update && \
 
 # -----------------------------------------------------------------------------
 
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200604 as build-armv6
 
 ENV LANG C.UTF-8
 
@@ -166,7 +166,7 @@ RUN apt-get install --yes --no-install-recommends \
 
 # -----------------------------------------------------------------------------
 
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-run-20200604 as run-armv6
 
 ENV LANG C.UTF-8
 

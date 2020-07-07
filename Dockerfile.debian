@@ -21,7 +21,7 @@ FROM base as base-armv7
 
 FROM base as base-arm64
 
-FROM balenalib/raspberry-pi-debian-python:3.7-stretch-build as base-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-stretch-build-20200604 as base-armv6
 
 ENV LANG C.UTF-8
 
@@ -144,7 +144,9 @@ RUN . /.vars && \
 
 # Strip binaries and shared libraries
 RUN . /.vars && \
-    (find ${DEBIAN_DIR}${APP_DIR} -type f \\( -name '*.so*' -or -executable \\) -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
+    (find ${DEBIAN_DIR}${APP_DIR} -type f -name '*.so*' -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
+RUN . /.vars && \
+    (find ${DEBIAN_DIR}${APP_DIR} -type f -executable -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
 
 COPY debian/rhasspy debian/sox debian/fix-rhasspy-scripts.sh /tmp/
 RUN . /.vars && \
