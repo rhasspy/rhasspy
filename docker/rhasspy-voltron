@@ -12,7 +12,7 @@ else
     profile_dir="${XDG_CONFIG_HOME}/rhasspy/profiles"
 fi
 
-version="$(cat VERSION)"
+version='latest'
 
 docker run -it -p 12101:12101 \
        --device /dev/snd:/dev/snd \
