@@ -8,6 +8,8 @@ src_dir="$(realpath "${this_dir}/..")"
 download="${src_dir}/download"
 mkdir -p "${download}"
 
+version="$(cat "${src_dir}/VERSION")"
+
 # -----------------------------------------------------------------------------
 
 : "${PLATFORMS=linux/amd64,linux/arm/v7,linux/arm64,linux/arm/v6}"
@@ -42,5 +44,6 @@ docker buildx build \
         "--platform=${PLATFORMS}" \
         --build-arg "DOCKER_REGISTRY=${DOCKER_REGISTRY}" \
         --tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest" \
+        --tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:${version}" \
         --push \
         "$@"

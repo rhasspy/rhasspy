@@ -101,6 +101,7 @@ COPY rhasspy-silence/requirements.txt ${BUILD_DIR}/rhasspy-silence/
 COPY rhasspy-speakers-cli-hermes/requirements.txt ${BUILD_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/requirements.txt ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-cli-hermes/
+COPY rhasspy-tts-wavenet-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-wavenet-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
 
 # Autoconf
@@ -215,6 +216,7 @@ COPY rhasspy-silence/ ${APP_DIR}/rhasspy-silence/
 COPY rhasspy-speakers-cli-hermes/ ${APP_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/ ${APP_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${APP_DIR}/rhasspy-tts-cli-hermes/
+COPY rhasspy-tts-wavenet-hermes/ ${APP_DIR}/rhasspy-tts-wavenet-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${APP_DIR}/rhasspy-wake-pocketsphinx-hermes/
 
 EXPOSE 12101

@@ -1,4 +1,4 @@
-AC_INIT([rhasspy], [2.5.0], [mike@rhasspy.org])
+AC_INIT([rhasspy], [2.5.1], [mike@rhasspy.org])
 AC_CONFIG_MACRO_DIR([m4])
 PC_INIT([3.7.0])
 
@@ -96,6 +96,8 @@ dnl --------------
 
 is_nanotts_enabled=UNKNOWN
 nanotts_from=prebuilt
+
+is_wavenet_enabled=yes
 
 dnl Set architectures based on host CPU
 AS_CASE([$host_cpu],
@@ -229,6 +231,12 @@ AC_ARG_ENABLE([precompiled-binaries],
     AS_HELP_STRING([--disable-precompiled-binaries],
         [build dependencies from source instead of downloading prebuilt binaries]))
 
+online_enabled=yes
+
+AC_ARG_ENABLE([online],
+    AS_HELP_STRING([--disable-online],
+    [disable all online services]))
+
 AC_ARG_VAR([RHASSPY_LANGUAGE],
     [use recommended settings for specific language (ca,nl,en,fr,de,el,hi,it,kz,zh,pt,es,sv,vi)])
 
@@ -340,6 +348,10 @@ dnl ---------------------------------------------------------------------------
 AC_ARG_ENABLE([nanotts],
     AS_HELP_STRING([--disable-nanotts],
         [disable installation of nanoTTS text to speech system]))
+
+AC_ARG_ENABLE([wavenet],
+    AS_HELP_STRING([--disable-wavenet],
+        [disable installation of Google Wavenet text to speech system]))
 
 dnl ---------------------------------------------------------------------------
 dnl Resolve Settings
@@ -515,6 +527,10 @@ AS_CASE([$enable_nanotts],
         [yes],[is_nanotts_enabled=yes],
         [no],[is_nanotts_enabled=no])
 
+AS_CASE([$enable_wavenet],
+        [yes],[is_wavenet_enabled=yes],
+        [no],[is_wavenet_enabled=no])
+
 dnl Determine prebuilt/source
 AS_CASE([$enable_precompiled_binaries],
         [no],[
@@ -543,6 +559,11 @@ dnl In-place install
 AS_CASE([$enable_in_place],
     [yes],[is_in_place=yes],
     [no],[is_in_place=no])
+
+dnl Online services
+AS_CASE([$enable_online],
+    [no],[is_wavenet_enabled=no])
+
 
 dnl ---------------------------------------------------------------------------
 dnl Extra Dependency Checks
@@ -665,6 +686,7 @@ AS_ECHO(["
 text to speech:"])
 
 AS_ECHO(["  nanoTTS: ${is_nanotts_enabled} (${nanotts_from})"])
+AS_ECHO(["  Wavenet: ${is_wavenet_enabled}"])
 
 AS_ECHO(["
 training:"])
@@ -727,6 +749,8 @@ AC_SUBST([KENLM_FROM], [$kenlm_from])
 
 AC_SUBST([ENABLE_NANOTTS], [$is_nanotts_enabled])
 AC_SUBST([NANOTTS_FROM], [$nanotts_from])
+
+AC_SUBST([ENABLE_WAVENET], [$is_wavenet_enabled])
 
 AC_SUBST([IN_PLACE], [$is_in_place])
 

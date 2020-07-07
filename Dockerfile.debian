@@ -94,6 +94,7 @@ COPY rhasspy-silence/ ${BUILD_DIR}/rhasspy-silence/
 COPY rhasspy-speakers-cli-hermes/ ${BUILD_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/ ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
+COPY rhasspy-tts-wavenet-hermes/ ${BUILD_DIR}/rhasspy-wavenet-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
 
 # Create Rhasspy distribution packages from source

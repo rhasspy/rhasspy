@@ -97,6 +97,11 @@ if not enable_snips:
     packages.pop("rhasspysnips_nlu")
     packages.pop("rhasspysnips_nlu_hermes")
 
+# wavenet
+enable_wavenet = is_yes("@ENABLE_WAVENET@")
+if not enable_wavenet:
+    packages.pop("rhasspytts_wavenet_hermes")
+
 # -----------------------------------------------------------------------------
 
 # True if Rhasspy Python modules will be used directly from source instead of
