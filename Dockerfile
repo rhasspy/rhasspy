@@ -98,6 +98,9 @@ COPY rhasspy-nlu-hermes/requirements.txt ${BUILD_DIR}/rhasspy-nlu-hermes/
 COPY rhasspy-rasa-nlu-hermes/requirements.txt ${BUILD_DIR}/rhasspy-rasa-nlu-hermes/
 COPY rhasspy-remote-http-hermes/requirements.txt ${BUILD_DIR}/rhasspy-remote-http-hermes/
 COPY rhasspy-silence/requirements.txt ${BUILD_DIR}/rhasspy-silence/
+COPY rhasspy-snips-nlu/requirements.txt ${BUILD_DIR}/rhasspy-snips-nlu/
+COPY rhasspy-snips-nlu/etc/languages/ ${BUILD_DIR}/rhasspy-snips-nlu/etc/languages/
+COPY rhasspy-snips-nlu-hermes/requirements.txt ${BUILD_DIR}/rhasspy-snips-nlu-hermes/
 COPY rhasspy-speakers-cli-hermes/requirements.txt ${BUILD_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/requirements.txt ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-cli-hermes/
@@ -112,7 +115,7 @@ COPY configure config.sub config.guess \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
-    ./configure --enable-in-place --prefix=${APP_DIR}/.venv
+    ./configure --enable-in-place --enable-snips --prefix=${APP_DIR}/.venv
 
 COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
@@ -126,10 +129,6 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 RUN cd ${BUILD_DIR} && \
     make && \
     make install
-
-# Strip binaries and shared libraries
-RUN (find ${APP_DIR} -type f -name '*.so*' -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
-RUN (find ${APP_DIR} -type f -executable -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
 
 # -----------------------------------------------------------------------------
 
@@ -213,8 +212,8 @@ COPY rhasspy-nlu-hermes/ ${APP_DIR}/rhasspy-nlu-hermes/
 COPY rhasspy-rasa-nlu-hermes/ ${APP_DIR}/rhasspy-rasa-nlu-hermes/
 COPY rhasspy-remote-http-hermes/ ${APP_DIR}/rhasspy-remote-http-hermes/
 COPY rhasspy-silence/ ${APP_DIR}/rhasspy-silence/
-COPY rhasspy-snips-nlu/ ${BUILD_DIR}/rhasspy-snips-nlu/
-COPY rhasspy-snips-nlu-hermes/ ${BUILD_DIR}/rhasspy-snips-nlu-hermes/
+COPY rhasspy-snips-nlu/ ${APP_DIR}/rhasspy-snips-nlu/
+COPY rhasspy-snips-nlu-hermes/ ${APP_DIR}/rhasspy-snips-nlu-hermes/
 COPY rhasspy-speakers-cli-hermes/ ${APP_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/ ${APP_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${APP_DIR}/rhasspy-tts-cli-hermes/
