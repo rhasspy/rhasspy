@@ -213,6 +213,8 @@ COPY rhasspy-nlu-hermes/ ${APP_DIR}/rhasspy-nlu-hermes/
 COPY rhasspy-rasa-nlu-hermes/ ${APP_DIR}/rhasspy-rasa-nlu-hermes/
 COPY rhasspy-remote-http-hermes/ ${APP_DIR}/rhasspy-remote-http-hermes/
 COPY rhasspy-silence/ ${APP_DIR}/rhasspy-silence/
+COPY rhasspy-snips-nlu/ ${BUILD_DIR}/rhasspy-snips-nlu/
+COPY rhasspy-snips-nlu-hermes/ ${BUILD_DIR}/rhasspy-snips-nlu-hermes/
 COPY rhasspy-speakers-cli-hermes/ ${APP_DIR}/rhasspy-speakers-cli-hermes/
 COPY rhasspy-supervisor/ ${APP_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${APP_DIR}/rhasspy-tts-cli-hermes/
