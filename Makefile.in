@@ -100,6 +100,9 @@ NANOTTS_SRC_FILE = $(DOWNLOAD_DIR)/nanotts-20200520.tar.gz
 ENABLE_SNOWBOY = @ENABLE_SNOWBOY@
 SNOWBOY_FILE = $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
 
+ENABLE_SNIPS = @ENABLE_SNIPS@
+SNIPS_LANG_DIR = $(srcdir)/rhasspy-snips-nlu/etc/languages
+
 # -----------------------------------------------------------------------------
 
 VENV_DIR = $(DESTDIR)$(prefix)
@@ -144,6 +147,14 @@ install-dependencies: install-opengrm \
 
 install-rhasspy:
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
+
+ifeq ($(ENABLE_SNIPS),yes)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(SNIPS_LANG_DIR)"/*.tar.gz
+	for lang in de en es fr it ja ko pt_br pt_pt zh; do \
+		"$(INSTALL_PYTHON)" -m snips_nlu download "$${lang}"; \
+	done
+endif # ENABLE_SNIPS
+
 	chmod +x "${srcdir}/rhasspy.sh"
 ifneq ($(IN_PLACE),yes)
 	install -D "${srcdir}/rhasspy.sh" "$(DESTDIR)$(prefix)/bin/rhasspy"
