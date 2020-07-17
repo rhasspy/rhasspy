@@ -146,6 +146,10 @@ install-dependencies: install-opengrm \
                       install-nanotts
 
 install-rhasspy:
+ifeq ($(ENABLE_SNIPS),yes)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) setuptools_rust
+endif # ENABLE_SNIPS
+
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
 
 ifeq ($(ENABLE_SNIPS),yes)

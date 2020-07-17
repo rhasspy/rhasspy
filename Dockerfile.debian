@@ -96,6 +96,8 @@ COPY rhasspy-supervisor/ ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-tts-wavenet-hermes/ ${BUILD_DIR}/rhasspy-wavenet-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
+COPY rhasspy-wake-raven/ ${APP_DIR}/rhasspy-wake-raven/
+COPY rhasspy-wake-raven-hermes/ ${APP_DIR}/rhasspy-wake-raven-hermes/
 
 # Create Rhasspy distribution packages from source
 COPY RHASSPY_DIRS ${BUILD_DIR}/
@@ -163,6 +165,8 @@ RUN . /.vars && \
     mv ${BUILD_DIR}/rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models ${PYINST_DIR}/rhasspywake_precise_hermes/ && \
     mkdir -p ${PYINST_DIR}/rhasspywake_snowboy_hermes && \
     mv ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/models ${PYINST_DIR}/rhasspywake_snowboy_hermes/ && \
+    mkdir -p ${PYINST_DIR}/rhasspywake_raven_hermes && \
+    mv ${BUILD_DIR}/rhasspy-wake-raven-hermes/rhasspywake_raven_hermes/templates ${PYINST_DIR}/rhasspywake_raven_hermes/ && \
     bash /tmp/fix-rhasspy-scripts.sh ${DEBIAN_DIR}${APP_DIR}/bin/rhasspy-*
 
 # Remove remnants of virtual environment

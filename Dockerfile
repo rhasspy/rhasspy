@@ -106,6 +106,8 @@ COPY rhasspy-supervisor/requirements.txt ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-tts-wavenet-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-wavenet-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
+COPY rhasspy-wake-raven/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven/
+COPY rhasspy-wake-raven-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven-hermes/
 
 # Autoconf
 COPY m4/ ${BUILD_DIR}/m4/
@@ -125,6 +127,9 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 #! ENV PIP_INDEX_URL=http://${PYPI}/simple/
 #! ENV PIP_TRUSTED_HOST=${PYPI_HOST}
 # ENDIF
+
+# Install Rust compiler for Snips NLU
+RUN curl https://sh.rustup.rs --no-verify -sSfL | sh
 
 RUN cd ${BUILD_DIR} && \
     make && \
@@ -219,6 +224,8 @@ COPY rhasspy-supervisor/ ${APP_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${APP_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-tts-wavenet-hermes/ ${APP_DIR}/rhasspy-tts-wavenet-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${APP_DIR}/rhasspy-wake-pocketsphinx-hermes/
+COPY rhasspy-wake-raven/ ${APP_DIR}/rhasspy-wake-raven/
+COPY rhasspy-wake-raven-hermes/ ${APP_DIR}/rhasspy-wake-raven-hermes/
 
 EXPOSE 12101
 

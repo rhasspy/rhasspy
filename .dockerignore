@@ -266,6 +266,22 @@
 !rhasspy-wake-precise-hermes/MANIFEST.in
 !rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models
 
+!rhasspy-wake-raven/rhasspywake_raven_hermes/*.py
+!rhasspy-wake-raven/setup.py
+!rhasspy-wake-raven/requirements.txt
+!rhasspy-wake-raven/VERSION
+!rhasspy-wake-raven/README.md
+!rhasspy-wake-raven/MANIFEST.in
+
+!rhasspy-wake-raven-hermes/bin/rhasspy-wake-raven-hermes
+!rhasspy-wake-raven-hermes/rhasspywake_raven_hermes/*.py
+!rhasspy-wake-raven-hermes/setup.py
+!rhasspy-wake-raven-hermes/requirements.txt
+!rhasspy-wake-raven-hermes/VERSION
+!rhasspy-wake-raven-hermes/README.md
+!rhasspy-wake-raven-hermes/MANIFEST.in
+!rhasspy-wake-raven-hermes/rhasspywake_raven_hermes/templates
+
 !rhasspy-wake-snowboy-hermes/bin/rhasspy-wake-snowboy-hermes
 !rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/*.py
 !rhasspy-wake-snowboy-hermes/setup.py
