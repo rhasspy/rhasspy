@@ -1,4 +1,4 @@
-AC_INIT([rhasspy], [2.5.1], [mike@rhasspy.org])
+AC_INIT([rhasspy], [2.5.2], [mike@rhasspy.org])
 AC_CONFIG_MACRO_DIR([m4])
 PC_INIT([3.7.0])
 
@@ -496,8 +496,8 @@ AS_CASE([$enable_precise],
     [no],[is_precise_enabled=no])
 
 AS_CASE([$enable_pocketsphinx],
-        [yes],[is_stt_pocketsphinx_enabled=yes],
-        [no],[is_stt_pocketsphinx_enabled=no])
+        [no],[is_stt_pocketsphinx_enabled=no
+              is_wake_pocketsphinx_enabled=no])
 
 AS_CASE([$enable_kaldi],
         [yes],[is_kaldi_enabled=yes],
