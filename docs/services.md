@@ -120,6 +120,8 @@ Listens to WAV chunks and tries to detect a wake/hotword. See [Wake Word](wake-w
 
 ### Available Services
 
+* [rhasspy-wake-raven-hermes](https://github.com/rhasspy/rhasspy-wake-raven-hermes)
+    * Implements [raven](wake-word.md#raven)
 * [rhasspy-wake-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-wake-pocketsphinx-hermes)
     * Implements [pocketsphinx](wake-word.md#pocketsphinx)
 * [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)

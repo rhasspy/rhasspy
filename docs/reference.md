@@ -13,7 +13,8 @@ The table below lists which components and compatible with Rhasspy's supported l
 
 | Category               | Name                                           | Offline?               | en       | de       | es       | fr       | it       | nl       | ru       | el       | hi       | zh       | vi       | pt       | sv       | ca       |
 | --------               | ------                                         | --------               | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  |
-| **Wake Word**          | [pocketsphinx](wake-word.md#pocketsphinx)      | &#x2713;               | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; |          |          |
+| **Wake Word**          | [raven](wake-word.md#raven)                    | &#x2713;               | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
+|                        | [pocketsphinx](wake-word.md#pocketsphinx)      | &#x2713;               | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; |          |          |
 |                        | [precise](wake-word.md#mycroft-precise)        | &#x2713;               | &#x2713; | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   |
 |                        | [porcupine](wake-word.md#porcupine)            | &#x2713;               | &#x2713; |          |          |          |          |          |          |          |          |          |          |          |          |          |
 |                        | [snowboy](wake-word.md#snowboy)                | *requires account*     | &#x2713; | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   | &bull;   |
@@ -676,7 +677,11 @@ All available profile sections and settings are listed below:
         * `remote` - configuration for external HTTP endpoint
             * `url` - URL of intent recognizer training endpoint
 * `wake` - waking Rhasspy up for speech input
-    * `system` - wake word recognition system (`pocketsphinx`, `snowboy`, `precise`, `porcupine`, `command`, `hermes`, or `dummy`)
+    * `system` - wake word recognition system (`raven`, `pocketsphinx`, `snowboy`, `precise`, `porcupine`, `command`, `hermes`, or `dummy`)
+    * `raven` - configuration for Raven wake word recognizer
+        * `template_dir` - directory where WAV templates are stored in profile (default: `raven`)
+        * `probability_threshold` - list with lower/upper probability range for detection (default: [0.45, 0.55])
+        * `minimum_matches` - number of templates that must match for a detection (default: 1)
     * `pocketsphinx` - configuration for Pocketsphinx wake word recognizer
         * `keyphrase` - phrase to wake up on (3-4 syllables recommended)
         * `threshold` - sensitivity of detection (recommended range 1e-50 to 1e-5)
