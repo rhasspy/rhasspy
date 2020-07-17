@@ -266,7 +266,7 @@
 !rhasspy-wake-precise-hermes/MANIFEST.in
 !rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models
 
-!rhasspy-wake-raven/rhasspywake_raven_hermes/*.py
+!rhasspy-wake-raven/rhasspywake_raven/*.py
 !rhasspy-wake-raven/setup.py
 !rhasspy-wake-raven/requirements.txt
 !rhasspy-wake-raven/VERSION
