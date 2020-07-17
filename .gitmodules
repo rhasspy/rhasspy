@@ -125,3 +125,9 @@
 [submodule "rhasspy-tts-wavenet-hermes"]
 	path = rhasspy-tts-wavenet-hermes
 	url = https://github.com/rhasspy/rhasspy-tts-wavenet-hermes
+[submodule "rhasspy-wake-raven"]
+	path = rhasspy-wake-raven
+	url = https://github.com/rhasspy/rhasspy-wake-raven.git
+[submodule "rhasspy-wake-raven-hermes"]
+	path = rhasspy-wake-raven-hermes
+	url = https://github.com/rhasspy/rhasspy-wake-raven-hermes.git

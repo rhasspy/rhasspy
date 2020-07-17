@@ -1,13 +1,10 @@
 # Web UI
 
-* Websocket API handle requests for satellites
-* Multiple site IDs in /api/text-to-speech
 * Multi-select in wakewords
 * Allow hotword upload
 
 # ASR
 
-* Support language model mixing during training
 * Italian nnet2 model
 * Add Julius ASR
 * Add Google STT
@@ -16,19 +13,18 @@
 # NLU
 
 * Support dynamic entity injection
-* Add Snips NLU
 
 # Wake
 
 * Audio stream/detector per site id
 * Training for pocketsphinx keyphrase
-* Snips Wake?
+* Raven
+    * Compute MFCC for new frame only
+    * Use C/C++ for extra speed
 
 # TTS
 
 * Add MaryTTS effects
-* Support Google Wavenet
-* Support NanoTTS
 * Support SSML
 
 # Intent Handling
@@ -39,8 +35,4 @@
 
 # Documentation
 
-* Redo screen shots
-
 # Docker
-
-* Merge arm/v6 image into main manifest

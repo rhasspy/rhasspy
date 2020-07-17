@@ -4,6 +4,7 @@ The typical workflow for interacting with a voice assistant is to first activate
 
 Available wake word systems are:
 
+* [Raven](wake-word.md#raven)
 * [Porcupine](wake-word.md#porcupine)
 * [Snowboy](wake-word.md#snowboy)
 * [Mycroft Precise](wake-word.md#precise)
@@ -16,6 +17,7 @@ The following table summarizes the key characteristics of each wake word system:
 
 | System                                    | Performance | Training to Customize | Online Sign Up          |
 | ------                                    | ----------- | -----------------     | ----------------------- |
+| [raven](wake-word.md#raven)               | moderate    | yes, offline          | no                      |
 | [porcupine](wake-word.md#porcupine)       | excellent   | yes, offline          | no                      |
 | [snowboy](wake-word.md#snowboy)           | good        | yes, online           | yes                     |
 | [precise](wake-word.md#mycroft-precise)   | moderate    | yes, offline          | no                      |
@@ -24,6 +26,33 @@ The following table summarizes the key characteristics of each wake word system:
 ## MQTT/Hermes
 
 Rhasspy listens for `hermes/hotword/<wakewordId>/detected` messages to decide when to wake up. The `hermes/hotword/toggleOff` and `hermes/hotword/toggleOff` messages can be used to disable/enable wake word listening (done automatically during voice command recording and audio output).
+
+## Raven
+
+Listens for a wake word with [raven](https://github.com/rhasspy/rhasspy-wake-raven). This system is based on [Snips Personal Wakeword Detector](https://medium.com/snips-ai/machine-learning-on-voice-a-gentle-introduction-with-snips-personal-wake-word-detector-133bd6fb568e).
+
+Add to your [profile](profiles.md):
+
+```json
+"wake": {
+  "system": "raven",
+  "raven": {
+    "probability_threshold": [0.45, 0.55],
+    "minimum_matches": 1
+  }
+}
+```
+
+You will need to record at least 3 WAV template files with your custom wake word. Once recorded, trim silence from the audio using a program like [Audacity](https://www.audacityteam.org/). Export the templates to a directory named `raven` in your profile as 16-bit 16Khz mono WAV files.
+
+You can adjust the sensitivty by changing `raven.probability_threshold` to a be a tighter (less sensitive) or looser (more sensitive) range around 0.5. Additionally, you can increase the value of `minmum_matches` to required more than one WAV template to match before a detection occurs. This should reduce false positives, but may increase false negatives.
+
+### UDP Audio Streaming
+
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite has woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio` and `wake.porcupine.udp_audio` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+
+Implemented by [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)
+
 
 ## Porcupine
 
@@ -37,10 +66,6 @@ Add to your [profile](profiles.md):
   "porcupine": {
     "sensitivity": 0.5
   }
-},
-
-"rhasspy": {
-  "listen_on_start": true
 }
 ```
 
@@ -72,10 +97,6 @@ Add to your [profile](profiles.md):
     "sensitivity": "0.5",
     "apply_frontend": false
   }
-},
-
-"rhasspy": {
-  "listen_on_start": true
 }
 ```
 
@@ -135,10 +156,6 @@ Add to your [profile](profiles.md):
     "trigger_level": 3,
     "chunk_size": 2048
   }
-},
-
-"rhasspy": {
-  "listen_on_start": true
 }
 ```
 
@@ -164,10 +181,6 @@ Add to your [profile](profiles.md):
     "threshold": 1e-30,
     "chunk_size": 960
   }
-},
-
-"rhasspy": {
-  "listen_on_start": true
 }
 ```
 

@@ -28,4 +28,6 @@ rhasspy-tts-wavenet-hermes
 rhasspy-wake-pocketsphinx-hermes
 rhasspy-wake-porcupine-hermes
 rhasspy-wake-precise-hermes
+rhasspy-wake-raven
+rhasspy-wake-raven-hermes
 rhasspy-wake-snowboy-hermes
