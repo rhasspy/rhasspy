@@ -36,6 +36,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
         build-essential swig libatlas-base-dev portaudio19-dev \
+        gfortran libopenblas-dev liblapack-dev cython \
         curl ca-certificates
 
 FROM build-ubuntu as build-amd64
@@ -57,6 +58,7 @@ ENV LANG C.UTF-8
 
 RUN install_packages \
         swig libatlas-base-dev portaudio19-dev \
+        gfortran libopenblas-dev liblapack-dev cython \
         curl ca-certificates
 
 # -----------------------------------------------------------------------------
@@ -117,7 +119,7 @@ COPY configure config.sub config.guess \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
-    ./configure --enable-in-place --enable-snips --prefix=${APP_DIR}/.venv
+    ./configure --enable-in-place --prefix=${APP_DIR}/.venv
 
 COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
@@ -128,10 +130,9 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 #! ENV PIP_TRUSTED_HOST=${PYPI_HOST}
 # ENDIF
 
-# Install Rust compiler for Snips NLU
-RUN curl https://sh.rustup.rs --no-verify -sSfL | sh
-
-RUN cd ${BUILD_DIR} && \
+RUN export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/download" && \
+    export POCKETSPHINX_FROM_SRC=no && \
+    cd ${BUILD_DIR} && \
     make && \
     make install
 

@@ -70,6 +70,7 @@ PRECISE_FILE = $(DOWNLOAD_DIR)/precise-engine_0.3.0_$(DOCKER_ARCH).tar.gz
 
 ENABLE_POCKETSPHINX = @ENABLE_POCKETSPHINX@
 POCKETSPHINX_FILE = $(DOWNLOAD_DIR)/pocketsphinx-python.tar.gz
+POCKETSPHINX_FROM_SRC ?= yes
 
 ENABLE_KALDI = @ENABLE_KALDI@
 KALDI_FROM = @KALDI_FROM@
@@ -286,7 +287,7 @@ $(SNOWBOY_FILE):
 # -----------------------------------------------------------------------------
 
 .PHONY: pocketsphinx install-pocketsphinx
-ifeq ($(ENABLE_POCKETSPHINX),yes)
+ifeq ($(ENABLE_POCKETSPHINX)x$(POCKETSPHINX_FROM_SRC),yesxyes)
 pocketsphinx: $(POCKETSPHINX_FILE)
 
 install-pocketsphinx: $(POCKETSPHINX_FILE)
