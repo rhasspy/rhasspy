@@ -21,6 +21,7 @@
 * Raven
     * Compute MFCC for new frame only
     * Use C/C++ for extra speed
+    * Output WAV data with detection
 
 # TTS
 
