@@ -31,13 +31,15 @@ Rhasspy listens for `hermes/hotword/<wakewordId>/detected` messages to decide wh
 
 Listens for a wake word with [Raven](https://github.com/rhasspy/rhasspy-wake-raven). This system is based on the [Snips Personal Wakeword Detector](https://medium.com/snips-ai/machine-learning-on-voice-a-gentle-introduction-with-snips-personal-wake-word-detector-133bd6fb568e) and works by comparing incoming audio to several pre-recorded templates.
 
+The underlying implementation of Raven heavily borrows from [node-personal-wakeword](https://github.com/mathquis/node-personal-wakeword) by [mathquis](https://github.com/mathquis).
+
 Add to your [profile](profiles.md):
 
 ```json
 "wake": {
   "system": "raven",
   "raven": {
-    "probability_threshold": [0.45, 0.55],
+    "probability_threshold": 0.5,
     "minimum_matches": 1
   }
 }
@@ -45,7 +47,7 @@ Add to your [profile](profiles.md):
 
 To train Raven, you will need to record at least 3 WAV template files with your custom wake word. This can be done in the Rhasspy web interface or manually with a program like [Audacity](https://www.audacityteam.org/). If you record manually, make sure to trim silence from the beginning and end of the audio and export the templates to a directory named `raven` in your profile as 16-bit 16Khz mono WAV files.
 
-You can adjust the sensitivty by changing `raven.probability_threshold` to a be a tighter (less sensitive) or looser (more sensitive) range around 0.5. Additionally, you can increase the value of `minmum_matches` to required more than one WAV template to match before a detection occurs. This should reduce false positives, but may increase false negatives.
+You can adjust the sensitivty by changing `raven.probability_threshold` to a value in `[0, 1]` (realistically between 0.1 and 0.73). Additionally, you can increase the value of `minmum_matches` to required more than one WAV template to match before a detection occurs. This should reduce false positives, but may increase false negatives.
 
 ### UDP Audio Streaming
 
