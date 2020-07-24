@@ -124,6 +124,14 @@ $ sudo apt install /path/to/rhasspy_<VERSION>_<ARCH>.deb
 
 where where `<VERSION>` is Rhasspy's version (probably 2.5.X) and `<ARCH>` is your build architecture.
 
+Now you can run `rhasspy` from the command-line:
+
+```sh
+$ rhasspy --profile en
+```
+
+and access the web interface at [http://localhost:12101](http://localhost:12101)
+
 ## Virtual Environment
 
 See the [Github documentation](https://github.com/rhasspy/rhasspy). On a Debian system, you should only need to install the necessary dependencies:
@@ -133,7 +141,7 @@ $ sudo apt-get update
 $ sudo apt-get install \
        python3 python3-dev python3-setuptools python3-pip python3-venv \
        git build-essential libatlas-base-dev swig portaudio19-dev \
-       supervisor mosquitto sox alsa-utils libgfortran4 \
+       supervisor mosquitto sox alsa-utils libgfortran4 libopenblas-dev \
        espeak flite \
        perl curl patchelf ca-certificates
 ```
