@@ -152,7 +152,8 @@ RUN apt-get update && \
         perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
-        libttspico-utils
+        libttspico-utilsi \
+        libopenblas-dev
 
 FROM run-ubuntu as run-amd64
 
@@ -174,7 +175,8 @@ RUN install_packages \
         supervisor mosquitto \
         perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
-        gstreamer1.0-tools gstreamer1.0-plugins-good
+        gstreamer1.0-tools gstreamer1.0-plugins-good \
+        libopenblas-dev
 
 # -----------------------------------------------------------------------------
 # Run
