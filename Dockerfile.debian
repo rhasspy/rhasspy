@@ -96,8 +96,8 @@ COPY rhasspy-supervisor/ ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-tts-wavenet-hermes/ ${BUILD_DIR}/rhasspy-wavenet-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
-COPY rhasspy-wake-raven/ ${APP_DIR}/rhasspy-wake-raven/
-COPY rhasspy-wake-raven-hermes/ ${APP_DIR}/rhasspy-wake-raven-hermes/
+COPY rhasspy-wake-raven/ ${BUILD_DIR}/rhasspy-wake-raven/
+COPY rhasspy-wake-raven-hermes/ ${BUILD_DIR}/rhasspy-wake-raven-hermes/
 
 # Create Rhasspy distribution packages from source
 COPY RHASSPY_DIRS ${BUILD_DIR}/

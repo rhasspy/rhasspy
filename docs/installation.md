@@ -122,7 +122,7 @@ Next, install the `.deb` file:
 $ sudo apt install /path/to/rhasspy_<VERSION>_<ARCH>.deb
 ```
 
-where where `<VERSION>` is Rhasspy's version (probably 2.5.0) and `<ARCH>` is your build architecture.
+where where `<VERSION>` is Rhasspy's version (probably 2.5.X) and `<ARCH>` is your build architecture.
 
 ## Virtual Environment
 

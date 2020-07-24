@@ -132,6 +132,7 @@ ifeq ($(VIRTUALENV),yes)
 	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) --upgrade pip
 	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) wheel || true
 	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) setuptools
+	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) cython
 endif # VIRTUALENV == yes
 
 .PHONY: install-opengrm install-phonetisaurus install-precise install-pocketsphinx install-kaldi install-julius install-snowboy install-deepspeech install-kenlm
