@@ -647,6 +647,7 @@ POCKETSPHINX_FROM
 ENABLE_STT_POCKETSPHINX
 ENABLE_WAKE_POCKETSPHINX
 ENABLE_POCKETSPHINX
+ENABLE_RAVEN
 ENABLE_PORCUPINE
 ENABLE_SNOWBOY
 PRECISE_FROM
@@ -3747,6 +3748,8 @@ is_snowboy_enabled=UNKNOWN
 
 is_wake_pocketsphinx_enabled=UNKNOWN
 
+is_raven_enabled=yes
+
 
 is_speech_to_text_enabled=yes
 
@@ -4189,6 +4192,7 @@ case $enable_wake in #(
             is_porcupine_enabled=no
             is_snowboy_enabled=no
             is_wake_pocketsphinx_enabled=no
+            is_raven_enabled=no
          ;; #(
   *) :
      ;;
@@ -4222,6 +4226,15 @@ case $enable_precise in #(
     is_precise_enabled=yes ;; #(
   no) :
     is_precise_enabled=no ;; #(
+  *) :
+     ;;
+esac
+
+case $enable_raven in #(
+  yes) :
+    is_raven_enabled=yes ;; #(
+  no) :
+    is_raven_enabled=no ;; #(
   *) :
      ;;
 esac
@@ -5025,6 +5038,8 @@ $as_echo "  porcupine: ${is_porcupine_enabled}"
 
 $as_echo "  snowboy: ${is_snowboy_enabled}"
 
+$as_echo "  raven: ${is_raven_enabled}"
+
 if test "x$is_wake_pocketsphinx_enabled" = xyes; then :
   $as_echo "  pocketsphinx: ${is_wake_pocketsphinx_enabled} (${pocketsphinx_from})"
 else
@@ -5110,6 +5125,8 @@ PRECISE_FROM=$precise_from
 ENABLE_SNOWBOY=$is_snowboy_enabled
 
 ENABLE_PORCUPINE=$is_porcupine_enabled
+
+ENABLE_RAVEN=$is_raven_enabled
 
 
 ENABLE_POCKETSPHINX=$is_pocketsphinx_enabled

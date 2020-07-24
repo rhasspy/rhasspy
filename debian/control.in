@@ -2,7 +2,7 @@ Package: rhasspy
 Version: @VERSION@
 Section: utils
 Priority: optional
-Depends: alsa-utils,jq,espeak,flite,sox,libportaudio2,libatlas3-base,libstdc++6,libgfortran4,supervisor,mosquitto
+Depends: alsa-utils,jq,espeak,flite,sox,libportaudio2,libatlas3-base,libstdc++6,libgfortran4,supervisor,mosquitto,libopenblas-dev
 Architecture: @DEBIAN_ARCH@
 Maintainer: Michael Hansen
 Description: Offline voice assistant for many human languages

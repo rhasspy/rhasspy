@@ -30,6 +30,8 @@ _COMMANDS = [
     "wake-pocketsphinx-hermes",
     "wake-porcupine-hermes",
     "wake-precise-hermes",
+    "wake-raven",
+    "wake-raven-hermes",
     "wake-snowboy-hermes",
 ]
 

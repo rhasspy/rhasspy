@@ -51,6 +51,7 @@ enable_snowboy = is_yes("@ENABLE_SNOWBOY@")
 enable_porcupine = is_yes("@ENABLE_PORCUPINE@")
 enable_precise = is_yes("@ENABLE_PRECISE@")
 enable_snips = is_yes("@ENABLE_SNIPS@")
+enable_raven = is_yes("@ENABLE_RAVEN@")
 
 # Add optional paths/imports
 optional_pathex = []
@@ -121,6 +122,12 @@ if enable_snips:
     optional_pathex.extend(["rhasspy-snips-nlu", "rhasspy-snips-nlu-hermes"])
     optional_imports.extend(
         ["rhasspysnips_nlu.__main__", "rhasspysnips_nlu_hermes.__main__"]
+    )
+
+if enable_raven:
+    optional_pathex.extend(["rhasspy-wake-raven", "rhasspy-wake-raven-hermes"])
+    optional_imports.extend(
+        ["rhasspywake_raven.__main__", "rhasspywake_raven_hermes.__main__"]
     )
 
 # -----------------------------------------------------------------------------

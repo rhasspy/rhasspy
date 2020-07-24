@@ -49,6 +49,8 @@ is_snowboy_enabled=UNKNOWN
 
 is_wake_pocketsphinx_enabled=UNKNOWN
 
+is_raven_enabled=yes
+
 dnl --------------
 dnl Speech to Text
 dnl --------------
@@ -473,6 +475,7 @@ AS_CASE([$enable_wake],
             is_porcupine_enabled=no
             is_snowboy_enabled=no
             is_wake_pocketsphinx_enabled=no
+            is_raven_enabled=no
         ])
 
 AS_CASE([$enable_speech_to_text],
@@ -494,6 +497,10 @@ dnl Override with enable/disable options (non-meta)
 AS_CASE([$enable_precise],
     [yes],[is_precise_enabled=yes],
     [no],[is_precise_enabled=no])
+
+AS_CASE([$enable_raven],
+    [yes],[is_raven_enabled=yes],
+    [no],[is_raven_enabled=no])
 
 AS_CASE([$enable_pocketsphinx],
         [no],[is_stt_pocketsphinx_enabled=no
@@ -653,6 +660,8 @@ AS_ECHO(["  porcupine: ${is_porcupine_enabled}"])
 
 AS_ECHO(["  snowboy: ${is_snowboy_enabled}"])
 
+AS_ECHO(["  raven: ${is_raven_enabled}"])
+
 AS_IF([test "x$is_wake_pocketsphinx_enabled" = xyes],
 AS_ECHO(["  pocketsphinx: ${is_wake_pocketsphinx_enabled} (${pocketsphinx_from})"]),
 AS_ECHO(["  pocketsphinx: ${is_wake_pocketsphinx_enabled}"]))
@@ -719,6 +728,7 @@ AC_SUBST([PRECISE_FROM], [$precise_from])
 
 AC_SUBST([ENABLE_SNOWBOY], [$is_snowboy_enabled])
 AC_SUBST([ENABLE_PORCUPINE], [$is_porcupine_enabled])
+AC_SUBST([ENABLE_RAVEN], [$is_raven_enabled])
 
 AC_SUBST([ENABLE_POCKETSPHINX], [$is_pocketsphinx_enabled])
 AC_SUBST([ENABLE_WAKE_POCKETSPHINX], [$is_wake_pocketsphinx_enabled])
