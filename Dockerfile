@@ -152,7 +152,7 @@ RUN apt-get update && \
         perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
-        libttspico-utilsi \
+        libttspico-utils \
         libopenblas-dev
 
 FROM run-ubuntu as run-amd64
