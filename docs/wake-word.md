@@ -40,20 +40,68 @@ Add to your [profile](profiles.md):
   "system": "raven",
   "raven": {
     "probability_threshold": 0.5,
-    "minimum_matches": 1
+    "minimum_matches": 1,
+    "average_templates": true
   }
 }
 ```
 
-To train Raven, you will need to record at least 3 WAV template files with your custom wake word. This can be done in the Rhasspy web interface or manually with a program like [Audacity](https://www.audacityteam.org/). If you record manually, make sure to trim silence from the beginning and end of the audio and export the templates to a directory named `raven` in your profile as 16-bit 16Khz mono WAV files.
+To train Raven, you will need to record at least 3 WAV template files with your custom wake word. This can be done in the Rhasspy web interface or manually with a program like [Audacity](https://www.audacityteam.org/). If you record manually, make sure to trim silence from the beginning and end of the audio and export the templates to a directory named `raven/default` in your profile as 16-bit 16Khz mono WAV files.
 
-You can adjust the sensitivty by changing `raven.probability_threshold` to a value in `[0, 1]` (realistically between 0.1 and 0.73). Additionally, you can increase the value of `minmum_matches` to required more than one WAV template to match before a detection occurs. This should reduce false positives, but may increase false negatives.
+You can adjust the sensitivity by changing `raven.probability_threshold` to a value in `[0, 1]` (realistically between 0.1 and 0.73). A value below 0.5 will make Raven more sensitive, increasing false positives. A value above 0.5 will make Raven less sensitive, increasing false negatives. Additionally, you can increase the value of `minmum_matches` to required more than one WAV template to match before a detection occurs. This should reduce false positives, but may increase false negatives.
+
+The `average_templates` setting will combine all of the example WAV templates into a single template, reducing CPU usage. This may also reduce accuracy, but the loss appears negligible in practice.
+
+### Multiple Wake Words
+
+Raven supports any number of wake words, and is only limited by CPU. A separate thread is used for each wake word detection in order to utilize multiple cores. To add more keywords to Raven, you must edit your profile:
+
+```json
+"wake": {
+  "system": "raven",
+  "raven": {
+      ...
+
+      "keywords": {
+          "default": {
+              "probability_threshold": 0.4
+          },
+          
+          "other-keyword": {
+              "average_templates": False,
+              "minimum_matches": 2
+          }
+      }
+  }
+}
+```
+
+The `wake.raven.keywords` object contains a key for each wake/keyword and their individual settings. If you don't specify a setting, the value under `wake.raven` is used instead.
+
+A keyword whose key is `NAME` should have it's WAV templates stored in `raven/NAME` in your profile directory. Changing the "Wakeword Id" in the Raven section of Rhasspy's web UI will allow you to record examples to the appropriate directory (`NAME` = Wakeword Id).
+
+### Saving Positive Examples
+
+Setting `wake.raven.examples_dir` to the name of a directory in your profile will cause Raven to save WAV audio of any positive wakeword detections to `DIR/NAME/FORMAT` where `DIR` is `wake.raven.examples_dir`, `NAME` is the keyword name (e.g., "default"), and `FORMAT` is a `strftime` format string specified in `wake.raven.examples_format`. For example:
+
+```json
+"wake": {
+  "system": "raven",
+  "raven": {
+      ...
+
+      "examples_dir": "raven"
+  }
+}
+```
+
+will save positive WAV examples to `raven/default/examples`. These examples could be used to train a more sophisticated wake word system like [Mycroft Precise](#mycroft-precise).
 
 ### UDP Audio Streaming
 
-By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite has woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio` and `wake.porcupine.udp_audio` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
+By default, Rhasspy will stream microphone audio over MQTT in WAV chunks. When using Rhasspy in a [master/satellite](tutorials.md#server-with-satellites) setup, it may be desirable to only send audio to the MQTT broker after the satellite has woken up. For this case, set **both** `microphone.<MICROPHONE_SYSTEM>.udp_audio` and `wake.raven.udp_audio` to the **same** free port number on your satellite. This will cause the microphone service to stream over UDP until an [`asr/startListening`](reference.md#asr_startlistening) message is received. It will go back to UDP stream when an [`asr/stopListening`](reference.md#asr_stoplistening).
 
-Implemented by [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes)
+Implemented by [rhasspy-wake-raven-hermes](https://github.com/rhasspy/rhasspy-wake-raven-hermes)
 
 
 ## Porcupine
