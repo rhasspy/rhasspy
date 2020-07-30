@@ -304,7 +304,7 @@ This guide will cover installing Rhasspy on a Raspberry Pi from scratch using [D
 
 I highly recommend buying a [CanaKit Raspberry Pi kit](https://www.amazon.com/CanaKit-Raspberry-4GB-Starter-Kit/dp/B07V5JTMV9), which includes everything you need to get started. At a minimum you need a Pi, an SD card, a power supply, and a microphone. You'll probably want a speaker too, but it's optional.
 
-Be careful when choosing a kit and a microphone. The [ReSpeaker 2mic HAT](https://respeaker.io/2_mic_array/) plugs into the GPIO pins on the Pi, which means you won't be able to easly enclose it in the kit's case or use the included fan.
+Be careful when choosing a kit and a microphone. The [ReSpeaker 2mic HAT](https://respeaker.io/2_mic_array/) plugs into the GPIO pins on the Pi, which means you won't be able to easily enclose it in the kit's case or use the included fan.
 
 ### Setting up the SD Card
 
@@ -342,7 +342,7 @@ After writing the Raspberry Pi OS to your SD card, browse the "boot" volume on y
 
 Create a new, empty file in the top-level directory of the `boot` volume named `ssh` (lower case, no file extension). The presence of this file will tell the Raspberry Pi to enable SSH on boot.
 
-To enable WiFi, create a file in the top-level directory of the `boot` volumed named `wpa_supplicant.conf` edit it with a text editor. Paste in the following content (taken from [here](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md)) and save the file:
+To enable WiFi, create a file in the top-level directory of the `boot` volume named `wpa_supplicant.conf` edit it with a text editor. Paste in the following content (taken from [here](https://www.raspberrypi.org/documentation/configuration/wireless/headless.md)) and save the file:
 
 ```
 ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -374,7 +374,7 @@ After saving the file, eject the SD card from your computer and insert it into t
 
 Ensure that your microphone and SD card are inserted into your Raspberry Pi. If you have a spare HDMI monitor, I'd highly recommend plugging it in so you can get the Pi's IP address and see if there were any problems during boot.
 
-Once everything is connected, go ahead and plug your power supply into the Pi. You should see some raspberry icons in the upper left and scrolling text as it boots. When it comes to the login prompt, read upwards until you find a line that says "My IP address is ..." (probaby starts with 192.168). My Pi's IP address was 192.168.1.26, but yours is likely different.
+Once everything is connected, go ahead and plug your power supply into the Pi. You should see some raspberry icons in the upper left and scrolling text as it boots. When it comes to the login prompt, read upwards until you find a line that says "My IP address is ..." (probably starts with 192.168). My Pi's IP address was 192.168.1.26, but yours is likely different.
 
 From a terminal on your desktop computer, try pinging your Pi (where `<IP_ADDRESS>` is your Pi's IP address).
 
@@ -495,83 +495,173 @@ $ docker run -d -p 12101:12101 \
 
 ## Server with Satellites
 
-A common usage scenario for Rhasspy is to have one or more low power satellites connect to a more powerful central server. These satellites are typically Raspberry Pi's, and are responsible for:
+A common usage scenario for Rhasspy is to have one or more low power satellites connect to a more powerful central server (called the "base" station). These satellites are typically Raspberry Pi's, and are responsible for:
 
 * [Wake word](wake-word.md) detection
 * [Audio recording](audio-input.md) from a microphone
 * [Audio playback](audio-output.md) to a speaker
 
-The backend server, typically a standard desktop or [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html), is responsible for:
+The base station, typically a standard desktop or [Intel NUC](https://www.intel.com/content/www/us/en/products/boards-kits/nuc.html), is responsible for:
 
 * [Speech to text](speech-to-text.md)
 * [Intent recognition](intent-recognition.md)
 * [Text to speech](text-to-speech.md)
 * [Intent handling](intent-handling.md)
 
-In this tutorial, we will configure **two instances** of Rhasspy: one as a satellite and one as a backend "master" server. This can be done using either Rhasspy's [MQTT API](reference.md#mqtt-api) or [HTTP API](reference.md#http-api) depending on whether or not the satellite and master are connected to the same MQTT broker.
+<div style="border: 1px solid red; padding: 5px; margin: 0 0 10px 0;">
+    <strong>NOTE:</strong> Training is only done on the base station
+</div>
 
-* [Master/Satellite over MQTT](#shared-mqtt-broker)
-* [Master/Satellite over HTTP](#remote-http-server)
+In this tutorial, we will configure **two instances** of Rhasspy: one as a satellite and one as a base station. This can be done using either Rhasspy's [MQTT API](reference.md#mqtt-api) or [HTTP API](reference.md#http-api) depending on whether or not the satellite and base station are connected to the same MQTT broker. It's usually easier to set up satellites with HTTP, but using MQTT allows for more flexibility and speed.
 
-### Shared MQTT Broker
+* [Base/Satellite over HTTP](#remote-http-server)
+* [Base/Satellite over MQTT](#shared-mqtt-broker)
 
-If your master server and satellite(s) are all connected to a single MQTT broker, they can easily share information. The challenge, in fact, is making sure they don't share too much!
+### Remote HTTP Server
 
-The first step is to ensure that the master and satellite(s) have **different siteIds**. In the "Settings" page of each Rhasspy instance, ensure that the "siteId" at the top is unique across all [Hermes-compatible](https://docs.snips.ai/reference/hermes) services connected to your MQTT broker.
+You can connect satellites to a Rhasspy base station *without* needing to worry about a shared MQTT broker or conflicting site ids. Rhasspy's built-in [HTTP API](reference.md#http-api) allows for any external client, including a satellite, to do request speech to text, intent recognition, etc. from another instance of Rhasspy.
 
-Example master command:
+In this model, the satellite runs it's own [dialogue manager](services.md#dialogue-manager) and a "remote" version of each service that it will requesting from the base station. As far as the satellite is concerned, it's a completely isolated instance of Rhasspy that just happens to have some functionality done externally. From the base station's perspective, the satellite is just another HTTP client making API requests.
+
+![Flow of messages in HTTP base station/satellite set up](img/master-satellite/http-flow.png)
+
+The diagram above shows a satellite that does remote speech to text, intent recognition, and text to speech. For completeness, it also communicates with an instance of Home Assistant. Once the wake word is detected, audio is recorded **locally** until silence. At that point, the WAV audio is POST-ed to [`/api/speech-to-text`](reference.md#api_speech_to_text) on the base station. The transcription flows through the satellite's dialogue manager and out to [`/api/text-to-intent`](reference.md#api_text_to_intent) again on the base station. The intent is sent to Home Assistant, and speech feedback is transformed to audio on the base station through [`/api/text-to-speech`](reference.md#text_to_speech). This audio is then finally played locally on the satellite's speakers.
+
+It's important to note that any of the external functionality (speech to text, text to intent, text to speech) could be done locally on the satellite, on a different instance of Rhasspy, or through any service compatible with the [HTTP API](reference.md#http-api). Any combination is possible!
+
+#### HTTP Example
+
+In this example, we'll start two instances of Rhasspy on two **different** machines and configure one of them (the "satellite") to make requests to the other (the "base"). It's important that these are running on separate machines to avoid HTTP port conflicts (12101).
+
+Let's start a base station on the first machine named `rhasspy-base`:
 
 ```bash
 docker run -it \
-    -v "$HOME/.config/rhasspy/master:/profiles" \
-    --network host \
-    rhasspy/rhasspy:2.5.0-pre \
+    -v "$HOME/.config/rhasspy/profiles:/profiles" \
+    rhasspy/rhasspy \
     --profile en \
     --user-profiles /profiles
 ```
 
-Master web UI will be accessible at [http://localhost:12101](http://localhost:12101)
+The base station web UI will be accessible at http://rhasspy-base:12101 where `rhasspy-base` is the hostname or IP address of your base station machine.
 
-Example satellite command:
+Starting the satellite is similiar on a second machine named `rhasspy-satellite`:
 
 ```bash
-docker run -it -v "$HOME/.config/rhasspy/satellite:/profiles" \
-    --network host \
+docker run -it \
+    -v "$HOME/.config/rhasspy/profiles:/profiles" \
     --device /dev/snd \
-    rhasspy/rhasspy:2.5.0-pre \
+    rhasspy/rhasspy \
     --profile en \
-    --user-profiles /profiles \
-    --http-port 13202 \
-    --local-mqtt-port 13183
+    --user-profiles /profiles
 ```
 
-Satellite web UI will be accessible at [http://localhost:13202](http://localhost:13202)
+Note that on the satellite we add `--device /dev/snd` to allow Docker access to the microphone.
+
+The satellite web UI will be accessible at http://rhasspy-satellite:12101 where `rhasspy-satellite` is the hostname or IP address of your satellite machine.
 
 #### Satellite Settings
 
-On your satellite, set MQTT to "External" and configure the details of your broker. Set the speech to text, intent recognition, and (optionally) the text to speech services to "Hermes MQTT". Make sure to disable "Dialogue Management", and enable audio recording, wake word, and audio playing.
+On your satellite, set the speech to text, intent recognition, and (optionally) the text to speech services to "Remote HTTP". Make sure to also set "Dialogue Management" to "Rhasspy", and enable audio recording, wake word, and audio playing.
+
+![Satellite settings for remote HTTP](img/master-satellite/satellite-http-settings.png)
+
+Next, expand each "Remote HTTP" service and set the [appropriate HTTP end-point](reference.md#http-api) on your Rhasspy base station. For example, the URL for speech to text should be something like `http://rhasspy-base:12101/api/speech-to-text`. **Make sure** to leave the `/api/...` part of the URL intact.
+
+![Satellite HTTP servers](img/master-satellite/satellite-remote-settings.png)
+
+Click "Save Settings" and restart your satellite. You **do not** need to do any training on the satellite.
+
+#### Base Station Settings
+
+Your base station needs to have speech to text, intent recognition, and (optionally) text to speech services enabled. Make sure to save settings, restart Rhasspy, download profile artifacts, update sentences, and **train the profile** on your base station.
+
+![Base station settings for remote HTTP](img/master-satellite/master-http-settings.png)
+
+You do not need to run a dialogue manager on the base station, since wake/ASR/NLU coordinate will be done on the satellite.
+
+#### Testing
+
+If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page. Something like "porcupine (pause) turn on the living room lamp".
+
+![Satellite test for remote HTTP](img/master-satellite/satellite-http-test.png)
+
+### Shared MQTT Broker
+
+If your base station and satellite(s) are all connected to a single MQTT broker, they can easily share information. The challenge, in fact, is making sure they don't share too much!
+
+Before diving into this example, it's critical to have the correct mental model of how Rhasspy services communicate over MQTT. Central to this communication is the **site id**. Almost every [MQTT message](reference.md#mqtt-api) contains a `site_id` property, either embedded in the JSON payload or as part of the MQTT topic. Each Rhasspy service will check this property against an internal whitelist and *discard any message* that contains an "unknown" `site_id`.
+
+When you set a site id in your Rhasspy settings, all of the services automatically whitelist it:
+
+![Site id in settings](img/master-satellite/site-id.png)
+
+A satellite, however, should have a *different* site id than the base station. By default, the base station will ignore all messages from a satellite even if they're connected to the same MQTT broker. This is where the "satellite site ids" for each service come from:
+
+![Satellite site ids in settings](img/master-satellite/satellite-site-ids.png)
+
+When you add one or more satellite site ids to a service, such as speech to text, that service will listen for and response to MQTT messages from that Rhasspy instance. Importantly, the responses will have the same site id as their source. Derived messages also contain the source site id, so when a satellite's [hotword detection](reference.md#hotword_detected) is captured by the base station's [dialogue manager](services.md#dialogue-manager), the derived [ASR start listening](reference.md#asr_startlistening) message contain the satellite's site id.
+
+In the diagram below, a satellite and base station are connected to the same MQTT broker. On the base station, the ASR (Speech), NLU (Intent), text to speech, and dialogue services have whitelisted the satellite's site id. The corresponding services on the satellite are all set to "Hermes MQTT" except for dialogue, which can simply be disabled.
+
+![Flow of messages in MQTT base station/satellite set up](img/master-satellite/mqtt-flow.png)
+
+#### MQTT Example
+
+In this example, we'll start two instances of Rhasspy on two **different** machines and configure them to connect to the same external MQTT broker. The base station will have the satellite's site id whitelisted so it can perform speech to text, intent recognition, etc.
+
+Let's start a base station on the first machine named `rhasspy-base`:
+
+```bash
+docker run -it \
+    -v "$HOME/.config/rhasspy/profiles:/profiles" \
+    rhasspy/rhasspy \
+    --profile en \
+    --user-profiles /profiles
+```
+
+The base station web UI will be accessible at http://rhasspy-base:12101 where `rhasspy-base` is the hostname or IP address of your base station machine.
+
+Starting the satellite is similiar on a second machine named `rhasspy-satellite`:
+
+```bash
+docker run -it \
+    -v "$HOME/.config/rhasspy/profiles:/profiles" \
+    --device /dev/snd \
+    rhasspy/rhasspy \
+    --profile en \
+    --user-profiles /profiles
+```
+
+Note that on the satellite we add `--device /dev/snd` to allow Docker access to the microphone.
+
+The satellite web UI will be accessible at http://rhasspy-satellite:12101 where `rhasspy-satellite` is the hostname or IP address of your satellite machine.
+
+#### Satellite Settings
+
+On your satellite, start by changing your "siteId" in the Settings to "satellite". Afterwards, set MQTT to "External" and configure the details of your broker. Set the speech to text, intent recognition, and (optionally) the text to speech services to "Hermes MQTT". Make sure to disable "Dialogue Management", and enable audio recording, wake word, and audio playing.
 
 ![Satellite settings for Hermes MQTT](img/master-satellite/satellite-mqtt-settings.png)
 
-Setting a service to "Hermes MQTT" means that Rhasspy will expect *some* service connected to your broker to handle the appropriate [MQTT messages](reference.md#mqtt-api) for speech to text, etc.
+Setting a service to "Hermes MQTT" means that Rhasspy will expect *some* service connected to your broker to handle the appropriate [MQTT messages](reference.md#mqtt-api) for speech to text, etc. In our example this will be the base station, but it could just as easily be another service or Node-RED flow.
 
-#### Master Settings
+#### Base Station Settings
 
-For you master server, also set MQTT to "External" and configure the details of your broker. First, set Dialogue Management to "Rhasspy" and select your preferred Speech to Text, Intent Recognition, and Text to Speech services.
+For your base station, also set MQTT to "External" and configure the details of your broker. Next, set Dialogue Management to "Rhasspy" and select your preferred Speech to Text, Intent Recognition, and Text to Speech services.
 
-![Master settings for Hermes MQTT](img/master-satellite/master-mqtt-settings.png)
+![Base station settings for Hermes MQTT](img/master-satellite/master-mqtt-settings.png)
 
- Under **each service** (including Dialogue Management), add the `siteId`'s of each of your satellites to the "Satellite siteIds" text box (separated by commas).
+ Under **each service** (including Dialogue Management), add the site id of *each* of your satellites to the "Satellite siteIds" text box (separated by commas). This will cause that particular service to response to MQTT messages coming from that satellite.
 
-![Master satellite ids for Hermes MQTT](img/master-satellite/master-mqtt-satellite-ids.png)
+![Base station satellite ids for Hermes MQTT](img/master-satellite/master-mqtt-satellite-ids.png)
 
-Adding one or more satellite `siteId`'s to a service will cause it to listen and respond to requests for each satellite. The dialogue manager is crucial here, as it will catch wake word detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
+Adding the satellite site id(s) to the dialogue manager is crucial, since it will catch wake word detections, engage the ASR and NLU systems, and dispatch TTS audio playback to the appropriate site.
 
 #### UDP Audio Streaming
 
-By default, your satellite will stream all recorded audio over MQTT. This will go to both the wake word service (satellite) and ASR service (master).
+By default, your satellite will stream all [recorded audio](reference.md#audioserver_audioframe) over MQTT. This will go to both the wake word service (satellite) and ASR service (base station).
 
-If you wish to keep streaming audio contained on the satellite until the wake word is spoken, you need to configure a **UDP audio port** for both the audio recording and wake word services.
+If you wish to keep streaming audio contained on the satellite until the wake word is spoken, you need to configure a UDP audio port for **both the audio recording and wake word services**.
 
 ![Satellite UDP ports for Hermes MQTT](img/master-satellite/satellite-mqtt-udp.png)
 
@@ -582,57 +672,3 @@ With a UDP audio port set, the microphone audio will go directly to the wake wor
 If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page. Something like "porcupine (pause) turn on the living room lamp".
 
 ![Satellite test for Hermes MQTT](img/master-satellite/satellite-mqtt-test.png)
-
-### Remote HTTP Server
-
-You can also connect satellites to a master Rhasspy server *without* needing to worry about a shared MQTT broker or conflicting `siteId` values! Rhasspy's built-in [HTTP API](reference.md#http-api) allows for any external client, including a satellite, to do speech to text, intent recognition, etc.
-
-Example master command:
-
-```bash
-docker run -it \
-    -v "$HOME/.config/rhasspy/master:/profiles" \
-    --network host \
-    rhasspy/rhasspy:2.5.0-pre \
-    --profile en \
-    --user-profiles /profiles
-```
-
-Master web UI will be accessible at [http://localhost:12101](http://localhost:12101)
-
-Example satellite command:
-
-```bash
-docker run -it -v "$HOME/.config/rhasspy/satellite:/profiles" \
-    --network host \
-    --device /dev/snd \
-    rhasspy/rhasspy:2.5.0-pre \
-    --profile en \
-    --user-profiles /profiles \
-    --http-port 13202 \
-    --local-mqtt-port 13183
-```
-
-Satellite web UI will be accessible at [http://localhost:13202](http://localhost:13202)
-
-#### Satellite Settings
-
-On your satellite, set the speech to text, intent recognition, and (optionally) the text to speech services to "Remote HTTP". Make sure to also set "Dialogue Management" to "Rhasspy", and enable audio recording, wake word, and audio playing.
-
-![Satellite settings for remote HTTP](img/master-satellite/satellite-http-settings.png)
-
-Next, expand each "Remote HTTP" service and set the URL to the host name and port of your master Rhasspy server. Make sure to leave the `/api/...` part of the URL intact.
-
-![Satellite HTTP servers](img/master-satellite/satellite-remote-settings.png)
-
-#### Master Settings
-
-Your master server needs to have speech to text, intent recognition, and (optionally) text to speech services enabled. Make sure to download profile artifacts, update sentences, and train the profile on your master server.
-
-![Master settings for remote HTTP](img/master-satellite/master-http-settings.png)
-
-#### Testing
-
-If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page. Something like "porcupine (pause) turn on the living room lamp".
-
-![Satellite test for remote HTTP](img/master-satellite/satellite-http-test.png)

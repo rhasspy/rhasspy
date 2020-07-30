@@ -10,7 +10,8 @@ The table below summarizes architecture compatibility with Rhasspy's components:
 
 | Category               | Name                                           | amd64    | armhf    | aarch64  | armv6l   |
 | --------               | ------                                         | -------  | -------  | -------  |          |
-| **Wake Word**          | [pocketsphinx](wake-word.md#pocketsphinx)      | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
+| **Wake Word**          | [raven](wake-word.md#raven)                    | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
+|                        | [pocketsphinx](wake-word.md#pocketsphinx)      | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [snowboy](wake-word.md#snowboy)                | &#x2713; | &#x2713; |          | &#x2713; |
 |                        | [precise](wake-word.md#mycroft-precise)        | &#x2713; | &#x2713; | &#x2713; |          |
 |                        | [porcupine](wake-word.md#porcupine)            | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
@@ -25,7 +26,7 @@ The table below summarizes architecture compatibility with Rhasspy's components:
 | **Text to Speech**     | [espeak](text-to-speech.md#espeak)             | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [flite](text-to-speech.md#flite)               | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [picotts](text-to-speech.md#picotts)           | &#x2713; | &#x2713; |          |          |
-|                        | [picotts](text-to-speech.md#nanotts)           | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
+|                        | [nanotts](text-to-speech.md#nanotts)           | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [marytts](text-to-speech.md#marytts)           | &#x2713; | &#x2713; | &#x2713; |          |
 |                        | [opentts](text-to-speech.md#opentts)           | &#x2713; | &#x2713; | &#x2713; |          |
 |                        | [wavenet](text-to-speech.md#google-wavenet)    | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
