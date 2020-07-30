@@ -32,11 +32,11 @@ Rhasspy is actively seeking contributions. If you want to start developing, [for
 ```shell
 git clone https://github.com/<your_username>/<repository>.git
 cd <repository>
-make venv
+./configure
+make
+make install
 source .venv/bin/activate
 ```
-
-TODO: Change this for the new ./configure, make setup
 
 ## Run all checks
 
