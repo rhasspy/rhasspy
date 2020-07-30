@@ -177,3 +177,12 @@ The various repositories also have their own issue tracker to follow and discuss
 | [rhasspy-wake-porcupine-hermes](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-porcupine-hermes)](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-porcupine-hermes)](https://github.com/rhasspy/rhasspy-wake-porcupine-hermes/pulls) |
 | [rhasspy-wake-precise-hermes](https://github.com/rhasspy/rhasspy-wake-precise-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-precise-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-precise-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-precise-hermes)](https://github.com/rhasspy/rhasspy-wake-precise-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-precise-hermes)](https://github.com/rhasspy/rhasspy-wake-precise-hermes/pulls) |
 | [rhasspy-wake-snowboy-hermes](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes) | [![Tests](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/workflows/Tests/badge.svg)](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/actions) | [![Open issues](https://img.shields.io/github/issues-raw/rhasspy/rhasspy-wake-snowboy-hermes)](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/issues) | [![Open pull requests](https://img.shields.io/github/issues-pr-raw/rhasspy/rhasspy-wake-snowboy-hermes)](https://github.com/rhasspy/rhasspy-wake-snowboy-hermes/pulls) |
+
+---
+
+<p>This project is supported by:</p>
+<p>
+  <a href="https://www.digitalocean.com/">
+    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px">
+  </a>
+</p>

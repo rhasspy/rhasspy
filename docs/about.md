@@ -47,6 +47,13 @@ The following tools/libraries help to support Rhasspy:
 * [webrtcvad](https://github.com/wiseman/py-webrtcvad) (voice activity detection)
 * [Zamia Speech](https://github.com/gooofy/zamia-speech) (acoustic models)
 
+<p>This project is supported by:</p>
+<p>
+  <a href="https://www.digitalocean.com/">
+    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px">
+  </a>
+</p>
+
 ## History
 
 Rhasspy was originally inspired by [Jasper](https://jasperproject.github.io), an "open source platform for developing always-on, voice-controlled applications". Rhasspy's original architecture (v1) was close to Jasper's, though the two systems handled speech/intent recognition in very different ways.
