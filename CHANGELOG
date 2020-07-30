@@ -1,0 +1,23 @@
+## [2.5.5] - 2020 Jun 30
+
+### Added
+
+- Raven wake word system, based on Snips Personal Wakeword
+- Support for Google WaveNet text to speech
+- Support for OpenTTS/MozillaTTS
+- Support for nanoTTS (fork of picoTTS)
+- Energy-based silence detection in rhasspy-silence
+- Preliminary support for SnipsNLU (not available yet in Docker)
+- MQTT TLS in all services and web server
+- More tutorials and documentation
+
+### Changed
+
+- Added train/restart confirmations back into web UI
+- Fixed TTS language bug with eSpeak and picoTTS
+- Use GNU autotools for source build (./configure, make, make install)
+- Use pinned versions of profile files on GitHub
+
+## [2.5.0] - 2020 Jun 05
+
+First release of Rhasspy 2.5

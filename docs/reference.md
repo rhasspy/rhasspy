@@ -351,8 +351,8 @@ Messages for [intent handling](intent-handling.md).
         * `entity: string` - name of entity (required)
         * `slotName: string` - name of slot (required)
         * `confidence: float` - confidence from NLU system for this slot (required)
-        * `rawValue: string` - entity value **without** [substitutons](training.md#substitutions) (required)
-        * `value: object` - entity value with [substitutons](training.md#substitutions) (required)
+        * `rawValue: string` - entity value **without** [substitutions](training.md#substitutions) (required)
+        * `value: object` - entity value with [substitutions](training.md#substitutions) (required)
             * `value: any` - entity value
         * `range: object = null` - indexes of entity value in text
             * `start: int` - start index
@@ -776,7 +776,7 @@ All available profile sections and settings are listed below:
 
 ## Data Formats
 
-In addition to the message formats specificed in the [Hermes protocol](https://docs.snips.ai/reference/hermes), Rhasspy has its own formats for [transcriptions](#transcriptions) and [intents](#intents). A Rhasspy profile also contains artifacts in standard formats, such as [pronunciation dictionaries](#pronunciation-dictionaries), [language models](#language-models), and [grapheme to phoneme models](#grapheme-to-phoneme-models).
+In addition to the message formats specified in the [Hermes protocol](https://docs.snips.ai/reference/hermes), Rhasspy has its own formats for [transcriptions](#transcriptions) and [intents](#intents). A Rhasspy profile also contains artifacts in standard formats, such as [pronunciation dictionaries](#pronunciation-dictionaries), [language models](#language-models), and [grapheme to phoneme models](#grapheme-to-phoneme-models).
 
 ### Transcriptions
 
