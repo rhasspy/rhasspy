@@ -127,7 +127,12 @@ if enable_snips:
 if enable_raven:
     optional_pathex.extend(["rhasspy-wake-raven", "rhasspy-wake-raven-hermes"])
     optional_imports.extend(
-        ["rhasspywake_raven.__main__", "rhasspywake_raven_hermes.__main__"]
+        [
+            "rhasspywake_raven.__main__",
+            "rhasspywake_raven_hermes.__main__",
+            "numpy",
+            "scipy",
+        ]
     )
 
 # -----------------------------------------------------------------------------
