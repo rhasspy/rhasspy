@@ -3,6 +3,7 @@
 * [Getting Started Guide](#getting-started-guide)
 * [From Scratch on a Raspberry Pi](#from-scratch-on-a-raspberry-pi)
 * [Server with Satellites](#server-with-satellites)
+* [Custom Wakeword with Raven](#custom-wakeword-with-raven)
 
 ## Getting Started Guide
 
@@ -672,3 +673,36 @@ With a UDP audio port set, the microphone audio will go directly to the wake wor
 If all is working, you should be able to speak the wake word + voice command to the satellite and have the recognized intent show up on its test page. Something like "porcupine (pause) turn on the living room lamp".
 
 ![Satellite test for Hermes MQTT](img/master-satellite/satellite-mqtt-test.png)
+
+---
+
+## Custom Wakeword with Raven
+
+[Raven](wake-word.md#raven) is a wake word system based on the [Snips Personal Wakeword Detector](https://medium.com/snips-ai/machine-learning-on-voice-a-gentle-introduction-with-snips-personal-wake-word-detector-133bd6fb568e). It works by comparing incoming audio frames to a set of pre-recorded templates, only signaling a detection if there is a close enough match.
+
+To get started with Raven:
+
+1. Visit the Rhasspy settings page in the web UI and select "Raven" for the "Wake Word" system
+2. Save your settings and restart Rhasspy
+
+With the Raven service now started, we can record our examples. Drop down the Raven settings and locate the example "Record" buttons:
+
+![Raven web UI for recording examples](img/raven/record-examples.png)
+
+Click the "Record" button next to "Example 1" and wait for a dialogue box to appear that says "Speak wake word":
+
+![Raven recording dialogue box](img/raven/speak-dialogue.png)
+
+Clearly speak your wake word and then pause. If you microphone is properly configured, the dialogue box should automatically close and a "Recorded" label will be placed next to "Example 1". The dialogue box will not close if there is no audio input or if there is excessive background noise.
+
+Once you've recorded all three examples, make sure to **Restart Rhasspy** so the Raven service can pick up the new templates.
+
+![Raven examples recorded](img/raven/examples-recorded.png)
+
+After restarting, try speaking your wake word and see if Rhasspy wakes up. You can increase the sensitivity by lowering the probability threshold below 0.5 (maybe 0.45). Likewise, you can decrease sensitivity by increasing the probability threshold above 0.5 (maybe 0.55).
+
+### Multiple Wake Words
+
+Raven any number of custom wake words. By changing the "Wakeword Id" before recording your examples, you can create a new set of templates. Upon detection, Rhasspy will report this name as `wakewordId` in the [hotword detected message](reference.md#hotword_detected).
+
+Deleting a custom wake word is currently not supported through the web UI (though you can always overwrite the recordings). If you wish to delete a custom wake word, visit the `raven` directory of your Rhasspy profile and simply delete the directory named after your wakeword id.

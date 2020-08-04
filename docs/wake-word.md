@@ -31,6 +31,10 @@ Rhasspy listens for `hermes/hotword/<wakewordId>/detected` messages to decide wh
 
 Listens for a wake word with [Raven](https://github.com/rhasspy/rhasspy-wake-raven). This system is based on the [Snips Personal Wakeword Detector](https://medium.com/snips-ai/machine-learning-on-voice-a-gentle-introduction-with-snips-personal-wake-word-detector-133bd6fb568e) and works by comparing incoming audio to several pre-recorded templates.
 
+<div style="border: 1px solid green; padding: 5px; margin: 0 0 1rem 0;">
+    See the <a href="/tutorials/#custom-wakeword-with-raven">Raven tutorial</a> for how to get started.
+</div>
+
 The underlying implementation of Raven heavily borrows from [node-personal-wakeword](https://github.com/mathquis/node-personal-wakeword) by [mathquis](https://github.com/mathquis).
 
 Add to your [profile](profiles.md):
