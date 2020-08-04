@@ -108,7 +108,8 @@ This is done completely offline, on your device. If you experience performance p
         "kaldi_dir": "/opt/kaldi",
         "language_model": "language_model.txt",
         "model_dir": "model",
-        "unknown_words": "unknown_words.txt"
+        "unknown_words": "unknown_words.txt",
+        "language_model_type": "arpa"
     }
   }
 }
@@ -117,6 +118,12 @@ This is done completely offline, on your device. If you experience performance p
 Rhasspy currently supports `nnet3` and `gmm` Kaldi acoustic models.
 
 This requires Kaldi to be installed, which is...challenging. The [Docker image of Rhasspy](https://cloud.docker.com/u/synesthesiam/repository/docker/synesthesiam/rhasspy-server) contains a [pre-built copy](https://github.com/synesthesiam/kaldi-docker/releases) of Kaldi, which might work for you outside of Docker. Make sure to set `kaldi_dir` to wherever you installed Kaldi.
+
+### Language Model Type
+
+By default, Rhasspy generates an [ARPA](https://cmusphinx.github.io/wiki/arpaformat/) language model from [your custom voice commands](training.md#sentencesini). This model is somewhat flexible, allowing minor deviations from the prescribed templates. For longer voice commands or when you have slots with many possibilities, this language modeling approach can cause recognition problems.
+
+Setting `speech_to_text.kaldi.language_model_type` to "text_fst" instead of "arpa" will cause Rhasspy to directly convert your custom voice command graph into a Kaldi grammar finite state transducer (`G.fst`). While less flexible, this approach will only ever produce sentences from your templates.
 
 ### Open Transcription
 
