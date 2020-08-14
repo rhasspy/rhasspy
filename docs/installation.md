@@ -105,7 +105,7 @@ If you're using Docker Compose to run Rhasspy, just go into the directory of you
 
 ```bash
 $ docker-compose pull
-$ docker-compose restart
+$ docker-compose up -d
 ```
 
 The first command downloads the latest Rhasspy image and the second command recreates your container from this new image.
