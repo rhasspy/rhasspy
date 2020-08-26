@@ -29,6 +29,8 @@ The following table summarizes the trade-offs of using each intent recognizer:
 
 Rhasspy receives intent recognition requests on the `hermes/nlu/query` topic. Successful recognitions are published to `hermes/intent/<intentName>`, and unsuccessful recognitions to `hermes/nlu/intentNotRecognized` The format of these messages adheres to the [Hermes protocol](https://docs.snips.ai/reference/dialogue#intent).
 
+You can react to these intent recognitions in your own programs, for example using the [rhasspy-hermes-app](https://rhasspy-hermes-app.readthedocs.io) library.
+
 ## Fsticuffs
 
 Uses the [rhasspy-nlu](https://github.com/rhasspy/rhasspy-nlu) library to recognize **only** those sentences that Rhasspy was [trained on](training.md#sentencesini). While less flexible than the other intent recognizers, `fsticuffs` can be trained and perform recognition over *millions* of sentences in milliseconds. If you only plan to recognize voice commands from your training set (and not unseen ones via text chat), `fsticuffs` is the best choice.
