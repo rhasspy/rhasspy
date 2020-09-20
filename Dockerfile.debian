@@ -128,7 +128,8 @@ COPY README.md LICENSE ${BUILD_DIR}/
 # ENDIF
 
 RUN cd ${BUILD_DIR} && \
-    export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/dist" \
+    export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/dist -f ${BUILD_DIR}/download" \
+    export POCKETSPHINX_FROM_SRC=no && \
     make && \
     make install
 
@@ -144,12 +145,6 @@ RUN . /.vars && \
 
 RUN . /.vars && \
     mv ${APP_DIR}/* ${DEBIAN_DIR}${APP_DIR}/
-
-# Strip binaries and shared libraries
-RUN . /.vars && \
-    (find ${DEBIAN_DIR}${APP_DIR} -type f -name '*.so*' -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
-RUN . /.vars && \
-    (find ${DEBIAN_DIR}${APP_DIR} -type f -executable -print0 | xargs -0 strip --strip-unneeded -- 2>/dev/null) || true
 
 COPY debian/rhasspy debian/sox debian/fix-rhasspy-scripts.sh /tmp/
 RUN . /.vars && \

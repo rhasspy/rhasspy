@@ -126,6 +126,7 @@ if enable_snips:
 
 if enable_raven:
     optional_pathex.extend(["rhasspy-wake-raven", "rhasspy-wake-raven-hermes"])
+    optional_datas.extend(copy_metadata("numpy"))
     optional_imports.extend(
         [
             "rhasspywake_raven.__main__",
@@ -134,6 +135,13 @@ if enable_raven:
             "scipy",
         ]
     )
+
+    # Add numpy compiled artifacts
+    # for site_dir in site_dirs:
+    #     numpy_dir = Path(site_dir) / "numpy"
+    #     if numpy_dir.is_dir():
+    #         for numpy_so_path in numpy_dir.rglob("*.so"):
+    #             found_artifacts[str(numpy_so_path)] = numpy_so_path
 
 # -----------------------------------------------------------------------------
 
@@ -202,10 +210,10 @@ exe = EXE(
     name="rhasspy",
     debug=False,
     bootloader_ignore_signals=False,
-    strip=True,
+    strip=False,
     upx=True,
     console=True,
 )
 coll = COLLECT(
-    exe, a.binaries, a.zipfiles, a.datas, strip=True, upx=True, name="rhasspy"
+    exe, a.binaries, a.zipfiles, a.datas, strip=False, upx=True, name="rhasspy"
 )
