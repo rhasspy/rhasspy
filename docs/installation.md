@@ -93,6 +93,23 @@ If you're using a Raspberry Pi Zero, make sure to specify the platform:
 $ docker pull --platform linux/arm/v6 rhasspy/rhasspy
 ```
 
+After pulling the latest Rhasspy image, your Rhasspy container is still based on the old image. So to apply the update to your running Rhasspy instance, you also have to:
+
+* Stop the container: `docker stop rhasspy`
+* Remove the container: `docker rm rhasspy`
+* Create the container again with your original `docker run` command.
+
+After this, the Rhasspy container is running from the newest image you downloaded with the `docker pull` command.
+
+If you're using Docker Compose to run Rhasspy, just go into the directory of your `docker-compose.yml` file and execute the following commands:
+
+```bash
+$ docker-compose pull
+$ docker-compose up -d
+```
+
+The first command downloads the latest Rhasspy image and the second command recreates your container from this new image.
+
 ## Debian
 
 Pre-compiled packages are available for Debian-based distributions (Ubuntu, Raspberry Pi OS, etc.) on `amd64`, `armhf`, `armel`, and `arm64` (`aarch64`) architectures. These packages are built using Docker and `dpkg`.

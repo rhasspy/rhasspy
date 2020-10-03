@@ -1,3 +1,22 @@
+## [2.5.6]
+
+### Added
+
+- Multi-site support for dialogue manager
+- Add "Text FST" language model type for Kaldi for strict grammar-based recognition
+- UDP audio settings in web UI for Pocketsphinx wake word system
+- Rudimentary SSML support in Google Wavenet TTS (digitalfiz)
+
+### Changed
+
+- JSON output from all services is no longer forced to be ASCII
+- fuzzywuzzy performance improvement by using sqlite database (maxbachmann)
+- Lots of documentation improvements (koen)
+- Strip commans from replaced numbers ("one thousand, one hundred")
+- Improve rhasspy-nlu performance (maxbachmann)
+- Simplify Google Wavenet voice selection UI (Romkabouter)
+- Fix local command when not using absolute path (DeadEnd)
+
 ## [2.5.5] - 2020 Jun 30
 
 ### Added

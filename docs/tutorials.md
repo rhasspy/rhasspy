@@ -401,7 +401,7 @@ pi@raspberrypi:~ $
 
 ### Installing Microphone Drivers
 
-If you're using the [ReSpeaker 2mic HAT](https://respeaker.io/2_mic_array/), you need to install the driver before continuing. If not, proceed to the [Installing Rhasspy](#installing-rhasspy) step.
+If you're using a [ReSpeaker mic array](https://respeaker.io/), you need to install the driver before continuing. If not, proceed to the [Installing Rhasspy](#installing-rhasspy) step.
 
 We'll following the official instructions from the [seeed-voicecard GitHub page](https://github.com/respeaker/seeed-voicecard). On your Raspberry Pi, enter the following commands:
 
