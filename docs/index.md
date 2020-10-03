@@ -49,7 +49,7 @@ Rhasspy is <strong>optimized for</strong>:
     * [Getting Started Guide](tutorials.md#getting-started-guide)
     * [Why Rhasspy?](why-rhasspy.md)
     * [Whitepaper](whitepaper.md)
-* [Community Discourse]((https://community.rhasspy.org)
+* [Community Discourse](https://community.rhasspy.org)
     
 ## Web Interface
 
