@@ -25,6 +25,7 @@ DEFINE_string 'certfile' '' 'SSL certificate file'
 DEFINE_string 'keyfile' '' 'SSL private key file (optional)'
 DEFINE_string 'http-host' '' 'Change host for web server (default: localhost)'
 DEFINE_string 'http-port' '' 'Change port for web server (default: 12101)'
+DEFINE_string 'http-root' '' 'Change URL root for web server (default: /)'
 DEFINE_string 'local-mqtt-port' '' 'Change internal MQTT port (default: 12183)'
 DEFINE_boolean 'web-server' true 'Run Rhasspy web server'
 DEFINE_boolean 'generate-conf' true 'Generate supervisord conf from profile'
@@ -81,6 +82,7 @@ fi
 
 http_host="${FLAGS_http_host}"
 http_port="${FLAGS_http_port}"
+http_root="${FLAGS_http_root}"
 
 if [[ -n "${http_host}" ]]; then
     extra_web_args+=('--host' "${http_host}")
@@ -88,6 +90,10 @@ fi
 
 if [[ -n "${http_port}" ]]; then
     extra_web_args+=('--port' "${http_port}")
+fi
+
+if [[ -n "${http_root}" ]]; then
+    extra_web_args+=('--url-root' "${http_root}")
 fi
 
 # Extra arguments to pass to rhasspy-supervisor
