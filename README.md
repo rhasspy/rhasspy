@@ -135,6 +135,8 @@ If you feel comfortable sending your voice commands through the Internet for som
 
 Community contributions are welcomed! There are many different [ways to contribute](docs/contributing.md), both as a developer and a non-developer.
 
+![Open source](docs/img/open-source.png)
+
 ---
 
 <p>This project is supported by:</p>
