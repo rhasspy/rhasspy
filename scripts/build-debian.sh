@@ -15,7 +15,7 @@ this_dir="$( cd "$( dirname "$0" )" && pwd )"
 src_dir="$(realpath "${this_dir}/..")"
 
 version="$(cat "${src_dir}/VERSION")"
-out_version='2.5'
+out_version="${version}"
 
 # -----------------------------------------------------------------------------
 

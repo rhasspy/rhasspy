@@ -117,7 +117,7 @@ Rhasspy supports the following languages:
 
 As of version 2.5, Rhasspy is composed of [independent services](https://rhasspy.readthedocs.io/en/latest/services/) that coordinate over [MQTT](https://mqtt.org) using a superset of the [Hermes protocol](https://docs.snips.ai/reference/hermes).
 
-![Rhasspy services](img/services.png)
+![Rhasspy services](docs/img/services.png)
 
 You can easily extend or replace functionality in Rhasspy by using the [appropriate messages](https://rhasspy.readthedocs.io/en/latest/reference/#mqtt-api). Many of these messages can be also sent and received over the [HTTP API](https://rhasspy.readthedocs.io/en/latest/reference/#http-api) and the [Websocket API](https://rhasspy.readthedocs.io/en/latest/reference/#websocket-api).
 
@@ -134,6 +134,8 @@ If you feel comfortable sending your voice commands through the Internet for som
 ## Contributing
 
 Community contributions are welcomed! There are many different [ways to contribute](docs/contributing.md), both as a developer and a non-developer.
+
+![Open source](docs/img/open-source.png)
 
 ---
 
