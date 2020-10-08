@@ -110,6 +110,8 @@ $ docker-compose up -d
 
 The first command downloads the latest Rhasspy image and the second command recreates your container from this new image.
 
+---
+
 ## Debian
 
 Pre-compiled packages are available for Debian-based distributions (Ubuntu, Raspberry Pi OS, etc.) on `amd64`, `armhf`, `armel`, and `arm64` (`aarch64`) architectures. These packages are built using Docker and `dpkg`.
@@ -150,6 +152,8 @@ $ rhasspy --profile en
 and access the web interface at [http://localhost:12101](http://localhost:12101)
 
 To upgrade in the future, you can remove Rhasspy with `sudo dpkg -r rhasspy` and then install the new Debian package.
+
+---
 
 ## Virtual Environment
 
@@ -210,6 +214,26 @@ $ ./configure --enable-in-place
 $ make
 $ make install
 ```
+
+---
+
+## Hass.io
+
+If you use [Home Assistant](https://www.home-assistant.io), you can install Rhasspy as a [Hass.io add-on](https://www.home-assistant.io/addons/). Follow the [installation instructions for Hass.io](https://www.home-assistant.io/hassio/installation/) before proceeding.
+
+To install the add-on, add [this Hass.IO Add-On Repository](https://github.com/synesthesiam/hassio-addons) in the Add-On Store, refresh, then install the "Rhasspy Assistant **2.5**" under “Synesthesiam Hass.IO Add-Ons” (all the way at the bottom of the Add-On Store screen).
+
+![Synesthesiam add-on store](img/hass-io-store.png)
+
+Before starting the add-on, make sure to give it access to your microphone and speakers:
+
+![Audio settings for Hass.io](img/hass-io-audio.png)
+
+### Updating Hass.IO Add-On
+
+You should receive notifications when a new version of Rhasspy is available for Hass.IO. Follow the instructions from Hass.IO on how to update the add-on.
+
+---
 
 ## Windows Subsystem for Linux (WSL)
 
