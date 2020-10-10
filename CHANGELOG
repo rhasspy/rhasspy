@@ -2,7 +2,16 @@
 
 ### Added
 
+- Add support for Czech language
 - Add --http-root option to run web server with a different prefix
+
+### Changed
+
+- fuzzywuzzy examples database is deleted before training
+
+### Fixed
+
+- Fix silence phones in Vietnamese profile
 
 ## [2.5.6]
 
