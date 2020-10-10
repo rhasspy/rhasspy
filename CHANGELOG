@@ -1,4 +1,4 @@
-## Current
+## [2.5.7] - 2020 Oct 10
 
 ### Added
 
@@ -16,7 +16,7 @@
 - Fix silence phones in Vietnamese profile
 - Model index bug in rhasspy-wake-snowboy-hermes
 
-## [2.5.6]
+## [2.5.6] - 2020 Oct 3
 
 ### Added
 
