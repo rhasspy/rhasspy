@@ -12,6 +12,7 @@
 ### Fixed
 
 - Fix silence phones in Vietnamese profile
+- Model index bug in rhasspy-wake-snowboy-hermes
 
 ## [2.5.6]
 
