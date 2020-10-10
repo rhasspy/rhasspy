@@ -4,10 +4,12 @@
 
 - Add support for Czech language
 - Add --http-root option to run web server with a different prefix
+- siteId fields to dialogue continue/end session Hermes messages
 
 ### Changed
 
 - fuzzywuzzy examples database is deleted before training
+- More graceful handling of missing site ids in dialogue manager
 
 ### Fixed
 
