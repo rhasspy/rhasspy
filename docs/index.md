@@ -112,6 +112,8 @@ Rhasspy supports the following languages:
     * [Kaldi](https://github.com/synesthesiam/sv_kaldi-montreal)
 * Catalan (`ca`)
     * [Pocketsphinx](https://github.com/synesthesiam/ca-es_pocketsphinx-cmu)
+* Czech (`cs`)
+    * [Kaldi](https://github.com/rhasspy/cs_kaldi-rhasspy)
 
 ## Services
 

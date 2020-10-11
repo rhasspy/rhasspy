@@ -4,18 +4,24 @@ After you voice command has been [handled](intent-handling.md), it's common to p
 
 The following table summarizes language support for the various text to speech systems:
 
-| System                                      | en       | de       | es       | fr       | it       | nl       | ru       | el       | hi       | zh       | vi       | pt       | ca       |
-| ------                                      | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  |
-| [espeak](text-to-speech.md#espeak)          | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
-| [flite](text-to-speech.md#flite)            | &#x2713; |          |          |          |          |          |          |          | &#x2713; |          |          |          |          |
-| [picotts](text-to-speech.md#picotts)        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |
-| [nanotts](text-to-speech.md#nanotts)        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |
-| [marytts](text-to-speech.md#marytts)        | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |          |          |          |          |          |
-| [opentts](text-to-speech.md#opentts)        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
-| [wavenet](text-to-speech.md#google-wavenet) | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |
+| Language | [espeak](text-to-speech.md#espeak) | [flite](text-to-speech.md#flite) | [picotts](text-to-speech.md#picotts) | [nanotts](text-to-speech.md#nanotts) | [marytts](text-to-speech.md#marytts) | [opentts](text-to-speech.md#opentts) | [wavenet](text-to-speech.md#google-wavenet) |
+| en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
+| de       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
+| es       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             |                                      | &#x2713;                             | &#x2713;                                    |
+| fr       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
+| it       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
+| nl       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
+| ru       | &#x2713;                           |                                  |                                      |                                      | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
+| el       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |
+| hi       | &#x2713;                           | &#x2713;                         |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
+| zh       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
+| vi       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |
+| pt       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
+| ca       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |
+| cs       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
 
 ---
-
+| --- |
 ## eSpeak
 
 Uses [eSpeak](http://espeak.sourceforge.net) to speak sentences. This is the default text to speech system and, while it sounds robotic, has the widest support for different languages.

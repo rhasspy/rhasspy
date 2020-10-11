@@ -12,14 +12,24 @@ Available speech to text systems are:
 
 The following table summarizes language support for the various speech to text systems:
 
-| System                                         | en       | de       | es       | fr       | it       | nl       | ru       | el       | hi       | zh       | vi       | pt       | ca       |
-| ------                                         | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  | -------  |
-| [pocketsphinx](speech-to-text.md#pocketsphinx) | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |
-| [kaldi](speech-to-text.md#kaldi)               | &#x2713; | &#x2713; |          | &#x2713; |          | &#x2713; |          |          |          |          | &#x2713; |          |          |
-| [deepspeech](speech-to-text.md#deepspeech)     | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |          |          |          |
+| Language | [pocketsphinx](speech-to-text.md#pocketsphinx) | [kaldi](speech-to-text.md#kaldi) | [deepspeech](speech-to-text.md#deepspeech) |
+| en       | &#x2713;                                       | &#x2713;                         | &#x2713;                                   |
+| de       | &#x2713;                                       | &#x2713;                         | &#x2713;                                   |
+| es       | &#x2713;                                       |                                  |                                            |
+| fr       | &#x2713;                                       | &#x2713;                         |                                            |
+| it       | &#x2713;                                       |                                  |                                            |
+| nl       | &#x2713;                                       | &#x2713;                         |                                            |
+| ru       | &#x2713;                                       |                                  |                                            |
+| el       | &#x2713;                                       |                                  |                                            |
+| hi       | &#x2713;                                       |                                  |                                            |
+| zh       | &#x2713;                                       |                                  |                                            |
+| vi       |                                                | &#x2713;                         |                                            |
+| pt       | &#x2713;                                       |                                  |                                            |
+| ca       | &#x2713;                                       |                                  |                                            |
+| cs       |                                                | &#x2713;                         |                                            |
 
 ## MQTT/Hermes
-
+| ## MQTT/Hermes |
 Rhasspy transcribes audio according to the [Hermes protocol](https://docs.snips.ai/reference/hermes). The following steps are needed to get a transcription:
 
 1. A `hermes/asr/startListening` message is sent with a unique `sessionId`
