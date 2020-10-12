@@ -4,24 +4,24 @@ After you voice command has been [handled](intent-handling.md), it's common to p
 
 The following table summarizes language support for the various text to speech systems:
 
-| Language | [espeak](text-to-speech.md#espeak) | [flite](text-to-speech.md#flite) | [picotts](text-to-speech.md#picotts) | [nanotts](text-to-speech.md#nanotts) | [marytts](text-to-speech.md#marytts) | [opentts](text-to-speech.md#opentts) | [wavenet](text-to-speech.md#google-wavenet) |
-| en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
-| de       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
-| es       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             |                                      | &#x2713;                             | &#x2713;                                    |
-| fr       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
-| it       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
-| nl       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
-| ru       | &#x2713;                           |                                  |                                      |                                      | &#x2713;                             | &#x2713;                             | &#x2713;                                    |
-| el       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |
-| hi       | &#x2713;                           | &#x2713;                         |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
-| zh       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
-| vi       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |
-| pt       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
-| ca       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |
-| cs       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |
+| Language | [espeak](text-to-speech.md#espeak) | [flite](text-to-speech.md#flite) | [picotts](text-to-speech.md#picotts) | [nanotts](text-to-speech.md#nanotts) | [marytts](text-to-speech.md#marytts) | [opentts](text-to-speech.md#opentts) | [wavenet](text-to-speech.md#google-wavenet) | [larynx](text-to-speech.md#larynx) |
+| en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| de       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| es       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+| fr       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| it       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| nl       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
+| ru       | &#x2713;                           |                                  |                                      |                                      | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| el       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
+| hi       | &#x2713;                           | &#x2713;                         |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+| zh       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+| vi       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
+| pt       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+| ca       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
+| cs       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
 
 ---
-| --- |
+
 ## eSpeak
 
 Uses [eSpeak](http://espeak.sourceforge.net) to speak sentences. This is the default text to speech system and, while it sounds robotic, has the widest support for different languages.
@@ -269,6 +269,49 @@ Before using WaveNet, you must set up a Google cloud account and [generate a JSO
 WAV files of each sentence are cached in `wavenet.cache_dir` in your profile directory. Sentences are cached based on their text and the `gender`, `voice`, `language_code`, and `sample_rate` of the `wavenet` system. Changing any of these things will require using the Google API.
 
 Contributed by [Romkabouter](https://github.com/Romkabouter).
+
+Implemented by [rhasspy-tts-wavenet-hermes](https://github.com/rhasspy/rhasspy-tts-wavenet-hermes)
+
+## Larynx
+
+[Text to speech system](https://github.com/rhasspy/larynx) based on [a fork](https://github.com/rhasspy/TTS) of [MozillaTTS](https://github.com/mozilla/TTS). Uses pre-trained [PyTorch](https://pytorch.org) models and vocoders from public single-speaker datasets.
+
+Add to your [profile](profiles.md):
+
+```json
+"text_to_speech": {
+  "system": "larynx",
+  "larynx": {
+    "cache_dir": "tts/larynx/cache",
+    "default_voice": "myvoice",
+    "voices": {
+      "myvoice" {
+        "model": "/path/to/tts_checkpoint.pth.tar",
+        "config": "/path/to/tts_config.json",
+        "vocoder_model": "/path/to/vocoder_checkpoint.pth.tar",
+        "vocoder_config": "/path/to/vocoder_config.json",
+      }
+    }
+  }
+}
+```
+
+The `model` property is required for each voice. If `config` is missing, a file named `config.json` is assumed to exist in the same directory as the model checkpoint file. The `vocoder_model` and `vocoder_config` properties are optional. Vocoders and TTS models must currently share the same audio details (sample rate, etc.).
+
+* Supported model types:
+  * Tacotron2
+  * Glow-TTS
+Supported vocoder types:
+    * Multi-band MelGAN
+    * Fullband MelGAN
+    
+Available voices:
+    * Dutch
+        * [nl-rdh](https://github.com/rhasspy/nl_larynx-rdh)
+        
+Please contact a Rhasspy developer if you'd like to volunteer your voice!
+
+Implemented by [rhasspy-tts-larynx-hermes](https://github.com/rhasspy/rhasspy-tts-larynx-hermes)
 
 ## Home Assistant TTS Platform
 

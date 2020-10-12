@@ -267,6 +267,12 @@ Generates spoken audio for a sentence. See [Text to Speech](text-to-speech.md) f
 * [rhasspy-tts-cli-hermes](https://github.com/rhasspy/rhasspy-tts-cli-hermes)
     * Calls external program for text to speech
     * Implements [espeak](text-to-speech.md#espeak), [flite](text-to-speech.md#flite), [picoTTS](text-to-speech.md#picotts), [nanoTTS](text-to-speech.md#nanotts), [marytts](text-to-speech.md#marytts), [opentts](text-to-speech.md#opentts), and [command](text-to-speech.md#command)
+* [rhasspy-tts-larynx-hermes](https://github.com/rhasspy/rhasspy-tts-larynx-hermes)
+    * Uses [Larynx](https://github.com/rhasspy/larynx) text to speech system (based on [MozillaTTS](https://github.com/mozilla/TTS))
+    * Implements [larynx](text-to-speech.md#larynx)
+* [rhasspy-tts-wavenet-hermes](https://github.com/rhasspy/rhasspy-tts-wavenet-hermes)
+    * Uses Google's [WaveNet](https://cloud.google.com/text-to-speech/docs/wavenet)
+    * Implements [wavenet](text-to-speech.md#google-wavenet)
 * [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
     * POSTs to [remote web server](reference.md#api_text_to_speech) for text to speech
     * Implements [remote](text-to-speech.md#remote) (`--tts-url`) and [command](text-to-speech.md#command) (`--tts-command`)

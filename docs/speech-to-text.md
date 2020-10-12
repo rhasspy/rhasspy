@@ -29,7 +29,7 @@ The following table summarizes language support for the various speech to text s
 | cs       |                                                | &#x2713;                         |                                            |
 
 ## MQTT/Hermes
-| ## MQTT/Hermes |
+
 Rhasspy transcribes audio according to the [Hermes protocol](https://docs.snips.ai/reference/hermes). The following steps are needed to get a transcription:
 
 1. A `hermes/asr/startListening` message is sent with a unique `sessionId`

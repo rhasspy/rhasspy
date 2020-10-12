@@ -14,6 +14,7 @@ rhasspy-snips-nlu-hermes
 rhasspy-speakers-cli-hermes
 rhasspy-supervisor
 rhasspy-tts-cli-hermes
+rhasspy-tts-larynx-hermes
 rhasspy-tts-wavenet-hermes
 rhasspy-wake-pocketsphinx-hermes
 rhasspy-wake-porcupine-hermes

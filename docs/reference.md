@@ -32,6 +32,7 @@ The table below lists which components and compatible with Rhasspy's supported l
 |                        | [nanotts](text-to-speech.md#nanotts)           | &#x2713;               | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |          |          |
 |                        | [marytts](text-to-speech.md#marytts)           | *needs extra software* | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |          |          |          |          |          |          |          |
 |                        | [opentts](text-to-speech.md#opentts)           | *needs extra software* | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
+|                        | [larynx](text-to-speech.md#larynx)             | &#x2713;               |          |          |          |          |          | &#x2713; |          |          |          |          |          |          |          |          |          |
 |                        | [wavenet](text-to-speech.md#google-wavenet)    |                        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |
 
 &bull; - yes, but requires training/customization
