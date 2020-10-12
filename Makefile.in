@@ -105,7 +105,8 @@ ENABLE_SNIPS = @ENABLE_SNIPS@
 SNIPS_LANG_DIR = $(srcdir)/rhasspy-snips-nlu/etc/languages
 
 ENABLE_LARYNX = @ENABLE_LARYNX@
-TORCH_WHEEL = $(DOWNLOAD_DIR)/torch-1.6.0-cp37-cp37m-$(DOCKER_ARCH).whl
+LARYNX_ARCH = @LARYNX_ARCH@
+TORCH_WHEEL = $(DOWNLOAD_DIR)/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl
 
 # -----------------------------------------------------------------------------
 
