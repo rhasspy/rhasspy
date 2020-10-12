@@ -27,6 +27,8 @@ _COMMANDS = [
     "speakers-cli-hermes",
     "supervisor",
     "tts-cli-hermes",
+    "tts-larynx-hermes",
+    "tts-wavenet-hermes",
     "wake-pocketsphinx-hermes",
     "wake-porcupine-hermes",
     "wake-precise-hermes",

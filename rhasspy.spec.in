@@ -52,6 +52,7 @@ enable_porcupine = is_yes("@ENABLE_PORCUPINE@")
 enable_precise = is_yes("@ENABLE_PRECISE@")
 enable_snips = is_yes("@ENABLE_SNIPS@")
 enable_raven = is_yes("@ENABLE_RAVEN@")
+enable_larynx = is_yes("@ENABLE_LARYNX@")
 
 # Add optional paths/imports
 optional_pathex = []
@@ -136,12 +137,9 @@ if enable_raven:
         ]
     )
 
-    # Add numpy compiled artifacts
-    # for site_dir in site_dirs:
-    #     numpy_dir = Path(site_dir) / "numpy"
-    #     if numpy_dir.is_dir():
-    #         for numpy_so_path in numpy_dir.rglob("*.so"):
-    #             found_artifacts[str(numpy_so_path)] = numpy_so_path
+if enable_larynx:
+    optional_pathex.extend(["rhasspy-tts-larynx-hermes"])
+    optional_imports.extend(["rhasspytts_larynx_hermes.__main__", "torch"])
 
 # -----------------------------------------------------------------------------
 

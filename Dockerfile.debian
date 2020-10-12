@@ -98,6 +98,7 @@ COPY rhasspy-tts-wavenet-hermes/ ${BUILD_DIR}/rhasspy-wavenet-cli-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
 COPY rhasspy-wake-raven/ ${BUILD_DIR}/rhasspy-wake-raven/
 COPY rhasspy-wake-raven-hermes/ ${BUILD_DIR}/rhasspy-wake-raven-hermes/
+COPY rhasspy-tts-larynx-hermes/ ${BUILD_DIR}/rhasspy-tts-larynx-hermes/
 
 # Create Rhasspy distribution packages from source
 COPY RHASSPY_DIRS ${BUILD_DIR}/
