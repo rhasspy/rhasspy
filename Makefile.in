@@ -156,6 +156,10 @@ ifeq ($(ENABLE_SNIPS),yes)
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) setuptools_rust
 endif # ENABLE_SNIPS
 
+ifeq ($(ENABLE_LARYNX),yes)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(TORCH_WHEEL)"
+endif # ENABLE_LARYNX
+
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
 
 ifeq ($(ENABLE_SNIPS),yes)
@@ -167,6 +171,9 @@ endif # ENABLE_SNIPS
 
 ifeq ($(ENABLE_LARYNX),yes)
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(TORCH_WHEEL)"
+	cd "$(src_dir)/rhasspytts_larynx_hermes/TTS" && \
+      "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) -r requirements.txt && \
+      "$(INSTALL_PYTHON)" setup.py develop
 endif # ENABLE_LARYNX
 
 	chmod +x "${srcdir}/rhasspy.sh"
