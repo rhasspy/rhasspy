@@ -626,6 +626,7 @@ ac_subst_vars='LTLIBOBJS
 LIBOBJS
 IN_PLACE
 ENABLE_LARYNX
+LARYNX_ARCH
 ENABLE_WAVENET
 NANOTTS_FROM
 ENABLE_NANOTTS
@@ -3792,6 +3793,7 @@ nanotts_from=prebuilt
 is_wavenet_enabled=yes
 
 is_larynx_enabled=UNKNOWN
+larynx_arch=NONE
 
 case $host_cpu in #(
   armv6l) :
@@ -3856,6 +3858,7 @@ case $host_cpu in #(
         is_nanotts_enabled=yes
 
         is_larynx_enabled=yes
+        larynx_arch=armv7l
      ;; #(
   aarch64) :
 
@@ -3887,6 +3890,7 @@ case $host_cpu in #(
         is_nanotts_enabled=yes
 
         is_larynx_enabled=yes
+        larynx_arch=aarch64
      ;; #(
   x86_64) :
 
@@ -3918,6 +3922,7 @@ case $host_cpu in #(
         is_nanotts_enabled=yes
 
         is_larynx_enabled=yes
+        larynx_arch=x86_64
      ;; #(
   *) :
      ;;
@@ -5212,6 +5217,8 @@ NANOTTS_FROM=$nanotts_from
 
 ENABLE_WAVENET=$is_wavenet_enabled
 
+
+LARYNX_ARCH=$larynx_arch
 
 ENABLE_LARYNX=$is_larynx_enabled
 
