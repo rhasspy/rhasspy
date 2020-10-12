@@ -104,6 +104,9 @@ SNOWBOY_FILE = $(DOWNLOAD_DIR)/snowboy-1.3.0.tar.gz
 ENABLE_SNIPS = @ENABLE_SNIPS@
 SNIPS_LANG_DIR = $(srcdir)/rhasspy-snips-nlu/etc/languages
 
+ENABLE_LARYNX = @ENABLE_LARYNX@
+TORCH_WHEEL = $(DOWNLOAD_DIR)/torch-1.6.0-cp37-cp37m-$(DOCKER_ARCH).whl
+
 # -----------------------------------------------------------------------------
 
 VENV_DIR = $(DESTDIR)$(prefix)
@@ -135,7 +138,7 @@ ifeq ($(VIRTUALENV),yes)
 	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) cython
 endif # VIRTUALENV == yes
 
-.PHONY: install-opengrm install-phonetisaurus install-precise install-pocketsphinx install-kaldi install-julius install-snowboy install-deepspeech install-kenlm
+.PHONY: install-opengrm install-phonetisaurus install-precise install-pocketsphinx install-kaldi install-julius install-snowboy install-deepspeech install-kenlm install-nanotts install-larynx
 install-dependencies: install-opengrm \
                       install-phonetisaurus \
                       install-precise \
@@ -145,9 +148,10 @@ install-dependencies: install-opengrm \
                       install-snowboy \
                       install-deepspeech \
                       install-kenlm \
-                      install-nanotts
+                      install-nanotts \
+                      install-larynx
 
-install-rhasspy:
+install-rhasspy: install-larynx
 ifeq ($(ENABLE_SNIPS),yes)
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) setuptools_rust
 endif # ENABLE_SNIPS
@@ -160,6 +164,10 @@ ifeq ($(ENABLE_SNIPS),yes)
 		"$(INSTALL_PYTHON)" -m snips_nlu download "$${lang}"; \
 	done
 endif # ENABLE_SNIPS
+
+ifeq ($(ENABLE_LARYNX),yes)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(TORCH_WHEEL)"
+endif # ENABLE_LARYNX
 
 	chmod +x "${srcdir}/rhasspy.sh"
 ifneq ($(IN_PLACE),yes)
@@ -437,6 +445,26 @@ endif # ENABLE_NANOTTS
 
 $(NANOTTS_SRC_FILE):
 	$(DO_DOWNLOAD) "$(NANOTTS_SRC_FILE)" 'https://github.com/synesthesiam/prebuilt-apps/raw/master/download/nanotts-20200520.tar.gz'
+
+# -----------------------------------------------------------------------------
+# Larynx: text to speech
+# https://github.com/rhasspy/larynx
+# -----------------------------------------------------------------------------
+
+.PHONY: larynx
+ifeq ($(ENABLE_LARYNX),yes)
+larynx: $(NANOTTS_PRE_FILE)
+
+install-larynx: $(TORCH_WHEEL)
+	"$(srcdir)/scripts/install/install-nanotts.sh" "$(NANOTTS_PRE_FILE)" "$(DESTDIR)$(prefix)"
+
+$(TORCH_WHEEL):
+	$(DO_DOWNLOAD) "$(TORCH_WHEEL)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/torch-1.6.0-cp37-cp37m-$(DOCKER_ARCH).whl"
+else # ENABLE_LARYNX
+larynx:
+
+install-larynx:
+endif # ENABLE_LARYNX
 
 # -----------------------------------------------------------------------------
 

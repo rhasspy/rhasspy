@@ -1,4 +1,4 @@
-AC_INIT([rhasspy], [2.5.2], [mike@rhasspy.org])
+AC_INIT([rhasspy], [2.5.7], [mike@rhasspy.org])
 AC_CONFIG_MACRO_DIR([m4])
 PC_INIT([3.7.0])
 
@@ -101,6 +101,8 @@ nanotts_from=prebuilt
 
 is_wavenet_enabled=yes
 
+is_larynx_enabled=UNKNOWN
+
 dnl Set architectures based on host CPU
 AS_CASE([$host_cpu],
     [armv6l],[
@@ -132,6 +134,8 @@ AS_CASE([$host_cpu],
         is_kenlm_enabled=yes
 
         is_nanotts_enabled=yes
+
+        is_larynx_enabled=no
     ],
     [armv7l],[
         dnl ARM 32-bit v7 (Pi 2/3/4)
@@ -161,6 +165,8 @@ AS_CASE([$host_cpu],
         is_kenlm_enabled=yes
 
         is_nanotts_enabled=yes
+
+        is_larynx_enabled=yes
     ],
     [aarch64],[
         dnl ARM 64-bit (Pi 3/4)
@@ -190,6 +196,8 @@ AS_CASE([$host_cpu],
         is_kenlm_enabled=yes
 
         is_nanotts_enabled=yes
+
+        is_larynx_enabled=yes
     ],
     [x86_64],[
         dnl x86_64 compatible
@@ -219,6 +227,8 @@ AS_CASE([$host_cpu],
         is_kenlm_enabled=yes
 
         is_nanotts_enabled=yes
+
+        is_larynx_enabled=yes
     ])
 
 dnl ---------------------------------------------------------------------------
@@ -354,6 +364,10 @@ AC_ARG_ENABLE([nanotts],
 AC_ARG_ENABLE([wavenet],
     AS_HELP_STRING([--disable-wavenet],
         [disable installation of Google Wavenet text to speech system]))
+
+AC_ARG_ENABLE([larynx],
+    AS_HELP_STRING([--disable-larynx],
+        [disable installation of Larynx text to speech system]))
 
 dnl ---------------------------------------------------------------------------
 dnl Resolve Settings
@@ -538,6 +552,11 @@ AS_CASE([$enable_wavenet],
         [yes],[is_wavenet_enabled=yes],
         [no],[is_wavenet_enabled=no])
 
+AS_CASE([$enable_larynx],
+        [yes],[is_larynx_enabled=yes],
+        [no],[is_larynx_enabled=no])
+
+
 dnl Determine prebuilt/source
 AS_CASE([$enable_precompiled_binaries],
         [no],[
@@ -696,6 +715,7 @@ text to speech:"])
 
 AS_ECHO(["  nanoTTS: ${is_nanotts_enabled} (${nanotts_from})"])
 AS_ECHO(["  Wavenet: ${is_wavenet_enabled}"])
+AS_ECHO(["  Larynx: ${is_larynx_enabled}"])
 
 AS_ECHO(["
 training:"])
@@ -761,6 +781,8 @@ AC_SUBST([ENABLE_NANOTTS], [$is_nanotts_enabled])
 AC_SUBST([NANOTTS_FROM], [$nanotts_from])
 
 AC_SUBST([ENABLE_WAVENET], [$is_wavenet_enabled])
+
+AC_SUBST([ENABLE_LARYNX], [$is_larynx_enabled])
 
 AC_SUBST([IN_PLACE], [$is_in_place])
 
