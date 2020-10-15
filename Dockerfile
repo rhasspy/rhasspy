@@ -43,7 +43,17 @@ FROM build-ubuntu as build-amd64
 
 FROM build-ubuntu as build-armv7
 
+RUN apt-get install --no-install-recommends --yes \
+        llvm-9
+
+ENV LLVM_CONFIG=/usr/bin/llvm-config-9
+
 FROM build-ubuntu as build-arm64
+
+RUN apt-get install --no-install-recommends --yes \
+        llvm-9
+
+ENV LLVM_CONFIG=/usr/bin/llvm-config-9
 
 # -----------------------------------------------------------------------------
 
@@ -111,6 +121,7 @@ COPY rhasspy-wake-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake
 COPY rhasspy-wake-raven/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven/
 COPY rhasspy-wake-raven-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven-hermes/
 COPY rhasspy-tts-larynx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-larynx-hermes/
+COPY rhasspy-tts-larynx-hermes/larynx/ ${BUILD_DIR}/rhasspy-tts-larynx-hermes/larynx/
 
 # Autoconf
 COPY m4/ ${BUILD_DIR}/m4/
@@ -120,7 +131,7 @@ COPY configure config.sub config.guess \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
-    ./configure --enable-in-place --prefix=${APP_DIR}/.venv
+    ./configure --enable-in-place --prefix=${APP_DIR}/.venv --disable-larynx
 
 COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 

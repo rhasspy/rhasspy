@@ -114,7 +114,7 @@ COPY configure config.sub config.guess \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
-    ./configure --prefix=${APP_DIR}
+    ./configure --prefix=${APP_DIR} --disable-larynx
 
 COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 

@@ -172,9 +172,13 @@ endif # ENABLE_SNIPS
 
 ifeq ($(ENABLE_LARYNX),yes)
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(TORCH_WHEEL)"
-	cd "$(src_dir)/rhasspytts_larynx_hermes/TTS" && \
+	cd "$(srcdir)/rhasspy-tts-larynx-hermes/larynx/TTS" && \
       "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) -r requirements.txt && \
-      "$(INSTALL_PYTHON)" setup.py develop
+      "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) . && \
+	cd "$(srcdir)/rhasspy-tts-larynx-hermes/larynx/TTS/TTS/tts/layers/glow_tts/monotonic_align" && \
+      "$(INSTALL_PYTHON)" setup.py install && \
+	cd "$(srcdir)/rhasspy-tts-larynx-hermes/larynx" && \
+      "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) -r requirements.txt
 endif # ENABLE_LARYNX
 
 	chmod +x "${srcdir}/rhasspy.sh"
