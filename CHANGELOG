@@ -1,9 +1,8 @@
-## [2.5.7]
+## [2.5.7] - 2020 Oct 15
 
 ### Added
 
 - Add support for Czech language
-- Add Larynx TTS system and Dutch rdh voice
 - Add --http-root option to run web server with a different prefix
 
 ### Changed
@@ -13,6 +12,7 @@
 
 ### Fixed
 
+- Use session id instead of site id where possible in dialogue manager
 - Fix silence phones in Vietnamese and profiles
 - Model index bug in rhasspy-wake-snowboy-hermes
 
