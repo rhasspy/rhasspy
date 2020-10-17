@@ -101,7 +101,7 @@ nanotts_from=prebuilt
 
 is_wavenet_enabled=yes
 
-is_larynx_enabled=UNKNOWN
+is_larynx_enabled=no
 larynx_arch=NONE
 
 dnl Set architectures based on host CPU
@@ -135,8 +135,6 @@ AS_CASE([$host_cpu],
         is_kenlm_enabled=yes
 
         is_nanotts_enabled=yes
-
-        is_larynx_enabled=no
     ],
     [armv7l],[
         dnl ARM 32-bit v7 (Pi 2/3/4)
@@ -167,7 +165,6 @@ AS_CASE([$host_cpu],
 
         is_nanotts_enabled=yes
 
-        is_larynx_enabled=yes
         larynx_arch=armv7l
     ],
     [aarch64],[
@@ -199,7 +196,6 @@ AS_CASE([$host_cpu],
 
         is_nanotts_enabled=yes
 
-        is_larynx_enabled=yes
         larynx_arch=aarch64
     ],
     [x86_64],[
@@ -231,7 +227,6 @@ AS_CASE([$host_cpu],
 
         is_nanotts_enabled=yes
 
-        is_larynx_enabled=yes
         larynx_arch=x86_64
     ])
 
