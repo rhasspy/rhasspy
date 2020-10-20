@@ -471,7 +471,7 @@ install-larynx: $(TORCH_WHEEL)
 	"$(srcdir)/scripts/install/install-nanotts.sh" "$(NANOTTS_PRE_FILE)" "$(DESTDIR)$(prefix)"
 
 $(TORCH_WHEEL):
-	$(DO_DOWNLOAD) "$(TORCH_WHEEL)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/torch-1.6.0-cp37-cp37m-$(DOCKER_ARCH).whl"
+	$(DO_DOWNLOAD) "$(TORCH_WHEEL)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl"
 else # ENABLE_LARYNX
 larynx:
 
