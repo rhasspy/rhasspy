@@ -5,6 +5,7 @@
 - Spanish Kaldi profile
 - French Kaldi profile
 - Italian Kaldi profile
+- rhasspy/asr/recordingFinished MQTT message sent immediately after silence detection
 - Satellite site ids to intent handling settings in web UI
 
 ### Fixed
