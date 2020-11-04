@@ -6,6 +6,7 @@
 - French Kaldi profile and Larynx TTS voice
 - Italian Kaldi profile
 - German Larynx TTS voice
+- Volume scale (0-1) for feedback sounds and TTS
 - rhasspy/asr/recordingFinished MQTT message sent immediately after silence detection
 - Satellite site ids to intent handling settings in web UI
 
@@ -13,6 +14,7 @@
 
 - Argument list for sound output command system (jrouly)
 - Expand environment variables in TLS ca_certs
+- spn silence phone in Swedish profile
 
 ## [2.5.7] - 2020 Oct 15
 
