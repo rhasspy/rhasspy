@@ -3,13 +3,14 @@
 ### Added
 
 - Spanish Kaldi profile
+- French Kaldi profile
 - Italian Kaldi profile
 - Satellite site ids to intent handling settings in web UI
 
 ### Fixed
 
 - Argument list for sound output command system (jrouly)
-
+- Expand environment variables in TLS ca_certs
 
 ## [2.5.7] - 2020 Oct 15
 
