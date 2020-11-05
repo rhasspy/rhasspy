@@ -7,6 +7,7 @@
 - Italian Kaldi profile
 - German Larynx TTS voice
 - Volume scale (0-1) for feedback sounds and TTS
+- rhasspy/asr/setVolume MQTT message and /api/setVolume HTTP endpoint
 - rhasspy/asr/recordingFinished MQTT message sent immediately after silence detection
 - Satellite site ids to intent handling settings in web UI
 
