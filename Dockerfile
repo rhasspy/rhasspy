@@ -131,7 +131,7 @@ COPY configure config.sub config.guess \
      ${BUILD_DIR}/
 
 RUN cd ${BUILD_DIR} && \
-    ./configure --enable-in-place --prefix=${APP_DIR}/.venv --disable-larynx
+    ./configure --enable-in-place --prefix=${APP_DIR}/.venv
 
 COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
