@@ -15,6 +15,7 @@
 - Argument list for sound output command system (jrouly)
 - Expand environment variables in TLS ca_certs
 - spn silence phone in Swedish profile
+- Use callback API in PyAudio to avoid buffer overrun
 
 ## [2.5.7] - 2020 Oct 15
 
