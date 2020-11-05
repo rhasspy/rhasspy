@@ -32,7 +32,7 @@ The table below lists which components and compatible with Rhasspy's supported l
 |                        | [nanotts](text-to-speech.md#nanotts)           | &#x2713;               | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          |          |          |          |          |          |          |          |          |          |
 |                        | [marytts](text-to-speech.md#marytts)           | *needs extra software* | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |          |          |          |          |          |          |          |          |
 |                        | [opentts](text-to-speech.md#opentts)           | *needs extra software* | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
-|                        | [larynx](text-to-speech.md#larynx)             | &#x2713;               |          |          |          |          |          | &#x2713; |          |          |          |          |          |          |          |          |          |
+|                        | [larynx](text-to-speech.md#larynx)             | &#x2713;               |          | &#x2713; |          | &#x2713; |          | &#x2713; |          |          |          |          |          |          |          |          |          |
 |                        | [wavenet](text-to-speech.md#google-wavenet)    |                        | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; | &#x2713; |          | &#x2713; |
 
 &bull; - yes, but requires training/customization
@@ -110,6 +110,10 @@ Messages for [audio input](audio-input.md) and [audio output](audio-output.md).
         * `description: string? = null` - detailed description of device
         * `working: boolean? = null` - true/false if test succeeded or not, null if not tested
     * `id: string? = null` - unique ID from request
+    * `siteId: string = "default"` - Hermes site ID
+* <a id="audioserver_setvolume"><tt>rhasspy/audioServer/setVolume</tt></a> (JSON, Rhasspy only)
+    * Set the volume at one or more sites
+    * `volume: float` - volume level to set (0 = off, 1 = full volume)
     * `siteId: string = "default"` - Hermes site ID
     
 ### Automated Speech Recognition
@@ -406,6 +410,7 @@ Messages for [intent handling](intent-handling.md).
     * `text: string` - sentence to speak (required)
     * `lang: string? = null` - override language for TTS system
     * `id: string? = null` - unique ID for request (copied to `sayFinished`)
+    * `volume: float? = null` - volume level to speak with (0 = off, 1 = full volume)
     * `siteId: string = "default"` - Hermes site ID
     * `sessionId: string? = null` - current session ID
     * Response(s)
@@ -497,6 +502,10 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * Set `Accept: application/json` to GET JSON with all sentence files
     * Set `Content-Type: application/json` to POST JSON with sentences for multiple files
     * See `sentences.ini` and `intents` directory in your profile
+* <a id="api_set_volume"><tt>/api/set-volume</tt></a>
+    * POST to set volume at one or more sites
+    * Body text is volume level (0 = off, 1 = full volume)
+    * `?siteId=site1,site2,...` to apply to specific site(s)
 * <a id="api_slots"><tt>/api/slots</tt></a>
     * GET slot values as JSON or POST to add to/overwrite them
     * `?overwrite_all=true` to clear slots in JSON before writing
@@ -530,6 +539,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * `?voice=<voice>` - override default TTS voice
     * `?language=<language>` - override default TTS language or locale
     * `?repeat=true` - have Rhasspy repeat the last sentence it spoke
+    * `?volume=<volume>` - volume level to speak at (0 = off, 1 = full volume)
     * `?siteId=site1,site2,...` to apply to specific site(s)
 * <a id="api_train"><tt>/api/train</tt></a>
     * POST to re-train your profile

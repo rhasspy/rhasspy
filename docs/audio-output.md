@@ -24,6 +24,10 @@ Add to your [profile](profiles.md):
 If provided, `sounds.aplay.device` is passed to `aplay` with the `-D` argument.
 Leave it blank to use the default device.
 
+You may set `sounds.aplay.volume` to a value in `[0, 1]` where 0 is off and 1 is full volume. This can be changed at runtime through the [`rhasspy/audioServer/setVolume`](reference.md#audioserver_setvolume) message or the [`/api/set-volume`](reference.md#api_set_volume) HTTP endpoint.
+
+WAV audio sent to this service is automatically inspected for an [INFO chunk](https://github.com/synesthesiam/wav-chunk). If present, it's value is deserialized a JSON object and a "volume" property will used to determine the final playback volume (e.g., `{ "volume": 0.5 }`).
+
 Implemented by [rhasspy-speakers-cli-hermes](https://github.com/rhasspy/rhasspy-speakers-cli-hermes)
 
 ## Remote
