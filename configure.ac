@@ -101,7 +101,7 @@ nanotts_from=prebuilt
 
 is_wavenet_enabled=yes
 
-is_larynx_enabled=no
+is_larynx_enabled=UNKNOWN
 larynx_arch=NONE
 
 dnl Set architectures based on host CPU
