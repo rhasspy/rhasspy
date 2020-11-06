@@ -3825,6 +3825,8 @@ case $host_cpu in #(
         is_kenlm_enabled=yes
 
         is_nanotts_enabled=yes
+
+        is_larynx_enabled=no
      ;; #(
   armv7l) :
 
@@ -3855,6 +3857,7 @@ case $host_cpu in #(
 
         is_nanotts_enabled=yes
 
+        is_larynx_enabled=yes
         larynx_arch=armv7l
      ;; #(
   aarch64) :
@@ -3886,6 +3889,7 @@ case $host_cpu in #(
 
         is_nanotts_enabled=yes
 
+        is_larynx_enabled=yes
         larynx_arch=aarch64
      ;; #(
   x86_64) :
@@ -3917,6 +3921,7 @@ case $host_cpu in #(
 
         is_nanotts_enabled=yes
 
+        is_larynx_enabled=yes
         larynx_arch=x86_64
      ;; #(
   *) :
