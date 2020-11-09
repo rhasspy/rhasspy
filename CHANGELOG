@@ -2,6 +2,7 @@
 
 ### Added
 
+- Russian Kaldi profile
 - Spanish Kaldi profile
 - French Kaldi profile and Larynx TTS voice
 - Italian Kaldi profile
@@ -17,6 +18,7 @@
 - Expand environment variables in TLS ca_certs
 - spn silence phone in Swedish profile
 - Use callback API in PyAudio to avoid buffer overrun
+- HTTP API JSON should not be forced to ASCII
 
 ## [2.5.7] - 2020 Oct 15
 
