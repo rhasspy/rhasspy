@@ -2,7 +2,8 @@
 
 ### Added
 
-- Spanish Kaldi profile
+- Russian Kaldi profile and Larynx TTS voice
+- Spanish Kaldi profile and Larynx TTS voice
 - French Kaldi profile and Larynx TTS voice
 - Italian Kaldi profile
 - German Larynx TTS voice
@@ -10,6 +11,7 @@
 - rhasspy/asr/setVolume MQTT message and /api/setVolume HTTP endpoint
 - rhasspy/asr/recordingFinished MQTT message sent immediately after silence detection
 - Satellite site ids to intent handling settings in web UI
+- num2words support for Swedish (Bostrom)
 
 ### Fixed
 
@@ -17,6 +19,7 @@
 - Expand environment variables in TLS ca_certs
 - spn silence phone in Swedish profile
 - Use callback API in PyAudio to avoid buffer overrun
+- HTTP API JSON should not be forced to ASCII
 
 ## [2.5.7] - 2020 Oct 15
 

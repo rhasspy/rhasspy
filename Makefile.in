@@ -108,6 +108,8 @@ ENABLE_LARYNX = @ENABLE_LARYNX@
 LARYNX_ARCH = @LARYNX_ARCH@
 TORCH_WHEEL = $(DOWNLOAD_DIR)/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl
 
+NUM2WORDS_FILE = $(DOWNLOAD_DIR)/num2words_0.5.10-sv.tar.gz
+
 # -----------------------------------------------------------------------------
 
 VENV_DIR = $(DESTDIR)$(prefix)
@@ -151,7 +153,8 @@ install-dependencies: install-opengrm \
                       install-deepspeech \
                       install-kenlm \
                       install-nanotts \
-                      install-larynx
+                      install-larynx \
+                      install-num2words
 
 install-rhasspy: install-larynx
 ifeq ($(ENABLE_SNIPS),yes)
@@ -203,6 +206,19 @@ download-init:
 .PHONY: build-init
 build-init:
 	$(MKDIR_P) "$(BUILD_DIR)"
+
+# -----------------------------------------------------------------------------
+# num2words: convert numbers to words
+# https://github.com/rhasspy/num2words
+# Credit: https://github.com/savoirfairelinux/num2words
+# -----------------------------------------------------------------------------
+.PHONY: install-num2words
+
+install-num2words: $(NUM2WORDS_FILE)
+	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(NUM2WORDS_FILE)"
+
+$(NUM2WORDS_FILE):
+	$(DO_DOWNLOAD) "$(NUM2WORDS_FILE)" 'https://github.com/rhasspy/num2words/archive/v0.5.10-sv.tar.gz'
 
 # -----------------------------------------------------------------------------
 # Opengrm: languge modeling toolkit
