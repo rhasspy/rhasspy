@@ -21,6 +21,10 @@
 - Use callback API in PyAudio to avoid buffer overrun
 - HTTP API JSON should not be forced to ASCII
 
+### Changed
+
+- Default Kaldi language model type is now text FST instead of arpa
+
 ## [2.5.7] - 2020 Oct 15
 
 ### Added
