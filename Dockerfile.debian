@@ -1,4 +1,4 @@
-FROM python:3.7.7-stretch as base
+FROM python:3.7.7-buster as base
 
 ENV LANG C.UTF-8
 
@@ -21,7 +21,7 @@ FROM base as base-armv7
 
 FROM base as base-arm64
 
-FROM balenalib/raspberry-pi-debian-python:3.7-stretch-build-20200604 as base-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200529 as base-armv6
 
 ENV LANG C.UTF-8
 
