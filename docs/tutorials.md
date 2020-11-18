@@ -251,7 +251,7 @@ def on_message(client, userdata, msg):
         sentence = nlu_payload["input"]
 
     site_id = nlu_payload["siteId"]
-    client.publish("hermes/tts/say", json.dumps({"text": , "siteId": site_id}))
+    client.publish("hermes/tts/say", json.dumps({"text": sentence, "siteId": site_id}))
 
 
 # Create MQTT client and connect to broker
