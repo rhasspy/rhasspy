@@ -1,4 +1,4 @@
-FROM python:3.7.7-stretch as base
+FROM python:3.7.7-buster as base
 
 ENV LANG C.UTF-8
 
@@ -11,7 +11,7 @@ RUN apt-get update && \
         build-essential \
         python3 python3-dev python3-pip python3-setuptools python3-venv \
         swig portaudio19-dev libatlas-base-dev \
-        fakeroot curl
+        fakeroot curl rsync
 
 # -----------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ FROM base as base-armv7
 
 FROM base as base-arm64
 
-FROM balenalib/raspberry-pi-debian-python:3.7-stretch-build-20200604 as base-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200529 as base-armv6
 
 ENV LANG C.UTF-8
 
@@ -31,7 +31,7 @@ ENV LANG C.UTF-8
 
 RUN install_packages \
         swig portaudio19-dev libatlas-base-dev \
-        fakeroot curl
+        fakeroot curl rsync
 
 # -----------------------------------------------------------------------------
 
@@ -39,145 +39,109 @@ ARG TARGETARCH
 ARG TARGETVARIANT
 FROM base-$TARGETARCH$TARGETVARIANT as build
 
-ENV APP_DIR=/usr/lib/rhasspy
-ENV BUILD_DIR=/build
-
-COPY VERSION ${BUILD_DIR}/
-
-# Write shared variables to /.vars
-RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\\+=//')" && \
-    export VERSION="$(cat ${BUILD_DIR}/VERSION)" && \
-    export PACKAGE_NAME=rhasspy_${VERSION}_${DEBIAN_ARCH} && \
-    export DEBIAN_DIR=${BUILD_DIR}/${PACKAGE_NAME} && \
-    echo "export VERSION=${VERSION}" > /.vars && \
-    echo "export PACKAGE_NAME=${PACKAGE_NAME}" >> /.vars && \
-    echo "export DEBIAN_ARCH=${DEBIAN_ARCH}" >> /.vars && \
-    echo "export DEBIAN_DIR=${DEBIAN_DIR}" >> /.vars
-
-RUN . /.vars && \
-    mkdir -p ${DEBIAN_DIR}/DEBIAN
-
-COPY debian/control.in /
-
-RUN . /.vars && \
-    sed -e s"/@VERSION@/${VERSION}/" -e "s/@DEBIAN_ARCH@/${DEBIAN_ARCH}/" < /control.in > ${DEBIAN_DIR}/DEBIAN/control
-
 # Directory of prebuilt tools
-COPY download/ ${BUILD_DIR}/download/
+ENV DOWNLOAD_DIR=/download
+COPY download/ ${DOWNLOAD_DIR}/
+
+ENV APP_DIR=/usr/lib/rhasspy
+
+COPY VERSION ${APP_DIR}/
 
 # Copy Rhasspy source
-COPY rhasspy/ ${BUILD_DIR}/rhasspy/
-COPY rhasspy-server-hermes/ ${BUILD_DIR}/rhasspy-server-hermes/
-COPY rhasspy-wake-snowboy-hermes/ ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/
-COPY rhasspy-wake-porcupine-hermes/ ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/
-COPY rhasspy-wake-precise-hermes/ ${BUILD_DIR}/rhasspy-wake-precise-hermes/
-COPY rhasspy-profile/ ${BUILD_DIR}/rhasspy-profile/
-COPY rhasspy-asr/ ${BUILD_DIR}/rhasspy-asr/
-COPY rhasspy-asr-deepspeech ${BUILD_DIR}/rhasspy-asr-deepspeech/
-COPY rhasspy-asr-deepspeech-hermes/ ${BUILD_DIR}/rhasspy-asr-deepspeech-hermes/
-COPY rhasspy-asr-pocketsphinx/ ${BUILD_DIR}/rhasspy-asr-pocketsphinx/
-COPY rhasspy-asr-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-asr-pocketsphinx-hermes/
-COPY rhasspy-asr-kaldi/ ${BUILD_DIR}/rhasspy-asr-kaldi/
-COPY rhasspy-asr-kaldi-hermes/ ${BUILD_DIR}/rhasspy-asr-kaldi-hermes/
-COPY rhasspy-dialogue-hermes/ ${BUILD_DIR}/rhasspy-dialogue-hermes/
-COPY rhasspy-fuzzywuzzy/ ${BUILD_DIR}/rhasspy-fuzzywuzzy/
-COPY rhasspy-fuzzywuzzy-hermes/ ${BUILD_DIR}/rhasspy-fuzzywuzzy-hermes/
-COPY rhasspy-hermes/ ${BUILD_DIR}/rhasspy-hermes/
-COPY rhasspy-homeassistant-hermes/ ${BUILD_DIR}/rhasspy-homeassistant-hermes/
-COPY rhasspy-microphone-cli-hermes/ ${BUILD_DIR}/rhasspy-microphone-cli-hermes/
-COPY rhasspy-microphone-pyaudio-hermes/ ${BUILD_DIR}/rhasspy-microphone-pyaudio-hermes/
-COPY rhasspy-nlu/ ${BUILD_DIR}/rhasspy-nlu/
-COPY rhasspy-nlu-hermes/ ${BUILD_DIR}/rhasspy-nlu-hermes/
-COPY rhasspy-rasa-nlu-hermes/ ${BUILD_DIR}/rhasspy-rasa-nlu-hermes/
-COPY rhasspy-remote-http-hermes/ ${BUILD_DIR}/rhasspy-remote-http-hermes/
-COPY rhasspy-silence/ ${BUILD_DIR}/rhasspy-silence/
-COPY rhasspy-speakers-cli-hermes/ ${BUILD_DIR}/rhasspy-speakers-cli-hermes/
-COPY rhasspy-supervisor/ ${BUILD_DIR}/rhasspy-supervisor/
-COPY rhasspy-tts-cli-hermes/ ${BUILD_DIR}/rhasspy-tts-cli-hermes/
-COPY rhasspy-tts-wavenet-hermes/ ${BUILD_DIR}/rhasspy-wavenet-cli-hermes/
-COPY rhasspy-wake-pocketsphinx-hermes/ ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
-COPY rhasspy-wake-raven/ ${BUILD_DIR}/rhasspy-wake-raven/
-COPY rhasspy-wake-raven-hermes/ ${BUILD_DIR}/rhasspy-wake-raven-hermes/
-COPY rhasspy-tts-larynx-hermes/ ${BUILD_DIR}/rhasspy-tts-larynx-hermes/
-
-# Create Rhasspy distribution packages from source
-COPY RHASSPY_DIRS ${BUILD_DIR}/
-COPY scripts/build-dists.sh ${BUILD_DIR}/scripts/
-RUN cd ${BUILD_DIR} && \
-    scripts/build-dists.sh --no-copy
+COPY rhasspy/ ${APP_DIR}/rhasspy/
+COPY rhasspy-server-hermes/ ${APP_DIR}/rhasspy-server-hermes/
+COPY rhasspy-wake-snowboy-hermes/ ${APP_DIR}/rhasspy-wake-snowboy-hermes/
+COPY rhasspy-wake-porcupine-hermes/ ${APP_DIR}/rhasspy-wake-porcupine-hermes/
+COPY rhasspy-wake-precise-hermes/ ${APP_DIR}/rhasspy-wake-precise-hermes/
+COPY rhasspy-profile/ ${APP_DIR}/rhasspy-profile/
+COPY rhasspy-asr/ ${APP_DIR}/rhasspy-asr/
+COPY rhasspy-asr-deepspeech ${APP_DIR}/rhasspy-asr-deepspeech/
+COPY rhasspy-asr-deepspeech-hermes/ ${APP_DIR}/rhasspy-asr-deepspeech-hermes/
+COPY rhasspy-asr-pocketsphinx/ ${APP_DIR}/rhasspy-asr-pocketsphinx/
+COPY rhasspy-asr-pocketsphinx-hermes/ ${APP_DIR}/rhasspy-asr-pocketsphinx-hermes/
+COPY rhasspy-asr-kaldi/ ${APP_DIR}/rhasspy-asr-kaldi/
+COPY rhasspy-asr-kaldi-hermes/ ${APP_DIR}/rhasspy-asr-kaldi-hermes/
+COPY rhasspy-dialogue-hermes/ ${APP_DIR}/rhasspy-dialogue-hermes/
+COPY rhasspy-fuzzywuzzy/ ${APP_DIR}/rhasspy-fuzzywuzzy/
+COPY rhasspy-fuzzywuzzy-hermes/ ${APP_DIR}/rhasspy-fuzzywuzzy-hermes/
+COPY rhasspy-hermes/ ${APP_DIR}/rhasspy-hermes/
+COPY rhasspy-homeassistant-hermes/ ${APP_DIR}/rhasspy-homeassistant-hermes/
+COPY rhasspy-microphone-cli-hermes/ ${APP_DIR}/rhasspy-microphone-cli-hermes/
+COPY rhasspy-microphone-pyaudio-hermes/ ${APP_DIR}/rhasspy-microphone-pyaudio-hermes/
+COPY rhasspy-nlu/ ${APP_DIR}/rhasspy-nlu/
+COPY rhasspy-nlu-hermes/ ${APP_DIR}/rhasspy-nlu-hermes/
+COPY rhasspy-rasa-nlu-hermes/ ${APP_DIR}/rhasspy-rasa-nlu-hermes/
+COPY rhasspy-remote-http-hermes/ ${APP_DIR}/rhasspy-remote-http-hermes/
+COPY rhasspy-silence/ ${APP_DIR}/rhasspy-silence/
+COPY rhasspy-speakers-cli-hermes/ ${APP_DIR}/rhasspy-speakers-cli-hermes/
+COPY rhasspy-supervisor/ ${APP_DIR}/rhasspy-supervisor/
+COPY rhasspy-tts-cli-hermes/ ${APP_DIR}/rhasspy-tts-cli-hermes/
+COPY rhasspy-tts-wavenet-hermes/ ${APP_DIR}/rhasspy-wavenet-cli-hermes/
+COPY rhasspy-wake-pocketsphinx-hermes/ ${APP_DIR}/rhasspy-wake-pocketsphinx-hermes/
+COPY rhasspy-wake-raven/ ${APP_DIR}/rhasspy-wake-raven/
+COPY rhasspy-wake-raven-hermes/ ${APP_DIR}/rhasspy-wake-raven-hermes/
+COPY rhasspy-tts-larynx-hermes/ ${APP_DIR}/rhasspy-tts-larynx-hermes/
 
 # Autoconf
-COPY m4/ ${BUILD_DIR}/m4/
+COPY m4/ ${APP_DIR}/m4/
 COPY configure config.sub config.guess \
      install-sh missing aclocal.m4 \
-     Makefile.in setup.py.in rhasspy.sh.in rhasspy.spec.in \
-     ${BUILD_DIR}/
+     RHASSPY_DIRS Makefile.in setup.py.in rhasspy.sh.in rhasspy.spec.in \
+     ${APP_DIR}/
 
-RUN cd ${BUILD_DIR} && \
-    ./configure --prefix=${APP_DIR} --disable-larynx
+RUN cd ${APP_DIR} && \
+    ./configure --enable-in-place
 
-COPY scripts/install/ ${BUILD_DIR}/scripts/install/
+COPY scripts/install/ ${APP_DIR}/scripts/install/
 
-COPY etc/shflags ${BUILD_DIR}/etc/
-COPY etc/wav/ ${BUILD_DIR}/etc/wav/
+COPY etc/shflags ${APP_DIR}/etc/
+COPY etc/wav/ ${APP_DIR}/etc/wav/
 
-COPY README.md LICENSE ${BUILD_DIR}/
+COPY README.md LICENSE ${APP_DIR}/
 
 # IFDEF PYPI
 #! ENV PIP_INDEX_URL=http://${PYPI}/simple/
 #! ENV PIP_TRUSTED_HOST=${PYPI_HOST}
 # ENDIF
 
-RUN cd ${BUILD_DIR} && \
-    export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/dist -f ${BUILD_DIR}/download" \
+RUN cd ${APP_DIR} && \
+    export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" \
+    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.30.0 scipy==1.5.1' && \
     export POCKETSPHINX_FROM_SRC=no && \
+    export VIRTUALENV_FLAGS='--copies' && \
     make && \
     make install
 
-RUN . ${APP_DIR}/bin/activate && \
-    pip install pyinstaller
+ENV DEBIAN_DIR=/debian
+ENV DEBIAN_RHASSPY_DIR=${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy
 
-COPY __main__.py ${BUILD_DIR}/
-RUN . /.vars && \
-    mkdir -p ${DEBIAN_DIR}${APP_DIR} && \
-    cd ${BUILD_DIR} && \
-    . ${APP_DIR}/bin/activate && \
-    pyinstaller --noconfirm --distpath ${APP_DIR} rhasspy.spec
+RUN mkdir -p ${DEBIAN_DIR}/rhasspy/usr/bin ${DEBIAN_DIR}/rhasspy/usr/lib && \
+    rsync -av ${APP_DIR} ${DEBIAN_DIR}/rhasspy/usr/lib/
 
-RUN . /.vars && \
-    mv ${APP_DIR}/* ${DEBIAN_DIR}${APP_DIR}/
+RUN mkdir -p ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy/bin
+COPY bin/rhasspy-voltron bin/voltron-run ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy/bin/
+COPY debian/rhasspy ${DEBIAN_DIR}/rhasspy/usr/bin/
 
-COPY debian/rhasspy debian/sox debian/fix-rhasspy-scripts.sh /tmp/
-RUN . /.vars && \
-    export PYINST_DIR=${DEBIAN_DIR}${APP_DIR}/rhasspy && \
-    mkdir -p ${DEBIAN_DIR}/usr/bin && \
-    mv /tmp/rhasspy ${DEBIAN_DIR}/usr/bin/ && \
-    mv /tmp/sox ${DEBIAN_DIR}${APP_DIR}/bin/ && \
-    mkdir -p ${PYINST_DIR}/rhasspyprofile && \
-    mv ${BUILD_DIR}/rhasspy-profile/rhasspyprofile/profiles ${PYINST_DIR}/rhasspyprofile/ && \
-    mkdir -p ${PYINST_DIR}/rhasspywake_porcupine_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-porcupine-hermes/rhasspywake_porcupine_hermes/porcupine ${PYINST_DIR}/rhasspywake_porcupine_hermes/ && \
-    mkdir -p ${PYINST_DIR}/rhasspywake_precise_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-precise-hermes/rhasspywake_precise_hermes/models ${PYINST_DIR}/rhasspywake_precise_hermes/ && \
-    mkdir -p ${PYINST_DIR}/rhasspywake_snowboy_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-snowboy-hermes/rhasspywake_snowboy_hermes/models ${PYINST_DIR}/rhasspywake_snowboy_hermes/ && \
-    mkdir -p ${PYINST_DIR}/rhasspywake_raven_hermes && \
-    mv ${BUILD_DIR}/rhasspy-wake-raven-hermes/rhasspywake_raven_hermes/templates ${PYINST_DIR}/rhasspywake_raven_hermes/ && \
-    bash /tmp/fix-rhasspy-scripts.sh ${DEBIAN_DIR}${APP_DIR}/bin/rhasspy-*
+# Clean up
+RUN cd ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy && \
+    find . -depth -type d -name '.git' -exec rm -rf {} \\; && \
+    find . -depth -type d -name '__pycache' -exec rm -rf {} \\; && \
+    find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
 
-# Remove remnants of virtual environment
-RUN . /.vars && \
-    rm -rf \
-        ${DEBIAN_DIR}${APP_DIR}/bin/pip* \
-        ${DEBIAN_DIR}${APP_DIR}/bin/python* \
-        ${DEBIAN_DIR}${APP_DIR}/lib/python*
+COPY debian/control.in /
+RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\\+=//')" && \
+    export VERSION="$(cat ${APP_DIR}/VERSION)" && \
+    mkdir -p ${DEBIAN_DIR}/rhasspy/DEBIAN && \
+    sed -e s"/@VERSION@/${VERSION}/" -e "s/@DEBIAN_ARCH@/${DEBIAN_ARCH}/" < /control.in > ${DEBIAN_DIR}/rhasspy/DEBIAN/control
 
-RUN . /.vars && \
-    cd ${BUILD_DIR} && \
-    fakeroot dpkg --build ${PACKAGE_NAME}
+RUN cd ${DEBIAN_DIR} && \
+    fakeroot dpkg --build rhasspy
+
+RUN cd ${DEBIAN_DIR} && \
+    dpkg-name *.deb
 
 # -----------------------------------------------------------------------------
 
 FROM scratch
 
-COPY --from=build /build/*.deb /
+COPY --from=build /debian/*.deb /

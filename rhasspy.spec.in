@@ -20,18 +20,13 @@ for lib_python_dir in lib_dir.glob("python*"):
         site_dirs.append(site_dir)
 
 # Look for compiled artifacts
-artifacts = ["_webrtcvad.*.so", "_portaudio.*.so"]
-found_artifacts = {}
+binaries = []
 for site_dir in site_dirs:
-    site_dir = Path(site_dir)
-    for artifact in artifacts:
-        artifact_paths = list(site_dir.glob(artifact))
-        if artifact_paths:
-            found_artifacts[artifact] = artifact_paths[0]
+    for so_file in Path(site_dir).glob("**/*.so"):
+        if not so_file.is_file():
             continue
 
-missing_artifacts = set(artifacts) - set(found_artifacts)
-assert not missing_artifacts, missing_artifacts
+        binaries.append((str(so_file), str(so_file.relative_to(site_dir).parent)))
 
 # -----------------------------------------------------------------------------
 
@@ -138,8 +133,30 @@ if enable_raven:
     )
 
 if enable_larynx:
-    optional_pathex.extend(["rhasspy-tts-larynx-hermes"])
-    optional_imports.extend(["rhasspytts_larynx_hermes.__main__", "torch"])
+    optional_pathex.extend(
+        [
+            "rhasspy-tts-larynx-hermes",
+            "rhasspy-tts-larynx-hermes/larynx/larynx",
+            "rhasspy-tts-larynx-hermes/larynx/TTS",
+        ]
+    )
+
+    optional_imports.extend(
+        [
+            "rhasspytts_larynx_hermes.__main__",
+            "larynx",
+            "TTS",
+            "TTS.vocoder.models",
+            "TTS.vocoder.models.multiband_melgan_generator",
+            "TTS.tts.models",
+            "TTS.tts.models.tacotron2",
+            "TTS.tts.models.glow_tts",
+            "TTS.tts.models.layers",
+            "TTS.tts.models.layers.glow_tts.monotonic_align",
+            "torch",
+        ]
+    )
+    optional_datas.extend(copy_metadata("pyworld"))
 
 # -----------------------------------------------------------------------------
 
@@ -164,7 +181,7 @@ a = Analysis(
         "rhasspy-tts-cli-hermes",
     ]
     + optional_pathex,
-    binaries=[(p, ".") for p in found_artifacts.values()],
+    binaries=binaries,
     datas=copy_metadata("webrtcvad") + optional_datas,
     hiddenimports=[
         "aiofiles",

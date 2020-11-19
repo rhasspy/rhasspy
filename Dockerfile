@@ -39,21 +39,31 @@ RUN apt-get update && \
         gfortran libopenblas-dev liblapack-dev cython \
         curl ca-certificates
 
+ENV DEBIAN_FRONTEND=noninteractive
+
+# -----------------------------------------------------------------------------
+
 FROM build-ubuntu as build-amd64
 
 FROM build-ubuntu as build-armv7
 
 RUN apt-get install --no-install-recommends --yes \
-        llvm-9
+        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
+        libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
+        libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
+        libharfbuzz-dev libfribidi-dev libxcb1-dev
 
-ENV LLVM_CONFIG=/usr/bin/llvm-config-9
+ENV LLVM_CONFIG=/usr/bin/llvm-config-7
 
 FROM build-ubuntu as build-arm64
 
 RUN apt-get install --no-install-recommends --yes \
-        llvm-9
+        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
+        libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
+        libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
+        libharfbuzz-dev libfribidi-dev libxcb1-dev
 
-ENV LLVM_CONFIG=/usr/bin/llvm-config-9
+ENV LLVM_CONFIG=/usr/bin/llvm-config-7
 
 # -----------------------------------------------------------------------------
 
@@ -143,6 +153,7 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 # ENDIF
 
 RUN export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/download" && \
+    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.30.0 scipy==1.5.1' && \
     export POCKETSPHINX_FROM_SRC=no && \
     cd ${BUILD_DIR} && \
     make && \
@@ -157,7 +168,7 @@ ENV LANG C.UTF-8
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
-        python3 libpython3.7 python3-pip python3-setuptools \
+        python3 libpython3.7 python3-pip python3-setuptools python3-distutils python3-llvmlite  \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
         supervisor mosquitto \
@@ -165,7 +176,9 @@ RUN apt-get update && \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libttspico-utils \
-        libopenblas-dev
+        libsndfile1 libgomp1 libatlas3-base libgfortran4 libopenblas-base \
+        libjpeg8 libopenjp2-7 libtiff5 libxcb1 \
+        libnuma1
 
 FROM run-ubuntu as run-amd64
 
@@ -188,7 +201,7 @@ RUN install_packages \
         perl curl sox alsa-utils libasound2-plugins jq \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
-        libopenblas-dev
+        libopenblas-base
 
 # -----------------------------------------------------------------------------
 # Run
