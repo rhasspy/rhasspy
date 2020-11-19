@@ -11,6 +11,7 @@
 - rhasspy/asr/setVolume MQTT message and /api/setVolume HTTP endpoint
 - rhasspy/asr/recordingFinished MQTT message sent immediately after silence detection
 - Satellite site ids to intent handling settings in web UI
+- Group separator for co-located satellites (dialogue.group_separator)
 - num2words support for Swedish (Bostrom)
 
 ### Fixed
