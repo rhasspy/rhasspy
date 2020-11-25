@@ -39,7 +39,7 @@ The following tools/libraries help to support Rhasspy:
 * [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) (microphone)
 * [Python 3.7](https://www.python.org)
 * [Quart](https://gitlab.com/pgjones/quart) (web framework)
-* [rapidfuzz](https://github.com/rhasspy/rapidfuzz) (fuzzy string matching)
+* [rapidfuzz](https://github.com/maxbachmann/rapidfuzz) (fuzzy string matching)
 * [Snips NLU](https://github.com/snipsco/snips-nlu) (intent recognition)
 * [snowboy](https://snowboy.kitt.ai) (wake word)
 * [Sox](http://sox.sourceforge.net) (WAV conversion)
