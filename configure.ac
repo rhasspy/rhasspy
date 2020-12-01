@@ -1,4 +1,4 @@
-AC_INIT([rhasspy], [2.5.7], [mike@rhasspy.org])
+AC_INIT([rhasspy], [2.5.8], [mike@rhasspy.org])
 AC_CONFIG_MACRO_DIR([m4])
 PC_INIT([3.7.0])
 

@@ -125,7 +125,7 @@ COPY debian/rhasspy ${DEBIAN_DIR}/rhasspy/usr/bin/
 # Clean up
 RUN cd ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy && \
     find . -depth -type d -name '.git' -exec rm -rf {} \\; && \
-    find . -depth -type d -name '__pycache' -exec rm -rf {} \\; && \
+    find . -depth -type d -name '__pycache__' -exec rm -rf {} \\; && \
     find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
 
 COPY debian/control.in /

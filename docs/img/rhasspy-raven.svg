@@ -16,9 +16,9 @@
    id="svg860"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="rhasspy-raven.svg"
-   inkscape:export-filename="../../public/img/logo.png"
-   inkscape:export-xdpi="26.190001"
-   inkscape:export-ydpi="26.190001">
+   inkscape:export-filename="./rhasspy-icon.png"
+   inkscape:export-xdpi="88.230003"
+   inkscape:export-ydpi="88.230003">
   <defs
      id="defs854" />
   <sodipodi:namedview
@@ -29,7 +29,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="-4.6466602"
+     inkscape:cx="-98.338308"
      inkscape:cy="43.808495"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
@@ -38,9 +38,9 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1440"
-     inkscape:window-height="755"
-     inkscape:window-x="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1172"
+     inkscape:window-x="1440"
      inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
@@ -51,7 +51,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
