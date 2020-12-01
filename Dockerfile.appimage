@@ -1,6 +1,7 @@
 FROM python:3.7.7-buster as base
 
 ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
 # IFDEF PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
@@ -11,7 +12,7 @@ RUN apt-get update && \
         build-essential \
         python3 python3-dev python3-pip python3-setuptools python3-venv \
         swig portaudio19-dev libatlas-base-dev \
-        fakeroot curl rsync
+        fakeroot curl
 
 # -----------------------------------------------------------------------------
 
@@ -31,7 +32,7 @@ ENV LANG C.UTF-8
 
 RUN install_packages \
         swig portaudio19-dev libatlas-base-dev \
-        fakeroot curl rsync
+        fakeroot curl
 
 # -----------------------------------------------------------------------------
 
@@ -112,40 +113,69 @@ RUN cd ${APP_DIR} && \
     make && \
     make install
 
-ENV DEBIAN_DIR=/debian
-ENV DEBIAN_RHASSPY_DIR=${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy
-
-RUN mkdir -p ${DEBIAN_DIR}/rhasspy/usr/bin ${DEBIAN_DIR}/rhasspy/usr/lib && \
-    rsync -av ${APP_DIR} ${DEBIAN_DIR}/rhasspy/usr/lib/
-
-RUN mkdir -p ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy/bin
-COPY bin/rhasspy-voltron bin/voltron-run ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy/bin/
-COPY debian/rhasspy ${DEBIAN_DIR}/rhasspy/usr/bin/
+COPY bin/ ${APP_DIR}/bin/
 
 # Clean up
-RUN cd ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy && \
-    find . -depth -type d -name '.git' -exec rm -rf {} \\; && \
-    find . -depth -type d -name '__pycache__' -exec rm -rf {} \\; && \
-    find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
+RUN cd ${APP_DIR} && \
+   find . -depth -type d -name '.git' -exec rm -rf {} \\; && \
+   find . -depth -type d -name '__pycache__' -exec rm -rf {} \\; && \
+   find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
 
-# Add libpython3.7
-RUN cp /usr/local/lib/libpython3.7m.so* \
-       ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy/.venv/lib/
+# -----------------------------------------------------------------------------
 
-COPY debian/control.in /
-RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\\+=//')" && \
-    export VERSION="$(cat ${APP_DIR}/VERSION)" && \
-    mkdir -p ${DEBIAN_DIR}/rhasspy/DEBIAN && \
-    sed -e s"/@VERSION@/${VERSION}/" -e "s/@DEBIAN_ARCH@/${DEBIAN_ARCH}/" < /control.in > ${DEBIAN_DIR}/rhasspy/DEBIAN/control
+ARG TARGETARCH
+ARG TARGETVARIANT
+FROM base as package
 
-RUN cd ${DEBIAN_DIR} && \
-    fakeroot dpkg --build rhasspy
+ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
-RUN cd ${DEBIAN_DIR} && \
-    dpkg-name *.deb
+# IFDEF PROXY
+#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
+# ENDIF
+
+RUN apt-get update && \
+    apt-get install --yes --no-install-recommends \
+        python3-pip python3-setuptools \
+        patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot file
+
+COPY download/appimagetool-*.AppImage /opt/
+RUN mv /opt/appimagetool-${TARGETARCH}${TARGETVARIANT}.AppImage /opt/appimagetool
+
+# Workaround AppImage issues with Docker
+RUN cd /opt/ && \
+    chmod +x appimagetool && \
+    sed -i 's|AI\x02|\x00\x00\x00|' appimagetool && \
+    ./appimagetool --appimage-extract && \
+    mv /opt/squashfs-root /opt/appimagetool.AppDir && \
+    ln -s /opt/appimagetool.AppDir/AppRun /usr/local/bin/appimagetool
+
+# IFDEF PYPI
+#! ENV PIP_INDEX_URL=http://${PYPI}/simple/
+#! ENV PIP_TRUSTED_HOST=${PYPI_HOST}
+# ENDIF
+
+RUN pip3 install appimage-builder
+
+ENV BUILD_DIR=/build
+ENV APP_DIR=${BUILD_DIR}/AppDir
+
+# Copy code and virtual environment
+COPY --from=build /usr/lib/rhasspy/ ${APP_DIR}/usr/lib/rhasspy/
+
+COPY AppImageBuilder.yml ${BUILD_DIR}/
+COPY docs/img/rhasspy-raven-square.svg /usr/share/icons/hicolor/rhasspy.svg
+
+# Build image
+RUN cd ${BUILD_DIR} && \
+    appimage-builder --skip-tests --skip-appimage
+
+RUN cd ${BUILD_DIR} && \
+    chmod a+x ${APP_DIR}/AppRun && \
+    appimage-builder --skip-tests --skip-build
 
 # -----------------------------------------------------------------------------
 
 FROM scratch
 
-COPY --from=build /debian/*.deb /
+COPY --from=package /build/*.AppImage /

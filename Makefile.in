@@ -50,6 +50,11 @@ DOWNLOAD_DIR ?= $(srcdir)/download
 DO_DOWNLOAD ?= curl -sSfL -o
 
 DOCKER_ARCH = @DOCKER_ARCH@
+ifeq ($(DOCKER_ARCH),amd64)
+PYTHON_LINUX=manylinux1
+else  # DOCKER_ARCH == x86_64
+PYTHON_LINUX=linux
+endif  # DOCKER_ARCH == x86_64
 
 ENABLE_OPENGRM = @ENABLE_OPENGRM@
 OPENGRM_ARCH = @OPENGRM_ARCH@
@@ -107,6 +112,8 @@ SNIPS_LANG_DIR = $(srcdir)/rhasspy-snips-nlu/etc/languages
 ENABLE_LARYNX = @ENABLE_LARYNX@
 LARYNX_ARCH = @LARYNX_ARCH@
 TORCH_WHEEL = $(DOWNLOAD_DIR)/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl
+PHONETISAURUS_WHEEL = $(DOWNLOAD_DIR)/phonetisaurus-0.3.0-py3-none-$(PYTHON_LINUX)_$(LARYNX_ARCH).whl
+GRUUT = $(DOWNLOAD_DIR)/gruut-0.4.0.tar.gz
 
 NUM2WORDS_FILE = $(DOWNLOAD_DIR)/num2words_0.5.10-sv.tar.gz
 
@@ -482,13 +489,18 @@ $(NANOTTS_SRC_FILE):
 
 .PHONY: larynx
 ifeq ($(ENABLE_LARYNX),yes)
-larynx: $(NANOTTS_PRE_FILE)
+larynx:
 
-install-larynx: $(TORCH_WHEEL)
-	"$(srcdir)/scripts/install/install-nanotts.sh" "$(NANOTTS_PRE_FILE)" "$(DESTDIR)$(prefix)"
+install-larynx: $(TORCH_WHEEL) $(PHONETISAURUS_WHEEL) $(GRUUT)
 
 $(TORCH_WHEEL):
 	$(DO_DOWNLOAD) "$(TORCH_WHEEL)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl"
+
+$(PHONETISAURUS_WHEEL):
+	$(DO_DOWNLOAD) "$(PHONETISAURUS_WHEEL)" "https://github.com/rhasspy/phonetisaurus-pypi/releases/download/v0.3.0/phonetisaurus-0.3.0-py3-none-$(PYTHON_LINUX)_$(LARYNX_ARCH).whl"
+
+$(GRUUT):
+	$(DO_DOWNLOAD) "$(GRUUT)" 'https://github.com/rhasspy/gruut/releases/download/v0.4.0/gruut-0.4.0.tar.gz'
 else # ENABLE_LARYNX
 larynx:
 
