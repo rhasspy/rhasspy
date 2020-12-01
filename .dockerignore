@@ -28,6 +28,10 @@
 !download
 !scripts/
 
+# AppImage
+!AppImageBuilder.yml
+!docs/img
+
 # Source
 !__main__.py
 !rhasspy/*.py
