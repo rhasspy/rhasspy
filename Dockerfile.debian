@@ -128,6 +128,10 @@ RUN cd ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy && \
     find . -depth -type d -name '__pycache__' -exec rm -rf {} \\; && \
     find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
 
+# Add libpython3.7
+RUN cp /usr/local/lib/libpython3.7m.so* \
+       ${DEBIAN_DIR}/rhasspy/usr/lib/rhasspy/.venv/lib/
+
 COPY debian/control.in /
 RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\\+=//')" && \
     export VERSION="$(cat ${APP_DIR}/VERSION)" && \

@@ -159,6 +159,9 @@ RUN export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/download" && \
     make && \
     make install
 
+RUN cd ${APP_DIR}/.venv && \
+    find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
+
 # -----------------------------------------------------------------------------
 
 # Run stage for amd64/armv7/arm64
