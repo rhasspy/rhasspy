@@ -1,15 +1,12 @@
 # -----------------------------------------------------------------------------
 # Dockerfile for Rhasspy (https://github.com/rhasspy/rhasspy)
-# Requires Docker buildx: https://docs.docker.com/buildx/working-with-buildx/
+# Requires NOBUILDX=1 environment variable
 # See scripts/build-docker.sh
 #
-# Builds a multi-arch image for amd64/armv6/armv7/arm64.
+# Builds an image for a single architecture.
 # The virtual environment from the build stage is copied over to the run stage.
 # The Rhasspy source code is then copied into the run stage and executed within
 # that virtual environment.
-#
-# Build stages are named build-$TARGETARCH$TARGETVARIANT, so build-amd64,
-# build-armv6, etc. Run stages are named similarly.
 #
 # armv6 images (Raspberry Pi 0/1) are derived from balena base images:
 # https://www.balena.io/docs/reference/base-images/base-images/#balena-base-images
@@ -23,8 +20,7 @@
 # * pypi - https://github.com/jayfk/docker-pypi-cache
 # -----------------------------------------------------------------------------
 
-# Build stage for amd64/armv7/arm64
-FROM debian:buster-slim as build-debian
+FROM debian:buster-slim as build
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -36,61 +32,18 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
-        build-essential swig libatlas-base-dev portaudio19-dev \
+        build-essential swig portaudio19-dev \
+        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
         gfortran libopenblas-dev liblapack-dev cython \
         curl ca-certificates
 
-# -----------------------------------------------------------------------------
-
-FROM build-debian as build-amd64
-
-FROM build-debian as build-armv7
-
-RUN apt-get install --no-install-recommends --yes \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
-        libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
-        libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
-        libharfbuzz-dev libfribidi-dev libxcb1-dev
-
 ENV LLVM_CONFIG=/usr/bin/llvm-config-7
-
-FROM build-debian as build-arm64
-
-RUN apt-get install --no-install-recommends --yes \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
-        libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
-        libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
-        libharfbuzz-dev libfribidi-dev libxcb1-dev
-
-ENV LLVM_CONFIG=/usr/bin/llvm-config-7
-
-# -----------------------------------------------------------------------------
-
-# Build stage for armv6
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200604 as build-armv6
-
-ENV LANG C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
-
-# IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
-RUN install_packages \
-        swig libatlas-base-dev portaudio19-dev \
-        gfortran libopenblas-dev liblapack-dev cython \
-        curl ca-certificates
-
-# -----------------------------------------------------------------------------
-# Build
-# -----------------------------------------------------------------------------
-
-ARG TARGETARCH
-ARG TARGETVARIANT
-FROM build-$TARGETARCH$TARGETVARIANT as build
 
 ENV APP_DIR=/usr/lib/rhasspy
 ENV BUILD_DIR=/build
+
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 # Directory of prebuilt tools
 COPY download/shared/ ${BUILD_DIR}/download/
@@ -168,9 +121,10 @@ RUN cd ${APP_DIR}/.venv && \
     find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
 
 # -----------------------------------------------------------------------------
+# Run
+# -----------------------------------------------------------------------------
 
-# Run stage for amd64/armv7/arm64
-FROM debian:buster-slim as run-debian
+FROM debian:buster-slim as run
 
 # IFDEF PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
@@ -195,46 +149,6 @@ RUN apt-get update && \
 # IFDEF PROXY
 #! RUN rm -f /etc/apt/apt.conf.d/01proxy
 # ENDIF
-
-FROM run-debian as run-amd64
-
-FROM run-debian as run-armv7
-
-FROM run-debian as run-arm64
-
-# -----------------------------------------------------------------------------
-
-# Run stage for armv6
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-run-20200604 as run-armv6
-
-# IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
-ENV LANG C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN install_packages \
-        python3 libpython3.7 python3-pip python3-setuptools \
-        libportaudio2 libatlas3-base libgfortran4 \
-        ca-certificates \
-        supervisor mosquitto \
-        perl curl sox alsa-utils libasound2-plugins jq \
-        espeak flite \
-        gstreamer1.0-tools gstreamer1.0-plugins-good \
-        libopenblas-base
-
-# IFDEF PROXY
-#! RUN rm -f /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
-# -----------------------------------------------------------------------------
-# Run
-# -----------------------------------------------------------------------------
-
-ARG TARGETARCH
-ARG TARGETVARIANT
-FROM run-$TARGETARCH$TARGETVARIANT
 
 ENV APP_DIR=/usr/lib/rhasspy
 COPY --from=build ${APP_DIR}/ ${APP_DIR}/
