@@ -24,7 +24,7 @@
 # -----------------------------------------------------------------------------
 
 # Build stage for amd64/armv7/arm64
-FROM debian:buster-slim as build-debian
+FROM debian:buster as build-debian
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -170,7 +170,7 @@ RUN cd ${APP_DIR}/.venv && \
 # -----------------------------------------------------------------------------
 
 # Run stage for amd64/armv7/arm64
-FROM debian:buster-slim as run-debian
+FROM debian:buster as run-debian
 
 # IFDEF PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy

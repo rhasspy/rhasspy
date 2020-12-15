@@ -30,6 +30,7 @@
 
 # AppImage
 !AppImageBuilder.yml
+!appimage/
 !docs/img
 
 # Source

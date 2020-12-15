@@ -116,7 +116,7 @@ if [[ -n "${NOBUILDX}" ]]; then
     fi
 
     mkdir -p "${output_dir}"
-    appimage_path="$(docker run --rm "${tag}" /bin/sh -c 'ls -1 /appimage/*.AppImage' | head -n1)"
+    appimage_path="$(docker run --rm "${tag}" /bin/sh -c 'ls -1 /*.AppImage' | head -n1)"
     echo "Copying ${appimage_path} to ${output_dir}"
     docker cp "$(docker create --rm "${tag}"):${appimage_path}" "${output_dir}/"
 else

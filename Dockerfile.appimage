@@ -1,4 +1,4 @@
-FROM debian:buster-slim as base
+FROM debian:buster as base
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -114,15 +114,13 @@ RUN apt-get update && \
 
 ARG TARGETARCH
 ARG TARGETVARIANT
-COPY download/appimage/appimagetool-${TARGETARCH}${TARGETVARIANT}.AppImage /opt/appimagetool
+COPY appimage/appimagetool-${TARGETARCH}${TARGETVARIANT}.tar.gz /opt/appimagetool.tar.gz
 
-# Workaround AppImage issues with Docker
 RUN cd /opt/ && \
-    chmod +x appimagetool && \
-    sed -i 's|AI\x02|\x00\x00\x00|' appimagetool && \
-    ./appimagetool --appimage-extract && \
-    mv /opt/squashfs-root /opt/appimagetool.AppDir && \
-    ln -s /opt/appimagetool.AppDir/AppRun /usr/local/bin/appimagetool
+    tar -xf appimagetool.tar.gz && \
+    ln -s /opt/appimagetool/AppRun /usr/local/bin/appimagetool
+
+RUN appimagetool --version
 
 # IFDEF PROXY
 #! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
@@ -146,10 +144,15 @@ RUN cd ${BUILD_DIR} && \
 
 RUN cd ${BUILD_DIR} && \
     chmod a+x ${APP_DIR}/AppRun && \
-    appimage-builder --skip-tests --skip-build
+    case ${TARGETARCH}${TARGETVARIANT} in \
+        armv7) export ARCH=arm ;; \
+        arm64) export ARCH=arm_aarch64 ;; \
+        *) export ARCH=x86_64 ;; \
+    esac && \
+    /usr/local/bin/appimagetool ${APP_DIR}
 
 # -----------------------------------------------------------------------------
 
 FROM debian:buster-slim
 
-COPY --from=package /build/*.AppImage /appimage/
+COPY --from=package /build/*.AppImage /
