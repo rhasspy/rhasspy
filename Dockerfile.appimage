@@ -1,10 +1,10 @@
-FROM python:3.7.7-buster as base
+FROM debian:buster-slim as base
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
 # IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
+#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
 RUN apt-get update && \
@@ -14,35 +14,17 @@ RUN apt-get update && \
         swig portaudio19-dev libatlas-base-dev \
         fakeroot curl
 
-# -----------------------------------------------------------------------------
-
-FROM base as base-amd64
-
-FROM base as base-armv7
-
-FROM base as base-arm64
-
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200529 as base-armv6
-
-ENV LANG C.UTF-8
-
-# IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
-RUN install_packages \
-        swig portaudio19-dev libatlas-base-dev \
-        fakeroot curl
-
-# -----------------------------------------------------------------------------
-
-ARG TARGETARCH
-ARG TARGETVARIANT
-FROM base-$TARGETARCH$TARGETVARIANT as build
-
 # Directory of prebuilt tools
 ENV DOWNLOAD_DIR=/download
-COPY download/ ${DOWNLOAD_DIR}/
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+COPY download/shared/ ${DOWNLOAD_DIR}/
+COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/
+
+# IFDEF NOAVX
+#! RUN mv ${DOWNLOAD_DIR}/noavx/* ${DOWNLOAD_DIR}/
+# ENDIF
 
 ENV APP_DIR=/usr/lib/rhasspy
 
@@ -100,9 +82,9 @@ COPY etc/wav/ ${APP_DIR}/etc/wav/
 
 COPY README.md LICENSE ${APP_DIR}/
 
-# IFDEF PYPI
-#! ENV PIP_INDEX_URL=http://${PYPI}/simple/
-#! ENV PIP_TRUSTED_HOST=${PYPI_HOST}
+# IFDEF PROXY
+#! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
+#! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
 
 RUN cd ${APP_DIR} && \
@@ -123,24 +105,16 @@ RUN cd ${APP_DIR} && \
 
 # -----------------------------------------------------------------------------
 
-ARG TARGETARCH
-ARG TARGETVARIANT
 FROM base as package
-
-ENV LANG C.UTF-8
-ENV DEBIAN_FRONTEND=noninteractive
-
-# IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
         python3-pip python3-setuptools \
         patchelf desktop-file-utils libgdk-pixbuf2.0-dev fakeroot file
 
-COPY download/appimagetool-*.AppImage /opt/
-RUN mv /opt/appimagetool-${TARGETARCH}${TARGETVARIANT}.AppImage /opt/appimagetool
+ARG TARGETARCH
+ARG TARGETVARIANT
+COPY download/appimage/appimagetool-${TARGETARCH}${TARGETVARIANT}.AppImage /opt/appimagetool
 
 # Workaround AppImage issues with Docker
 RUN cd /opt/ && \
@@ -150,9 +124,9 @@ RUN cd /opt/ && \
     mv /opt/squashfs-root /opt/appimagetool.AppDir && \
     ln -s /opt/appimagetool.AppDir/AppRun /usr/local/bin/appimagetool
 
-# IFDEF PYPI
-#! ENV PIP_INDEX_URL=http://${PYPI}/simple/
-#! ENV PIP_TRUSTED_HOST=${PYPI_HOST}
+# IFDEF PROXY
+#! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
+#! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
 
 RUN pip3 install appimage-builder
@@ -161,9 +135,9 @@ ENV BUILD_DIR=/build
 ENV APP_DIR=${BUILD_DIR}/AppDir
 
 # Copy code and virtual environment
-COPY --from=build /usr/lib/rhasspy/ ${APP_DIR}/usr/lib/rhasspy/
+COPY --from=base /usr/lib/rhasspy/ ${APP_DIR}/usr/lib/rhasspy/
 
-COPY AppImageBuilder.yml ${BUILD_DIR}/
+COPY download/appimage/AppImageBuilder-${TARGETARCH}${TARGETVARIANT}.yml ${BUILD_DIR}/AppImageBuilder.yml
 COPY docs/img/rhasspy-raven-square.svg /usr/share/icons/hicolor/rhasspy.svg
 
 # Build image
@@ -176,6 +150,6 @@ RUN cd ${BUILD_DIR} && \
 
 # -----------------------------------------------------------------------------
 
-FROM scratch
+FROM debian:buster-slim
 
-COPY --from=package /build/*.AppImage /
+COPY --from=package /build/*.AppImage /appimage/
