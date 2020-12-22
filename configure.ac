@@ -520,6 +520,9 @@ AS_CASE([$enable_raven],
     [yes],[is_raven_enabled=yes],
     [no],[is_raven_enabled=no])
 
+AS_CASE([$enable_snowboy],
+    [no],[is_snowboy_enabled=no])
+
 AS_CASE([$enable_pocketsphinx],
         [no],[is_stt_pocketsphinx_enabled=no
               is_wake_pocketsphinx_enabled=no])
@@ -589,6 +592,10 @@ dnl In-place install
 AS_CASE([$enable_in_place],
     [yes],[is_in_place=yes],
     [no],[is_in_place=no])
+
+dnl Virtual environment
+AS_CASE([$enable_virtualenv],
+    [no],[is_virtualenv_enabled=no])
 
 dnl Online services
 AS_CASE([$enable_online],

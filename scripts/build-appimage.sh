@@ -52,9 +52,6 @@ if [[ -n "${PROXY}" ]]; then
     # Run through pre-processor to replace variables
     "${src_dir}/docker/preprocess.sh" < "${DOCKERFILE}" > "${temp_dockerfile}"
     DOCKERFILE="${temp_dockerfile}"
-
-    echo "Debian proxy: ${PROXY}"
-    echo "PyPI proxy: ${PYPI}"
 fi
 
 # ------------------------------------------------------------------------------

@@ -1,3 +1,174 @@
-#!/usr/bin/env bash
-prefix="/usr/lib/rhasspy"
-"${prefix}/bin/rhasspy-voltron" "$@"
+#!/bin/bash
+APPDIR='/usr/lib/rhasspy'
+
+export PATH="${APPDIR}/bin:${APPDIR}/usr/local/bin:${PATH}"
+export LD_LIBRARY_PATH="${APPDIR}/lib:${APPDIR}/usr/local/lib:${LD_LIBRARY_PATH}"
+
+export RHASSPY_BASE_DIR="${APPDIR}"
+
+# Set up Python path
+while read -r rhasspy_dir; do
+    if [[ -n "${rhasspy_dir}" ]]; then
+        module_dir="${RHASSPY_BASE_DIR}/${rhasspy_dir}"
+        if [[ -d "${module_dir}" ]]; then
+            PYTHONPATH="${module_dir}:${PYTHONPATH}"
+
+            bin_dir="${module_dir}/bin"
+            if [[ -d "${bin_dir}" ]]; then
+                export PATH="${bin_dir}:${PATH}"
+            fi
+        fi
+    fi
+done < "${RHASSPY_BASE_DIR}/RHASSPY_DIRS"
+
+export PYTHONPATH="${RHASSPY_BASE_DIR}:${PYTHONPATH}"
+
+# Application-specific fixes
+export KALDI_DIR="${APPDIR}/lib/kaldi"
+
+config_home="${XDG_CONFIG_HOME}"
+if [[ -z "${config_home}" ]]; then
+    config_home="${HOME}/.config"
+fi
+
+# -----------------------------------------------------------------------------
+# Command-line Arguments
+# -----------------------------------------------------------------------------
+
+. "${RHASSPY_BASE_DIR}/etc/shflags"
+
+DEFINE_string 'profile' '' 'Path to profile' 'p'
+DEFINE_string 'user-profiles' "${config_home}/rhasspy/profiles" 'Directory with user profile files'
+DEFINE_string 'certfile' '' 'SSL certificate file'
+DEFINE_string 'keyfile' '' 'SSL private key file (optional)'
+DEFINE_string 'http-host' '' 'Change host for web server (default: localhost)'
+DEFINE_string 'http-port' '' 'Change port for web server (default: 12101)'
+DEFINE_string 'http-root' '' 'Change URL root for web server (default: /)'
+DEFINE_string 'local-mqtt-port' '' 'Change internal MQTT port (default: 12183)'
+DEFINE_boolean 'web-server' true 'Run Rhasspy web server'
+DEFINE_boolean 'generate-conf' true 'Generate supervisord conf from profile'
+
+FLAGS "$@" || exit $?
+eval set -- "${FLAGS_ARGV}"
+
+set -e
+
+# -----------------------------------------------------------------------------
+# Load settings
+# -----------------------------------------------------------------------------
+
+profile_name="${FLAGS_profile}"
+if [[ -z "${profile_name}" ]]; then
+    echo "--profile or -p is required"
+    exit 1
+fi
+
+user_profiles="${FLAGS_user_profiles}"
+if [[ -z "${user_profiles}" ]]; then
+    echo "--user-profiles is required"
+    exit 1
+fi
+
+if [[ "${FLAGS_web_server}" -eq "${FLAGS_FALSE}" ]]; then
+    no_web_server='true'
+fi
+
+if [[ "${FLAGS_generate_conf}" -eq "${FLAGS_FALSE}" ]]; then
+    no_generate_conf='true'
+fi
+
+profile_dir="${user_profiles}/${profile_name}"
+
+# Set environment variables
+export RHASSPY_PROFILE="${profile_name}"
+export RHASSPY_PROFILE_DIR="${profile_dir}"
+
+# Extra arguments to pass to web server
+extra_web_args=("$@")
+
+certfile="${FLAGS_certfile}"
+keyfile="${FLAGS_keyfile}"
+
+if [[ -n "${certfile}" ]]; then
+    extra_web_args+=('--certfile'  "${certfile}")
+
+    # Only check for keyfile if certfile has been given
+    if [[ -n "${keyfile}" ]]; then
+        extra_web_args+=('--keyfile'  "${keyfile}")
+    fi
+fi
+
+http_host="${FLAGS_http_host}"
+http_port="${FLAGS_http_port}"
+http_root="${FLAGS_http_root}"
+
+if [[ -n "${http_host}" ]]; then
+    extra_web_args+=('--host' "${http_host}")
+fi
+
+if [[ -n "${http_port}" ]]; then
+    extra_web_args+=('--port' "${http_port}")
+fi
+
+if [[ -n "${http_root}" ]]; then
+    extra_web_args+=('--url-root' "${http_root}")
+fi
+
+# Extra arguments to pass to rhasspy-supervisor
+extra_supervisor_args=()
+
+local_mqtt_port="${FLAGS_local_mqtt_port}"
+if [[ -n "${local_mqtt_port}" ]]; then
+    extra_web_args+=('--local-mqtt-port' "${local_mqtt_port}")
+    extra_supervisor_args+=('--local-mqtt-port' "${local_mqtt_port}")
+fi
+
+# -----------------------------------------------------------------------------
+
+# Generate supervisord conf
+conf_path="${profile_dir}/supervisord.conf"
+echo 'Starting up...'
+
+if [[ -z "${no_generate_conf}" ]]; then
+    # Re-generate supervisord conf from profile
+    python3 -m rhasspysupervisor \
+            --profile "${profile_name}" \
+            --user-profiles "${user_profiles}" \
+            --docker-compose '' \
+            "${extra_supervisor_args[@]}" \
+            --debug
+fi
+
+if [[ -z "${RHASSPY_WEB_DIR}" ]]; then
+    # Look for web interface files in rhasspy-server-hermes
+    RHASSPY_WEB_DIR="${RHASSPY_BASE_DIR}/rhasspy-server-hermes/web"
+fi
+
+if [[ -z "${no_web_server}" ]]; then
+    # Run web server
+    python3 -m rhasspyserver_hermes \
+            --profile "${profile_name}" \
+            --user-profiles "${user_profiles}" \
+            --web-dir "${RHASSPY_WEB_DIR}" \
+            "${extra_web_args[@]}" \
+        &
+
+    # Kill the process above when this terminal exits
+    web_pid=$!
+
+    function finish {
+        kill "${web_pid}"
+    }
+
+    trap finish EXIT
+fi
+
+# Run assistant
+log_path="${profile_dir}/supervisord.log"
+pid_path="${profile_dir}/supervisord.pid"
+
+echo 'Starting services...'
+supervisord \
+    --configuration "${conf_path}" \
+    --logfile "${log_path}" \
+    --pidfile "${pid_path}"
