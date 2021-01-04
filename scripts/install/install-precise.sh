@@ -11,4 +11,8 @@ output="$(realpath "$2")"
 
 mkdir -p "${output}/lib/precise"
 tar -C "${output}/lib/precise" -xf "${precise}" --strip-components=1
-ln -sf "${output}/lib/precise/precise-engine" "${output}/bin/precise-engine"
+
+# Use relative link
+pushd "${output}/bin"
+ln -sf "../lib/precise/precise-engine" 'precise-engine'
+popd

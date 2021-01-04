@@ -4263,6 +4263,13 @@ case $enable_raven in #(
      ;;
 esac
 
+case $enable_snowboy in #(
+  no) :
+    is_snowboy_enabled=no ;; #(
+  *) :
+     ;;
+esac
+
 case $enable_pocketsphinx in #(
   no) :
     is_stt_pocketsphinx_enabled=no
@@ -4396,6 +4403,13 @@ case $enable_in_place in #(
     is_in_place=yes ;; #(
   no) :
     is_in_place=no ;; #(
+  *) :
+     ;;
+esac
+
+case $enable_virtualenv in #(
+  no) :
+    is_virtualenv_enabled=no ;; #(
   *) :
      ;;
 esac
