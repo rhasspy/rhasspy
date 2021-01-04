@@ -47,7 +47,7 @@ IN_PLACE = @IN_PLACE@
 
 BUILD_DIR ?= $(srcdir)/build
 DOWNLOAD_DIR ?= $(srcdir)/download
-DO_DOWNLOAD ?= curl -sSfL -o
+DO_DOWNLOAD ?= curl --silent --show-error --fail --location --create-dirs --output
 
 DOCKER_ARCH = @DOCKER_ARCH@
 ifeq ($(DOCKER_ARCH),amd64)
