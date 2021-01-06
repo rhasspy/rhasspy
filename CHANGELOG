@@ -1,5 +1,14 @@
 ## Unreleased
 
+### Added
+
+- _site_id meta slot to Home Assistant intents/events (bk90)
+
+### Fixed
+
+- Download links for Spanish profile
+- Download links for German profile
+
 ### Changed
 
 - Upgrade porcupine wake word system to 1.9
