@@ -300,7 +300,7 @@ Rhasspy is able to interoperate with Snips.AI services using the [Hermes protoco
 
 ## HTTP API
 
-Rhasspy features a comprehensive HTTP API available at `/api/`, documented with [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification) (Swagger). See the [HTTP API reference](reference.md#http-api) for more details.
+Rhasspy features a comprehensive HTTP API available at `/openapi/`, documented with [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification) (Swagger). See the [HTTP API reference](reference.md#http-api) for more details.
 
 ### Secure Hosting with HTTPS
 

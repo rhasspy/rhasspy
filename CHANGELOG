@@ -3,6 +3,7 @@
 ### Changed
 
 - Upgrade porcupine wake word system to 1.9
+- Move OpenAPI page from /api/ to /openapi/
 
 ## [2.5.8]
 
