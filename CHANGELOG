@@ -2,6 +2,7 @@
 
 ### Added
 
+- Settings for energy-based silence detection
 - _site_id meta slot to Home Assistant intents/events (bk90)
 
 ### Fixed

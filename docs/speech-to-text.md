@@ -28,6 +28,49 @@ The following table summarizes language support for the various speech to text s
 | ca       | &#x2713;                                       |                                  |                                            |
 | cs       |                                                | &#x2713;                         |                                            |
 
+## Silence Detection
+
+You can adjust how Rhasspy detects the start and stop of voice commands. Add to your [profile](profiles.md):
+
+```json
+  "command": {
+    "webrtcvad": {
+      "skip_sec": 0,
+      "min_sec": 1,
+      "speech_sec": 0.3,
+      "silence_sec": 0.5,
+      "before_sec": 0.5,
+      "silence_method": "vad_only",
+      "vad_mode": 1,
+      "max_energy": "",
+      "max_current_energy_ratio_threshold": "",
+      "current_energy_threshold": ""
+    }
+  }
+}
+```
+
+where:
+
+* `skip_sec` is how many seconds of audio should be ignored before recording
+* `min_sec` is the minimum number of seconds a voice command should last
+* `speech_sec` is the seconds of speech before a command starts
+* `silence_sec` is the seconds a silence after a command before ending
+* `before_sec` is how many seconds of audio before a command starts are kept
+* `silence_method` determines how Rhasspy detects the end of a voice command
+    * `vad_only` - only [webrtcvad](https://github.com/wiseman/py-webrtcvad) is used
+    * `current_only` - audio frames whose energy is above `current_energy_threshold` are considered speech
+    * `ratio_only` - audio frames whose ratio of max/current energy is below `max_current_energy_ratio_threshold` are considered speech (see `max_energy`)
+    * `vad_and_current` - both VAD and current audio energy are used
+    * `vad_and_ratio` - both VAD and max/current energy ratio are used
+    * `all` - VAD, current energy, and max/current energy ratio are all used
+* `vad_mode` is the sensitivity of speech detection (3 is the <strong>least</strong> sensitive)
+* `current_energy_threshold` - frame with audio energy threshold above this value is considered speech
+* `max_current_energy_ratio_threshold` - frame with ratio of max/current energy below this value is considered speech
+* `max_energy` - if not set, max energy is computed for every audio frame; otherwise, this fixed value is used
+
+Implemented by [rhasspy-silence](https://github.com/rhasspy/rhasspy-silence)
+
 ## MQTT/Hermes
 
 Rhasspy transcribes audio according to the [Hermes protocol](https://docs.snips.ai/reference/hermes). The following steps are needed to get a transcription:
@@ -71,33 +114,6 @@ When Rhasspy starts, it creates a pocketsphinx decoder with the following attrib
 
 If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.pocketsphinx.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified. For English, German, and Dutch, you may want to use [Kaldi](#kaldi) instead for better results.
 
-### Silence Detection
-
-You can adjust how Rhasspy detects the start and stop of voice commands. Add to your [profile](profiles.md):
-
-```json
-  "command": {
-    "webrtcvad": {
-      "skip_sec": 0,
-      "min_sec": 1,
-      "speech_sec": 0.3,
-      "silence_sec": 0.5,
-      "before_sec": 0.5,
-      "vad_mode": 3
-    }
-  }
-}
-```
-
-where:
-
-* `skip_sec` is how many seconds of audio should be ignored before recording
-* `min_sec` is the minimum number of seconds a voice command should last
-* `speech_sec` is the seconds of speech before a command starts
-* `silence_sec` is the seconds a silence after a command before ending
-* `before_sec` is how many seconds of audio before a command starts are kept
-* `vad_mode` is the sensitivity of speech detection (3 is the <strong>least</strong> sensitive)
-
 Implemented by [rhasspy-asr-pocketsphinx-hermes](https://github.com/rhasspy/rhasspy-asr-pocketsphinx-hermes)
 
 ## Kaldi
@@ -139,10 +155,6 @@ Setting `speech_to_text.kaldi.language_model_type` to "text_fst" instead of "arp
 
 If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.kaldi.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified.
 
-### Silence Detection
-
-See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
-
 Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
 
 ## DeepSpeech
@@ -174,10 +186,6 @@ Uses the official [deepspeech library](https://pypi.org/project/deepspeech/), an
 
 If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.deepspeech.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified. Beware that the required downloads are quite large (at least 1 GB extra).
 
-### Silence Detection
-
-See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
-
 Implemented by [rhasspy-asr-deepspeech-hermes](https://github.com/rhasspy/rhasspy-asr-deepspeech-hermes)
 
 ## Remote HTTP Server
@@ -198,10 +206,6 @@ Add to your [profile](profiles.md):
 ```
 
 During speech recognition, 16-bit 16 kHz mono WAV data will be POST-ed to the endpoint with the `Content-Type` set to `audio/wav`. A `text/plain` response with the transcription is expected back.
-
-### Silence Detection
-
-See [silence detection settings](#silence-detection) to adjust how Rhasspy detects the start and stop of voice commands.
 
 Implemented by [rhasspy-remote-http-hermes](https://github.com/rhasspy/rhasspy-remote-http-hermes)
 
