@@ -1,5 +1,9 @@
 ## Unreleased
 
+### Fixed
+
+- fuzzywuzzy NluException: not enough values to unpack
+
 ### Changed
 
 - Upgrade porcupine wake word system to 1.9
