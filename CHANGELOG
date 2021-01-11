@@ -2,6 +2,8 @@
 
 ### Added
 
+- Add text to speech testing tools in settings page
+- Make it clearer in web UI when restarts are required
 - Settings for energy-based silence detection
 - _site_id meta slot to Home Assistant intents/events (bk90)
 

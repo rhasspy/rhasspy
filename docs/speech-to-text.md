@@ -159,7 +159,7 @@ Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr
 
 ## DeepSpeech
 
-Does speech recognition with [Mozilla's DeepSpeech](https://github.com/mozilla/DeepSpeech) version 0.6.
+Does speech recognition with [Mozilla's DeepSpeech](https://github.com/mozilla/DeepSpeech) version 0.9.
 This is done completely offline, on your device. If you experience performance problems (usually on a Raspberry Pi), consider running on a home server as well and have your client Rhasspy use a [remote HTTP connection](speech-to-text.md#remote-http-server).
 
 ```json
