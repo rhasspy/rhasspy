@@ -7,6 +7,7 @@
 
 ### Fixed
 
+- fuzzywuzzy NluException: not enough values to unpack
 - Download links for Spanish profile
 - Download links for German profile
 
