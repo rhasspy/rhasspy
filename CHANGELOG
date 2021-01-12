@@ -2,6 +2,7 @@
 
 ### Added
 
+- Add DeepSpeech v0.9 profiles for English, German, French, Spanish, Italian, and Polish (Jaco)
 - Add text to speech testing tools in settings page
 - Make it clearer in web UI when restarts are required
 - Settings for energy-based silence detection
@@ -15,6 +16,7 @@
 
 ### Changed
 
+- Upgrade to Mozilla DeepSpeech v0.9
 - Upgrade porcupine wake word system to 1.9
 - Move OpenAPI page from /api/ to /openapi/
 

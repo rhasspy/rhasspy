@@ -90,7 +90,7 @@ JULIUS_SRC_FILE = $(DOWNLOAD_DIR)/source/julius-2019.tar.gz
 ENABLE_DEEPSPEECH = @ENABLE_DEEPSPEECH@
 DEEPSPEECH_ARCH = @DEEPSPEECH_ARCH@
 DEEPSPEECH_FROM = @DEEPSPEECH_FROM@
-DEEPSPEECH_FILE = $(DOWNLOAD_DIR)/$(DOCKER_ARCH)/native_client.$(DOCKER_ARCH).cpu.linux.0.6.1.tar.xz
+DEEPSPEECH_FILE = $(DOWNLOAD_DIR)/$(DOCKER_ARCH)/native_client.$(DOCKER_ARCH).cpu.linux.0.9.3.tar.xz
 
 ENABLE_KENLM = @ENABLE_KENLM@
 KENLM_FROM = @KENLM_FROM@
@@ -423,7 +423,7 @@ install-deepspeech:
 endif # ENABLE_DEEPSPEECH
 
 $(DEEPSPEECH_FILE):
-	$(DO_DOWNLOAD) "$(DEEPSPEECH_FILE)" "https://github.com/mozilla/DeepSpeech/releases/download/v0.6.1/native_client.$(DEEPSPEECH_ARCH).cpu.linux.tar.xz"
+	$(DO_DOWNLOAD) "$(6EEPSPEECH_FILE)" "https://github.com/mozilla/DeepSpeech/releases/download/v0.9.3/native_client.$(DEEPSPEECH_ARCH).cpu.linux.tar.xz"
 
 # -----------------------------------------------------------------------------
 # KenLM: language modeling toolkit
