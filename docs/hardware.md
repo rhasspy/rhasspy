@@ -17,7 +17,7 @@ The table below summarizes architecture compatibility with Rhasspy's components:
 |                        | [porcupine](wake-word.md#porcupine)            | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 | **Speech to Text**     | [pocketsphinx](speech-to-text.md#pocketsphinx) | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [kaldi](speech-to-text.md#kaldi)               | &#x2713; | &#x2713; | &#x2713; |          |
-|                        | [deepspeech](speech-to-text.md#deepspeech)     | &#x2713; | &#x2713; |          |          |
+|                        | [deepspeech](speech-to-text.md#deepspeech)     | &#x2713; | &#x2713; | &#x2713; |          |
 | **Intent Recognition** | [fsticuffs](intent-recognition.md#fsticuffs)   | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [fuzzywuzzy](intent-recognition.md#fuzzywuzzy) | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
 |                        | [adapt](intent-recognition.md#mycroft-adapt)   | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
@@ -30,6 +30,7 @@ The table below summarizes architecture compatibility with Rhasspy's components:
 |                        | [marytts](text-to-speech.md#marytts)           | &#x2713; | &#x2713; | &#x2713; |          |
 |                        | [opentts](text-to-speech.md#opentts)           | &#x2713; | &#x2713; | &#x2713; |          |
 |                        | [wavenet](text-to-speech.md#google-wavenet)    | &#x2713; | &#x2713; | &#x2713; | &#x2713; |
+|                        | [larynx](text-to-speech.md#larynx)             | &#x2713; | &#x2713; | &#x2713; |          |
 
 ## Raspberry Pi
 
