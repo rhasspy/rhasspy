@@ -2,6 +2,7 @@
 
 ### Added
 
+- Add streaming audio support for DeepSpeech (faster transcription)
 - Add DeepSpeech v0.9 profiles for English, German, French, Spanish, Italian, and Polish (Jaco)
 - Add text to speech testing tools in settings page
 - Make it clearer in web UI when restarts are required

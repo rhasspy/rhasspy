@@ -155,6 +155,22 @@ and access the web interface at [http://localhost:12101](http://localhost:12101)
 
 To upgrade in the future, you can remove Rhasspy with `sudo dpkg -r rhasspy` and then install the new Debian package.
 
+### Mosquitto Error
+
+If you receive an error like `can't find command 'mosquitto'`, first make sure that it was properly installed:
+
+```sh
+$ sudo apt install mosquitto
+```
+
+If mosquitto was installed, the binary may have been put in `/usr/sbin` and might not be in your `$PATH`.
+
+You will either need to add `/usr/sbin` to `$PATH` in your `.profile` or run Rhasspy like this:
+
+```sh
+$ PATH="$PATH:/usr/sbin" rhasspy --profile en
+```
+
 ---
 
 ## Virtual Environment
