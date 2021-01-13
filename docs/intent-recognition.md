@@ -56,7 +56,7 @@ Implemented by [rhasspy-nlu-hermes](https://github.com/rhasspy/rhasspy-nlu-herme
 
 ## Fuzzywuzzy
 
-Finds the closest matching intent by using the [Levenshtein distance](https://en.wikipedia.org/wiki/Levenshtein_distance) between the text and all of the [training sentences](training.md#sentencesini) you provided. Works best when you have a small number of sentences (dozens to hundreds) and need some resiliency to spelling errors (i.e., from text chat).
+Finds the closest matching intent by using the [rapidfuzz library](https://github.com/maxbachmann/rapidfuzz) between the text and all of the [training sentences](training.md#sentencesini) you provided. Works best when you have a small number of sentences (dozens to hundreds) and need some resiliency to spelling errors (i.e., from text chat).
 
 Add to your [profile](profiles.md):
 

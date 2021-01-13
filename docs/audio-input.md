@@ -105,7 +105,7 @@ Add to your [profile](profiles.md):
 "microphone": {
   "system": "command",
   "command": {
-    "record_program": "gstreamer",
+    "record_program": "gst-launch-1.0",
     "record_arguments": "udpsrc port=12333 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample ! filesink location=/dev/stdout",
     "sample_rate": 16000,
     "sample_width": 2,

@@ -155,10 +155,12 @@ automation:
 
 ### Getting the Spoken Text
 
-The Home Assistant event will contain two extra slots besides the ones you specify:
+The Home Assistant event will contain some extra "meta" slots besides the ones you specify:
 
 * `_text` - spoken voice command text with [substitutions](training.md#substitutions)
 * `_raw_text` - literal transcription of voice command
+* `_site_id` - Hermes site ID for the recognized intent
+* `_intent` - Hermes intent object
 
 ## Node-RED
 
@@ -300,7 +302,7 @@ Rhasspy is able to interoperate with Snips.AI services using the [Hermes protoco
 
 ## HTTP API
 
-Rhasspy features a comprehensive HTTP API available at `/api/`, documented with [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification) (Swagger). See the [HTTP API reference](reference.md#http-api) for more details.
+Rhasspy features a comprehensive HTTP API available at `/openapi/`, documented with [OpenAPI 3](https://github.com/OAI/OpenAPI-Specification) (Swagger). See the [HTTP API reference](reference.md#http-api) for more details.
 
 ### Secure Hosting with HTTPS
 
