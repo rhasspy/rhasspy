@@ -2,12 +2,13 @@
 
 ### Added
 
-- Reboot/shutdown menu in web UI
-- Add streaming audio support for DeepSpeech (faster transcription)
 - Add DeepSpeech v0.9 profiles for English, German, French, Spanish, Italian, and Polish (Jaco)
+- Add streaming audio support for DeepSpeech (faster transcription)
+- Settings for energy-based silence detection
+- Max seconds for voice commands
+- Reboot/shutdown menu in web UI
 - Add text to speech testing tools in settings page
 - Make it clearer in web UI when restarts are required
-- Settings for energy-based silence detection
 - _site_id meta slot to Home Assistant intents/events (bk90)
 
 ### Fixed
@@ -21,6 +22,7 @@
 - Upgrade to Mozilla DeepSpeech v0.9
 - Upgrade porcupine wake word system to 1.9
 - Move OpenAPI page from /api/ to /openapi/
+- Improved web UI for Raven keywords
 
 ## [2.5.8]
 
