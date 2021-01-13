@@ -2,7 +2,7 @@ Package: rhasspy
 Version: @VERSION@
 Section: utils
 Priority: optional
-Depends: jq,sox,libportaudio2,libatlas3-base,libstdc++6,libgfortran4,supervisor,libopenblas-dev
+Depends: jq,sox,libportaudio2,libatlas3-base,libstdc++6,libgfortran4,supervisor,libopenblas-dev,llvm-7-runtime
 Recommends: alsa-utils,espeak,flite,mosquitto
 Architecture: @DEBIAN_ARCH@
 Maintainer: Michael Hansen

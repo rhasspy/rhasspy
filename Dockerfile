@@ -47,20 +47,14 @@ FROM build-debian as build-amd64
 FROM build-debian as build-armv7
 
 RUN apt-get install --no-install-recommends --yes \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
-        libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
-        libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
-        libharfbuzz-dev libfribidi-dev libxcb1-dev
+        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran
 
 ENV LLVM_CONFIG=/usr/bin/llvm-config-7
 
 FROM build-debian as build-arm64
 
 RUN apt-get install --no-install-recommends --yes \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
-        libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev \
-        libfreetype6-dev liblcms2-dev libwebp-dev tcl8.6-dev tk8.6-dev python3-tk \
-        libharfbuzz-dev libfribidi-dev libxcb1-dev
+        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran
 
 ENV LLVM_CONFIG=/usr/bin/llvm-config-7
 
@@ -73,7 +67,7 @@ ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
 # IFDEF PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${PROXY}"; };' >> /etc/apt/apt.conf.d/01proxy
+#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
 RUN install_packages \
@@ -88,16 +82,19 @@ RUN install_packages \
 ARG TARGETARCH
 ARG TARGETVARIANT
 FROM build-$TARGETARCH$TARGETVARIANT as build
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV APP_DIR=/usr/lib/rhasspy
 ENV BUILD_DIR=/build
 
 # Directory of prebuilt tools
-COPY download/shared/ ${BUILD_DIR}/download/
-COPY download/${TARGETARCH}${TARGETVARIANT}/ ${BUILD_DIR}/download/
+ENV DOWNLOAD_DIR=${BUILD_DIR}/download
+COPY download/shared/ ${DOWNLOAD_DIR}/
+COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/
 
 # IFDEF NOAVX
-#! RUN mv download/noavx/* download/
+#! RUN mv ${DOWNLOAD_DIR}/noavx/* ${DOWNLOAD_DIR}/
 # ENDIF
 
 # Copy Rhasspy module requirements
@@ -157,15 +154,18 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
 
-RUN export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/download" && \
-    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.30.0 scipy==1.5.1' && \
+RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
+    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.32.0 scipy==1.5.1' && \
+    if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
+        export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
+    fi && \
     export POCKETSPHINX_FROM_SRC=no && \
     cd ${BUILD_DIR} && \
     make && \
     make install
 
 RUN cd ${APP_DIR}/.venv && \
-    find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
+    find . -type f -name 'g2p.fst.gz' -exec gunzip -f {} \\;
 
 # -----------------------------------------------------------------------------
 

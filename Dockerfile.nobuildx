@@ -46,11 +46,12 @@ ARG TARGETARCH
 ARG TARGETVARIANT
 
 # Directory of prebuilt tools
-COPY download/shared/ ${BUILD_DIR}/download/
-COPY download/${TARGETARCH}${TARGETVARIANT}/ ${BUILD_DIR}/download/
+ENV DOWNLOAD_DIR=${BUILD_DIR}/download
+COPY download/shared/ ${DOWNLOAD_DIR}/
+COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/
 
 # IFDEF NOAVX
-#! RUN mv download/noavx/* download/
+#! RUN mv ${DOWNLOAD_DIR}/noavx/* ${DOWNLOAD_DIR}/
 # ENDIF
 
 # Copy Rhasspy module requirements
@@ -110,15 +111,18 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
 
-RUN export PIP_INSTALL_ARGS="-f ${BUILD_DIR}/download" && \
-    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.30.0 scipy==1.5.1' && \
+RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
+    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.32.0 scipy==1.5.1' && \
+    if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
+        export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
+    fi && \
     export POCKETSPHINX_FROM_SRC=no && \
     cd ${BUILD_DIR} && \
     make && \
     make install
 
 RUN cd ${APP_DIR}/.venv && \
-    find . -type f -name 'g2p.fst.gz' -exec gunzip {} \\;
+    find . -type f -name 'g2p.fst.gz' -exec gunzip -f {} \\;
 
 # -----------------------------------------------------------------------------
 # Run

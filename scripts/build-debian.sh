@@ -56,8 +56,6 @@ fi
 
 # ------------------------------------------------------------------------------
 
-rm -f "${dist_dir}/rhasspy_${version}_"*.deb
-
 echo "Building..."
 
 if [[ -n "${NOBUILDX}" ]]; then
