@@ -23,6 +23,6 @@ trap cleanup EXIT
 # -----------------------------------------------------------------------------
 
 tar -C "${temp_dir}" -xf "${native_client}"
-install -D "--target-directory=${output}/bin" -- "${temp_dir}/generate_trie" "${temp_dir}/deepspeech"
+install -D "--target-directory=${output}/bin" -- "${temp_dir}/generate_scorer_package" "${temp_dir}/deepspeech"
 install -D "--target-directory=${output}/lib" -- "${temp_dir}"/*.so*
 install -D "--target-directory=${output}/include" -- "${temp_dir}"/*.h
