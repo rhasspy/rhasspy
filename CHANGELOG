@@ -6,6 +6,7 @@
 - Add streaming audio support for DeepSpeech (faster transcription)
 - Settings for energy-based silence detection
 - Max seconds for voice commands
+- English voice for Larynx (kathleen)
 - Reboot/shutdown menu in web UI
 - Add text to speech testing tools in settings page
 - Make it clearer in web UI when restarts are required
