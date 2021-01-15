@@ -14,6 +14,7 @@
 
 ### Fixed
 
+- Custom converters for fsticuffs and fuzzywuzzy
 - fuzzywuzzy NluException: not enough values to unpack
 - Download links for all profiles
 

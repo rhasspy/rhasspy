@@ -199,7 +199,7 @@ Large [alternatives](#alternatives) can become unwieldy quickly. For example, sa
 movies = ("Primer" | "Moon" | "Chronicle" | "Timecrimes" | "Mulholland Drive" | ... )
 ```
 
-Rather than keep this list in `sentences.ini`, you may put each movie name on a separate line in a file named `slots/movies` (no file extension) and reference it as `$movies`. Rhasspy automatically loads all files in the `slots` directory of your [profile](#profiles.md) and makes them available as slots lists.
+Rather than keep this list in `sentences.ini`, you may put each movie name on a separate line in a file named `slots/movies` (no file extension) and reference it as `$movies`. Rhasspy automatically loads all files in the `slots` directory of your [profile](profiles.md) and makes them available as slots lists.
 
 For the example above, the file `slots/movies` should contain:
 
@@ -314,6 +314,8 @@ print(int(value))
 ```
 
 Converters can be *chained*, so `!foo!bar` will call the `foo` converter and then pass the result to `bar`.
+
+**NOTE:** custom converters currently only work with the [fsticuffs](intent-recognition.md#fsticuffs) and [fuzzywuzzy](intent-recognition.md#fuzzywuzzy) systems.
 
 ### Special Cases
 
