@@ -4,7 +4,9 @@ After you voice command has been [handled](intent-handling.md), it's common to p
 
 The following table summarizes language support for the various text to speech systems:
 
+
 | Language | [espeak](text-to-speech.md#espeak) | [flite](text-to-speech.md#flite) | [picotts](text-to-speech.md#picotts) | [nanotts](text-to-speech.md#nanotts) | [marytts](text-to-speech.md#marytts) | [opentts](text-to-speech.md#opentts) | [wavenet](text-to-speech.md#google-wavenet) | [larynx](text-to-speech.md#larynx) |
+| -------- | ---------------------------------- | -------------------------------- | ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------ | ------------------------------------------- | ---------------------------------- |
 | en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
 | de       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | es       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             |                                      | &#x2713;                             | &#x2713;                                    |                                    |
@@ -19,6 +21,7 @@ The following table summarizes language support for the various text to speech s
 | pt       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
 | ca       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
 | cs       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+
 
 ---
 
