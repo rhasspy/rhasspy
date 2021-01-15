@@ -169,7 +169,7 @@ This is done completely offline, on your device. If you experience performance p
 {
   "speech_to_text": {
     "system": "deepspeech",
-    "kaldi": {
+    "deepspeech": {
       "alphabet": "deepspeech/model/0.6.1/alphabet.txt",
       "acoustic_model": "deepspeech/model/0.6.1/output_graph.pbmm",
       "base_language_model": "deepspeech/model/0.6.1/base_lm.binary",

@@ -4,7 +4,7 @@ After a voice command has been transcribed and your intent has been successfully
 
 You can also handle intents by:
 
-* Listening for `hermes/intents/<intentName>` messages over MQTT ([details](intent-recognition.md#mqtthermes))
+* Listening for `hermes/intent/<intentName>` messages over MQTT ([details](intent-recognition.md#mqtthermes))
 * Connecting a websocket to `/api/events/intent` ([details](reference.md#websocket-api))
 
 Available intent handling systems are:
