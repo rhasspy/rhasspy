@@ -94,9 +94,9 @@ DEEPSPEECH_FILE = $(DOWNLOAD_DIR)/native_client.$(DOCKER_ARCH).cpu.linux.0.9.3.t
 
 ENABLE_KENLM = @ENABLE_KENLM@
 KENLM_FROM = @KENLM_FROM@
-KENLM_PRE_FILE = $(DOWNLOAD_DIR)/kenlm-20200308_$(DOCKER_ARCH).tar.gz
+KENLM_PRE_FILE = $(DOWNLOAD_DIR)/kenlm-20210107_$(DOCKER_ARCH).tar.gz
 EIGEN_SRC_FILE = $(DOWNLOAD_DIR)/source/eigen-3.2.8.tar.bz2
-KENLM_SRC_FILE = $(DOWNLOAD_DIR)/source/kenlm-20200308.tar.gz
+KENLM_SRC_FILE = $(DOWNLOAD_DIR)/source/kenlm-20210107.tar.gz
 
 ENABLE_NANOTTS = @ENABLE_NANOTTS@
 NANOTTS_FROM = @NANOTTS_FROM@
@@ -436,7 +436,7 @@ kenlm: $(KENLM_PRE_FILE)
 
   ifeq ($(KENLM_FROM),prebuilt)
 $(KENLM_PRE_FILE):
-	$(DO_DOWNLOAD) "$(KENLM_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/kenlm-20200308_$(DOCKER_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(KENLM_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/kenlm-20210107_$(DOCKER_ARCH).tar.gz"
   else # KENLM_FROM
 $(KENLM_PRE_FILE): $(EIGEN_SRC_FILE) $(KENLM_SRC_FILE)
 	"$(srcdir)/scripts/build/build-kenlm.sh" "$(KENLM_SRC_FILE)" "$(EIGEN_SRC_FILE)" "$(BUILD_DIR)" "$(KENLM_PRE_FILE)"
