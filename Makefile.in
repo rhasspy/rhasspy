@@ -79,8 +79,8 @@ POCKETSPHINX_FROM_SRC ?= yes
 
 ENABLE_KALDI = @ENABLE_KALDI@
 KALDI_FROM = @KALDI_FROM@
-KALDI_PRE_FILE = $(DOWNLOAD_DIR)/kaldi-2020_$(DOCKER_ARCH).tar.gz
-KALDI_SRC_FILE = $(DOWNLOAD_DIR)/source/kaldi-2020.tar.gz
+KALDI_PRE_FILE = $(DOWNLOAD_DIR)/kaldi-2021_$(DOCKER_ARCH).tar.gz
+KALDI_SRC_FILE = $(DOWNLOAD_DIR)/source/kaldi-2021.tar.gz
 
 ENABLE_JULIUS = @ENABLE_JULIUS@
 JULIUS_FROM = @JULIUS_FROM@
@@ -362,7 +362,7 @@ install-kaldi: $(KALDI_PRE_FILE)
 
   ifeq ($(KALDI_FROM),prebuilt)
 $(KALDI_PRE_FILE):
-	$(DO_DOWNLOAD) "$(KALDI_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/kaldi-2020_$(DOCKER_ARCH).tar.gz"
+	$(DO_DOWNLOAD) "$(KALDI_PRE_FILE)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/kaldi-2021_$(DOCKER_ARCH).tar.gz"
   else # KALDI_FROM
 $(KALDI_PRE_FILE): $(KALDI_SRC_FILE)
 	"$(srcdir)/scripts/build/build-kaldi.sh" "$(KALDI_SRC_FILE)" "$(BUILD_DIR)" "$(KALDI_PRE_FILE)"
@@ -374,7 +374,7 @@ install-kaldi:
 endif # ENABLE_KALDI
 
 $(KALDI_SRC_FILE):
-	$(DO_DOWNLOAD) "$(KALDI_SRC_FILE)" 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2020.tar.gz'
+	$(DO_DOWNLOAD) "$(KALDI_SRC_FILE)" 'https://github.com/synesthesiam/docker-kaldi/raw/master/download/kaldi-2021.tar.gz'
 
 # -----------------------------------------------------------------------------
 # Julius: speech to text

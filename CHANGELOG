@@ -1,3 +1,9 @@
+## [Unreleased]
+
+### Added
+
+- Confidence and word timings for Kaldi ASR
+
 ## [2.5.9] - 15 Jan 2021
 
 ### Added
