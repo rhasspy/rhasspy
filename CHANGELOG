@@ -3,6 +3,16 @@
 ### Added
 
 - Confidence and word timings for Kaldi ASR
+- Minimum ASR confidence threshold for dialogue manager
+
+### Fixed
+
+- Remote HTTP service sets site_id of satellite for ASR/NLU endpoints
+- DeepSpeech token output (was letters, now words)
+
+### Changed
+
+- /api/listen-for-command uses a proper wake workflow now (requires dialogue manager)
 
 ## [2.5.9] - 15 Jan 2021
 
