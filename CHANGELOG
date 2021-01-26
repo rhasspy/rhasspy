@@ -15,6 +15,7 @@
 ### Changed
 
 - /api/listen-for-command uses a proper wake workflow now (requires dialogue manager)
+- Show absolute paths for custom models (precise, snowboy, porcupine) in Web UI
 
 ## [2.5.9] - 15 Jan 2021
 
