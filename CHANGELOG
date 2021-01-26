@@ -9,6 +9,7 @@
 
 - Remote HTTP service sets site_id of satellite for ASR/NLU endpoints
 - DeepSpeech token output (was letters, now words)
+- Don't show restart/shutdown button if "sudo" isn't available (Docker, Hass.io)
 
 ### Changed
 
