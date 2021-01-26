@@ -4,6 +4,7 @@
 
 - Confidence and word timings for Kaldi ASR
 - Minimum ASR confidence threshold for dialogue manager
+- Detect AVX support and warn for Larynx, DeepSpeech, and Precise in Web UI
 
 ### Fixed
 
