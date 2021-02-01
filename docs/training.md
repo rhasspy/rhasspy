@@ -313,6 +313,8 @@ value = json.load(sys.stdin)
 print(int(value))
 ```
 
+If multiple values are given to the custom converter, they will be sent as a JSON list (`["value1", "value2", ...]`).
+
 Converters can be *chained*, so `!foo!bar` will call the `foo` converter and then pass the result to `bar`.
 
 **NOTE:** custom converters currently only work with the [fsticuffs](intent-recognition.md#fsticuffs) and [fuzzywuzzy](intent-recognition.md#fuzzywuzzy) systems.
