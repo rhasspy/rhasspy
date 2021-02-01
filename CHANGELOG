@@ -7,6 +7,7 @@
 - Detect AVX support and warn for Larynx, DeepSpeech, and Precise in Web UI
 - Handle spaces in converter arguments with word!(converter, ...)
 - rhasspy-tts-cli-hermes TTS commands may be Jinja2 templates (--use-jinja2)
+- Support for MaryTTS effects (jasonhildebrand)
 
 ### Fixed
 
