@@ -6,6 +6,7 @@
 - Minimum ASR confidence threshold for dialogue manager
 - Detect AVX support and warn for Larynx, DeepSpeech, and Precise in Web UI
 - Handle spaces in converter arguments with word!(converter, ...)
+- rhasspy-tts-cli-hermes TTS commands may be Jinja2 templates (--use-jinja2)
 
 ### Fixed
 
@@ -14,6 +15,7 @@
 - Multiple values in custom converters are sent as a list on stdin
 - Don't show restart/shutdown button if "sudo" isn't available (Docker, Hass.io)
 - Added missing espeak phonemes for some profiles
+- MaryTTS voice test in Web UI
 
 ### Changed
 
