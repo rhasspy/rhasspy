@@ -17,6 +17,7 @@
 - Don't show restart/shutdown button if "sudo" isn't available (Docker, Hass.io)
 - Added missing espeak phonemes for some profiles
 - MaryTTS voice test in Web UI
+- Remove dialogue session from site cache on end
 
 ### Changed
 
