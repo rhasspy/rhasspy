@@ -18,6 +18,7 @@
 - Added missing espeak phonemes for some profiles
 - MaryTTS voice test in Web UI
 - Remove dialogue session from site cache on end
+- Don't throw error about system not configured if message is intent for satellite (schnopsi)
 
 ### Changed
 
