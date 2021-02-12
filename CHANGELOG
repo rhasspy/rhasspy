@@ -8,6 +8,8 @@
 - Handle spaces in converter arguments with word!(converter, ...)
 - rhasspy-tts-cli-hermes TTS commands may be Jinja2 templates (--use-jinja2)
 - Support for MaryTTS effects (jasonhildebrand)
+- customData added to hermes/nlu/query message
+- customData is copied by NLU services from query to intent/intentNotRecognized
 
 ### Fixed
 
