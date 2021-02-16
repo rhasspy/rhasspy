@@ -298,7 +298,7 @@ This guide will cover installing Rhasspy on a Raspberry Pi from scratch using [D
 * Raspberry Pi 3B+
 * 32 GB SD card
 * Raspberry Pi OS (32-bit) Lite
-* ReSpeaker 2mic HAT
+* ReSpeaker 2mic HAT (or a Google AIY Voice Kit)
 * 3.5 mm speakers
 
 ### Purchasing a Raspberry Pi
@@ -401,6 +401,8 @@ pi@raspberrypi:~ $
 
 ### Installing Microphone Drivers
 
+#### ReSpeaker drivers
+
 If you're using a [ReSpeaker mic array](https://respeaker.io/), you need to install the driver before continuing. If not, proceed to the [Installing Rhasspy](#installing-rhasspy) step.
 
 We'll following the official instructions from the [seeed-voicecard GitHub page](https://github.com/respeaker/seeed-voicecard). On your Raspberry Pi, enter the following commands:
@@ -421,6 +423,34 @@ $ arecord -L
 ```
 
 If you see your microphone listed, installation was successful (something like `seeed2micvoicerec`). When configuring Rhasspy, set audio recording system to `arecord` and the device to `plughw:CARD=seeed2micvoicec,DEV=0`
+
+#### VoiceKit drivers
+If you're using a [Google Voice Kit](https://aiyprojects.withgoogle.com/voice), you need to install the driver before continuing.
+
+We'll follow the instructions from the [Community post about the AIY Voice drivers](https://community.rhasspy.org/t/on-google-aiy-v1-kit-as-satellite/487). On your Raspberry Pi, enter the following commands:
+
+```sh
+$ git clone https://github.com/google/aiyprojects-raspbian.git
+$ cd aiyprojects-raspbian
+$ git checkout voicekit
+$ sudo scripts/configure-driver.sh
+$ sudo scripts/install-alsa-config.sh
+$ sudo reboot
+```
+
+This could take some time to complete and the last command will reboot your Pi. Once the Pi reboot, log in and check if the microphone is working.
+Record something by:
+
+```sh
+$ arecord -f cd test.wav
+```
+Press (ctrl+z to stop recording)
+
+Check that it plays back with:
+
+```sh
+$aplay test.wav
+```
 
 ### Installing Rhasspy
 
