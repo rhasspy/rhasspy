@@ -1,5 +1,5 @@
 aiofiles==0.4.0
-aiohttp==3.6.2
+aiohttp==3.7.4
 dataclasses-json==0.4.2
 deepspeech==0.6.1
 json5==0.9.3
