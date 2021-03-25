@@ -10,7 +10,7 @@ paho-mqtt==1.5.0
 pocketsphinx==0.1.15
 PyAudio==0.2.11
 pydash==4.7.6
-pyyaml==5.3
+pyyaml==5.4
 quart==0.11.3
 quart-cors==0.3.0
 rapidfuzz==0.13.3
