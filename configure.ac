@@ -254,7 +254,7 @@ AC_ARG_ENABLE([online],
     [disable all online services]))
 
 AC_ARG_VAR([RHASSPY_LANGUAGE],
-    [use recommended settings for specific language (ca,nl,en,fr,de,el,hi,it,kz,zh,pt,es,sv,vi)])
+    [use recommended settings for specific language (ca,cs,de,el,en,es,fr,hi,it,nl,pl,pt,ru,sv,vi,zh)])
 
 dnl ---------------------------------------------------------------------------
 dnl Python virtual environment
@@ -426,20 +426,21 @@ AS_IF([test "x$RHASSPY_LANGUAGE" != x],
         lang=$RHASSPY_LANGUAGE
         AS_CASE([$lang],
             [ca],[stt_system=pocketsphinx],
-            [nl],[stt_system=${kaldi_or_pocketsphinx}],
-            [en],[stt_system=${kaldi_or_pocketsphinx}],
-            [fr],[stt_system=${kaldi_or_pocketsphinx}],
+            [cs],[stt_system=kaldi],
             [de],[stt_system=${kaldi_or_pocketsphinx}],
+            [el],[stt_system=pocketsphinx],
+            [en],[stt_system=${kaldi_or_pocketsphinx}],
+            [es],[stt_system=${kaldi_or_pocketsphinx}],
+            [fr],[stt_system=${kaldi_or_pocketsphinx}],
             [hi],[stt_system=pocketsphinx],
-            [it],[stt_system=pocketsphinx],
-            [kz],[stt_system=pocketsphinx],
-            [zh],[stt_system=pocketsphinx],
+            [it],[stt_system=${kaldi_or_pocketsphinx}],
+            [nl],[stt_system=${kaldi_or_pocketsphinx}],
             [pl],[stt_system=julius],
             [pt],[stt_system=pocketsphinx],
-            [ru],[stt_system=pocketsphinx],
-            [es],[stt_system=pocketsphinx],
+            [ru],[stt_system=${kaldi_or_pocketsphinx}],
             [sv],[stt_system=kaldi],
             [vi],[stt_system=kaldi],
+            [zh],[stt_system=pocketsphinx],
             [AC_MSG_ERROR([Unsupported language: $lang])])
 
     ])
