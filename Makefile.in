@@ -111,9 +111,7 @@ SNIPS_LANG_DIR = $(srcdir)/rhasspy-snips-nlu/etc/languages
 
 ENABLE_LARYNX = @ENABLE_LARYNX@
 LARYNX_ARCH = @LARYNX_ARCH@
-TORCH_WHEEL = $(DOWNLOAD_DIR)/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl
 PHONETISAURUS_WHEEL = $(DOWNLOAD_DIR)/phonetisaurus-0.3.0-py3-none-$(PYTHON_LINUX)_$(LARYNX_ARCH).whl
-GRUUT = $(DOWNLOAD_DIR)/gruut-0.5.0.tar.gz
 
 NUM2WORDS_FILE = $(DOWNLOAD_DIR)/num2words_0.5.10-sv.tar.gz
 
@@ -169,10 +167,6 @@ ifeq ($(ENABLE_SNIPS),yes)
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) setuptools_rust
 endif # ENABLE_SNIPS
 
-ifeq ($(ENABLE_LARYNX),yes)
-	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(TORCH_WHEEL)"
-endif # ENABLE_LARYNX
-
 	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(srcdir)"
 	"$(INSTALL_PYTHON)" -m pip uninstall --yes enum34
 
@@ -182,17 +176,6 @@ ifeq ($(ENABLE_SNIPS),yes)
 		"$(INSTALL_PYTHON)" -m snips_nlu download "$${lang}"; \
 	done
 endif # ENABLE_SNIPS
-
-ifeq ($(ENABLE_LARYNX),yes)
-	"$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) "$(TORCH_WHEEL)"
-	cd "$(srcdir)/rhasspy-tts-larynx-hermes/larynx/TTS" && \
-      "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) -r requirements.txt && \
-      "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) . && \
-	cd "$(srcdir)/rhasspy-tts-larynx-hermes/larynx/TTS/TTS/tts/layers/glow_tts/monotonic_align" && \
-      "$(INSTALL_PYTHON)" setup.py install && \
-	cd "$(srcdir)/rhasspy-tts-larynx-hermes/larynx" && \
-      "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) -r requirements.txt
-endif # ENABLE_LARYNX
 
 	chmod +x "${srcdir}/rhasspy.sh"
 ifneq ($(IN_PLACE),yes)
@@ -493,16 +476,11 @@ $(NANOTTS_SRC_FILE):
 ifeq ($(ENABLE_LARYNX),yes)
 larynx:
 
-install-larynx: $(TORCH_WHEEL) $(PHONETISAURUS_WHEEL) $(GRUUT)
-
-$(TORCH_WHEEL):
-	$(DO_DOWNLOAD) "$(TORCH_WHEEL)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/torch-1.6.0-cp37-cp37m-linux_$(LARYNX_ARCH).whl"
+install-larynx: $(PHONETISAURUS_WHEEL)
 
 $(PHONETISAURUS_WHEEL):
 	$(DO_DOWNLOAD) "$(PHONETISAURUS_WHEEL)" "https://github.com/rhasspy/phonetisaurus-pypi/releases/download/v0.3.0/phonetisaurus-0.3.0-py3-none-$(PYTHON_LINUX)_$(LARYNX_ARCH).whl"
 
-$(GRUUT):
-	$(DO_DOWNLOAD) "$(GRUUT)" 'https://github.com/rhasspy/gruut/releases/download/v0.5.0/gruut-0.5.0.tar.gz'
 else # ENABLE_LARYNX
 larynx:
 
