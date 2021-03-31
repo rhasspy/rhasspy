@@ -57,21 +57,11 @@ fi
 # Determine docker tags
 tags=()
 
-TAG_POSTFIX=''
-if [[ -n "${NOAVX}" ]]; then
-    # Image will use PyTorch compiled without AVX instructions.
-    # This will work with older CPUs like the Celeron.
-    TAG_POSTFIX='-noavx'
+# Latest version
+tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest")
 
-    # Latest no AVX
-    tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:noavx")
-else
-    # Latest (with AVX)
-    tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest")
-fi
-
-# Specific version with or without AVX
-tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:${version}${TAG_POSTFIX}")
+# Specific version
+tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:${version}")
 
 # -----------------------------------------------------------------------------
 

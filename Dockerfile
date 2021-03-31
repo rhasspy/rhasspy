@@ -47,16 +47,12 @@ FROM build-debian as build-amd64
 FROM build-debian as build-armv7
 
 RUN apt-get install --no-install-recommends --yes \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran
-
-ENV LLVM_CONFIG=/usr/bin/llvm-config-7
+        libatlas-base-dev libopenblas-dev gfortran
 
 FROM build-debian as build-arm64
 
 RUN apt-get install --no-install-recommends --yes \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran
-
-ENV LLVM_CONFIG=/usr/bin/llvm-config-7
+        libatlas-base-dev libopenblas-dev gfortran
 
 # -----------------------------------------------------------------------------
 
@@ -133,7 +129,6 @@ COPY rhasspy-wake-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake
 COPY rhasspy-wake-raven/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven/
 COPY rhasspy-wake-raven-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven-hermes/
 COPY rhasspy-tts-larynx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-larynx-hermes/
-COPY rhasspy-tts-larynx-hermes/larynx/ ${BUILD_DIR}/rhasspy-tts-larynx-hermes/larynx/
 
 # Autoconf
 COPY m4/ ${BUILD_DIR}/m4/
@@ -155,7 +150,8 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 # ENDIF
 
 RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
-    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.32.0 scipy==1.5.1' && \
+    export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
+    export PIP_VERSION='pip==20.2.4' && \
     if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
     fi && \
@@ -181,7 +177,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install --yes --no-install-recommends \
-        python3 libpython3.7 python3-pip python3-setuptools python3-distutils python3-llvmlite  \
+        python3 libpython3.7 python3-pip python3-setuptools python3-distutils \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
         supervisor mosquitto \
@@ -189,8 +185,7 @@ RUN apt-get update && \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libsndfile1 libgomp1 libatlas3-base libgfortran4 libopenblas-base \
-        libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3 \
-        libnuma1
+        libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3
 
 # IFDEF PROXY
 #! RUN rm -f /etc/apt/apt.conf.d/01proxy

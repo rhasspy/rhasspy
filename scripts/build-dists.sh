@@ -5,8 +5,8 @@ if [[ "$1" == '--no-build' ]]; then
     no_build='yes'
 fi
 
-if [[ "$1" == '--no-copy' ]]; then
-    no_copy='yes'
+if [[ "$1" == '--copy' ]]; then
+    copy='yes'
 fi
 
 # Directory of *this* script
@@ -33,7 +33,7 @@ if [[ -z "${no_build}" ]]; then
     done < "${src_dir}/RHASSPY_DIRS"
 fi
 
-if [[ -z "${no_copy}" ]]; then
+if [[ -n "${copy}" ]]; then
     # Update submodule downloads
     while read -r dir_name;
     do

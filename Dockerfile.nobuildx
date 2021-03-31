@@ -90,7 +90,6 @@ COPY rhasspy-wake-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake
 COPY rhasspy-wake-raven/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven/
 COPY rhasspy-wake-raven-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven-hermes/
 COPY rhasspy-tts-larynx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-larynx-hermes/
-COPY rhasspy-tts-larynx-hermes/larynx/ ${BUILD_DIR}/rhasspy-tts-larynx-hermes/larynx/
 
 # Autoconf
 COPY m4/ ${BUILD_DIR}/m4/
@@ -112,7 +111,8 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 # ENDIF
 
 RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
-    export PIP_PREINSTALL_PACKAGES='numpy==1.19.0 grpcio==1.32.0 scipy==1.5.1' && \
+    export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
+    export PIP_VERSION='pip==20.2.4' && \
     if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
     fi && \
