@@ -115,7 +115,7 @@ Rhasspy supports the following languages:
 * Portuguese (Português, `pt`)
     * [Pocketsphinx](https://github.com/synesthesiam/pt-br_pocketsphinx-cmu)
 * Swedish (`sv`)
-    * [Kaldi](https://github.com/synesthesiam/sv_kaldi-montreal)
+    * [Kaldi](https://github.com/rhasspy/sv_kaldi-rhasspy)
 * Catalan (`ca`)
     * [Pocketsphinx](https://github.com/synesthesiam/ca-es_pocketsphinx-cmu)
 * Czech (`cs`)

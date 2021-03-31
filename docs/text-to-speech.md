@@ -9,19 +9,18 @@ The following table summarizes language support for the various text to speech s
 |----------|------------------------------------|----------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|--------------------------------------|---------------------------------------------|------------------------------------|
 | ca       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
 | cs       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
-| en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | de       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | fr       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | el       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
-| en       | &#x2713;                           | &#x2713;                         | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
-| es       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+| es       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             |                                      | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | hi       | &#x2713;                           | &#x2713;                         |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
-| it       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
+| it       | &#x2713;                           |                                  | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | nl       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | pt       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
 | pl       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
-| ru       | &#x2713;                           |                                  |                                      |                                      | &#x2713;                             | &#x2713;                             | &#x2713;                                    |                                    |
-| sv       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
+| ru       | &#x2713;                           |                                  |                                      |                                      | &#x2713;                             | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
+| sv       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    | &#x2713;                           |
 | vi       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             |                                             |                                    |
 | zh       | &#x2713;                           |                                  |                                      |                                      |                                      | &#x2713;                             | &#x2713;                                    |                                    |
 
@@ -280,7 +279,9 @@ Implemented by [rhasspy-tts-wavenet-hermes](https://github.com/rhasspy/rhasspy-t
 
 ## Larynx
 
-[Text to speech system](https://github.com/rhasspy/larynx) based on [a fork](https://github.com/rhasspy/TTS) of [MozillaTTS](https://github.com/mozilla/TTS). Uses pre-trained [PyTorch](https://pytorch.org) models and vocoders from public single-speaker datasets.
+[Text to speech system](https://github.com/rhasspy/larynx) that uses pre-trained [onnx](https://onnx.ai/) models (currently [GlowTTS](https://github.com/rhasspy/glow-tts-train) and [Hi-Fi GAN](https://github.com/rhasspy/hifi-gan-train)). Text to phoneme conversion is done with [gruut](https://github.com/rhasspy/gruut).
+
+[Listen to voice samples here](https://rhasspy.github.io/larynx/)
 
 Add to your [profile](profiles.md):
 
@@ -290,31 +291,73 @@ Add to your [profile](profiles.md):
   "larynx": {
     "cache_dir": "tts/larynx/cache",
     "default_voice": "myvoice",
-    "voices": {
-      "myvoice" {
-        "model": "/path/to/tts_checkpoint.pth.tar",
-        "config": "/path/to/tts_config.json",
-        "vocoder_model": "/path/to/vocoder_checkpoint.pth.tar",
-        "vocoder_config": "/path/to/vocoder_config.json",
-      }
+    "vocoder": "universal_large"
     }
   }
 }
 ```
 
-The `model` property is required for each voice. If `config` is missing, a file named `config.json` is assumed to exist in the same directory as the model checkpoint file. The `vocoder_model` and `vocoder_config` properties are optional. Vocoders and TTS models must currently share the same audio details (sample rate, etc.).
+See below for a list of available voices and vocoders.
 
-* Supported model types:
-  * Tacotron2
-  * Glow-TTS
-Supported vocoder types:
-    * Multi-band MelGAN
-    * Fullband MelGAN
-    
-Available voices:
-    * Dutch
-        * [nl-rdh](https://github.com/rhasspy/nl_larynx-rdh)
-        
+### Larynx Voices
+
+All voices were trained from public audio datasets. See [here](https://github.com/rhasspy/larynx) for license information.
+
+* English (`en-us`, 20 voices)
+    * blizzard_fls (F, accent)
+    * cmu_aew (M)
+    * cmu_ahw (M)
+    * cmu_aup (M)
+    * cmu_bdl (M)
+    * cmu_clb (F)
+    * cmu_eey (F)
+    * cmu_fem (M)
+    * cmu_jmk (M)
+    * cmu_ksp (M, accent)
+    * cmu_ljm (F)
+    * cmu_lnh (F)
+    * cmu_rms (M)
+    * cmu_rxr (M)
+    * cmu_slp (F, accent)
+    * cmu_slt (F)
+    * ek (F, accent)
+    * harvard (F, accent)
+    * kathleen (F)
+    * ljspeech (F)
+* German (`de-de`, 1 voice)
+    * thorsten (M)
+* French (`fr-fr`, 3 voices)
+    * gilles\_le\_blanc (M)
+    * siwis (F)
+    * tom (M)
+* Spanish (`es-es`, 2 voices)
+    * carlfm (M)
+    * karen_savage (F)
+* Dutch (`nl`, 3 voices)
+    * bart\_de\_leeuw (M)
+    * flemishguy (M)
+    * rdh (M)
+* Italian (`it-it`, 2 voices)
+    * lisa (F)
+    * riccardo_fasol (M)
+* Swedish (`sv-se`, 1 voice)
+    * talesyntese (M)
+* Russian (`ru-ru`, 3 voices)
+    * hajdurova (F)
+    * nikolaev (M)
+    * minaev (M)
+
+### Larynx Vocoders
+
+A vocoder transforms the output of each voice ([mels](https://en.wikipedia.org/wiki/Mel-frequency_cepstrum)) into waveform audio.
+
+* universal_large
+    * High quality, but slow on the Raspberry Pi
+* vctk_medium
+    * Medium quality
+* vctk_small
+    * Lower quality, but fast on the Raspberry Pi
+
 Please contact a Rhasspy developer if you'd like to volunteer your voice!
 
 Implemented by [rhasspy-tts-larynx-hermes](https://github.com/rhasspy/rhasspy-tts-larynx-hermes)
