@@ -1,7 +1,9 @@
-## [Unreleased]
+## [2.5.10] - Unreleased
 
 ### Added
 
+- New version of Larynx with improved performance and 35 voices (20 English, 1 German, 3 French, 2 Spanish, 3 Dutch, 2 Italian, 1 Swedish, 3 Russian)
+- Kaldi ASR model for Swedish (sv)
 - Confidence and word timings for Kaldi ASR
 - Minimum ASR confidence threshold for dialogue manager
 - Detect AVX support and warn for Larynx, DeepSpeech, and Precise in Web UI
