@@ -147,6 +147,7 @@ ifeq ($(VIRTUALENV),yes)
 	"$(VENV_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) cython
 endif # VIRTUALENV == yes
 
+	if [[ -n "$(PIP_PRE_PREINSTALL_PACKAGES)" ]]; then "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) $(PIP_PRE_PREINSTALL_PACKAGES); fi
 	if [[ -n "$(PIP_PREINSTALL_PACKAGES)" ]]; then "$(INSTALL_PYTHON)" -m pip install $(PIP_INSTALL_ARGS) $(PIP_PREINSTALL_PACKAGES); fi
 
 .PHONY: install-opengrm install-phonetisaurus install-precise install-pocketsphinx install-kaldi install-julius install-snowboy install-deepspeech install-kenlm install-nanotts install-larynx

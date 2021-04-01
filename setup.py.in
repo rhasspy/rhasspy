@@ -102,6 +102,11 @@ enable_wavenet = is_yes("@ENABLE_WAVENET@")
 if not enable_wavenet:
     packages.pop("rhasspytts_wavenet_hermes")
 
+# larynx
+enable_larynx = is_yes("@ENABLE_LARYNX@")
+if not enable_larynx:
+    packages.pop("rhasspytts_larynx_hermes")
+
 # -----------------------------------------------------------------------------
 
 # True if Rhasspy Python modules will be used directly from source instead of
