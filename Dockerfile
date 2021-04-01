@@ -29,7 +29,7 @@ FROM debian:buster as build-debian
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -62,7 +62,7 @@ FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build-armv6
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -140,7 +140,7 @@ COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
 COPY RHASSPY_DIRS ${BUILD_DIR}/
 
-# IFDEF PROXY
+# IFDEF PYPI_PROXY
 #! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
@@ -167,7 +167,7 @@ RUN cd ${APP_DIR}/.venv && \
 # Run stage for amd64/armv7/arm64
 FROM debian:buster as run-debian
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -187,7 +187,7 @@ RUN apt-get update && \
         libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3 \
         libatomic1
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN rm -f /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -202,7 +202,7 @@ FROM run-debian as run-arm64
 # Run stage for armv6
 FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -219,7 +219,7 @@ RUN install_packages \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libopenblas-base
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN rm -f /etc/apt/apt.conf.d/01proxy
 # ENDIF
 

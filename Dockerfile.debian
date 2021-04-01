@@ -3,7 +3,7 @@ FROM debian:buster-slim as base
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -31,7 +31,7 @@ FROM balenalib/raspberry-pi-debian:buster-build as base-armv6
 
 ENV LANG C.UTF-8
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -78,7 +78,7 @@ COPY --from=python ${APP_DIR}/ ${APP_DIR}/
 COPY --from=python ${APP_DIR}/usr/local/include/python3.7m/ /usr/include/
 ENV PYTHON=${APP_DIR}/usr/local/bin/python3
 
-# IFDEF PROXY
+# IFDEF PYPI_PROXY
 #! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF

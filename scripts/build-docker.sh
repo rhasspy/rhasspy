@@ -31,13 +31,19 @@ if [[ -n "${PROXY}" ]]; then
     : "${PYPI_PROXY_HOST=${PROXY_HOST}}"
     : "${PYPI_PROXY_PORT=4000}"
 
-    export APT_PROXY_HOST
-    export APT_PROXY_PORT
-    export PYPI_PROXY_HOST
-    export PYPI_PROXY_PORT
+    if [[ -z "NO_APT_PROXY" ]]; then
+        export APT_PROXY='1'
+        export APT_PROXY_HOST
+        export APT_PROXY_PORT
+        echo "APT proxy: ${APT_PROXY_HOST}:${APT_PROXY_PORT}"
+    fi
 
-    echo "APT proxy: ${APT_PROXY_HOST}:${APT_PROXY_PORT}"
-    echo "PyPI proxy: ${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}"
+    if [[ -z "NO_PYPI_PROXY" ]]; then
+        export PYPI_PROXY='1'
+        export PYPI_PROXY_HOST
+        export PYPI_PROXY_PORT
+        echo "PyPI proxy: ${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}"
+    fi
 
     # Use temporary file instead
     temp_dockerfile="$(mktemp -p "${src_dir}")"
@@ -58,7 +64,9 @@ fi
 tags=()
 
 # Latest version
-tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest")
+if [[ -z "NO_DOCKER_LATEST" ]]; then
+    tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest")
+fi
 
 # Specific version
 tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:${version}")
