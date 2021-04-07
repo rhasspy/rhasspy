@@ -207,7 +207,7 @@ docker run -d -p 12101:12101 \
     --restart unless-stopped \
     -v "$HOME/.config/rhasspy/profiles:/profiles" \
     --device /dev/snd:/dev/snd \
-    rhasspy/rhasspy:2.5.0-pre \
+    rhasspy/rhasspy \
     --user-profiles /profiles \
     --profile en
 ```
