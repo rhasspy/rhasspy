@@ -246,7 +246,7 @@ Dispatches recognized intents to home automation software. See [Intent Handling]
 
 ### Input Messages
 
-* [`hermes/nlu/intent/<intentName>`](reference.md#nlu_intent)
+* [`hermes/intent/<intentName>`](reference.md#nlu_intent)
     * Intent successfully recognized
 * [`hermes/handle/toggleOn`](reference.md#handle_toggleon)
     * Enable intent handling

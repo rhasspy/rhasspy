@@ -353,9 +353,9 @@ Messages for [intent handling](intent-handling.md).
     * `sessionId: string? = null` - current session ID
     * `asrConfidence: float? = null` - confidence from ASR system for input text
     * Response(s)
-        * [`hermes/nlu/intent/<intentName>`](#nlu_intent)
+        * [`hermes/intent/<intentName>`](#nlu_intent)
         * [`hermes/nlu/intentNotRecognized`](#nlu_intentnotrecognized)
-* <a id="nlu_intent"><tt>hermes/nlu/intent/&lt;intentName&gt;</tt></a> (JSON)
+* <a id="nlu_intent"><tt>hermes/intent/&lt;intentName&gt;</tt></a> (JSON)
     * Sent when an intent was successfully recognized
     * `input: string` - text from query (required)
     * `intent: object` - details of recognized intent (required)

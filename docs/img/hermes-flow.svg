@@ -876,7 +876,7 @@
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:monospace;-inkscape-font-specification:monospace;text-align:center;text-anchor:middle;stroke-width:0.1669427"
            y="75.843063"
            x="113.08159"
-           sodipodi:role="line">hermes/nlu/intent/&lt;intentName&gt;</tspan></text>
+           sodipodi:role="line">hermes/intent/&lt;intentName&gt;</tspan></text>
     </g>
   </g>
 </svg>
