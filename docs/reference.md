@@ -474,7 +474,7 @@ Application authors may want to use the [rhasspy-client](https://pypi.org/projec
     * Returns intent JSON when command is finished
     * `?nohass=true` - stop Rhasspy from handling the intent
     * `?timeout=<seconds>` - override default command timeout
-    * `?entity=<entity>&value=<value>` - set custom entity/value in recognized intent
+    * `?entity=<entity>&value=<value>` - set custom entities/values in recognized intent
 * <a id="api_listen_for_wake"><tt>/api/listen-for-wake</tt></a>
     * POST "on" to have Rhasspy listen for a wake word
     * POST "off" to disable wake word

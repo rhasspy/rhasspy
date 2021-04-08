@@ -25,6 +25,7 @@
 - MaryTTS voice test in Web UI
 - Remove dialogue session from site cache on end
 - Don't throw error about system not configured if message is intent for satellite (schnopsi)
+- Custom entities from /api/listen-for-command are passed through to NLU intent
 
 ### Changed
 
