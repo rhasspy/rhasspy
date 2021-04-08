@@ -112,6 +112,7 @@ SNIPS_LANG_DIR = $(srcdir)/rhasspy-snips-nlu/etc/languages
 ENABLE_LARYNX = @ENABLE_LARYNX@
 LARYNX_ARCH = @LARYNX_ARCH@
 PHONETISAURUS_WHEEL = $(DOWNLOAD_DIR)/${DOCKER_ARCH}/phonetisaurus-0.3.0-py3-none-$(PYTHON_LINUX)_$(LARYNX_ARCH).whl
+ONNXRUNTIME_WHEEL = $(DOWNLOAD_DIR)/${DOCKER_ARCH}/onnxruntime-1.6.0-cp37-cp37m-linux_armv7l.whl
 
 NUM2WORDS_FILE = $(DOWNLOAD_DIR)/shared/num2words_0.5.10-sv.tar.gz
 
@@ -478,10 +479,17 @@ $(NANOTTS_SRC_FILE):
 ifeq ($(ENABLE_LARYNX),yes)
 larynx:
 
+ifeq ($(LARYNX_ARCH),armv7)
+install-larynx: $(PHONETISAURUS_WHEEL) $(ONNXRUNTIME_WHEEL)
+else # LARYNX_ARCH == armv7
 install-larynx: $(PHONETISAURUS_WHEEL)
+endif # LARYNX_ARCH == armv7
 
 $(PHONETISAURUS_WHEEL):
 	$(DO_DOWNLOAD) "$(PHONETISAURUS_WHEEL)" "https://github.com/rhasspy/phonetisaurus-pypi/releases/download/v0.3.0/phonetisaurus-0.3.0-py3-none-$(PYTHON_LINUX)_$(LARYNX_ARCH).whl"
+
+$(ONNXRUNTIME_WHEEL):
+	$(DO_DOWNLOAD) "$(ONNXRUNTIME_WHEEL)" "https://github.com/synesthesiam/prebuilt-apps/releases/download/v1.0/onnxruntime-1.6.0-cp37-cp37m-linux_armv7l.whl"
 
 else # ENABLE_LARYNX
 larynx:
