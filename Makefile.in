@@ -120,7 +120,7 @@ NUM2WORDS_FILE = $(DOWNLOAD_DIR)/shared/num2words_0.5.10-sv.tar.gz
 VENV_DIR = $(DESTDIR)$(prefix)
 VENV_PYTHON = $(VENV_DIR)/bin/python
 VIRTUALENV_FLAGS ?= --clear
-PIP_VERSION ?= pip
+PIP_VERSION ?= pip<=20.2.4
 
 ifeq ($(VIRTUALENV),yes)
   INSTALL_PYTHON=$(VENV_PYTHON)

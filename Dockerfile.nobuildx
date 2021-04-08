@@ -112,7 +112,7 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 
 RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
     export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
-    export PIP_VERSION='pip==20.2.4' && \
+    export PIP_VERSION='pip<=20.2.4' && \
     if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
     fi && \
