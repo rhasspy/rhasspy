@@ -25,6 +25,9 @@ profile="${RHASSPY_PROFILE_DIR}/profile.json"
 # Example: http://localhost:8123
 url="$(jq --raw-output .home_assistant.url < "${profile}")"
 
+# Strip final slash, if present
+url="${url%/}"
+
 # Long-lived access token
 token="$(jq --raw-output .home_assistant.access_token < "${profile}")"
 
