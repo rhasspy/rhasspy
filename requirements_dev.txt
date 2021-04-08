@@ -3,7 +3,7 @@ coverage==5.0.4
 flake8==3.7.9
 mypy==0.770
 pyinstaller==3.6
-pylint==2.4.4
+pylint==2.5.3
 pytest==5.4.1
 pytest-cov==2.8.1
 yamllint==1.21.0
