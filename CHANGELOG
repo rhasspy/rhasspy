@@ -31,6 +31,7 @@
 
 - /api/listen-for-command uses a proper wake workflow now (requires dialogue manager)
 - Show absolute paths for custom models (precise, snowboy, porcupine) in Web UI
+- TTS timeouts are computing using text length (dialogue.say_chars_per_second)
 
 ## [2.5.9] - 15 Jan 2021
 
