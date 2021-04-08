@@ -158,8 +158,6 @@ To save memory when running on a Raspberry Pi, considering [restricting the load
 
 ### Audio Effects
 
-**Not supported yet in 2.5!**
-
 MaryTTS is capable of applying several audio effects when producing speech.  See the web interface at [http://localhost:59125](http://localhost:59125)
 to experiment with this.
 
