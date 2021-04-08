@@ -3,18 +3,16 @@ FROM debian:buster-slim as base
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
 RUN apt-get update && \
     apt-get install --no-install-recommends --yes \
         build-essential swig portaudio19-dev \
-        llvm-7-dev libatlas-base-dev libopenblas-dev gfortran \
+        libatlas-base-dev libopenblas-dev gfortran \
         gfortran libopenblas-dev liblapack-dev cython \
         curl ca-certificates
-
-ENV LLVM_CONFIG=/usr/bin/llvm-config-7
 
 ENV NUM_JOBS=8
 
@@ -29,11 +27,11 @@ FROM base as base-armv7
 
 FROM base as base-arm64
 
-FROM balenalib/raspberry-pi-debian:buster-build-20200604 as base-armv6
+FROM balenalib/raspberry-pi-debian:buster-build as base-armv6
 
 ENV LANG C.UTF-8
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -80,7 +78,7 @@ COPY --from=python ${APP_DIR}/ ${APP_DIR}/
 COPY --from=python ${APP_DIR}/usr/local/include/python3.7m/ /usr/include/
 ENV PYTHON=${APP_DIR}/usr/local/bin/python3
 
-# IFDEF PROXY
+# IFDEF PYPI_PROXY
 #! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
@@ -93,12 +91,8 @@ ARG TARGETVARIANT
 
 # Directory of prebuilt tools
 ENV DOWNLOAD_DIR=${BUILD_DIR}/download
-COPY download/shared/ ${DOWNLOAD_DIR}/
-COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/
-
-# IFDEF NOAVX
-#! RUN mv download/noavx/* download/
-# ENDIF
+COPY download/shared/ ${DOWNLOAD_DIR}/shared/
+COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}/
 
 # Copy Rhasspy source
 COPY rhasspy/ ${APP_DIR}/rhasspy/
@@ -151,9 +145,13 @@ COPY etc/shflags ${APP_DIR}/etc/
 COPY etc/wav/ ${APP_DIR}/etc/wav/
 COPY README.md LICENSE RHASSPY_DIRS ${APP_DIR}/
 
-RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
+RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}/shared -f ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}" && \
+    export PIP_PRE_PREINSTALL_PACKAGES='cython' && \
     export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
     export PIP_VERSION='pip<=20.2.4' && \
+    if [ "${TARGETARCH}${TARGETVARIANT}" = 'amd64' ]; then \
+        export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} detect-simd~=0.2.0"; \
+    fi && \
     if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
     fi && \

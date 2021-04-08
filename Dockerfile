@@ -29,7 +29,7 @@ FROM debian:buster as build-debian
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -57,12 +57,12 @@ RUN apt-get install --no-install-recommends --yes \
 # -----------------------------------------------------------------------------
 
 # Build stage for armv6
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20200604 as build-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build-armv6
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -86,12 +86,8 @@ ENV BUILD_DIR=/build
 
 # Directory of prebuilt tools
 ENV DOWNLOAD_DIR=${BUILD_DIR}/download
-COPY download/shared/ ${DOWNLOAD_DIR}/
-COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/
-
-# IFDEF NOAVX
-#! RUN mv ${DOWNLOAD_DIR}/noavx/* ${DOWNLOAD_DIR}/
-# ENDIF
+COPY download/shared/ ${DOWNLOAD_DIR}/shared/
+COPY download/${TARGETARCH}${TARGETVARIANT}/ ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}/
 
 # Copy Rhasspy module requirements
 COPY rhasspy-server-hermes/requirements.txt ${BUILD_DIR}/rhasspy-server-hermes/
@@ -144,14 +140,17 @@ COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
 COPY RHASSPY_DIRS ${BUILD_DIR}/
 
-# IFDEF PROXY
+# IFDEF PYPI_PROXY
 #! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
 
-RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}" && \
+RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}/shared -f ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}" && \
     export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
     export PIP_VERSION='pip<=20.2.4' && \
+    if [ "${TARGETARCH}${TARGETVARIANT}" = 'amd64' ]; then \
+        export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} detect-simd~=0.2.0"; \
+    fi && \
     if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
     fi && \
@@ -168,7 +167,7 @@ RUN cd ${APP_DIR}/.venv && \
 # Run stage for amd64/armv7/arm64
 FROM debian:buster as run-debian
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -185,9 +184,10 @@ RUN apt-get update && \
         espeak flite \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libsndfile1 libgomp1 libatlas3-base libgfortran4 libopenblas-base \
-        libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3
+        libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3 \
+        libatomic1
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN rm -f /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -200,9 +200,9 @@ FROM run-debian as run-arm64
 # -----------------------------------------------------------------------------
 
 # Run stage for armv6
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-run-20200604 as run-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
@@ -219,7 +219,7 @@ RUN install_packages \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libopenblas-base
 
-# IFDEF PROXY
+# IFDEF APT_PROXY
 #! RUN rm -f /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
