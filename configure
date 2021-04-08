@@ -1426,8 +1426,8 @@ Optional Features:
                           system
   --disable-nanotts       disable installation of nanoTTS text to speech
                           system
-  --enable-wavenet        enable installation of Google Wavenet text to speech
-                          system
+  --disable-wavenet       disable installation of Google Wavenet text to
+                          speech system
   --disable-larynx        disable installation of Larynx text to speech system
   --disable-dependency-check
                           disable checking for external dependencies
@@ -3790,7 +3790,7 @@ kenlm_from=prebuilt
 is_nanotts_enabled=UNKNOWN
 nanotts_from=prebuilt
 
-is_wavenet_enabled=no
+is_wavenet_enabled=yes
 
 is_larynx_enabled=UNKNOWN
 larynx_arch=NONE
