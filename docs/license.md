@@ -9,7 +9,7 @@ Please see the individual licenses for the [supporting tools](about.md#supportin
 
 ## MIT License
 
-Copyright 2020 Michael Hansen
+Copyright 2020-2021 Michael Hansen
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

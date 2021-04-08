@@ -9,14 +9,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="103.87649mm"
-   height="37.541668mm"
-   viewBox="0 0 103.87649 37.541669"
+   width="97.553375mm"
+   height="32.409286mm"
+   viewBox="0 0 97.553377 32.409287"
    version="1.1"
    id="svg8"
    inkscape:version="0.92.3 (2405546, 2018-03-11)"
-   sodipodi:docname="rhasspy25.svg"
-   inkscape:export-filename="./rhasspy25.png"
+   sodipodi:docname="rhasspy25-noborder.svg"
+   inkscape:export-filename="./rhasspy25-noborder.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -29,10 +29,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.9899495"
-     inkscape:cx="100.9433"
-     inkscape:cy="-39.266869"
+     inkscape:cx="-98.38918"
+     inkscape:cy="-52.965854"
      inkscape:document-units="mm"
-     inkscape:current-layer="layer2"
+     inkscape:current-layer="layer1"
      showgrid="false"
      fit-margin-top="0"
      fit-margin-left="0"
@@ -53,36 +53,15 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
   <g
-     inkscape:groupmode="layer"
-     id="layer2"
-     inkscape:label="Background"
-     transform="translate(2.5178571,2.6145227)">
-    <rect
-       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#666666;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       id="rect831"
-       width="103.37649"
-       height="37.041668"
-       x="-2.2678571"
-       y="-2.3645227"
-       ry="3.0238094"
-       rx="3.0238094" />
-    <path
-       style="opacity:0.2;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       d="m 101.10863,17.101251 v 14.552085 c 0,1.67519 -1.348618,3.023809 -3.023809,3.023809 H 82.512202 C 100.04268,32.876811 100.34318,32.514228 101.10863,17.101251 Z"
-       id="rect851"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="csscc" />
-  </g>
-  <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(-34.173933,-9.0863723)">
+     transform="translate(-37.335488,-10.594229)">
     <path
        style="fill:none;stroke:#cccccc;stroke-width:0.26458332px;stroke-linecap:round;stroke-linejoin:miter;stroke-opacity:1"
        d="m 51.324796,23.7977 c 0.542065,0.888186 0.725987,2.612041 0.734992,4.744034"

@@ -19,14 +19,14 @@ The following table summarizes language support for the various speech to text s
 | de        | &#x2713;                                         | &#x2713;                           | &#x2713;                                     |
 | el        | &#x2713;                                         |                                    |                                              |
 | en        | &#x2713;                                         | &#x2713;                           | &#x2713;                                     |
-| es        | &#x2713;                                         |                                    |                                              |
-| fr        | &#x2713;                                         | &#x2713;                           |                                              |
+| es        | &#x2713;                                         | &#x2713;                           | &#x2713;                                     |
+| fr        | &#x2713;                                         | &#x2713;                           | &#x2713;                                     |
 | hi        | &#x2713;                                         |                                    |                                              |
-| it        | &#x2713;                                         |                                    |                                              |
+| it        | &#x2713;                                         | &#x2713;                           | &#x2713;                                     |
 | nl        | &#x2713;                                         | &#x2713;                           |                                              |
 | pl        |                                                  | &#x2713;                           | &#x2713;                                     |
-| pt        | &#x2713;                                         |                                    |                                              |
-| ru        | &#x2713;                                         |                                    |                                              |
+| pt        | &#x2713;                                         |                                    | &#x2713;                                     |
+| ru        | &#x2713;                                         | &#x2713;                           |                                              |
 | sv        |                                                  | &#x2713;                           |                                              |
 | vi        |                                                  | &#x2713;                           |                                              |
 | zh        | &#x2713;                                         |                                    |                                              |
@@ -73,6 +73,27 @@ where:
 * `max_energy` - if not set, max energy is computed for every audio frame; otherwise, this fixed value is used
 
 Implemented by [rhasspy-silence](https://github.com/rhasspy/rhasspy-silence)
+
+## ASR Confidence
+
+Each ASR system reports word-level and overall sentence confidences (see `asrTokens` in [asr/textCaptured](reference.md#asr_textcaptured)).
+
+* Pocketsphinx
+    * Sentence confidence is `exp(p)` where `p` is the hypothesis probability
+    * Word confidences are `exp(p)` where `p` is the segment probability
+* Kaldi
+    * Sentence confidence is the result of [MinimumBayesRisk.GetBayesRisk](http://kaldi-asr.org/doc/classkaldi_1_1MinimumBayesRisk.html#a0c65227b9d5ba270428cdc3f55edf682)
+    * Word confidences are the result of [MinimumBayesRisk.GetOneBestConfidences](http://kaldi-asr.org/doc/classkaldi_1_1MinimumBayesRisk.html#a535b2836b20009fb6c5e8dcdfefb356c)
+    * See [online2-cli-nnet3-decode-faster-confidence.cc](https://github.com/rhasspy/rhasspy-asr-kaldi/blob/master/etc/online2-cli-nnet3-decode-faster-confidence.cc)
+* DeepSpeech
+    * Sentence confidence is `exp(c)` where `c` is the [metadata confidence value](https://deepspeech.readthedocs.io/en/latest/Python-API.html#native_client.python.CandidateTranscript.confidence)
+    * Word confidences are always set to 1
+    
+The [rhasspy-dialogue-hermes](https://github.com/rhasspy/rhasspy-dialogue-hermes) will use the value of `speech_to_text.<SYSTEM>.min_confidence` to decide when a voice command should be rejected as not recognized (where `<SYSTEM>` is `pocketsphinx`, `kaldi`, or `deepspeech`). This is set to 0 by default, **allowing all voice commands through**.
+
+In the web interface, look for "Minimum Confidence" in the settings for your speech to text system:
+
+![Minimum ASR confidence setting](img/min-asr-confidence.png)
 
 ## MQTT/Hermes
 

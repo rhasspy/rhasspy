@@ -148,6 +148,14 @@ Messages for [speech to text](speech-to-text.md).
     * `siteId: string = "default"` - Hermes site ID
     * `sessionId: string? = null` - current session ID
     * `wakewordId: string? = null` - id of wake word that triggered session (Rhasspy only)
+    * `asrTokens: [[object]]? = null` - details of individual tokens (words) in captured text (also see [ASR confidence](speech-to-text.md#asr-confidence), note that list is two levels deep)
+        * `value: string` - text of the token
+        * `confidence: float` - confidence score of token (0-1, 1 is more confident)
+        * `rangeStart: int` - start index of token in input (0-based)
+        * `rangeEnd: int` - end index of token in input (0-based)
+        * `time: object` - structured time of when token was detected
+            * `start: float` - start time in seconds (relative to start of utterance)
+            * `end: float` - end time in seconds (relative to start of utterance)
 * <a id="asr_error"><tt>hermes/error/asr</tt></a> (JSON)
     * Sent when an error occurs in the ASR system
     * `error: string` - description of the error
@@ -343,6 +351,7 @@ Messages for [intent handling](intent-handling.md).
     * `id: string? = null` - unique id for request (copied to response messages)
     * `siteId: string = "default"` - Hermes site ID
     * `sessionId: string? = null` - current session ID
+    * `asrConfidence: float? = null` - confidence from ASR system for input text
     * Response(s)
         * [`hermes/nlu/intent/<intentName>`](#nlu_intent)
         * [`hermes/nlu/intentNotRecognized`](#nlu_intentnotrecognized)
