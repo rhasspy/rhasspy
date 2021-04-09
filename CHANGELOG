@@ -14,6 +14,7 @@
 - customData is copied by NLU services from query to intent/intentNotRecognized
 - lang property added for wake, speech_to_text, and intent profile sections
 - Wake, ASR, NLU services all set lang properties if null
+- Profile now has "parent" setting, allowing one profile to load settings from another
 
 ### Fixed
 
