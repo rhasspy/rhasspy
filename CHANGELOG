@@ -15,6 +15,7 @@
 - lang property added for wake, speech_to_text, and intent profile sections
 - Wake, ASR, NLU services all set lang properties if null
 - Profile now has "parent" setting, allowing one profile to load settings from another
+- Dialogue manager sound paths may be directories, from which a random WAV will be chosen each time (thanks plafue)
 
 ### Fixed
 
