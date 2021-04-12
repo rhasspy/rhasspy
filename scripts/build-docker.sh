@@ -64,7 +64,7 @@ fi
 tags=()
 
 # Latest version
-if [[ -z "NO_DOCKER_LATEST" ]]; then
+if [[ -z "${NO_DOCKER_LATEST}" ]]; then
     tags+=(--tag "${DOCKER_REGISTRY}/rhasspy/rhasspy:latest")
 fi
 
