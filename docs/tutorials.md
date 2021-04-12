@@ -202,7 +202,8 @@ Once you have `mosquitto` running, go to the "Settings" page in the Rhasspy web 
 Once you click "Save Settings", Rhasspy will restart and try to connect to your MQTT broker. **This will fail** if you are running Rhasspy inside Docker and trying to connect to `localhost`! In this case, you **must** stop Rhasspy (with `docker stop`) and modify your `docker run` command like this:
 
 ```bash
-docker run -d -p 12101:12101 \
+docker run -d \
+    -p 12101:12101 \
     --network host \
     --restart unless-stopped \
     -v "$HOME/.config/rhasspy/profiles:/profiles" \
@@ -485,7 +486,8 @@ If you're running Rhasspy on a Raspberry Pi Zero, please follow [these instructi
 After downloading and extracting the Rhasspy Docker image, start it running with this command:
 
 ```sh
-$ docker run -it -p 12101:12101 \
+$ docker run -it \
+      -p 12101:12101 \
       -v "$HOME/.config/rhasspy/profiles:/profiles" \
       -v "/etc/localtime:/etc/localtime:ro" \
       --device /dev/snd:/dev/snd \
@@ -511,7 +513,8 @@ Congratulations! From here, you can follow the [getting started guide](#getting-
 If you'd like to keep Rhasspy running the background on your Pi and automatically start up after a reboot, run the following command:
 
 ```sh
-$ docker run -d -p 12101:12101 \
+$ docker run -d \
+      -p 12101:12101 \
       --name rhasspy \
       --restart unless-stopped \
       -v "$HOME/.config/rhasspy/profiles:/profiles" \
@@ -568,6 +571,7 @@ Let's start a base station on the first machine named `rhasspy-base`:
 
 ```bash
 docker run -it \
+    -p 12101:12101 \
     -v "$HOME/.config/rhasspy/profiles:/profiles" \
     rhasspy/rhasspy \
     --profile en \
@@ -580,7 +584,8 @@ Starting the satellite is similiar on a second machine named `rhasspy-satellite`
 
 ```bash
 docker run -it \
-    -p 12101:12101 -v "$HOME/.config/rhasspy/profiles:/profiles" \
+    -p 12101:12101 \
+    -v "$HOME/.config/rhasspy/profiles:/profiles" \
     --device /dev/snd \
     rhasspy/rhasspy \
     --profile en \
@@ -645,6 +650,7 @@ Let's start a base station on the first machine named `rhasspy-base`:
 
 ```bash
 docker run -it \
+    -p 12101:12101 \
     -v "$HOME/.config/rhasspy/profiles:/profiles" \
     rhasspy/rhasspy \
     --profile en \
@@ -657,6 +663,7 @@ Starting the satellite is similiar on a second machine named `rhasspy-satellite`
 
 ```bash
 docker run -it \
+    -p 12101:12101 \
     -v "$HOME/.config/rhasspy/profiles:/profiles" \
     --device /dev/snd \
     rhasspy/rhasspy \
@@ -664,7 +671,7 @@ docker run -it \
     --user-profiles /profiles
 ```
 
-Note that on the satellite we add `--device /dev/snd` to allow Docker access to the microphone.
+Note that on the satellite we add `--device /dev/snd` to allow Docker access to the microphone and `-p 12101:12101` to make the Rhasspy server remotely accessible
 
 The satellite web UI will be accessible at http://rhasspy-satellite:12101 where `rhasspy-satellite` is the hostname or IP address of your satellite machine.
 
