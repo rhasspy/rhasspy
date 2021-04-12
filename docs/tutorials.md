@@ -580,14 +580,14 @@ Starting the satellite is similiar on a second machine named `rhasspy-satellite`
 
 ```bash
 docker run -it \
-    -v "$HOME/.config/rhasspy/profiles:/profiles" \
+    -p 12101:12101 -v "$HOME/.config/rhasspy/profiles:/profiles" \
     --device /dev/snd \
     rhasspy/rhasspy \
     --profile en \
     --user-profiles /profiles
 ```
 
-Note that on the satellite we add `--device /dev/snd` to allow Docker access to the microphone.
+Note that on the satellite we add `--device /dev/snd` to allow Docker access to the microphone, and `-p 12101:12101` to make the Rhasspy server remotely accessible.
 
 The satellite web UI will be accessible at http://rhasspy-satellite:12101 where `rhasspy-satellite` is the hostname or IP address of your satellite machine.
 
