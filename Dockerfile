@@ -33,7 +33,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
-RUN apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
         build-essential swig libatlas-base-dev portaudio19-dev \
@@ -46,7 +47,8 @@ FROM build-debian as build-amd64
 
 FROM build-debian as build-armv7
 
-RUN apt-get install --no-install-recommends --yes \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get install --no-install-recommends --yes \
         libatlas-base-dev libopenblas-dev gfortran
 
 FROM build-debian as build-arm64
@@ -57,7 +59,7 @@ RUN apt-get install --no-install-recommends --yes \
 # -----------------------------------------------------------------------------
 
 # Build stage for armv6
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-build as build-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20210225 as build-armv6
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
@@ -66,7 +68,8 @@ ENV DEBIAN_FRONTEND=noninteractive
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
 # ENDIF
 
-RUN install_packages \
+RUN --mount=type=cache,target=/var/cache/apt \
+    install_packages \
         swig libatlas-base-dev portaudio19-dev \
         gfortran libopenblas-dev liblapack-dev cython \
         curl ca-certificates
@@ -145,7 +148,8 @@ COPY RHASSPY_DIRS ${BUILD_DIR}/
 #! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
 # ENDIF
 
-RUN export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}/shared -f ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}" && \
+RUN --mount=type=cache,target=/root/.cache/pip \
+    export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}/shared -f ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}" && \
     export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
     export PIP_VERSION='pip<=20.2.4' && \
     if [ "${TARGETARCH}${TARGETVARIANT}" = 'amd64' ]; then \
@@ -174,7 +178,8 @@ FROM debian:buster as run-debian
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && \
+RUN --mount=type=cache,target=/var/cache/apt \
+    apt-get update && \
     apt-get install --yes --no-install-recommends \
         python3 libpython3.7 python3-pip python3-setuptools python3-distutils \
         libportaudio2 libatlas3-base libgfortran4 \
@@ -200,7 +205,7 @@ FROM run-debian as run-arm64
 # -----------------------------------------------------------------------------
 
 # Run stage for armv6
-FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
+FROM balenalib/raspberry-pi-debian-python:3.7-buster-run-20210201 as run-armv6
 
 # IFDEF APT_PROXY
 #! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
@@ -209,7 +214,8 @@ FROM balenalib/raspberry-pi-debian-python:3.7-buster-run as run-armv6
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN install_packages \
+RUN --mount=type=cache,target=/var/cache/apt \
+    install_packages \
         python3 libpython3.7 python3-pip python3-setuptools \
         libportaudio2 libatlas3-base libgfortran4 \
         ca-certificates \
