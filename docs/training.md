@@ -91,7 +91,7 @@ When the `SetLightColor` intent is recognized, the JSON event will contain a `co
 
 #### Tag Synonyms
 
-Tag/named entity values can be (substituted](#substitutions) using the colon (`:`) inside the `{curly:braces}` like:
+Tag/named entity values can be [substituted](#substitutions) using the colon (`:`) inside the `{curly:braces}` like:
 
 ```
 turn on the (living room lamp){name:light_1}
