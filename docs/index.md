@@ -50,6 +50,9 @@ Rhasspy is <strong>optimized for</strong>:
     * [Why Rhasspy?](why-rhasspy.md)
     * [Whitepaper](whitepaper.md)
 * [Community Discourse](https://community.rhasspy.org)
+* Academic Papers
+    * [In Search of a Conversational User Interface for Personal Health Assistance](https://www.scitepress.org/Papers/2021/103849/103849.pdf)
+    * [Analysis of Mycroft and Rhasspy Open Source voice assistants](https://academica-e.unavarra.es/xmlui/handle/2454/39091)
     
 ## Web Interface
 

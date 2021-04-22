@@ -4,6 +4,7 @@
 * [From Scratch on a Raspberry Pi](#from-scratch-on-a-raspberry-pi)
 * [Server with Satellites](#server-with-satellites)
 * [Custom Wakeword with Raven](#custom-wakeword-with-raven)
+* [Multiple Instances of Rhasspy](#multiple-instances-of-rhasspy)
 
 ## Getting Started Guide
 
@@ -743,3 +744,203 @@ After restarting, try speaking your wake word and see if Rhasspy wakes up. You c
 Raven any number of custom wake words. By changing the "Wakeword Id" before recording your examples, you can create a new set of templates. Upon detection, Rhasspy will report this name as `wakewordId` in the [hotword detected message](reference.md#hotword_detected).
 
 Deleting a custom wake word is currently not supported through the web UI (though you can always overwrite the recordings). If you wish to delete a custom wake word, visit the `raven` directory of your Rhasspy profile and simply delete the directory named after your wakeword id.
+
+---
+
+## Multiple Instances of Rhasspy
+
+You can run more than one instance (copy) of Rhasspy, and stream audio to all of them from the same microphone using [gstreamer](audio-input.md#gstreamer) and [multisinkudp](https://gstreamer.freedesktop.org/documentation/udp/multiudpsink.html).
+
+In this tutorial, we'll run two instances of Rhasspy with different language profiles. By using different wake words, this will allow the user to select which language they'd like to use for voice commands.
+
+### Port Configuration
+
+At a high level, we'll be using gstreamer to push raw audio from a microphone to two different UDP ports at the same time. By configuring our two Rhasspy instances to listen for audio on these different UDP ports, we can have them share the microphone.
+
+![Streaming audio to multiple Rhasspy instances](img/multiple-instances/udpmultisink.png)
+
+We'll configure things as follows:
+
+* Instance 1 (`en`)
+    * HTTP port is default 12101
+    * Audio input from UDP port 11111
+    * Forward audio internally to porcupine via UDP port 12345
+    * porcupine wake word set to "terminator"
+* Instance 2 (`fr`)
+    * HTTP port is different 22101
+    * Audio input from UDP port 22222
+    * Forward audio internally to porcupine via UDP port 12345
+    * porcupine wake word set to "porcupine"
+    
+Because we'll be using Docker, the **internal** UDP port (12345) can be the same because the containers are isolated from each other. However, the **external** HTTP ports (12101/22101) and UDP ports (11111/22222) must be different because they will be exposed via `docker run`.
+
+### Instance 1 (en)
+
+Start the first Rhasspy instance (`en`):
+
+```sh
+export profile_dir="${HOME}/.config/rhasspy/profiles"
+docker run -d \
+    --name rhasspy-en \
+    -p 12101:12101 \
+    -p 11111:11111/udp \
+    --device /dev/snd:/dev/snd \
+    -v "${profile_dir}":/profiles \
+    -v /etc/localtime:/etc/localtime \
+    rhasspy/rhasspy \
+    --user-profiles /profiles \
+    --profile en
+```
+
+The `-p 12101:12101"` line exposes the HTTP web interface port, while `-p 11111:11111/udp` exposes the UDP port for raw audio input.
+We still include the `--device /dev/snd:dev/snd` line so audio output will work.
+
+Next, we need to configure Rhasspy at http://localhost:12101 as follows:
+
+* **Audio Recording** - Local Command
+    * Record program: `gst-launch-1.0`
+    * Record arguments: `udpsrc port=11111 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample ! filesink location=/dev/stdout`
+* **Wake Word** - Porcupine
+    * Keyword file: `terminator_linux.ppn`
+* **Speech to Text** - Kaldi
+* **Intent Recognition** - Fsticuffs
+* **Audio Playing** - aplay
+* **Dialogue Management** - Rhasspy
+
+For reference, here is the profile JSON:
+
+
+```json
+{
+  "microphone": {
+    "command": {
+      "record_arguments": "udpsrc port=11111 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample ! filesink location=/dev/stdout",
+      "record_program": "gst-launch-1.0",
+      "udp_audio_port": "12345"
+    },
+    "system": "command"
+  },
+  "wake": {
+    "porcupine": {
+      "keyword_path": "terminator_linux.ppn",
+      "udp_audio": "12345"
+    },
+    "system": "porcupine"
+  },
+  "speech_to_text": {
+    "system": "kaldi"
+  },
+  "intent": {
+    "system": "fsticuffs"
+  },
+  "sounds": {
+    "system": "aplay"
+  },
+  "dialogue": {
+    "system": "rhasspy"
+  }
+}
+```
+
+**IMPORTANT**: Make sure to train your profile!
+
+### Instance 2 (fr)
+
+Start the second Rhasspy instance (`fr`):
+
+```sh
+export profile_dir="${HOME}/.config/rhasspy/profiles"
+docker run -d \
+    --name rhasspy-fr \
+    -p 22101:12101 \
+    -p 22222:22222/udp \
+    --device /dev/snd:/dev/snd \
+    -v "${profile_dir}":/profiles \
+    -v /etc/localtime:/etc/localtime \
+    rhasspy/rhasspy \
+    --user-profiles /profiles \
+    --profile fr
+```
+
+The `-p 22101:12101"` line exposes a **different** HTTP web interface port, which also `-p 22222:22222/udp` does for audio input.
+
+Next, we need to configure Rhasspy at http://localhost:22101 as follows:
+
+* **Audio Recording** - Local Command
+    * Record program: `gst-launch-1.0`
+    * Record arguments: `udpsrc port=22222 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample ! filesink location=/dev/stdout`
+* **Wake Word** - Porcupine
+    * Keyword file: `porcupine_linux.ppn`
+* **Speech to Text** - Kaldi
+* **Intent Recognition** - Fsticuffs
+* **Audio Playing** - aplay
+* **Dialogue Management** - Rhasspy
+
+For reference, here is the profile JSON:
+
+
+```json
+{
+  "microphone": {
+    "command": {
+      "record_arguments": "udpsrc port=22222 ! rawaudioparse use-sink-caps=false format=pcm pcm-format=s16le sample-rate=16000 num-channels=1 ! queue ! audioconvert ! audioresample ! filesink location=/dev/stdout",
+      "record_program": "gst-launch-1.0",
+      "udp_audio_port": "12345"
+    },
+    "system": "command"
+  },
+  "wake": {
+    "porcupine": {
+      "keyword_path": "porcupine_linux.ppn",
+      "udp_audio": "12345"
+    },
+    "system": "porcupine"
+  },
+  "speech_to_text": {
+    "system": "kaldi"
+  },
+  "intent": {
+    "system": "fsticuffs"
+  },
+  "sounds": {
+    "system": "aplay"
+  },
+  "dialogue": {
+    "system": "rhasspy"
+  }
+}
+```
+
+**IMPORTANT**: Make sure to train your profile!
+
+### Multi-Streaming Microphone Audio
+
+Now for the final piece of the puzzle. Run the following command to stream your default microphone's audio to both Rhasspy Docker containers simultaneously:
+
+```sh
+gst-launch-1.0 \
+    autoaudiosrc ! \
+    audioconvert ! \
+    audioresample ! \
+    audio/x-raw, rate=16000, channels=1, format=S16LE ! \
+    multiudpsink clients=127.0.0.1:11111,127.0.0.1:22222
+```
+
+You should now be able to activate the English instance with:
+
+"terminator (pause) what time is it?"
+
+and activate the French instance with:
+
+"porcupine (pause) quelle est la température"
+
+If you'd like to have this run at boot, consider creating a [simple systemd service](https://blog.victormendonca.com/2018/05/14/creating-a-simple-systemd-user-service/).
+
+### Stopping the Instances
+
+When you're finished, you can stop the Rhasspy instances and remove their containers with:
+
+```sh
+docker stop rhasspy-en rhasspy-fr
+docker rm rhasspy-en rhasspy-fr
+```
