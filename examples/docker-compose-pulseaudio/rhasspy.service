@@ -1,0 +1,15 @@
+[Unit]
+Description=Run Rhasspy user service
+Documentation=https://rhasspy.readthedocs.io/en/latest
+Documentation=https://github.com/rhasspy/rhasspy
+
+[Service]
+WorkingDirectory=%h/.config/rhasspy/docker-compose
+Environment=CURRENT_UID=%U:%G
+ExecStartPre=/usr/bin/docker-compose pull -q
+ExecStart=/usr/bin/docker-compose up
+ExecStop=/usr/bin/docker-compose down
+
+[Install]
+WantedBy=default.target
+
