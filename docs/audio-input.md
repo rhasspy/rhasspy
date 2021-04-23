@@ -11,6 +11,12 @@ Rhasspy receives audio over [MQTT](https://mqtt.org) using the [Hermes protocol]
 
 To avoid unnecessary conversion overhead, the WAV audio should be 16-bit 16Khz mono.
 
+## PulseAudio
+
+See [this example](https://github.com/rhasspy/rhasspy/tree/master/examples/docker-compose-pulseaudio) for a way use Rhasspy with PulseAudio.
+
+Set your audio input system to [ALSA](#alsa), which will pass through to PulseAudio.
+
 ## PyAudio
 
 Streams microphone data from a [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) device.
