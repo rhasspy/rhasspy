@@ -1,0 +1,29 @@
+version: "3.0"
+services:
+  rhasspy:
+    image: rhasspy/rhasspy
+    container_name: rhasspy
+    # Pass CURRENT_UID from environment variables, use 1000:1000 by default.
+    # It will run the user inside docker as this user, instead of root.
+    # It is meant to be run like:
+    #     CURRENT_UID=$(id -u):$(id -g) docker-compose up
+    user: ${CURRENT_UID:-1000:1000}
+    environment:
+      # Provide user-writable home directory
+      - HOME=/tmp
+      - PULSE_SERVER=unix:${XDG_RUNTIME_DIR}/pulse/native
+      - PULSE_RUNTIME_PATH=${XDG_RUNTIME_DIR}/pulse
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      # Tell alsa to use Pulseaudio.
+      - ./99-pulseaudio-default.conf:/etc/alsa/conf.d/99-pulseaudio-default.conf:ro
+      # Provide files to connect to Pulseaudio
+      - ${XDG_RUNTIME_DIR}/pulse/native:${XDG_RUNTIME_DIR}/pulse/native:ro
+      - $HOME/.config/pulse/cookie:/tmp/.config/pulse/cookie:ro
+      # Link user configuration.
+      - $HOME/.config/rhasspy/profiles:/tmp/.config/rhasspy/profiles
+    ports:
+      - 12101:12101 # http
+      - 12183:12183 # mqtt
+    command: --profile en
+
