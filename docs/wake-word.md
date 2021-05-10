@@ -19,7 +19,7 @@ The following table summarizes the key characteristics of each wake word system:
 | ------                                    | ----------- | -----------------     | ----------------------- |
 | [raven](wake-word.md#raven)               | moderate    | yes, offline          | no                      |
 | [porcupine](wake-word.md#porcupine)       | excellent   | yes, offline          | no                      |
-| [snowboy](wake-word.md#snowboy)           | good        | yes, online           | yes                     |
+| [snowboy](wake-word.md#snowboy)           | good        | yes, offline          | no                      |
 | [precise](wake-word.md#mycroft-precise)   | moderate    | yes, offline          | no                      |
 | [pocketsphinx](wake-word.md#pocketsphinx) | poor        | no                    | no                      |
 
@@ -156,7 +156,7 @@ Add to your [profile](profiles.md):
 
 If your hotword model has multiple embedded hotwords (such as `jarvis.umdl`), the "sensitivity" parameter should contain sensitivities for each embedded hotword separated by commas (e.g., "0.5,0.5").
 
-Visit [the snowboy website](https://snowboy.kitt.ai) to train your own wake word model (requires linking to a GitHub/Google/Facebook account). This *personal* model with end with `.pmdl`, and should go in your profile directory. Then, set `wake.snowboy.model` to the name of that file.
+To train your own wake word model, see [seasalt-ai](https://github.com/seasalt-ai/snowboy). The resulting file, ending with `.pmdl`, should go in your profile directory. Then, set `wake.snowboy.model` to the name of that file.
 
 You also have the option of using a pre-train *universal* model (`.umdl`) from [Kitt.AI](https://github.com/Kitt-AI/snowboy/tree/master/resources/models).
 
