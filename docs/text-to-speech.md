@@ -281,6 +281,8 @@ Implemented by [rhasspy-tts-wavenet-hermes](https://github.com/rhasspy/rhasspy-t
 
 [Listen to voice samples here](https://rhasspy.github.io/larynx/)
 
+**NOTE**: Performance of Larynx on the Raspberry Pi is significantly better on the [64-bit version of Raspberry Pi OS](https://downloads.raspberrypi.org/raspios_arm64/images/).
+
 Add to your [profile](profiles.md):
 
 ```json
