@@ -5,6 +5,7 @@ rhasspy-asr-kaldi
 rhasspy-asr-kaldi-hermes
 rhasspy-asr-pocketsphinx
 rhasspy-asr-pocketsphinx-hermes
+rhasspy-asr-vosk-hermes
 rhasspy-dialogue-hermes
 rhasspy-fuzzywuzzy
 rhasspy-fuzzywuzzy-hermes

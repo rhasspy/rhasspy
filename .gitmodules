@@ -134,3 +134,6 @@
 [submodule "rhasspy-tts-larynx-hermes"]
 	path = rhasspy-tts-larynx-hermes
 	url = https://github.com/rhasspy/rhasspy-tts-larynx-hermes.git
+[submodule "rhasspy-asr-vosk-hermes"]
+	path = rhasspy-asr-vosk-hermes
+	url = https://github.com/rhasspy/rhasspy-asr-vosk-hermes.git

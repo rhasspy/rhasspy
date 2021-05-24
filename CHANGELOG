@@ -1,3 +1,16 @@
+## [2.5.11] - Unreleased
+
+### Added
+
+- Preliminary support for Arabic (ar)
+- Initial support for Vosk ASR (English, German, French, Spanish, Italian, Russian, Portuguese, Vietnamese, Arabic)
+- Multiple audio streams for Precise wake word service (thanks Romkabouter)
+- Raven speed optimizations for dynamic time warping code (thanks maxbachmann)
+
+## Changed
+
+- The rhasspy-silence CLI tool can now split audio by silence and trim silence
+
 ## [2.5.10] - 2020 Apr 10
 
 ### Added

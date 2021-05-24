@@ -1,6 +1,7 @@
 rhasspy-asr-deepspeech-hermes
 rhasspy-asr-kaldi-hermes
 rhasspy-asr-pocketsphinx-hermes
+rhasspy-asr-vosk-hermes
 rhasspy-dialogue-hermes
 rhasspy-fuzzywuzzy-hermes
 rhasspy-homeassistant-hermes
