@@ -4,8 +4,9 @@
 
 - Preliminary support for Arabic (ar)
 - Initial support for Vosk ASR (English, German, French, Spanish, Italian, Russian, Portuguese, Vietnamese, Arabic)
-- Multiple audio streams for Precise wake word service (thanks Romkabouter)
+- Multiple audio streams for Precise/Porcupine/Snowboy/Pocketsphinx wake word service (thanks Romkabouter)
 - Raven speed optimizations for dynamic time warping code (thanks maxbachmann)
+- Wake word systems can receive raw UDP audio from multiple sites, and forward it to MQTT (see wake.<system>.udp_site_info)
 
 ## Changed
 
