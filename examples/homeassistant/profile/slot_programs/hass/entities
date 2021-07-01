@@ -34,7 +34,7 @@ token="$(jq --raw-output .home_assistant.access_token < "${profile}")"
 # -----------------------------------------------------------------------------
 
 # Use REST api to list the states of all Home Assistant entities.
-# Returns a JSON list of entitiy states.
+# Returns a JSON list of entity states.
 # We use jq to reformat this as a two-column list with the format: <entity_id> <friendly_name>.
 echo "GET ${url}/api/states" >&2
 curl -X GET \

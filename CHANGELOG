@@ -2,6 +2,7 @@
 
 ### Added
 
+- Option to allow "unknown" words to be recognized with Kaldi with Text FST grammar enabled
 - Preliminary support for Arabic (ar)
 - Initial support for Vosk ASR (English, German, French, Spanish, Italian, Russian, Portuguese, Vietnamese, Arabic)
 - Multiple audio streams for Precise/Porcupine/Snowboy/Pocketsphinx wake word service (thanks Romkabouter)
