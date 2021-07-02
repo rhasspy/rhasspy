@@ -179,6 +179,37 @@ Setting `speech_to_text.kaldi.language_model_type` to "text_fst" instead of "arp
 
 If you just want to use Rhasspy for general speech to text, you can set `speech_to_text.kaldi.open_transcription` to `true` in your profile. This will use the included general language model (much slower) and ignore any custom voice commands you've specified.
 
+### Unknown Words
+
+When you use "text_fst" for Kaldi's [language model type](#language-model-type), misspoken words outside of your vocabulary are usually forced to fit. Even with [confidence measures](#asr-confidence), it can be difficult to tell the difference between a correctly spoken sentence and random words.
+
+As of version 2.5.11, setting `speech_to_text.kaldi.allow_unknown_words` to `true` will enable a new "unknown words" mode for Kaldi (in the web interface, this option is titled "Replace unknown words with `<unk>`"). When "unknown words" mode is enabled, training will take longer and produce two grammars:
+
+1. An "unknown words" grammar made from a list of frequently-spoken words in your profile's language
+2. A grammar created from your `sentences.ini` file, but with every word optionally being from the "unknown words" set
+
+Combined, these two grammars allow Kaldi to generate `<unk>` words if you speak a word outside of your `sentences.ini` file. Frequently-spoken words are used under the assumption that they will contain a good mix of phonemes, and therefore "catch" most misspoken words.
+
+A few profile settings are available to tune the overall process:
+
+* `speech_to_text.kaldi.unknown_words_probability`
+    * Probability of an unknown word occurring for each spoken word in `sentences.ini`
+    * Defaults to 1e-5
+    * Decrease if you get too many `<unk>` words, increase if you get too few
+* `speech_to_text.kaldi.max_frequent_words`
+    * Number of frequent words to use during training (default: 100)
+    * Increasing this number will also increase training time
+    * Only increase if you can't get the desired behavior by change `unknown_words_probability`
+* `speech_to_text.kaldi.unknown_token`
+    * Transcription word emitted when an unknown word is encountered
+    * Defaults to `<unk>`
+    * Can be empty!
+* `speech_to_text.kaldi.frequent_words`
+    * Path to a text file containing frequently-spoken words, one per line
+    * A file named `frequent_words.txt` is already included in all profiles
+    
+After speech recognition, it will be the [intent recognizer's](#intent-recognition) job to decide what to do with unknown words in the transcription. By default, the word `<unk>` is emitted in place of unknown words (this can be changed with `speech_to_text.kaldi.unknown_token`). [fsticuffs](intent-recognition.md#fsticuffs), for example, will skip over `<unk>` words during recognition, which usually still results in a failed recognition.
+
 Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
 
 ## DeepSpeech
