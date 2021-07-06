@@ -7,6 +7,9 @@
 - Initial support for Vosk ASR (English, German, French, Spanish, Italian, Russian, Portuguese, Vietnamese, Arabic)
 - Multiple audio streams for Precise/Porcupine/Snowboy/Pocketsphinx wake word service (thanks Romkabouter)
 - Raven speed optimizations for dynamic time warping code (thanks maxbachmann)
+- Dialogue manager will convert audio files to WAV using soundfile and audioread
+- dialogue.sound_suffixes profile setting controls file extensions searched for when dialogue feedback sound path is a directory
+- rhasspy-speakers-cli-mqtt will convert audio bytes to WAV using soundfile and audioread
 - Wake word systems can receive raw UDP audio from multiple sites, and forward it to MQTT (see wake.<system>.udp_site_info)
 
 ## Fixed
