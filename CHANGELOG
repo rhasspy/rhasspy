@@ -9,6 +9,10 @@
 - Raven speed optimizations for dynamic time warping code (thanks maxbachmann)
 - Wake word systems can receive raw UDP audio from multiple sites, and forward it to MQTT (see wake.<system>.udp_site_info)
 
+## Fixed
+
+- Websocket queues are retained between restarts (thanks sabeechen)
+
 ## Changed
 
 - The rhasspy-silence CLI tool can now split audio by silence and trim silence
