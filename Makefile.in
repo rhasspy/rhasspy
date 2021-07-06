@@ -116,6 +116,8 @@ ONNXRUNTIME_WHEEL = $(DOWNLOAD_DIR)/${DOCKER_ARCH}/onnxruntime-1.6.0-cp37-cp37m-
 
 NUM2WORDS_FILE = $(DOWNLOAD_DIR)/shared/num2words_0.5.10-sv.tar.gz
 
+ENABLE_RAVEN = @ENABLE_RAVEN@
+
 # -----------------------------------------------------------------------------
 
 VENV_DIR = $(DESTDIR)$(prefix)
@@ -180,6 +182,13 @@ ifeq ($(ENABLE_SNIPS),yes)
 	done
 endif # ENABLE_SNIPS
 
+ifeq ($(ENABLE_RAVEN),yes)
+ifeq ($(IN_PLACE),yes)
+	cd "$(srcdir)/rhasspy-wake-raven" && \
+      "$(INSTALL_PYTHON)" setup.py build_ext --inplace
+endif  # IN_PLACE
+endif # ENABLE_RAVEN
+
 	chmod +x "${srcdir}/rhasspy.sh"
 ifneq ($(IN_PLACE),yes)
 	install -D "${srcdir}/rhasspy.sh" "$(DESTDIR)$(prefix)/bin/rhasspy"
@@ -190,7 +199,7 @@ ifneq ($(IN_PLACE),yes)
 	cp -fR "${srcdir}/rhasspy-server-hermes/web" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/templates" "$(DESTDIR)$(prefix)/share/rhasspy/"
 	cp -fR "${srcdir}/rhasspy-server-hermes/web/docs" "$(DESTDIR)$(prefix)/share/rhasspy/" || true
-endif  # IN_PLACE
+endif  # not IN_PLACE
 
 # -----------------------------------------------------------------------------
 

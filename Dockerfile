@@ -126,7 +126,7 @@ COPY rhasspy-supervisor/requirements.txt ${BUILD_DIR}/rhasspy-supervisor/
 COPY rhasspy-tts-cli-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-cli-hermes/
 COPY rhasspy-tts-wavenet-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-wavenet-hermes/
 COPY rhasspy-wake-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-pocketsphinx-hermes/
-COPY rhasspy-wake-raven/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven/
+COPY rhasspy-wake-raven/ ${BUILD_DIR}/rhasspy-wake-raven/
 COPY rhasspy-wake-raven-hermes/requirements.txt ${BUILD_DIR}/rhasspy-wake-raven-hermes/
 COPY rhasspy-tts-larynx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-tts-larynx-hermes/
 
@@ -163,6 +163,10 @@ RUN --mount=type=cache,id=pip-build,target=/root/.cache/pip \
     cd ${BUILD_DIR} && \
     make && \
     make install
+
+RUN mkdir -p ${APP_DIR}/rhasspy-wake-raven/rhasspywake_raven && \
+    cp -f ${BUILD_DIR}/rhasspy-wake-raven/rhasspywake_raven/dtw*.so \
+        ${APP_DIR}/rhasspy-wake-raven/rhasspywake_raven/
 
 RUN cd ${APP_DIR}/.venv && \
     find . -type f -name 'g2p.fst.gz' -exec gunzip -f {} \;
