@@ -70,6 +70,8 @@ is_deepspeech_enabled=UNKNOWN
 deepspeech_arch=NONE
 deepspeech_from=prebuilt
 
+is_vosk_enabled=UNKNOWN
+
 dnl ------------------
 dnl Intent Recognition
 dnl ------------------
@@ -137,6 +139,8 @@ AS_CASE([$host_cpu],
         is_nanotts_enabled=yes
 
         is_larynx_enabled=no
+
+        is_vosk_enabled=no
     ],
     [armv7l],[
         dnl ARM 32-bit v7 (Pi 2/3/4)
@@ -169,6 +173,8 @@ AS_CASE([$host_cpu],
 
         is_larynx_enabled=yes
         larynx_arch=armv7l
+
+        is_vosk_enabled=yes
     ],
     [aarch64],[
         dnl ARM 64-bit (Pi 3/4)
@@ -201,6 +207,8 @@ AS_CASE([$host_cpu],
 
         is_larynx_enabled=yes
         larynx_arch=aarch64
+
+        is_vosk_enabled=no
     ],
     [x86_64],[
         dnl x86_64 compatible
@@ -233,6 +241,8 @@ AS_CASE([$host_cpu],
 
         is_larynx_enabled=yes
         larynx_arch=x86_64
+
+        is_vosk_enabled=yes
     ])
 
 dnl ---------------------------------------------------------------------------
@@ -333,8 +343,13 @@ AC_ARG_ENABLE([julius],
 
 dnl Mozilla's DeepSpeech
 AC_ARG_ENABLE([deepspeech],
-    AS_HELP_STRING([--disable-deepspeech],
-        [disable installation of deepspeech speech to text system]))
+AS_HELP_STRING([--disable-deepspeech],
+[disable installation of deepspeech speech to text system]))
+
+dnl Vosk
+AC_ARG_ENABLE([vosk],
+    AS_HELP_STRING([--disable-vosk],
+        [disable installation of vosk speech to text system]))
 
 dnl Speech to text meta
 AC_ARG_ENABLE([speech-to-text],
@@ -712,6 +727,8 @@ AS_IF([test "x$is_deepspeech_enabled" = xyes],
 AS_ECHO(["  deepspeech: ${is_deepspeech_enabled} (${deepspeech_arch}, ${deepspeech_from})"]),
 AS_ECHO(["  deepspeech: ${is_deepspeech_enabled}"]))
 
+AS_ECHO(["  vosk: ${is_vosk_enabled}"])
+
 AS_IF([test "x$is_julius_enabled" = xyes],
 AS_ECHO(["  julius: ${is_julius_enabled} (${docker_arch}, ${julius_from})"]),
 AS_ECHO(["  julius: ${is_julius_enabled}"]))
@@ -796,6 +813,8 @@ AC_SUBST([ENABLE_WAVENET], [$is_wavenet_enabled])
 
 AC_SUBST([LARYNX_ARCH], [$larynx_arch])
 AC_SUBST([ENABLE_LARYNX], [$is_larynx_enabled])
+
+AC_SUBST([ENABLE_VOSK], [$is_vosk_enabled])
 
 AC_SUBST([IN_PLACE], [$is_in_place])
 

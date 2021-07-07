@@ -625,6 +625,7 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 IN_PLACE
+ENABLE_VOSK
 ENABLE_LARYNX
 LARYNX_ARCH
 ENABLE_WAVENET
@@ -746,6 +747,7 @@ enable_pocketsphinx
 enable_kaldi
 enable_julius
 enable_deepspeech
+enable_vosk
 enable_speech_to_text
 enable_fuzzywuzzy
 enable_snips
@@ -1418,6 +1420,7 @@ Optional Features:
   --disable-julius        disable installation of julius speech to text system
   --disable-deepspeech    disable installation of deepspeech speech to text
                           system
+  --disable-vosk          disable installation of vosk speech to text system
   --disable-speech-to-text
                           disable installation of all speech to text systems
   --disable-fuzzywuzzy    disable installation of fuzzywuzzy intent
@@ -3770,6 +3773,8 @@ is_deepspeech_enabled=UNKNOWN
 deepspeech_arch=NONE
 deepspeech_from=prebuilt
 
+is_vosk_enabled=UNKNOWN
+
 
 is_fuzzywuzzy_enabled=yes
 is_snips_enabled=no
@@ -3827,6 +3832,8 @@ case $host_cpu in #(
         is_nanotts_enabled=yes
 
         is_larynx_enabled=no
+
+        is_vosk_enabled=no
      ;; #(
   armv7l) :
 
@@ -3859,6 +3866,8 @@ case $host_cpu in #(
 
         is_larynx_enabled=yes
         larynx_arch=armv7l
+
+        is_vosk_enabled=yes
      ;; #(
   aarch64) :
 
@@ -3891,6 +3900,8 @@ case $host_cpu in #(
 
         is_larynx_enabled=yes
         larynx_arch=aarch64
+
+        is_vosk_enabled=no
      ;; #(
   x86_64) :
 
@@ -3923,6 +3934,8 @@ case $host_cpu in #(
 
         is_larynx_enabled=yes
         larynx_arch=x86_64
+
+        is_vosk_enabled=yes
      ;; #(
   *) :
      ;;
@@ -4030,6 +4043,12 @@ fi
 # Check whether --enable-deepspeech was given.
 if test "${enable_deepspeech+set}" = set; then :
   enableval=$enable_deepspeech;
+fi
+
+
+# Check whether --enable-vosk was given.
+if test "${enable_vosk+set}" = set; then :
+  enableval=$enable_vosk;
 fi
 
 
@@ -5117,6 +5136,8 @@ else
   $as_echo "  deepspeech: ${is_deepspeech_enabled}"
 fi
 
+$as_echo "  vosk: ${is_vosk_enabled}"
+
 if test "x$is_julius_enabled" = xyes; then :
   $as_echo "  julius: ${is_julius_enabled} (${docker_arch}, ${julius_from})"
 else
@@ -5237,6 +5258,9 @@ ENABLE_WAVENET=$is_wavenet_enabled
 LARYNX_ARCH=$larynx_arch
 
 ENABLE_LARYNX=$is_larynx_enabled
+
+
+ENABLE_VOSK=$is_vosk_enabled
 
 
 IN_PLACE=$is_in_place
