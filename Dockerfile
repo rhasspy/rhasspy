@@ -13,27 +13,20 @@
 #
 # armv6 images (Raspberry Pi 0/1) are derived from balena base images:
 # https://www.balena.io/docs/reference/base-images/base-images/#balena-base-images
-#
-# The IFDEF statements are handled by docker/preprocess.sh. These are just
-# comments that are uncommented if the environment variable after the IFDEF is
-# not empty.
-#
-# The build-docker.sh script will optionally add apt/pypi proxies running locally:
-# * apt - https://docs.docker.com/engine/examples/apt-cacher-ng/ 
-# * pypi - https://github.com/jayfk/docker-pypi-cache
 # -----------------------------------------------------------------------------
 
 # Build stage for amd64/armv7/arm64
 FROM debian:buster as build-debian
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF APT_PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
 
 RUN --mount=type=cache,id=apt-build,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get update && \
     apt-get install --no-install-recommends --yes \
         python3 python3-dev python3-setuptools python3-pip python3-venv \
@@ -46,30 +39,37 @@ RUN --mount=type=cache,id=apt-build,target=/var/cache/apt \
 FROM build-debian as build-amd64
 
 FROM build-debian as build-armv7
+ARG TARGETARCH
+ARG TARGETVARIANT
 
-RUN --mount=type=cache,id=apt-build-armv7,target=/var/cache/apt \
+RUN --mount=type=cache,id=apt-build,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get install --no-install-recommends --yes \
-        libatlas-base-dev libopenblas-dev gfortran
+        libatlas-base-dev libopenblas-dev gfortran libffi-dev
 
 FROM build-debian as build-arm64
+ARG TARGETARCH
+ARG TARGETVARIANT
 
-RUN --mount=type=cache,id=apt-build-arm64,target=/var/cache/apt \
+RUN --mount=type=cache,id=apt-build,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get install --no-install-recommends --yes \
-        libatlas-base-dev libopenblas-dev gfortran
+        libatlas-base-dev libopenblas-dev gfortran libffi-dev
 
 # -----------------------------------------------------------------------------
 
 # Build stage for armv6
 FROM balenalib/raspberry-pi-debian-python:3.7-buster-build-20210225 as build-armv6
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF APT_PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
 
-RUN --mount=type=cache,id=apt-build-armv6,target=/var/cache/apt \
+RUN --mount=type=cache,id=apt-build,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     install_packages \
         swig libatlas-base-dev portaudio19-dev \
         gfortran libopenblas-dev liblapack-dev cython \
@@ -106,6 +106,7 @@ COPY rhasspy-asr-pocketsphinx/requirements.txt ${BUILD_DIR}/rhasspy-asr-pocketsp
 COPY rhasspy-asr-pocketsphinx-hermes/requirements.txt ${BUILD_DIR}/rhasspy-asr-pocketsphinx-hermes/
 COPY rhasspy-asr-kaldi/requirements.txt ${BUILD_DIR}/rhasspy-asr-kaldi/
 COPY rhasspy-asr-kaldi-hermes/requirements.txt ${BUILD_DIR}/rhasspy-asr-kaldi-hermes/
+COPY rhasspy-asr-vosk-hermes/requirements.txt ${BUILD_DIR}/rhasspy-asr-vosk-hermes/
 COPY rhasspy-dialogue-hermes/requirements.txt ${BUILD_DIR}/rhasspy-dialogue-hermes/
 COPY rhasspy-fuzzywuzzy/requirements.txt ${BUILD_DIR}/rhasspy-fuzzywuzzy/
 COPY rhasspy-fuzzywuzzy-hermes/requirements.txt ${BUILD_DIR}/rhasspy-fuzzywuzzy-hermes/
@@ -144,11 +145,6 @@ COPY scripts/install/ ${BUILD_DIR}/scripts/install/
 
 COPY RHASSPY_DIRS ${BUILD_DIR}/
 
-# IFDEF PYPI_PROXY
-#! ENV PIP_INDEX_URL=http://${PYPI_PROXY_HOST}:${PYPI_PROXY_PORT}/simple/
-#! ENV PIP_TRUSTED_HOST=${PYPI_PROXY_HOST}
-# ENDIF
-
 RUN --mount=type=cache,id=pip-build,target=/root/.cache/pip \
     export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}/shared -f ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}" && \
     export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
@@ -164,6 +160,7 @@ RUN --mount=type=cache,id=pip-build,target=/root/.cache/pip \
     make && \
     make install
 
+# Copy pre-compiled extension for Raven
 RUN mkdir -p ${APP_DIR}/rhasspy-wake-raven/rhasspywake_raven && \
     cp -f ${BUILD_DIR}/rhasspy-wake-raven/rhasspywake_raven/dtw*.so \
         ${APP_DIR}/rhasspy-wake-raven/rhasspywake_raven/
@@ -171,19 +168,23 @@ RUN mkdir -p ${APP_DIR}/rhasspy-wake-raven/rhasspywake_raven && \
 RUN cd ${APP_DIR}/.venv && \
     find . -type f -name 'g2p.fst.gz' -exec gunzip -f {} \;
 
+# Clean up
+RUN rm -f /etc/apt/apt.conf.d/01cache
+
 # -----------------------------------------------------------------------------
 
 # Run stage for amd64/armv7/arm64
 FROM debian:buster as run-debian
-
-# IFDEF APT_PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
+
 RUN --mount=type=cache,id=apt-run,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get update && \
     apt-get install --yes --no-install-recommends \
         python3 libpython3.7 python3-pip python3-setuptools python3-distutils \
@@ -197,10 +198,6 @@ RUN --mount=type=cache,id=apt-run,target=/var/cache/apt \
         libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3 \
         libatomic1
 
-# IFDEF APT_PROXY
-#! RUN rm -f /etc/apt/apt.conf.d/01proxy
-# ENDIF
-
 FROM run-debian as run-amd64
 
 FROM run-debian as run-armv7
@@ -211,15 +208,16 @@ FROM run-debian as run-arm64
 
 # Run stage for armv6
 FROM balenalib/raspberry-pi-debian-python:3.7-buster-run-20210201 as run-armv6
-
-# IFDEF APT_PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN --mount=type=cache,id=apt-run-armv6,target=/var/cache/apt \
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
+
+RUN --mount=type=cache,id=apt-run,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     install_packages \
         python3 libpython3.7 python3-pip python3-setuptools \
         libportaudio2 libatlas3-base libgfortran4 \
@@ -230,9 +228,8 @@ RUN --mount=type=cache,id=apt-run-armv6,target=/var/cache/apt \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libopenblas-base
 
-# IFDEF APT_PROXY
-#! RUN rm -f /etc/apt/apt.conf.d/01proxy
-# ENDIF
+# Clean up
+RUN rm -f /etc/apt/apt.conf.d/01cache
 
 # -----------------------------------------------------------------------------
 # Run
@@ -241,6 +238,8 @@ RUN --mount=type=cache,id=apt-run-armv6,target=/var/cache/apt \
 ARG TARGETARCH
 ARG TARGETVARIANT
 FROM run-$TARGETARCH$TARGETVARIANT
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV APP_DIR=/usr/lib/rhasspy
 COPY --from=build ${APP_DIR}/ ${APP_DIR}/
@@ -264,6 +263,7 @@ COPY rhasspy-asr-pocketsphinx/ ${APP_DIR}/rhasspy-asr-pocketsphinx/
 COPY rhasspy-asr-pocketsphinx-hermes/ ${APP_DIR}/rhasspy-asr-pocketsphinx-hermes/
 COPY rhasspy-asr-kaldi/ ${APP_DIR}/rhasspy-asr-kaldi/
 COPY rhasspy-asr-kaldi-hermes/ ${APP_DIR}/rhasspy-asr-kaldi-hermes/
+COPY rhasspy-asr-vosk-hermes/ ${APP_DIR}/rhasspy-asr-vosk-hermes/
 COPY rhasspy-dialogue-hermes/ ${APP_DIR}/rhasspy-dialogue-hermes/
 COPY rhasspy-fuzzywuzzy/ ${APP_DIR}/rhasspy-fuzzywuzzy/
 COPY rhasspy-fuzzywuzzy-hermes/ ${APP_DIR}/rhasspy-fuzzywuzzy-hermes/

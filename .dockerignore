@@ -89,6 +89,14 @@
 !rhasspy-asr-kaldi-hermes/README.md
 !rhasspy-asr-kaldi-hermes/MANIFEST.in
 
+!rhasspy-asr-vosk-hermes/bin/rhasspy-asr-vosk-hermes
+!rhasspy-asr-vosk-hermes/rhasspyasr_vosk_hermes/*.py
+!rhasspy-asr-vosk-hermes/setup.py
+!rhasspy-asr-vosk-hermes/requirements.txt
+!rhasspy-asr-vosk-hermes/VERSION
+!rhasspy-asr-vosk-hermes/README.md
+!rhasspy-asr-vosk-hermes/MANIFEST.in
+
 !rhasspy-dialogue-hermes/bin/rhasspy-dialogue-hermes
 !rhasspy-dialogue-hermes/rhasspydialogue_hermes/*.py
 !rhasspy-dialogue-hermes/setup.py
