@@ -208,7 +208,7 @@ AS_CASE([$host_cpu],
         is_larynx_enabled=yes
         larynx_arch=aarch64
 
-        is_vosk_enabled=no
+        is_vosk_enabled=yes
     ],
     [x86_64],[
         dnl x86_64 compatible
