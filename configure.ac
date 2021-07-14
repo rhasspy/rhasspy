@@ -194,7 +194,7 @@ AS_CASE([$host_cpu],
 
         is_julius_enabled=yes
 
-        is_deepspeech_enabled=no
+        is_deepspeech_enabled=yes
         deepspeech_from=NONE
 
         is_opengrm_enabled=yes
