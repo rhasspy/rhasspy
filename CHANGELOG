@@ -16,6 +16,7 @@
 
 - Websocket queues are retained between restarts (thanks sabeechen)
 - Avoid skipping 0 value in fsticuffs intent recognition
+- Fix fsticuffs bug for dropping multiple words: [foo | bar]:
 
 ## Changed
 
