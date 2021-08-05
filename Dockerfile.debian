@@ -13,7 +13,8 @@ RUN --mount=type=cache,target=/var/cache/apt \
         build-essential swig portaudio19-dev \
         libatlas-base-dev libopenblas-dev gfortran \
         gfortran libopenblas-dev liblapack-dev cython \
-        curl ca-certificates
+        curl ca-certificates \
+	libffi-dev
 
 ENV NUM_JOBS=8
 
@@ -167,14 +168,14 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 
 # Clean up
 RUN cd ${APP_DIR} && \
-    find . -depth -type d -name '.git' -exec rm -rf {} \\; && \
-    find . -depth -type d -name '__pycache__' -exec rm -rf {} \\; && \
-    find . -type f -name 'g2p.fst.gz' -exec gunzip -f {} \\;
+    find . -depth -type d -name '.git' -exec rm -rf {} \; && \
+    find . -depth -type d -name '__pycache__' -exec rm -rf {} \; && \
+    find . -type f -name 'g2p.fst.gz' -exec gunzip -f {} \;
 
 COPY VERSION ${BUILD_DIR}/
 COPY debian/control.in /
 
-RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\\+=//')" && \
+RUN export DEBIAN_ARCH="$(dpkg-architecture | grep DEB_BUILD_ARCH= | sed -e 's/[^=]\+=//')" && \
     export VERSION="$(cat ${BUILD_DIR}/VERSION)" && \
     mkdir -p ${BUILD_DIR}/rhasspy/DEBIAN && \
     sed -e s"/@VERSION@/${VERSION}/" -e "s/@DEBIAN_ARCH@/${DEBIAN_ARCH}/" < /control.in > ${BUILD_DIR}/rhasspy/DEBIAN/control

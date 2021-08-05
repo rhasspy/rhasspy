@@ -196,7 +196,8 @@ RUN --mount=type=cache,id=apt-run,target=/var/cache/apt \
         gstreamer1.0-tools gstreamer1.0-plugins-good \
         libsndfile1 libgomp1 libatlas3-base libgfortran4 libopenblas-base \
         libjbig0 liblcms2-2 libopenjp2-7 libtiff5 libwebp6 libwebpdemux2 libwebpmux3 \
-        libatomic1
+        libatomic1 \
+        libspeex1 libspeex-dev libspeexdsp1 libspeexdsp-dev
 
 FROM run-debian as run-amd64
 
