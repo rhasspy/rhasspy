@@ -149,13 +149,6 @@ Community contributions are welcomed! There are many different [ways to contribu
 
 ---
 
-<p>This project is supported by:</p>
-<p>
-  <a href="https://www.digitalocean.com/">
-    <img src="https://opensource.nyc3.cdn.digitaloceanspaces.com/attribution/assets/SVG/DO_Logo_horizontal_blue.svg" width="201px">
-  </a>
-</p>
-
 ## Development Status
 
 The various repositories also have their own issue tracker to follow and discuss development of these specific components. Here's the status of all repositories:
