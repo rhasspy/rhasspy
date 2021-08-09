@@ -183,19 +183,22 @@ If you just want to use Rhasspy for general speech to text, you can set `speech_
 
 When you use "text_fst" for Kaldi's [language model type](#language-model-type), misspoken words outside of your vocabulary are usually forced to fit. Even with [confidence measures](#asr-confidence), it can be difficult to tell the difference between a correctly spoken sentence and random words.
 
-As of version 2.5.11, setting `speech_to_text.kaldi.allow_unknown_words` to `true` will enable a new "unknown words" mode for Kaldi (in the web interface, this option is titled "Replace unknown words with `<unk>`"). When "unknown words" mode is enabled, training will take longer and produce two grammars:
+As of version 2.5.11, setting `speech_to_text.kaldi.allow_unknown_words` to `true` will enable a new "unknown words" mode for Kaldi (in the web interface, this option is titled "Replace unknown words with `<unk>`"):
+
+![Settings for unknown words in Kaldi](img/kaldi-unknown-words-settings.png)
+
+When "unknown words" mode is enabled, training will take longer and produce two grammars:
 
 1. An "unknown words" grammar made from a list of frequently-spoken words in your profile's language
-2. A grammar created from your `sentences.ini` file, but with every word optionally being from the "unknown words" set
+2. A grammar created from your `sentences.ini` file, but with an optional "sentence" made entirely of "unknown words" 
 
-Combined, these two grammars allow Kaldi to generate `<unk>` words if you speak a word outside of your `sentences.ini` file. Frequently-spoken words are used under the assumption that they will contain a good mix of phonemes, and therefore "catch" most misspoken words.
+Combined, these two grammars allow Kaldi to generate `<unk>` words if you speak a sentence outside of your `sentences.ini` file. Frequently-spoken words are used under the assumption that they will contain a good mix of phonemes, and therefore "catch" most misspoken words.
 
 A few profile settings are available to tune the overall process:
 
 * `speech_to_text.kaldi.unknown_words_probability`
-    * Probability of an unknown word occurring for each spoken word in `sentences.ini`
-    * Defaults to 1e-5
-    * Decrease if you get too many `<unk>` words, increase if you get too few
+    * Probability of of an unknown sentence being spoken (defaults to 1e-5)
+    * Decrease if you get too many false positives for unknown sentences
 * `speech_to_text.kaldi.max_frequent_words`
     * Number of frequent words to use during training (default: 100)
     * Increasing this number will also increase training time
@@ -208,7 +211,31 @@ A few profile settings are available to tune the overall process:
     * Path to a text file containing frequently-spoken words, one per line
     * A file named `frequent_words.txt` is already included in all profiles
     
-After speech recognition, it will be the [intent recognizer's](#intent-recognition) job to decide what to do with unknown words in the transcription. By default, the word `<unk>` is emitted in place of unknown words (this can be changed with `speech_to_text.kaldi.unknown_token`). [fsticuffs](intent-recognition.md#fsticuffs), for example, will skip over `<unk>` words during recognition, which usually still results in a failed recognition.
+After speech recognition, it will be the [intent recognizer's](#intent-recognition) job to decide what to do with unknown words in the transcription. By default, the word `<unk>` is emitted in place of unknown words (this can be changed with `speech_to_text.kaldi.unknown_token`). [fsticuffs](intent-recognition.md#fsticuffs), for example, will produce a failed recognition if any `<unk>` words are present (see `intent.fsticuffs.failure_token`).
+
+### Cancel Word
+
+As of version 2.5.11, a "cancel" word can be given to terminate a (Kaldi) voice command at any time:
+
+![Settings for cancel word in Kaldi](img/kaldi-cancel-word-settings.png)
+
+Under the hood, this creates an alternative branch for each word in you `sentences.ini` that accepts the "cancel" word (`speech_to_text.kaldi.cancel_word`) and emits `<unk>` (or whatever `speech_to_text.kaldi.unknown_token` is set to). This will increase training and recognition time.
+
+There are three settings associated with this feature:
+
+* `speech_to_text.kaldi.cancel_word`
+    * Word spoken at any time to terminate voice command
+    * Should not be one of the words you use in `sentences.ini`
+* `speech_to_text.kaldi.cancel_probability`
+    * Probability of "cancel" word being spoken instead of the next word in your voice command
+    * Defaults to 1e-2
+    * Decrease if the "cancel" word is being recognized too often
+* `speech_to_text.kaldi.unknown_token`
+    * Transcription word emitted when an "cancel" word is encountered
+    * Defaults to `<unk>`
+    * Can be empty!
+
+After cancellation, it will be the [intent recognizer's](#intent-recognition) job to decide what to do with the transcription. By default, the word `<unk>` is emitted for the "cancel word", which will cause [fsticuffs](intent-recognition.md#fsticuffs), to produce a failed recognition (see `intent.fsticuffs.failure_token`).
 
 Implemented by [rhasspy-asr-kaldi-hermes](https://github.com/rhasspy/rhasspy-asr-kaldi-hermes)
 
