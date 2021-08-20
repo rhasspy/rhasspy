@@ -6,6 +6,7 @@
 - Changeable "cancel" word that can be spoken at any time to trigger a recognition failure
 - Preliminary support for Arabic (ar)
 - Initial support for Vosk ASR (English, German, French, Spanish, Italian, Russian, Portuguese, Vietnamese, Arabic)
+- New Larynx voices for German, Dutch, and English
 - Multiple audio streams for Precise/Porcupine/Snowboy/Pocketsphinx wake word service (thanks Romkabouter)
 - Raven speed optimizations for dynamic time warping code (thanks maxbachmann)
 - Dialogue manager will convert audio files to WAV using soundfile and audioread
