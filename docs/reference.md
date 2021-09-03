@@ -775,6 +775,7 @@ All available profile sections and settings are listed below:
     * `site_id` - one or more Hermes site IDs (comma separated). First ID is used for new messages
 * `dialogue` - configuration for Hermes dialogue manager
     * `system` - which dialogue manager to use (`rhasspy`, `hermes`, or `dummy`)
+    * `group_separator` - separator to use when grouping satellites (e.g., `bedroom.front`, `bedroom.back`)
 * `download` - configuration for profile file downloading
     * `url_base` - base URL to download profile artifacts (defaults to Github)
     * `conditions` - profile settings that will trigger file downloads
