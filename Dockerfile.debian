@@ -1,18 +1,19 @@
-FROM debian:buster-slim as base
+FROM debian:buster as base
+ARG TARGETARCH
+ARG TARGETVARIANT
 
 ENV LANG C.UTF-8
 ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF APT_PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
 
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,id=apt-base,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get update && \
     apt-get install --no-install-recommends --yes \
         build-essential swig portaudio19-dev \
         libatlas-base-dev libopenblas-dev gfortran \
-        gfortran libopenblas-dev liblapack-dev cython \
+        liblapack-dev cython \
         curl ca-certificates \
 	libffi-dev
 
@@ -32,15 +33,16 @@ FROM base as base-arm64
 FROM balenalib/raspberry-pi-debian:buster-build-20210225 as base-armv6
 
 ENV LANG C.UTF-8
+ENV DEBIAN_FRONTEND=noninteractive
 
-# IFDEF APT_PROXY
-#! RUN echo 'Acquire::http { Proxy "http://${APT_PROXY_HOST}:${APT_PROXY_PORT}"; };' >> /etc/apt/apt.conf.d/01proxy
-# ENDIF
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
 
-RUN --mount=type=cache,target=/var/cache/apt \
+RUN --mount=type=cache,id=apt-build,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     install_packages \
         swig portaudio19-dev libatlas-base-dev \
-        curl ca-certificates
+        curl ca-certificates \
+        gfortran
 
 ENV NUM_JOBS=8
 
@@ -54,8 +56,13 @@ ENV APP_DIR=${BUILD_DIR}/rhasspy/usr/lib/rhasspy
 ARG TARGETARCH
 ARG TARGETVARIANT
 FROM base-$TARGETARCH$TARGETVARIANT as python
+ARG TARGETARCH
+ARG TARGETVARIANT
+
+RUN echo "Dir::Cache var/cache/apt/${TARGETARCH}${TARGETVARIANT};" > /etc/apt/apt.conf.d/01cache
 
 RUN --mount=type=cache,target=/var/cache/apt \
+    mkdir -p /var/cache/apt/${TARGETARCH}${TARGETVARIANT}/archives/partial && \
     apt-get update && \
     apt-get install --yes --no-install-recommends \
         build-essential \
@@ -150,7 +157,7 @@ COPY etc/shflags ${APP_DIR}/etc/
 COPY etc/wav/ ${APP_DIR}/etc/wav/
 COPY README.md LICENSE RHASSPY_DIRS ${APP_DIR}/
 
-RUN --mount=type=cache,target=/root/.cache/pip \
+RUN --mount=type=cache,id=pip-rhasspy,target=/root/.cache/pip \
     export PIP_INSTALL_ARGS="-f ${DOWNLOAD_DIR}/shared -f ${DOWNLOAD_DIR}/${TARGETARCH}${TARGETVARIANT}" && \
     export PIP_PRE_PREINSTALL_PACKAGES='cython' && \
     export PIP_PREINSTALL_PACKAGES='numpy==1.20.1 scipy==1.5.1' && \
@@ -159,6 +166,7 @@ RUN --mount=type=cache,target=/root/.cache/pip \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} detect-simd~=0.2.0"; \
     fi && \
     if [ ! "${TARGETARCH}${TARGETVARIANT}" = 'armv6' ]; then \
+        export PIP_VERSION='pip'; \
         export PIP_PREINSTALL_PACKAGES="${PIP_PREINSTALL_PACKAGES} scikit-learn==0.23.2"; \
     fi && \
     export POCKETSPHINX_FROM_SRC=no && \
