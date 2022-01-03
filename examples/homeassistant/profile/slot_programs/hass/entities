@@ -45,7 +45,7 @@ curl -X GET \
     while read -r entity_id friendly_name;
     do
         # Debug to stderr
-        echo "${entity_id} ${friendly_name}" >&2
+        # echo "${entity_id} ${friendly_name}" >&2
 
         if [[ ! -z "$1" ]]; then
             # Filter based on domain
