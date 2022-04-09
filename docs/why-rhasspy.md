@@ -40,7 +40,7 @@ However, these disadvantages come with some major upsides:
 
 ### Base Station and Satellites
 
-Rhasspy can be split across multiple computers, such as a [server with satellites](http://localhost:8000/tutorials/#server-with-satellites). This configuration lets you run Rhasspy's "smarts" on a more powerful base station while audio recording and playback are handled on one or more satellites around your house.
+Rhasspy can be split across multiple computers, such as a [server with satellites](tutorials.md#server-with-satellites). This configuration lets you run Rhasspy's "smarts" on a more powerful base station while audio recording and playback are handled on one or more satellites around your house.
 
 ![Rhasspy base station and satellite](img/why-rhasspy/local-satellite.svg)
 

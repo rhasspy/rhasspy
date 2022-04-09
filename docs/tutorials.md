@@ -482,7 +482,7 @@ After the Pi reboots, log into it again (either locally or via SSH) and pull the
 $ docker pull rhasspy/rhasspy
 ```
 
-If you're running Rhasspy on a Raspberry Pi Zero, please follow [these instructions](http://localhost:8000/installation/#raspberry-pi-zero) instead.
+If you're running Rhasspy on a Raspberry Pi Zero, please follow [these instructions](installation.md#raspberry-pi-zero) instead.
 
 After downloading and extracting the Rhasspy Docker image, start it running with this command:
 
