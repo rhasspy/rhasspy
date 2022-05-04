@@ -239,7 +239,7 @@ $ make install
 
 If you use [Home Assistant](https://www.home-assistant.io), you can install Rhasspy as a [Hass.io add-on](https://www.home-assistant.io/addons/). Follow the [installation instructions for Hass.io](https://www.home-assistant.io/hassio/installation/) before proceeding.
 
-To install the add-on, add [this Hass.IO Add-On Repository](https://github.com/synesthesiam/hassio-addons) in the Add-On Store, refresh, then install the "Rhasspy Assistant **2.5**" under “Synesthesiam Hass.IO Add-Ons” (all the way at the bottom of the Add-On Store screen).
+To install the add-on, add [this Hass.IO Add-On Repository](https://github.com/rhasspy/hassio-addons) in the Add-On Store, refresh, then install the "Rhasspy Assistant" under “Rhasspy Hass.IO Add-Ons” (all the way at the bottom of the Add-On Store screen).
 
 ![Synesthesiam add-on store](img/hass-io-store.png)
 
