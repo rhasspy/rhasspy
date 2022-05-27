@@ -247,10 +247,6 @@ Before starting the add-on, make sure to give it access to your microphone and s
 
 ![Audio settings for Hass.io](img/hass-io-audio.png)
 
-### Updating Hass.IO Add-On
-
-You should receive notifications when a new version of Rhasspy is available for Hass.IO. Follow the instructions from Hass.IO on how to update the add-on.
-
 ---
 
 ## Windows Subsystem for Linux (WSL)
