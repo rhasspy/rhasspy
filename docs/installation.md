@@ -235,7 +235,7 @@ $ make install
 
 ---
 
-## Hass.io
+## Home Assistant
 
 Rhasspy can be installed as a [Home Assistant](https://www.home-assistant.io) add-on using the following button:
 
