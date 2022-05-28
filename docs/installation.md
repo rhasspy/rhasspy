@@ -235,21 +235,17 @@ $ make install
 
 ---
 
-## Hass.io
+## Home Assistant
 
-If you use [Home Assistant](https://www.home-assistant.io), you can install Rhasspy as a [Hass.io add-on](https://www.home-assistant.io/addons/). Follow the [installation instructions for Hass.io](https://www.home-assistant.io/hassio/installation/) before proceeding.
+Rhasspy can be installed as a [Home Assistant](https://www.home-assistant.io) add-on using the following button:
 
-To install the add-on, add [this Hass.IO Add-On Repository](https://github.com/synesthesiam/hassio-addons) in the Add-On Store, refresh, then install the "Rhasspy Assistant **2.5**" under “Synesthesiam Hass.IO Add-Ons” (all the way at the bottom of the Add-On Store screen).
+[![Open your Home Assistant instance and show the dashboard of a Supervisor add-on.](https://my.home-assistant.io/badges/supervisor_addon.svg)](https://my.home-assistant.io/redirect/supervisor_addon/?repository_url=https%3A%2F%2Fgithub.com%2Frhasspy%2Fhassio-addons&addon=47701997_rhasspy)
 
 ![Synesthesiam add-on store](img/hass-io-store.png)
 
 Before starting the add-on, make sure to give it access to your microphone and speakers:
 
 ![Audio settings for Hass.io](img/hass-io-audio.png)
-
-### Updating Hass.IO Add-On
-
-You should receive notifications when a new version of Rhasspy is available for Hass.IO. Follow the instructions from Hass.IO on how to update the add-on.
 
 ---
 
