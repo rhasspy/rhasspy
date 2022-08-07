@@ -8,7 +8,7 @@
 # Assumes that you have configured Home Assistant in Rhasspy already, and that a
 # long-lived access token is being used for authentication.
 #
-# Each argument to the script in the name of a domain to filter on.
+# Each argument to the script is the name of a domain to filter on.
 # For example: $hass/entities,light,switch will only return entities whose ids
 # start with "light." and "switch."
 # If no arguments are provided, all entities will be returned.
