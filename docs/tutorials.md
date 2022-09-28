@@ -556,7 +556,7 @@ In this tutorial, we will configure **two instances** of Rhasspy: one as a satel
 
 You can connect satellites to a Rhasspy base station *without* needing to worry about a shared MQTT broker or conflicting site ids. Rhasspy's built-in [HTTP API](reference.md#http-api) allows for any external client, including a satellite, to do request speech to text, intent recognition, etc. from another instance of Rhasspy.
 
-In this model, the satellite runs it's own [dialogue manager](services.md#dialogue-manager) and a "remote" version of each service that it will requesting from the base station. As far as the satellite is concerned, it's a completely isolated instance of Rhasspy that just happens to have some functionality done externally. From the base station's perspective, the satellite is just another HTTP client making API requests.
+In this model, the satellite runs its own [dialogue manager](services.md#dialogue-manager) and a "remote" version of each service that it will request from the base station. As far as the satellite is concerned, it's a completely isolated instance of Rhasspy that just happens to have some functionality done externally. From the base station's perspective, the satellite is just another HTTP client making API requests.
 
 ![Flow of messages in HTTP base station/satellite set up](img/master-satellite/http-flow.png)
 
