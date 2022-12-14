@@ -599,7 +599,7 @@ The satellite web UI will be accessible at http://rhasspy-satellite:12101 where 
 
 #### Satellite Settings
 
-On your satellite, set the speech to text, intent recognition, and (optionally) the text to speech services to "Remote HTTP". Make sure to also set "Dialogue Management" to "Rhasspy", and enable audio recording, wake word, and audio playing.
+On your satellite, start by changing your "siteId" in the Settings to "satellite. Afterwards, set the speech to text, intent recognition, and (optionally) the text to speech services to "Remote HTTP". Make sure to also set "Dialogue Management" to "Rhasspy", and enable audio recording, wake word, and audio playing.
 
 ![Satellite settings for remote HTTP](img/master-satellite/satellite-http-settings.png)
 
@@ -616,6 +616,10 @@ Your base station needs to have speech to text, intent recognition, and (optiona
 ![Base station settings for remote HTTP](img/master-satellite/master-http-settings.png)
 
 You do not need to run a dialogue manager on the base station, since wake/ASR/NLU coordinate will be done on the satellite.
+
+Under **each service**, add the site id of *each* of your satellites to the "Satellite siteIds" text box (separated by commas). This will cause that particular service to response to HTTP requests coming from that satellite.
+
+![Base station satellite ids for remote HTTP](img/master-satellite/master-http-satellite-ids.png)
 
 #### Testing
 
