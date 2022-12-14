@@ -694,7 +694,7 @@ For your base station, also set MQTT to "External" and configure the details of 
 
 ![Base station settings for Hermes MQTT](img/master-satellite/master-mqtt-settings.png)
 
- Under **each service** (including Dialogue Management), add the site id of *each* of your satellites to the "Satellite siteIds" text box (separated by commas). This will cause that particular service to response to MQTT messages coming from that satellite.
+Under **each service** (including Dialogue Management), add the site id of *each* of your satellites to the "Satellite siteIds" text box (separated by commas). This will cause that particular service to response to MQTT messages coming from that satellite.
 
 ![Base station satellite ids for Hermes MQTT](img/master-satellite/master-mqtt-satellite-ids.png)
 
