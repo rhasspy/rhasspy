@@ -43,6 +43,7 @@ Rhasspy is <strong>optimized for</strong>:
     
 ## Learn More
 
+* [Rhasspy A-M Video Series](https://www.youtube.com/watch?v=dI5tS3sNZD0) by [Thorsten Müller](https://www.thorsten-voice.de/)
 * [Video Demonstration](https://www.youtube.com/watch?v=IsAlz76PXJQ)
     * [Rhasspy In-Depth Series](https://www.youtube.com/playlist?list=PL0SUCSMtqzGE9z3oRFoPcz7wIM5XdIzQr)
 * [Documentation](https://rhasspy.readthedocs.io/en/latest/)
