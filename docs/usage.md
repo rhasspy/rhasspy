@@ -184,13 +184,13 @@ Rhasspy supports multiple websocket event endpoints:
     * Speech transcription
 * [`/api/mqtt`](reference.md#api_ws_mqtt)
     * Send/receive raw MQTT messages
-    
+
 #### WebSocket Intents
 
 Whenever a voice command is recognized, Rhasspy emits JSON events over a websocket connection available at `ws://YOUR_SERVER:12101/api/events/intent` (replace `ws://` with `wss://` if you're using [secure hosting](usage.md#secure-hosting-with-https)).
 You can listen to these events in a [Node-RED](https://nodered.org) flow, and easily add offline, private voice commands to your home automation set up!
 
-For the `ChangLightState` intent from the [RGB Light Example](index.md#rgb-light-example), Rhasspy will emit a JSON event like this over the websocket:
+For the `ChangeLightState` intent from the [RGB Light Example](index.md#rgb-light-example), Rhasspy will emit a JSON event like this over the websocket:
 
 ```json
 {
