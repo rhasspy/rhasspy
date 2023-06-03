@@ -11,6 +11,7 @@ larynx~=0.3.0
 marko==1.0.1
 mkdocs >= 1.0.4
 networkx==2.4
+numpy==1.20.1
 num2words==0.5.10
 paho-mqtt==1.5.0
 pocketsphinx==0.1.15
@@ -22,6 +23,7 @@ python_speech_features==0.6
 pyyaml==5.4
 quart==0.11.3
 quart-cors==0.3.0
+markupsafe==2.0.1
 rapidfuzz==1.0.0
 scipy==1.5.1
 swagger-ui-py==0.2.1
