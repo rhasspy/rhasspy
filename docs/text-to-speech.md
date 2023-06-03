@@ -222,6 +222,16 @@ services:
       - 5500:5500
 ```
 
+To run OpenTTS with a specific command executed (in this example, excluding `eSpeak` (robotic voices)), add:
+```yaml
+services:
+  opentts:
+    image: synesthesiam/opentts
+    ports:
+      - 5500:5500
+    command: '--no-espeak'
+```
+
 To run the full suite of text to speech systems offered by OpenTTS, add:
 
 ```yaml
