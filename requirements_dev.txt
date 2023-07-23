@@ -7,4 +7,4 @@ pylint==2.5.3
 pytest==5.4.1
 pytest-cov==2.8.1
 yamllint==1.21.0
-mkdocs==1.0.4
+mkdocs==1.2.3
