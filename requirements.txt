@@ -1,5 +1,5 @@
 aiofiles==0.4.0
-aiohttp==3.7.4
+aiohttp==3.8.5
 dataclasses-json==0.4.2
 deepspeech==0.9.3
 detect-simd==0.2
